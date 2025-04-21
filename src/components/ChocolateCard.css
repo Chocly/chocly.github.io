@@ -1,0 +1,147 @@
+/* src/components/ChocolateCard.css */
+.chocolate-card {
+  display: block;
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: var(--text-dark);
+  height: 100%;
+}
+
+.chocolate-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.chocolate-card.featured {
+  border: 2px solid var(--accent);
+}
+
+.image-container {
+  height: 220px;
+  overflow: hidden;
+  position: relative;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.chocolate-card:hover .image-container img {
+  transform: scale(1.05);
+}
+
+.featured-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: var(--accent);
+  color: var(--primary-dark);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-content {
+  padding: 1.5rem;
+}
+
+.card-title {
+  margin: 0 0 0.3rem 0;
+  font-size: 1.25rem;
+  color: var(--primary-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-maker {
+  color: var(--primary);
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.card-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  color: var(--text-dark);
+}
+
+.card-rating {
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+}
+
+.rating-value {
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-right: 0.5rem;
+}
+
+.stars {
+  display: flex;
+  margin-right: 0.5rem;
+}
+
+.star {
+  color: #FFD700;
+  font-size: 0.9rem;
+  margin-right: 1px;
+}
+
+.star.empty {
+  color: #E0E0E0;
+}
+
+.star.half {
+  position: relative;
+  color: #E0E0E0;
+}
+
+.star.half::before {
+  content: '★';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  overflow: hidden;
+  color: #FFD700;
+}
+
+.rating-count {
+  font-size: 0.8rem;
+  color: #777;
+}
+
+/* Apply special styling for featured cards */
+.chocolate-card.featured .card-content {
+  position: relative;
+}
+
+.chocolate-card.featured .card-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 1.5rem;
+  right: 1.5rem;
+  height: 1px;
+  background-color: #f0e6d2;
+}
+
+@media (max-width: 768px) {
+  .image-container {
+    height: 180px;
+  }
+}

@@ -1,0 +1,27 @@
+/* src/pages/BrowseAllPage.css */
+.browse-page {
+    padding: 2rem 0;
+  }
+  
+  .browse-page h1 {
+    color: var(--primary-dark);
+    margin-bottom: 0.5rem;
+  }
+  
+  .browse-description {
+    color: var(--primary);
+    margin-bottom: 2rem;
+  }
+  
+  .chocolate-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  
+  @media (max-width: 768px) {
+    .chocolate-grid {
+      gap: 1rem;
+    }
+  }

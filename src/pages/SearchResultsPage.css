@@ -1,0 +1,51 @@
+.search-results-page {
+    padding: 2rem 0;
+  }
+  
+  .search-header {
+    margin-bottom: 2rem;
+  }
+  
+  .search-header h1 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .search-query {
+    color: #666;
+    font-style: italic;
+  }
+  
+  .results-count {
+    margin-bottom: 1rem;
+    color: #666;
+  }
+  
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+  
+  .no-results {
+    text-align: center;
+    padding: 3rem 0;
+    color: #666;
+  }
+  
+  .no-results a {
+    color: #900;
+    text-decoration: none;
+  }
+  
+  .no-results a:hover {
+    text-decoration: underline;
+  }
+  
+  .loading, .error {
+    text-align: center;
+    padding: 3rem 0;
+  }
+  
+  .error {
+    color: #900;
+  }

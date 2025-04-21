@@ -1,0 +1,38 @@
+.rating-stars {
+  display: flex;
+  align-items: center;
+}
+
+.star {
+  color: #D4D4D4;
+  margin-right: 2px;
+}
+
+.star.filled {
+  color: var(--accent);
+}
+
+.star.half-filled {
+  position: relative;
+  color: #D4D4D4;
+}
+
+.star.half-filled::before {
+  content: '★';
+  position: absolute;
+  color: var(--accent);
+  width: 50%;
+  overflow: hidden;
+}
+
+.star-large {
+  font-size: 1.5rem;
+}
+
+.star.interactive {
+  cursor: pointer;
+}
+
+.star.interactive:hover {
+  color: var(--accent);
+}
