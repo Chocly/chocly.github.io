@@ -1,179 +1,175 @@
-// src/pages/HomePage.jsx
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { getAllChocolates } from '../services/chocolateFirebaseService';
-import ChocolateCard from '../components/ChocolateCard';
+import { useState, useEffect } from 'react';
 import './HomePage.css';
 
-// Sample recent reviews (in a real app, these would come from your database)
-const sampleRecentReviews = [
-  {
-    id: 'rev1',
-    user: 'ChocolateLover42',
-    rating: 4.5,
-    text: 'The notes of cherry and vanilla in this bar are perfectly balanced. It has a smooth melt and lingering finish that keeps me coming back for more.',
-    date: '2023-04-12',
-    chocolate: {
-      id: '1',
-      name: 'Valrhona Guanaja 70%',
-      imageUrl: 'https://placehold.co/300x300?text=Chocolate'
-    }
-  },
-  {
-    id: 'rev2',
-    user: 'CocoaExplorer',
-    rating: 5,
-    text: 'This is hands down the best milk chocolate I\'ve ever tasted. Creamy, not too sweet, with complex notes you don\'t usually find in milk chocolate.',
-    date: '2023-04-10',
-    chocolate: {
-      id: '2',
-      name: 'Amedei Toscano Brown',
-      imageUrl: 'https://placehold.co/300x300?text=Chocolate'
-    }
-  },
-  {
-    id: 'rev3',
-    user: 'BeanToBarFan',
-    rating: 4,
-    text: 'A wonderful single-origin bar with bright fruity notes. The texture is perfect, though I found the finish a bit too acidic for my taste.',
-    date: '2023-04-08',
-    chocolate: {
-      id: '3',
-      name: 'Dandelion Madagascar',
-      imageUrl: 'https://placehold.co/300x300?text=Chocolate'
-    }
-  }
-];
-
-// Helper function to render star ratings
-const renderStars = (rating) => {
-  const stars = [];
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 !== 0;
-  
-  for (let i = 1; i <= 5; i++) {
-    if (i <= fullStars) {
-      stars.push(<span key={i} className="star full">★</span>);
-    } else if (i === fullStars + 1 && hasHalfStar) {
-      stars.push(<span key={i} className="star half">★</span>);
-    } else {
-      stars.push(<span key={i} className="star empty">★</span>);
-    }
-  }
-  
-  return stars;
-};
-
-function ReviewPreview({ review }) {
-  return (
-    <div className="review-card">
-      <div className="review-header">
-        <div className="reviewer-info">
-          <span className="reviewer-name">{review.user}</span>
-          <div className="review-rating">
-            {renderStars(review.rating)}
-          </div>
-        </div>
-        <div className="chocolate-info">
-          <img src={review.chocolate.imageUrl} alt={review.chocolate.name} />
-          <span className="chocolate-name">{review.chocolate.name}</span>
-        </div>
-      </div>
-      <p className="review-text">{review.text.substring(0, 120)}...</p>
-      <Link to={`/chocolate/${review.chocolate.id}`} className="read-more">
-        Read more <span className="arrow">→</span>
-      </Link>
-    </div>
-  );
-}
-
 function HomePage() {
+  // State for featured chocolates and recent reviews
   const [chocolates, setChocolates] = useState([]);
+  const [recentReviews, setRecentReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [recentReviews] = useState(sampleRecentReviews);
   
+  // Sample chocolate data (would come from your API)
+  const sampleChocolates = [
+    {
+      id: 1,
+      name: 'Madagascan Dark 72%',
+      maker: 'Terroir Artisan',
+      type: 'Dark',
+      origin: 'Madagascar',
+      cacaoPercentage: 72,
+      averageRating: 4.8,
+      ratings: 186,
+      imageUrl: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?q=80&w=2069'
+    },
+    {
+      id: 2,
+      name: 'Sea Salt Caramel',
+      maker: 'Wild Coast Chocolate',
+      type: 'Dark Milk',
+      origin: 'Ecuador',
+      cacaoPercentage: 55,
+      averageRating: 4.9,
+      ratings: 203,
+      imageUrl: 'https://images.unsplash.com/photo-1548907040-4d42bfaaa981?q=80&w=2069'
+    },
+    {
+      id: 3,
+      name: 'Peruvian Single Origin',
+      maker: 'Craft Origins',
+      type: 'Dark',
+      origin: 'Peru',
+      cacaoPercentage: 70,
+      averageRating: 4.7,
+      ratings: 156,
+      imageUrl: 'https://images.unsplash.com/photo-1614088685112-0297c8d9e72e?q=80&w=2487'
+    }
+  ];
+  
+  // Sample recent reviews (would come from your API)
+  const sampleReviews = [
+    {
+      id: 'rev1',
+      user: 'ChocolateFiend',
+      rating: 4.5,
+      text: 'The fruity notes in this Madagascar bar are incredible - bright cherry and subtle citrus that lingers beautifully.',
+      date: new Date('2025-04-20'),
+      chocolate: {
+        id: 1,
+        name: 'Madagascan Dark 72%',
+        maker: 'Terroir Artisan',
+        imageUrl: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?q=80&w=2069'
+      }
+    },
+    {
+      id: 'rev2',
+      user: 'CocoaExplorer',
+      rating: 5,
+      text: 'This has to be the most balanced milk chocolate I ever tried. Creamy but not too sweet with complex notes you do not usually find.',
+      date: new Date('2025-04-22'),
+      chocolate: {
+        id: 2,
+        name: 'Sea Salt Caramel',
+        maker: 'Wild Coast Chocolate',
+        imageUrl: 'https://images.unsplash.com/photo-1548907040-4d42bfaaa981?q=80&w=2069'
+      }
+    }
+  ];
+
+  // Simulate data fetching
   useEffect(() => {
-    const fetchChocolates = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const data = await getAllChocolates();
-        setChocolates(data);
-        setLoading(false);
+        // In a real app, these would be API calls
+        // const chocolates = await getFeatureChocolates();
+        // const reviews = await getRecentReviews();
+        
+        // Using sample data for now
+        setTimeout(() => {
+          setChocolates(sampleChocolates);
+          setRecentReviews(sampleReviews);
+          setLoading(false);
+        }, 1000);
       } catch (err) {
         setError(err.message);
         setLoading(false);
       }
     };
     
-    fetchChocolates();
+    fetchData();
   }, []);
   
-  const getFeaturedChocolates = () => {
-    // In a real app, you might want to select featured chocolates based on ratings or other criteria
-    return chocolates.slice(0, 6);
+  // Render star ratings
+  const renderStars = (rating) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+    
+    for (let i = 1; i <= 5; i++) {
+      if (i <= fullStars) {
+        stars.push(<span key={i} className="star filled">★</span>);
+      } else if (i === fullStars + 1 && hasHalfStar) {
+        stars.push(<span key={i} className="star half">★</span>);
+      } else {
+        stars.push(<span key={i} className="star empty">★</span>);
+      }
+    }
+    
+    return stars;
   };
-  
+
   if (loading) {
     return (
       <div className="loading-container">
-        <div className="loading-animation">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        <p>Discovering amazing chocolates...</p>
+        <p>Loading...</p>
       </div>
     );
-  }
-  
-  if (error) {
-    return <div className="error">Error: {error}</div>;
   }
   
   return (
     <div className="home-page">
       {/* Hero Section */}
-      <div className="hero-section">
-        <div className="hero-overlay"></div>
-        <div className="container hero-content">
-          <h1 className="hero-title">Discover Your Perfect Chocolate</h1>
-          <p className="hero-subtitle">Life is too short for mediocre chocolate. Find, rate, and share the world's finest bars.</p>
-          <div className="hero-cta">
-            <Link to="/browse" className="cta-button primary">Explore Chocolates</Link>
-            <Link to="/about" className="cta-button secondary">About Us</Link>
+      <section className="hero-section">
+        <div className="container">
+          <div className="hero-content">
+            <h1 className="hero-title">
+              Discover Your Perfect Chocolate
+            </h1>
+            <p className="hero-subtitle">
+              Join our community of chocolate enthusiasts to explore, 
+              review, and share the world's finest chocolates
+            </p>
+            <div className="search-container">
+              <input 
+                type="text" 
+                placeholder="Search for a chocolate, origin, or maker..."
+                className="search-input"
+              />
+              <button className="search-button">Search</button>
+            </div>
+            <div className="hero-actions">
+              <a href="/explore" className="btn btn-primary">Explore Chocolates</a>
+              <a href="/join" className="btn btn-secondary">Join Community</a>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
       
-      {/* Mission Section */}
-      <section className="mission-section">
+      {/* Community Stats Section */}
+      <section className="stats-section">
         <div className="container">
-          <div className="mission-content">
-            <h2 className="section-title">Our Mission</h2>
-            <p className="mission-text">We believe chocolate is an art form. Our mission is to help you navigate the world of premium chocolate, connect you with exceptional makers, and build a community of passionate chocolate lovers.</p>
-          </div>
-          <div className="mission-cards">
-            <div className="mission-card">
-              <div className="icon-container">
-                <i className="mission-icon discover"></i>
-              </div>
-              <h3>Discover</h3>
-              <p>Find new chocolates based on flavor profiles, origin, and maker</p>
+          <div className="stats-wrapper">
+            <div className="stat-item">
+              <span className="stat-number">4,823</span>
+              <span className="stat-label">Chocolate Lovers</span>
             </div>
-            <div className="mission-card">
-              <div className="icon-container">
-                <i className="mission-icon rate"></i>
-              </div>
-              <h3>Rate & Review</h3>
-              <p>Share your experiences and help others find exceptional chocolate</p>
+            <div className="stat-item">
+              <span className="stat-number">1,250+</span>
+              <span className="stat-label">Chocolates Reviewed</span>
             </div>
-            <div className="mission-card">
-              <div className="icon-container">
-                <i className="mission-icon learn"></i>
-              </div>
-              <h3>Learn</h3>
-              <p>Explore the stories behind each bar and develop your palate</p>
+            <div className="stat-item">
+              <span className="stat-number">85</span>
+              <span className="stat-label">Countries Represented</span>
             </div>
           </div>
         </div>
@@ -184,12 +180,33 @@ function HomePage() {
         <div className="container">
           <div className="section-header">
             <h2 className="section-title">Featured Chocolates</h2>
-            <Link to="/browse" className="view-all-link">Browse All <span className="arrow">→</span></Link>
+            <p className="section-subtitle">Exceptional chocolates curated by our community</p>
+            <a href="/explore" className="view-all">View All</a>
           </div>
           
-          <div className="featured-grid">
-            {getFeaturedChocolates().map(chocolate => (
-              <ChocolateCard key={chocolate.id} chocolate={chocolate} featured={true} />
+          <div className="chocolate-cards">
+            {chocolates.map(chocolate => (
+              <a key={chocolate.id} href={`/chocolate/${chocolate.id}`} className="chocolate-card">
+                <div className="card-image-container">
+                  <img src={chocolate.imageUrl} alt={chocolate.name} className="card-image" />
+                  <div className="card-badge">{chocolate.type}</div>
+                </div>
+                <div className="card-content">
+                  <h3 className="card-title">{chocolate.name}</h3>
+                  <p className="card-maker">{chocolate.maker}</p>
+                  <div className="card-meta">
+                    <span className="card-origin">{chocolate.origin}</span>
+                    <span className="card-percentage">{chocolate.cacaoPercentage}% Cacao</span>
+                  </div>
+                  <div className="card-rating">
+                    <div className="rating-stars">
+                      {renderStars(chocolate.averageRating)}
+                    </div>
+                    <span className="rating-number">{chocolate.averageRating.toFixed(1)}</span>
+                    <span className="rating-count">({chocolate.ratings})</span>
+                  </div>
+                </div>
+              </a>
             ))}
           </div>
         </div>
@@ -198,59 +215,129 @@ function HomePage() {
       {/* Categories Section */}
       <section className="categories-section">
         <div className="container">
-          <h2 className="section-title">Explore By Category</h2>
+          <div className="section-header">
+            <h2 className="section-title">Explore by Category</h2>
+            <p className="section-subtitle">Find chocolates that match your preferences</p>
+          </div>
           
-          <div className="category-showcase">
-            <Link to="/category/dark" className="category-tile dark">
-              <div className="category-content">
-                <h3>Dark Chocolate</h3>
-                <p>Bold & intense</p>
-              </div>
-            </Link>
+          <div className="categories-grid">
+            <a href="/category/dark" className="category-tile">
+              <h3 className="category-title">Dark Chocolate</h3>
+              <p className="category-description">Bold & intense profiles</p>
+            </a>
             
-            <Link to="/category/milk" className="category-tile milk">
-              <div className="category-content">
-                <h3>Milk Chocolate</h3>
-                <p>Smooth & creamy</p>
-              </div>
-            </Link>
+            <a href="/category/milk" className="category-tile">
+              <h3 className="category-title">Milk Chocolate</h3>
+              <p className="category-description">Creamy & approachable</p>
+            </a>
             
-            <Link to="/category/origin" className="category-tile origin">
-              <div className="category-content">
-                <h3>Single Origin</h3>
-                <p>Distinctive terroir</p>
-              </div>
-            </Link>
+            <a href="/category/origin" className="category-tile">
+              <h3 className="category-title">Single Origin</h3>
+              <p className="category-description">Distinctive terroir</p>
+            </a>
             
-            <Link to="/category/filled" className="category-tile filled">
-              <div className="category-content">
-                <h3>Filled Chocolates</h3>
-                <p>Exciting combinations</p>
-              </div>
-            </Link>
+            <a href="/category/artisan" className="category-tile">
+              <h3 className="category-title">Artisan Craft</h3>
+              <p className="category-description">Small batch excellence</p>
+            </a>
           </div>
         </div>
       </section>
       
-      {/* Latest Reviews Section */}
-      <section className="latest-reviews">
+      {/* Recent Reviews Section */}
+      <section className="reviews-section">
         <div className="container">
-          <h2 className="section-title">Latest Reviews</h2>
-          <div className="reviews-slider">
+          <div className="section-header">
+            <h2 className="section-title">Community Reviews</h2>
+            <p className="section-subtitle">Discover what chocolate lovers are saying</p>
+            <a href="/reviews" className="view-all">View All</a>
+          </div>
+          
+          <div className="reviews-grid">
             {recentReviews.map(review => (
-              <ReviewPreview key={review.id} review={review} />
+              <div key={review.id} className="review-card">
+                <div className="review-header">
+                  <div className="review-user">
+                    <span className="user-name">{review.user}</span>
+                    <span className="review-date">
+                      {review.date.toLocaleDateString(undefined, { 
+                        month: 'short', 
+                        day: 'numeric' 
+                      })}
+                    </span>
+                  </div>
+                  <div className="review-rating">
+                    {renderStars(review.rating)}
+                  </div>
+                </div>
+                <div className="review-chocolate">
+                  <img 
+                    src={review.chocolate.imageUrl} 
+                    alt={review.chocolate.name} 
+                    className="chocolate-image"
+                  />
+                  <div className="chocolate-info">
+                    <h4 className="chocolate-name">{review.chocolate.name}</h4>
+                    <p className="chocolate-maker">{review.chocolate.maker}</p>
+                  </div>
+                </div>
+                <p className="review-text">{review.text}</p>
+                <a href={`/review/${review.id}`} className="read-more">Read Full Review</a>
+              </div>
             ))}
           </div>
         </div>
       </section>
       
+      {/* How It Works Section */}
+      <section className="how-it-works">
+        <div className="container">
+          <div className="section-header">
+            <h2 className="section-title">How Chocly Works</h2>
+            <p className="section-subtitle">Join our chocolate community in three simple steps</p>
+          </div>
+          
+          <div className="steps-container">
+            <div className="step-card">
+              <div className="step-number">1</div>
+              <h3 className="step-title">Discover</h3>
+              <p className="step-description">
+                Explore our extensive chocolate database and find chocolates based on origin, flavor profile, or maker
+              </p>
+            </div>
+            
+            <div className="step-card">
+              <div className="step-number">2</div>
+              <h3 className="step-title">Taste & Rate</h3>
+              <p className="step-description">
+                Develop your palate by tasting and rating chocolates, tracking your personal chocolate journey
+              </p>
+            </div>
+            
+            <div className="step-card">
+              <div className="step-number">3</div>
+              <h3 className="step-title">Connect</h3>
+              <p className="step-description">
+                Share recommendations, follow fellow chocolate lovers, and join tasting events in your area
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
       {/* Call to Action */}
-      <section className="join-cta">
+      <section className="cta-section">
         <div className="container">
           <div className="cta-content">
-            <h2>Join Our Chocolate Community</h2>
-            <p>Create an account to rate chocolates, save favorites, and connect with fellow enthusiasts</p>
-            <Link to="/signup" className="cta-button primary">Sign Up</Link>
+            <h2 className="cta-title">Ready to join our chocolate community?</h2>
+            <p className="cta-text">
+              Create a free account to start tracking your tastings, 
+              save favorites, and connect with fellow chocolate enthusiasts
+            </p>
+            <div className="cta-buttons">
+              <a href="/signup" className="btn btn-primary">Create Account</a>
+              <a href="/explore" className="btn btn-tertiary">Explore First</a>
+            </div>
           </div>
         </div>
       </section>

@@ -38,7 +38,7 @@ function Header() {
     <header className="header">
       <div className="container">
         <Link to="/" className="logo">
-          <h1>ChocolateReview</h1>
+          <h1>Chocly</h1>
         </Link>
         
         <form className="search-form" onSubmit={handleSearch}>
