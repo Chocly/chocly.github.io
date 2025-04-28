@@ -1,80 +1,40 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { doc, getDoc, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
-import { db } from '../firebase';
 import { getChocolateById } from '../services/chocolateFirebaseService';
+import { getChocolateReviews } from '../services/reviewService';
+import { useAuth } from '../contexts/AuthContext';
 import RatingStars from '../components/RatingStars';
 import ReviewItem from '../components/ReviewItem';
 import './ChocolateDetailPage.css';
-// import { useAuth } from '../contexts/AuthContext';
-
 
 function ChocolateDetailPage() {
+  console.log('ChocolateDetailPage component rendering');
   const { id } = useParams();
   const [chocolate, setChocolate] = useState(null);
   const [reviews, setReviews] = useState([]);
-  const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userRating, setUserRating] = useState(0);
   const [reviewText, setReviewText] = useState('');
-  //const { currentUser } = useAuth();
-    // Add this conditional to safely use the auth context
-  //const auth = useAuth();
-  //const currentUser = auth ? auth.currentUser : null;
+  const { currentUser } = useAuth();
+  console.log('Chocolate ID from URL:', id);
+
   
   useEffect(() => {
+    console.log('UseEffect running, fetching chocolate with ID:', id);
     const fetchChocolateData = async () => {
       try {
+        console.log('Attempting to fetch chocolate data...');
         setLoading(true);
-        
         // Fetch chocolate details
-        const docRef = doc(db, 'chocolates', id);
-        const docSnap = await getDoc(docRef);
-        
-        if (!docSnap.exists()) {
-          setError('Chocolate not found');
-          setLoading(false);
-          return;
-        }
-        
-        const chocolateData = {
-          id: docSnap.id,
-          ...docSnap.data()
-        };
-        
+        const chocolateData = await getChocolateById(id);
+        console.log('Chocolate data received:', data);
         setChocolate(chocolateData);
         
-        // Fetch tag names if the chocolate has tagIds
-        if (chocolateData.tagIds && chocolateData.tagIds.length > 0) {
-          const tagNames = [];
-          for (const tagId of chocolateData.tagIds) {
-            try {
-              const tagDoc = await getDoc(doc(db, 'tags', tagId));
-              if (tagDoc.exists()) {
-                tagNames.push(tagDoc.data().name);
-              }
-            } catch (err) {
-              console.error("Error fetching tag:", err);
-            }
-          }
-          setTags(tagNames);
-        }
-        
         // Fetch reviews for this chocolate
-        const reviewsQuery = query(
-          collection(db, 'reviews'),
-          where('chocolateId', '==', id),
-          orderBy('createdAt', 'desc')
-        );
-        
-        const reviewsSnapshot = await getDocs(reviewsQuery);
-        const reviewsData = reviewsSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        
+        const reviewsData = await getChocolateReviews(id);
         setReviews(reviewsData);
+        
         setLoading(false);
       } catch (err) {
         console.error("Error fetching chocolate details:", err);
@@ -86,13 +46,14 @@ function ChocolateDetailPage() {
     fetchChocolateData();
   }, [id]);
   
+  console.log('Component state:', { loading, error, chocolate });
+
   const handleRatingChange = (rating) => {
     setUserRating(rating);
   };
   
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
-    
     if (!currentUser) {
       alert('Please sign in to leave a review');
       return;
@@ -103,8 +64,8 @@ function ChocolateDetailPage() {
       return;
     }
     
-    // In a real app, this would call a service to save the review
-    alert('Review submission will be implemented in the next phase!');
+    // In a real app, you would call a service to save the review
+    alert('Review submission functionality will be implemented soon!');
   };
   
   if (loading) {
@@ -121,9 +82,13 @@ function ChocolateDetailPage() {
   }
   
   if (error || !chocolate) {
-    return <div className="error">Error: {error || 'Chocolate not found'}</div>;
-  }
-  
+    return (
+      <div className="chocolate-detail-page">
+        <h1>Chocolate Detail: {chocolate.name}</h1>
+        <p>This is a basic version just to check if rendering works</p>
+      </div>
+    );
+  }   
   // Prepare flavor profile data or use default if not available
   const flavorProfile = chocolate.flavorProfile || [
     { name: 'Sweet', intensity: 3 },
@@ -136,9 +101,7 @@ function ChocolateDetailPage() {
   // Prepare ingredients as array if it's a string
   const ingredients = Array.isArray(chocolate.ingredients) 
     ? chocolate.ingredients 
-    : (typeof chocolate.ingredients === 'string' 
-        ? chocolate.ingredients.split(',').map(item => item.trim())
-        : []);
+    : (chocolate.ingredients || '').split(',').map(item => item.trim());
   
   return (
     <div className="chocolate-detail-page">
@@ -149,9 +112,7 @@ function ChocolateDetailPage() {
               <img 
                 src={chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate'} 
                 alt={chocolate.name} 
-                className="chocolate-label-image"
               />
-              <div className="image-caption">Product Label</div>
             </div>
             <div className="detail-info">
               <h1>{chocolate.name}</h1>
@@ -161,7 +122,7 @@ function ChocolateDetailPage() {
                 <div className="average-rating">
                   <span className="rating-number">{(chocolate.averageRating || 0).toFixed(1)}</span>
                   <RatingStars rating={chocolate.averageRating || 0} size="large" />
-                  <span className="rating-count">({chocolate.ratings || 0} ratings)</span>
+                  <span className="rating-count">({chocolate.reviewCount || 0} ratings)</span>
                 </div>
                 
                 <div className="user-rating">
@@ -190,9 +151,9 @@ function ChocolateDetailPage() {
                 </div>
               </div>
               
-              {tags.length > 0 && (
+              {chocolate.tags && chocolate.tags.length > 0 && (
                 <div className="chocolate-tags">
-                  {tags.map(tag => (
+                  {chocolate.tags.map(tag => (
                     <span key={tag} className="tag">{tag}</span>
                   ))}
                 </div>

@@ -30,30 +30,77 @@ export const getAllChocolates = async () => {
   }));
 };
 
+// Check in src/services/chocolateFirebaseService.js
 export const getChocolateById = async (id) => {
-  const docRef = doc(db, 'chocolates', id);
-  const snapshot = await getDoc(docRef);
-  
-  if (snapshot.exists()) {
-    return {
-      id: snapshot.id,
-      ...snapshot.data()
-    };
-  } else {
-    throw new Error('Chocolate not found');
+  console.log('getChocolateById called with ID:', id);
+  try {
+    const docRef = doc(db, 'chocolates', id);
+    const snapshot = await getDoc(docRef);
+    
+    console.log('Snapshot exists?', snapshot.exists());
+    
+    if (snapshot.exists()) {
+      const data = {
+        id: snapshot.id,
+        ...snapshot.data()
+      };
+      console.log('Returning chocolate data:', data);
+      return data;
+    } else {
+      console.log('Chocolate not found in database');
+      throw new Error('Chocolate not found');
+    }
+  } catch (error) {
+    console.error('Error in getChocolateById:', error);
+    throw error;
   }
 };
 
 export const searchChocolates = async (searchTerm) => {
-  // Basic search implementation
-  // For more advanced search, consider using Algolia or Elasticsearch
-  const chocolates = await getAllChocolates();
-  return chocolates.filter(chocolate => 
-    chocolate.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    chocolate.maker.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    chocolate.origin.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    chocolate.type.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  try {
+    // First, check if we are searching for a tag
+    const tagsSnapshot = await getDocs(tagsCollection);
+    const tags = {};
+    tagsSnapshot.docs.forEach(doc => {
+      const tagData = doc.data();
+      tags[doc.id] = tagData.name.toLowerCase();
+    });
+    
+    // Get all chocolates
+    const snapshot = await getDocs(chocolatesCollection);
+    const chocolates = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    
+    const term = searchTerm.toLowerCase();
+    
+    // Filter chocolates that match the search term
+    return chocolates.filter(chocolate => {
+      // Check basic fields
+      const nameMatch = chocolate.name && chocolate.name.toLowerCase().includes(term);
+      const makerMatch = chocolate.maker && 
+        (typeof chocolate.maker === 'string' 
+          ? chocolate.maker.toLowerCase().includes(term)
+          : chocolate.maker.name && chocolate.maker.name.toLowerCase().includes(term));
+      const originMatch = chocolate.origin && chocolate.origin.toLowerCase().includes(term);
+      const typeMatch = chocolate.type && chocolate.type.toLowerCase().includes(term);
+      
+      // Check tags
+      let tagMatch = false;
+      if (chocolate.tagIds && Array.isArray(chocolate.tagIds)) {
+        tagMatch = chocolate.tagIds.some(tagId => {
+          // Check if tag name matches search term
+          return tags[tagId] && tags[tagId].includes(term);
+        });
+      }
+      
+      return nameMatch || makerMatch || originMatch || typeMatch || tagMatch;
+    });
+  } catch (error) {
+    console.error("Error searching chocolates:", error);
+    throw error;
+  }
 };
 
 export const addChocolate = async (chocolateData, imageFile) => {
@@ -171,4 +218,70 @@ export const getFeaturedChocolates = async () => {
     id: doc.id,
     ...doc.data()
   }));
+};
+
+// Add to chocolateFirebaseService.js
+
+// Function to update a chocolate with a new image URL
+export const updateChocolateImage = async (chocolateId, imageFile) => {
+  try {
+    // Upload image to storage
+    const storageRef = ref(storage, `chocolate-images/${chocolateId}_${Date.now()}`);
+    await uploadBytes(storageRef, imageFile);
+    const imageUrl = await getDownloadURL(storageRef);
+    
+    // Update the chocolate document with the new image URL
+    const chocolateRef = doc(db, 'chocolates', chocolateId);
+    await updateDoc(chocolateRef, {
+      imageUrl,
+      updatedAt: new Date()
+    });
+    
+    return imageUrl;
+  } catch (error) {
+    console.error("Error updating chocolate image:", error);
+    throw error;
+  }
+};
+
+// Function to batch process images from a URL source
+export const batchProcessImages = async (chocolates, imageUrlField = 'externalImageUrl') => {
+  const results = {
+    successful: 0,
+    failed: 0,
+    details: []
+  };
+  
+  for (const chocolate of chocolates) {
+    try {
+      if (chocolate[imageUrlField] && !chocolate.imageUrl) {
+        // Fetch the image from the external URL
+        const response = await fetch(chocolate[imageUrlField]);
+        const blob = await response.blob();
+        
+        // Create a file from the blob
+        const file = new File([blob], `${chocolate.id}.jpg`, { type: 'image/jpeg' });
+        
+        // Upload to Firebase Storage
+        await updateChocolateImage(chocolate.id, file);
+        
+        results.successful++;
+        results.details.push({
+          id: chocolate.id,
+          name: chocolate.name,
+          status: 'success'
+        });
+      }
+    } catch (error) {
+      results.failed++;
+      results.details.push({
+        id: chocolate.id,
+        name: chocolate.name,
+        status: 'failed',
+        error: error.message
+      });
+    }
+  }
+  
+  return results;
 };

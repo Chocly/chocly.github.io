@@ -26,15 +26,15 @@ function BrowseAllPage() {
   }, []);
   
   if (loading) {
-    return <div className="loading">Loading chocolates...</div>;
+    return <div className="loading full-width">Loading chocolates...</div>;
   }
   
   if (error) {
-    return <div className="error">Error: {error}</div>;
+    return <div className="error full-width">Error: {error}</div>;
   }
   
   return (
-    <div className="browse-page">
+    <div className="browse-page full-page">
       <div className="container">
         <h1>All Chocolates</h1>
         <p className="browse-description">Browse our complete collection of {chocolates.length} chocolates.</p>

@@ -1,3 +1,4 @@
+// Update src/components/Header.jsx to add a barcode search link
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
@@ -17,7 +18,6 @@ function Header() {
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
-    console.log("Menu toggled:", !menuOpen); // Debug line
   };
 
   // Close menu when clicking outside
@@ -65,11 +65,11 @@ function Header() {
             <div className="nav-section">
               <h3>Browse</h3>
               <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
-              <Link to="/browse" onClick={() => setMenuOpen(false)}>Browse All Chocolates</Link>
+              <Link to="/browse" onClick={() => setMenuOpen(false)}>All Chocolates</Link>
+              <Link to="/barcode" onClick={() => setMenuOpen(false)}>Barcode Search</Link>
               <Link to="/category/dark" onClick={() => setMenuOpen(false)}>Dark Chocolate</Link>
               <Link to="/category/milk" onClick={() => setMenuOpen(false)}>Milk Chocolate</Link>
               <Link to="/category/white" onClick={() => setMenuOpen(false)}>White Chocolate</Link>
-              <Link to="/category/origin" onClick={() => setMenuOpen(false)}>Single Origin</Link>
             </div>
             <div className="nav-section">
               <h3>Account</h3>

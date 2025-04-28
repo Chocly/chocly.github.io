@@ -15,7 +15,8 @@ import {
   import { db } from "../firebase";
   
   // Get all reviews for a chocolate
-  export const getChocolateReviews = async (chocolateId) => {
+
+export const getChocolateReviews = async (chocolateId) => {
     try {
       const q = query(
         collection(db, "reviews"),
@@ -24,10 +25,17 @@ import {
       );
   
       const snapshot = await getDocs(q);
-      return snapshot.docs.map(doc => ({
+      const reviews = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }));
+      
+      // If no reviews found in the database, return empty array
+      if (reviews.length === 0) {
+        return [];
+      }
+      
+      return reviews;
     } catch (error) {
       console.error("Error getting chocolate reviews:", error);
       throw error;
