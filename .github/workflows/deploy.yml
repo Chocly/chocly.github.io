@@ -21,14 +21,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # Use Node.js 18 instead of 16
-          
-      - name: Install dependencies
-        run: npm ci
+          node-version: '18'
+          cache: 'npm'
       
-      - name: Fix crypto module
-        run: |
-          echo "export const webcrypto = crypto;" >> node_modules/vite/dist/node/chunks/dep-Bid9ssRr.js
+      - name: Install dependencies
+        run: npm install
         
       - name: Build website
         run: npm run build
