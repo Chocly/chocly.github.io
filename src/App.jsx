@@ -13,6 +13,10 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import BatchImageUploadPage from './pages/BatchImageUploadPage';
 import AdminPage from './pages/AdminPage';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsOfServicePage from './pages/TermsOfServicePage';
 import './App.css';
 
 function App() {
@@ -31,6 +35,10 @@ function App() {
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/signup" element={<SignUpForm />} />
               <Route path="/login" element={<LoginForm />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="/terms-of-service" element={<TermsOfServicePage />} />
               <Route path="/admin" element={<AdminPage />} />
               <Route path="/admin/batch-upload" element={<BatchImageUploadPage />} />
             </Routes>
