@@ -6,15 +6,16 @@ import { getAuth, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-    apiKey: "AIzaSyAMKxVJqQyhB726ZIpqzrnlJwlVMEompzI",
-    authDomain: "chocolate-review-web.firebaseapp.com",
-    projectId: "chocolate-review-web",
-    storageBucket: "chocolate-review-web.firebasestorage.app",
-    messagingSenderId: "40760554846",
-    appId: "1:40760554846:web:af7701c50e3a44c13acbcf",
-    measurementId: "G-CQXWMKJDQW"
-  };
+// updated firebase js that uses environment variables
+  const firebaseConfig = {
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyAMKxVJqQyhB726ZIpqzrnlJwlVMEompzI",
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "chocolate-review-web.firebaseapp.com",
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "chocolate-review-web",
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "chocolate-review-web.firebasestorage.app",
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "40760554846",
+    appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:40760554846:web:af7701c50e3a44c13acbcf",
+    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-CQXWMKJDQW"
+};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
