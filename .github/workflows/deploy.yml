@@ -8,7 +8,7 @@ on:
       - main
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -21,16 +21,20 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'  # Use Node.js 18 instead of 16
           
       - name: Install dependencies
         run: npm ci
+      
+      - name: Fix crypto module
+        run: |
+          echo "export const webcrypto = crypto;" >> node_modules/vite/dist/node/chunks/dep-Bid9ssRr.js
         
       - name: Build website
         run: npm run build
         
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          folder: dist
+          branch: gh-pages
