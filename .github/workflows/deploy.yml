@@ -15,6 +15,9 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+        # Dynamically set environment based on branch name
+    environment: ${{ github.ref_name == 'main' && 'production' || github.ref_name }}
+
     steps:
       - uses: actions/checkout@v3
       
