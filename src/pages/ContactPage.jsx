@@ -80,7 +80,7 @@ function ContactPage() {
             
             <div className="contact-section">
               <h3>Email Us</h3>
-              <p className="email-address">hello@chocly.com</p>
+              <p className="email-address">hello@chocly.co</p>
               <p className="email-note">We aim to respond to all inquiries within 48 hours.</p>
             </div>
             
