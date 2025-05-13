@@ -162,7 +162,7 @@ function PrivacyPolicyPage() {
               If you have questions or comments about this privacy policy, please contact us at:
             </p>
             <p className="contact-info">
-              Email: privacy@chocly.com<br />
+              Email: privacy@chocly.co<br />
               Address: 123 Chocolate Lane, Sweet City, CA 94000
             </p>
           </section>
