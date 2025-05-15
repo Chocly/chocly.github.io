@@ -1,6 +1,6 @@
-// Update src/components/Header.jsx to add a barcode search link
+// src/components/Header.jsx
 import { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Header.css';
 
 function Header() {
@@ -8,11 +8,16 @@ function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Check if we're on the homepage
+  const isHomePage = location.pathname === "/";
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery(''); // Clear the search after submission
     }
   };
 
@@ -41,15 +46,18 @@ function Header() {
           <h1>Chocly</h1>
         </Link>
         
-        <form className="search-form" onSubmit={handleSearch}>
-          <input
-            type="text"
-            placeholder="Search chocolates, makers..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button type="submit">Search</button>
-        </form>
+        {/* Only show search form when NOT on homepage */}
+        {!isHomePage && (
+          <form className="search-form" onSubmit={handleSearch}>
+            <input
+              type="text"
+              placeholder="Search chocolates, makers..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button type="submit">Search</button>
+          </form>
+        )}
         
         <div className="nav-container" ref={menuRef}>
           <button className="menu-toggle" onClick={toggleMenu}>

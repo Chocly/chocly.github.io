@@ -6,7 +6,10 @@ import { getChocolateById } from '../services/chocolateFirebaseService';
 import RatingStars from '../components/RatingStars';
 import ReviewItem from '../components/ReviewItem';
 import './ChocolateDetailPage.css';
-// import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
+import { addReview } from '../services/reviewService'; // Add this import
+
+
 
 
 function ChocolateDetailPage() {
@@ -18,7 +21,8 @@ function ChocolateDetailPage() {
   const [error, setError] = useState(null);
   const [userRating, setUserRating] = useState(0);
   const [reviewText, setReviewText] = useState('');
-  //const { currentUser } = useAuth();
+  const { currentUser } = useAuth();
+  const [reviewSuccess, setReviewSuccess] = useState(false);
     // Add this conditional to safely use the auth context
   //const auth = useAuth();
   //const currentUser = auth ? auth.currentUser : null;
@@ -45,7 +49,7 @@ function ChocolateDetailPage() {
         
         setChocolate(chocolateData);
         
-        // Fetch tag names if the chocolate has tagIds
+        // Fetch tags if the chocolate has tagIds
         if (chocolateData.tagIds && chocolateData.tagIds.length > 0) {
           const tagNames = [];
           for (const tagId of chocolateData.tagIds) {
@@ -61,20 +65,9 @@ function ChocolateDetailPage() {
           setTags(tagNames);
         }
         
-        // Fetch reviews for this chocolate
-        const reviewsQuery = query(
-          collection(db, 'reviews'),
-          where('chocolateId', '==', id),
-          orderBy('createdAt', 'desc')
-        );
+        // Call fetchReviews to load reviews
+        await fetchReviews();
         
-        const reviewsSnapshot = await getDocs(reviewsQuery);
-        const reviewsData = reviewsSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        
-        setReviews(reviewsData);
         setLoading(false);
       } catch (err) {
         console.error("Error fetching chocolate details:", err);
@@ -84,8 +77,8 @@ function ChocolateDetailPage() {
     };
     
     fetchChocolateData();
-  }, [id]);
-  
+  }, [id]); // Include fetchReviews in dependencies if needed
+
   const handleRatingChange = (rating) => {
     setUserRating(rating);
   };
@@ -103,10 +96,66 @@ function ChocolateDetailPage() {
       return;
     }
     
-    // In a real app, this would call a service to save the review
-    alert('Review submission will be implemented in the next phase!');
+    if (!reviewText.trim()) {
+      alert('Please write a review');
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      setReviewSuccess(true);
+      // Create the review data
+      const reviewData = {
+        chocolateId: id,
+        userId: currentUser.uid,
+        user: currentUser.displayName || 'Anonymous User',
+        userPhotoURL: currentUser.photoURL || null,
+        rating: userRating,
+        text: reviewText,
+        chocolate: {
+          id: chocolate.id,
+          name: chocolate.name,
+          maker: chocolate.maker,
+          imageUrl: chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate'
+        }
+      };
+      
+      // Add the review to Firestore
+      await addReview(reviewData);
+      
+      // Reset form
+      setUserRating(0);
+      setReviewText('');
+      
+      // Refresh reviews list
+      const reviewsQuery = query(
+        collection(db, 'reviews'),
+        where('chocolateId', '==', id),
+        orderBy('createdAt', 'desc')
+      );
+      
+      const reviewsSnapshot = await getDocs(reviewsQuery);
+      const reviewsData = reviewsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      
+      setReviews(reviewsData);
+      
+     // Refresh reviews list using the fetchReviews function
+    await fetchReviews();
+
+      // Show success message
+      alert('Your review has been submitted successfully!');
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      alert(`Error submitting review: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
   
+
   if (loading) {
     return (
       <div className="loading-container">
@@ -133,6 +182,26 @@ function ChocolateDetailPage() {
     { name: 'Earthy', intensity: 0 }
   ];
   
+  const fetchReviews = async () => {
+    try {
+      const reviewsQuery = query(
+        collection(db, 'reviews'),
+        where('chocolateId', '==', id),
+        orderBy('createdAt', 'desc')
+      );
+      
+      const reviewsSnapshot = await getDocs(reviewsQuery);
+      const reviewsData = reviewsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      
+      setReviews(reviewsData);
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+    }
+  };
+
   // Prepare ingredients as array if it's a string
   const ingredients = Array.isArray(chocolate.ingredients) 
     ? chocolate.ingredients 
@@ -277,8 +346,8 @@ function ChocolateDetailPage() {
                 onChange={(e) => setReviewText(e.target.value)}
                 required
               ></textarea>
-              <button type="submit" className="submit-review">
-                Submit Review
+              <button type="submit" className="submit-review"
+              disabled={!currentUser || loading}  >
               </button>
             </form>
           </div>
