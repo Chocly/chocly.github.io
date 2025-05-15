@@ -71,8 +71,8 @@ export const signInWithGoogle = async () => {
   }
 };
   
-  // Sign in with Facebook
-  /*
+  //Sign in with Facebook
+  
   export const signInWithFacebook = async () => {
     try {
       const result = await signInWithPopup(auth, facebookProvider);
@@ -88,7 +88,7 @@ export const signInWithGoogle = async () => {
       throw error;
     }
   };
-  */
+
   // Create user profile in Firestore
   export const createUserProfile = async (user, additionalData = {}) => {
     if (!user) return;
