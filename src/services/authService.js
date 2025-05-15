@@ -6,7 +6,9 @@ import {
     signOut,
     sendPasswordResetEmail,
     updateProfile,
-    onAuthStateChanged
+    onAuthStateChanged,
+    GoogleAuthProvider,  // Make sure this is imported
+    FacebookAuthProvider // Make sure this is imported  
   } from "firebase/auth";
   import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
   import { auth, db, googleProvider, facebookProvider } from "../firebase";
@@ -43,9 +45,10 @@ import {
   // src/services/authService.js
 // Add better error handling to signInWithGoogle function
 
+// src/services/authService.js
 export const signInWithGoogle = async () => {
   try {
-    // Configure Google provider with additional settings for better compatibility
+    // Create a new instance of GoogleAuthProvider here
     const googleProvider = new GoogleAuthProvider();
     googleProvider.setCustomParameters({
       prompt: 'select_account'
@@ -62,12 +65,7 @@ export const signInWithGoogle = async () => {
     return result.user;
   } catch (error) {
     console.error("Google sign-in error:", error);
-    // Provide more detailed error information
-    if (error.code === 'auth/configuration-not-found') {
-      throw new Error('Authentication configuration issue. Please contact support.');
-    } else {
-      throw error;
-    }
+    throw error;
   }
 };
   
