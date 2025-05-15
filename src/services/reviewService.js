@@ -68,32 +68,85 @@ export const getChocolateReviews = async (chocolateId) => {
     }
   };
   
-  // Add a review
-  export const addReview = async (reviewData) => {
-    try {
-      const newReview = {
-        ...reviewData,
-        createdAt: serverTimestamp()
-      };
+// src/services/reviewService.js
+
+// Add a review
+export const addReview = async (reviewData) => {
+  try {
+    const newReview = {
+      ...reviewData,
+      createdAt: serverTimestamp()
+    };
   
-      const docRef = await addDoc(collection(db, "reviews"), newReview);
+    // Add the review document to Firestore
+    const docRef = await addDoc(collection(db, "reviews"), newReview);
+    
+    // Update chocolate average rating and review count
+    await updateChocolateRating(reviewData.chocolateId);
+    
+    // Update user review count
+    await updateUserReviewCount(reviewData.userId);
+    
+    return {
+      id: docRef.id,
+      ...newReview
+    };
+  } catch (error) {
+    console.error("Error adding review:", error);
+    throw error;
+  }
+};
+
+// Helper function to update a chocolate's average rating (ensure this is defined)
+const updateChocolateRating = async (chocolateId) => {
+  try {
+    const q = query(
+      collection(db, "reviews"),
+      where("chocolateId", "==", chocolateId)
+    );
+    
+    const snapshot = await getDocs(q);
+    
+    if (!snapshot.empty) {
+      const reviews = snapshot.docs.map(doc => doc.data());
+      const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+      const averageRating = totalRating / reviews.length;
       
-      // Update chocolate average rating
-      updateChocolateRating(reviewData.chocolateId);
-      
-      // Update user review count
-      updateUserReviewCount(reviewData.userId);
-      
-      return {
-        id: docRef.id,
-        ...newReview
-      };
-    } catch (error) {
-      console.error("Error adding review:", error);
-      throw error;
+      const chocolateRef = doc(db, "chocolates", chocolateId);
+      await updateDoc(chocolateRef, {
+        averageRating,
+        reviewCount: reviews.length,
+        updatedAt: serverTimestamp()
+      });
     }
-  };
-  
+  } catch (error) {
+    console.error("Error updating chocolate rating:", error);
+    throw error;
+  }
+};
+
+// Helper function to update a user's review count (ensure this is defined)
+const updateUserReviewCount = async (userId) => {
+  try {
+    const q = query(
+      collection(db, "reviews"),
+      where("userId", "==", userId)
+    );
+    
+    const snapshot = await getDocs(q);
+    const reviewCount = snapshot.size;
+    
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, {
+      reviewCount,
+      updatedAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error("Error updating user review count:", error);
+    // We'll just log this error rather than throwing it to prevent
+    // blocking the review submission if this update fails
+  }
+};  
   // Update a review
   export const updateReview = async (reviewId, updatedData) => {
     try {
@@ -147,55 +200,8 @@ export const getChocolateReviews = async (chocolateId) => {
       throw error;
     }
   };
-  
-  // Helper function to update a chocolate's average rating
-  const updateChocolateRating = async (chocolateId) => {
-    try {
-      const q = query(
-        collection(db, "reviews"),
-        where("chocolateId", "==", chocolateId)
-      );
-      
-      const snapshot = await getDocs(q);
-      
-      if (!snapshot.empty) {
-        const reviews = snapshot.docs.map(doc => doc.data());
-        const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
-        const averageRating = totalRating / reviews.length;
-        
-        const chocolateRef = doc(db, "chocolates", chocolateId);
-        await updateDoc(chocolateRef, {
-          averageRating,
-          ratings: reviews.length,
-          updatedAt: serverTimestamp()
-        });
-      }
-    } catch (error) {
-      console.error("Error updating chocolate rating:", error);
-    }
-  };
-  
-  // Helper function to update a user's review count
-  const updateUserReviewCount = async (userId) => {
-    try {
-      const q = query(
-        collection(db, "reviews"),
-        where("userId", "==", userId)
-      );
-      
-      const snapshot = await getDocs(q);
-      const reviewCount = snapshot.size;
-      
-      const userRef = doc(db, "users", userId);
-      await updateDoc(userRef, {
-        reviewCount,
-        updatedAt: serverTimestamp()
-      });
-    } catch (error) {
-      console.error("Error updating user review count:", error);
-    }
-  };
-  
+    
+ 
   // Sample reviews for demo purposes
   const getSampleUserReviews = () => {
     return [
@@ -243,3 +249,105 @@ export const getChocolateReviews = async (chocolateId) => {
       }
     ];
   };
+
+  // src/services/reviewService.js - Adding the getRecentTopReviews function
+
+// Add this function to get recent top reviews (reviews with high ratings)
+export const getRecentTopReviews = async (limit = 5) => {
+  try {
+    const q = query(
+      collection(db, "reviews"),
+      where("rating", ">=", 4), // Only get reviews with 4+ stars
+      orderBy("rating", "desc"), // Sort by rating (highest first)
+      orderBy("createdAt", "desc"), // Then by date (newest first)
+      limit(limit) // Limit to specified number of reviews
+    );
+
+    const snapshot = await getDocs(q);
+    
+    // For demo or development purposes, return sample data if no real reviews exist
+    if (snapshot.empty) {
+      return getSampleTopReviews(limit);
+    }
+    
+    // Process the reviews and fetch related chocolate data
+    const reviews = [];
+    for (const doc of snapshot.docs) {
+      const reviewData = {
+        id: doc.id,
+        ...doc.data()
+      };
+      
+      // Get the chocolate data for this review
+      try {
+        const chocolateDoc = await getDoc(doc(db, "chocolates", reviewData.chocolateId));
+        if (chocolateDoc.exists()) {
+          reviewData.chocolate = {
+            id: chocolateDoc.id,
+            ...chocolateDoc.data()
+          };
+        }
+      } catch (err) {
+        console.error("Error fetching chocolate for review:", err);
+      }
+      
+      reviews.push(reviewData);
+    }
+    
+    return reviews;
+  } catch (error) {
+    console.error("Error getting top reviews:", error);
+    // Return sample data in case of error to prevent UI disruption
+    return getSampleTopReviews(limit);
+  }
+};
+
+// Sample top reviews for development/demo
+const getSampleTopReviews = (limit) => {
+  const sampleReviews = [
+    {
+      id: 'sample1',
+      user: 'ChocolateFiend',
+      rating: 5,
+      text: 'The fruity notes in this Madagascar bar are incredible - bright cherry and subtle citrus that lingers beautifully. One of the best dark chocolates I\'ve ever tasted.',
+      createdAt: { seconds: Date.now() / 1000 - 86400 }, // 1 day ago
+      chocolateId: '1',
+      chocolate: {
+        id: '1',
+        name: 'Madagascan Dark 72%',
+        maker: 'Terroir Artisan',
+        imageUrl: '/placeholder-chocolate.jpg'
+      }
+    },
+    {
+      id: 'sample2',
+      user: 'CocoaExplorer',
+      rating: 5,
+      text: 'This has to be the most balanced milk chocolate I ever tried. Creamy but not too sweet with complex notes you do not usually find in milk chocolate. Simply divine!',
+      createdAt: { seconds: Date.now() / 1000 - 172800 }, // 2 days ago
+      chocolateId: '2',
+      chocolate: {
+        id: '2',
+        name: 'Sea Salt Caramel',
+        maker: 'Wild Coast Chocolate',
+        imageUrl: '/placeholder-chocolate.jpg'
+      }
+    },
+    {
+      id: 'sample3',
+      user: 'BeanToBarFan',
+      rating: 4.5,
+      text: 'Exceptional balance of flavors with notes of berries and a hint of earthiness. The mouthfeel is incredibly silky and the finish is long and pleasant.',
+      createdAt: { seconds: Date.now() / 1000 - 259200 }, // 3 days ago
+      chocolateId: '3',
+      chocolate: {
+        id: '3',
+        name: 'Peruvian Single Origin',
+        maker: 'Craft Origins',
+        imageUrl: '/placeholder-chocolate.jpg'
+      }
+    }
+  ];
+  
+  return sampleReviews.slice(0, limit);
+};

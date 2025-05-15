@@ -6,6 +6,7 @@ import SearchResultsPage from './pages/SearchResultsPage';
 import ProfilePage from './pages/ProfilePage';
 import BrowseAllPage from './pages/BrowseAllPage';
 import BarcodeSearchPage from './pages/BarcodeSearchPage';
+import CategoryPage from './pages/CategoryPage'; // Import the new CategoryPage
 import SignUpForm from './components/auth/SignUpForm';
 import LoginForm from './components/auth/LoginForm';
 import { AuthProvider } from './contexts/AuthContext';
@@ -41,6 +42,8 @@ function App() {
               <Route path="/terms-of-service" element={<TermsOfServicePage />} />
               <Route path="/admin" element={<AdminPage />} />
               <Route path="/admin/batch-upload" element={<BatchImageUploadPage />} />
+              <Route path="/category/:categorySlug" element={<CategoryPage />} />
+
             </Routes>
           </main>
           <Footer />
