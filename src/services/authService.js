@@ -40,24 +40,39 @@ import {
     }
   };
   
-  // Sign in with Google
-  export const signInWithGoogle = async () => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      
-      // Check if it's a new user and create profile if needed
-      const userDoc = await getDoc(doc(db, "users", result.user.uid));
-      if (!userDoc.exists()) {
-        await createUserProfile(result.user);
-      }
-      
-      return result.user;
-    } catch (error) {
+  // src/services/authService.js
+// Add better error handling to signInWithGoogle function
+
+export const signInWithGoogle = async () => {
+  try {
+    // Configure Google provider with additional settings for better compatibility
+    const googleProvider = new GoogleAuthProvider();
+    googleProvider.setCustomParameters({
+      prompt: 'select_account'
+    });
+    
+    const result = await signInWithPopup(auth, googleProvider);
+    
+    // Check if it's a new user and create profile if needed
+    const userDoc = await getDoc(doc(db, "users", result.user.uid));
+    if (!userDoc.exists()) {
+      await createUserProfile(result.user);
+    }
+    
+    return result.user;
+  } catch (error) {
+    console.error("Google sign-in error:", error);
+    // Provide more detailed error information
+    if (error.code === 'auth/configuration-not-found') {
+      throw new Error('Authentication configuration issue. Please contact support.');
+    } else {
       throw error;
     }
-  };
+  }
+};
   
   // Sign in with Facebook
+  /*
   export const signInWithFacebook = async () => {
     try {
       const result = await signInWithPopup(auth, facebookProvider);
@@ -73,7 +88,7 @@ import {
       throw error;
     }
   };
-  
+  */
   // Create user profile in Firestore
   export const createUserProfile = async (user, additionalData = {}) => {
     if (!user) return;
