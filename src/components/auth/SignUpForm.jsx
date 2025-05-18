@@ -55,13 +55,16 @@ function SignUpForm() {
     }
   };
 
-  const handleGoogleSignUp = async () => {
+  const handleGoogleLogin = async () => {
     try {
       setLoading(true);
-      await signInWithGoogle();
+      setError('');
+      const user = await signInWithGoogle();
+      console.log("Google login successful:", user?.uid);
       navigate('/profile');
     } catch (error) {
-      setError(error.message);
+      console.error("Google login error:", error);
+      setError(error.message || "Failed to log in with Google");
     } finally {
       setLoading(false);
     }

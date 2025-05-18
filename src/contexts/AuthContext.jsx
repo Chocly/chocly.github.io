@@ -12,25 +12,38 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onAuthChange(async (user) => {
-      setCurrentUser(user);
       setLoading(true);
+      setError(null);
       
-      if (user) {
-        // Load the user's profile from Firestore
-        try {
-          const profile = await getUserProfile(user.uid);
-          setUserProfile(profile);
-        } catch (error) {
-          console.error("Error loading user profile:", error);
+      try {
+        if (user) {
+          console.log("User authenticated:", user.uid);
+          setCurrentUser(user);
+          
+          // Load the user's profile from Firestore
+          try {
+            const profile = await getUserProfile(user.uid);
+            console.log("User profile loaded:", profile ? "success" : "not found");
+            setUserProfile(profile);
+          } catch (profileError) {
+            console.error("Error loading user profile:", profileError);
+            setError("Failed to load user profile");
+          }
+        } else {
+          console.log("No user authenticated");
+          setCurrentUser(null);
+          setUserProfile(null);
         }
-      } else {
-        setUserProfile(null);
+      } catch (authError) {
+        console.error("Auth state change error:", authError);
+        setError("Authentication error");
+      } finally {
+        setLoading(false);
       }
-      
-      setLoading(false);
     });
 
     return unsubscribe;
@@ -39,7 +52,8 @@ export function AuthProvider({ children }) {
   const value = {
     currentUser,
     userProfile,
-    loading
+    loading,
+    error
   };
 
   return (

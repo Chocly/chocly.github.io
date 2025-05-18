@@ -22,7 +22,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider();
-const facebookProvider = new FacebookAuthProvider();
 
-export { db, storage, auth, googleProvider, facebookProvider };
+// Don't export providers, only export what's needed
+export { db, storage, auth };
