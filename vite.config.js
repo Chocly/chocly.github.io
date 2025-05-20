@@ -5,4 +5,11 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: '/',    // Use '/' for user/org sites, or '/repo-name/' for project sites
+  build: {
+    rollupOptions: {
+      external: [
+        /^scripts\/.*/  // Excludes anything in the scripts directory
+      ]
+    }
+  }
 })
