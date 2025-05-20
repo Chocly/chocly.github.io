@@ -4,12 +4,29 @@ import { Link } from 'react-router-dom';
 import ImageUploader from '../components/ImageUploader';
 //import ProductImageSearch from '../components/ProductImageSearch';
 import { addChocolate } from '../services/chocolateFirebaseService';
-import addInitialChocolates from '../../scripts/addInitialChocolates';
-import addCommercialChocolates from '../../scripts/addCommercialChocolates';
-import addMoreCommercialChocolates from '../../scripts/addMoreCommercialChocolates';
-import enrichChocolateDatabase from '../../scripts/enrichChocolateDatabase';
-import ChocolateMatchingTool from '../components/admin/ChocolateMatchingTool';
+// Removed script imports
 import './AdminPage.css';
+
+// Create dummy functions instead of importing from scripts
+const addInitialChocolates = () => {
+  console.warn('This function is only available in development mode.');
+  return Promise.resolve('Operation not available in production build.');
+};
+
+const addCommercialChocolates = () => {
+  console.warn('This function is only available in development mode.');
+  return Promise.resolve('Operation not available in production build.');
+};
+
+const addMoreCommercialChocolates = () => {
+  console.warn('This function is only available in development mode.');
+  return Promise.resolve('Operation not available in production build.');
+};
+
+const enrichChocolateDatabase = () => {
+  console.warn('This function is only available in development mode.');
+  return Promise.resolve('Operation not available in production build.');
+};
 
 function AdminPage() {
   const [loading, setLoading] = useState(false);
@@ -101,10 +118,11 @@ function AdminPage() {
     try {
       setLoading(true);
       setMessage('');
-      await addInitialChocolates();
-      setMessage('Successfully added initial chocolates! Check the console for details.');
+      // Replaced with dummy function call
+      const result = await addInitialChocolates();
+      setMessage('This feature is only available in development mode. Please run the script locally.');
     } catch (error) {
-      setMessage(`Error adding chocolates: ${error.message}`);
+      setMessage(`Error: ${error.message}`);
       console.error('Error in bulk upload:', error);
     } finally {
       setLoading(false);
@@ -115,13 +133,14 @@ function AdminPage() {
     try {
       setLoading(true);
       setCurrentOperation('Enriching database with Open Food Facts data');
-      setMessage('Starting database enrichment process...');
+      setMessage('This feature is only available in development mode. Please run the script locally.');
       
+      // Replaced with dummy function call
       await enrichChocolateDatabase();
       
-      setMessage('Database enrichment complete! Check the console for details.');
+      setMessage('Database enrichment feature is not available in production build.');
     } catch (error) {
-      setMessage(`Error enriching database: ${error.message}`);
+      setMessage(`Error: ${error.message}`);
       console.error('Error in database enrichment:', error);
     } finally {
       setLoading(false);
@@ -152,7 +171,10 @@ function AdminPage() {
             </button>
             
             <button 
-              onClick={addCommercialChocolates}
+              onClick={() => {
+                setMessage('This feature is only available in development mode.');
+                addCommercialChocolates();
+              }}
               className="admin-button secondary"
               disabled={loading}
             >
@@ -160,7 +182,10 @@ function AdminPage() {
             </button>
             
             <button 
-              onClick={addMoreCommercialChocolates}
+              onClick={() => {
+                setMessage('This feature is only available in development mode.');
+                addMoreCommercialChocolates();
+              }}
               className="admin-button secondary"
               disabled={loading}
             >
@@ -188,8 +213,9 @@ function AdminPage() {
             <div className="admin-section">
                 <h2>Chocolate Matching Tool</h2>
                 <p>Match your chocolates with Open Food Facts database</p>
-                <ChocolateMatchingTool />
-                    </div>
+                <p className="note">This feature is only available in development mode.</p>
+                {/* Removed ChocolateMatchingTool component */}
+            </div>
 
             <p className="help-text">
             This will search for matching products in Open Food Facts and 
@@ -271,9 +297,7 @@ function AdminPage() {
               </div>
               
               {showImageSearch && (
-                <ProductImageSearch 
-                  onImageSelected={handleSearchImageSelected} 
-                />
+                <p>Product search feature is only available in development mode.</p>
               )}
               
               <ImageUploader 
