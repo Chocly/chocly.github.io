@@ -1,5 +1,8 @@
+// Replace these imports at the top of your file
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';  // Add this import
 import xlsx from 'xlsx';
 import { initializeApp } from 'firebase/app';
 import { 
@@ -13,6 +16,10 @@ import {
   Timestamp 
 } from 'firebase/firestore';
 import axios from 'axios';
+
+// Add these lines right after the imports
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Firebase configuration
 const firebaseConfig = {
@@ -384,4 +391,3 @@ importDarkChocolates().then(() => {
   console.error('Fatal error:', err);
   process.exit(1);
 });
-EOL
