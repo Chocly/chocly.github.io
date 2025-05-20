@@ -1,7 +1,7 @@
 // src/scripts/enrichChocolateDatabase.js
-import { db } from '../firebase';
+import { db } from '../src/firebase';
 import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
-import { enrichChocolateData } from '../utils/dataUtils';
+import { enrichChocolateData } from '../src/utils/dataUtils';
 
 const enrichChocolateDatabase = async () => {
   try {

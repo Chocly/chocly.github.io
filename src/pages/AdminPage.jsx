@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 import ImageUploader from '../components/ImageUploader';
 //import ProductImageSearch from '../components/ProductImageSearch';
 import { addChocolate } from '../services/chocolateFirebaseService';
-import addInitialChocolates from '../scripts/addInitialChocolates';
-import addCommercialChocolates from '../scripts/addCommercialChocolates';
-import addMoreCommercialChocolates from '../scripts/addMoreCommercialChocolates';
-import enrichChocolateDatabase from '../scripts/enrichChocolateDatabase';
+import addInitialChocolates from '../../scripts/addInitialChocolates';
+import addCommercialChocolates from '../../scripts/addCommercialChocolates';
+import addMoreCommercialChocolates from '../../scripts/addMoreCommercialChocolates';
+import enrichChocolateDatabase from '../../scripts/enrichChocolateDatabase';
 import ChocolateMatchingTool from '../components/admin/ChocolateMatchingTool';
 import './AdminPage.css';
 
