@@ -34,3 +34,31 @@ data/data_keys
 data/data_keys.gz
 data/web_images.txt
 data/image_lookup.json
+
+echo "data/data_keys" >> .gitignore
+echo "data/*.csv" >> .gitignore  # Also ignore any other large data files
+echo "data/*.json" >> .gitignore
+
+# Large data files
+data/data_keys
+data/*.csv
+data/*.json
+*.db
+scripts/development/
+
+# Node modules
+node_modules/
+
+# Build files
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+
+# Editor files
+.vscode/
+.idea/
