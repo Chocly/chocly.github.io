@@ -1,0 +1,98 @@
+/* src/components/admin/ChocolateMatchingTool.css */
+.chocolate-matching-tool {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .batch-controls {
+    margin: 20px 0;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .batch-controls input {
+    width: 60px;
+    padding: 5px;
+    margin: 0 10px;
+  }
+  
+  .message {
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #f0f0f0;
+    border-left: 4px solid #666;
+  }
+  
+  .match-results h3 {
+    margin-top: 30px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .match-item {
+    display: flex;
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .match-chocolate, .off-chocolate {
+    flex: 1;
+    padding: 10px;
+  }
+  
+  .match-arrows {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    font-size: 24px;
+  }
+  
+  .match-score {
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #666;
+  }
+  
+  .chocolate-image {
+    max-width: 150px;
+    max-height: 150px;
+    object-fit: contain;
+    margin: 10px 0;
+  }
+  
+  .match-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+  }
+  
+  .accept-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .reject-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }

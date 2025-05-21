@@ -1,0 +1,41 @@
+/* Update BrowseAllPage.css */
+.browse-page {
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.full-page {
+  width: 100%;
+  min-height: calc(100vh - 60px - 100px); /* Adjust based on your header and footer heights */
+}
+
+.full-width {
+  width: 100%;
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.browse-page h1 {
+  color: var(--primary-dark);
+  margin-bottom: 0.5rem;
+}
+
+.browse-description {
+  color: var(--primary);
+  margin-bottom: 2rem;
+}
+
+.chocolate-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .chocolate-grid {
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+}

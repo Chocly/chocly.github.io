@@ -1,0 +1,90 @@
+/* src/components/BarcodeScanner.css */
+.barcode-scanner {
+    background-color: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .barcode-scanner h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: var(--primary-dark);
+  }
+  
+  .scan-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  
+  .manual-entry, .scan-image {
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+  }
+  
+  .manual-entry h3, .scan-image h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--primary-dark);
+  }
+  
+  .manual-entry form {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .manual-entry input {
+    flex: 1;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  .manual-entry button, .scan-image button {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+  
+  .manual-entry button:hover, .scan-image button:hover {
+    background-color: var(--primary-dark);
+  }
+  
+  .manual-entry button:disabled, .scan-image button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .scan-image p {
+    margin-bottom: 1rem;
+  }
+  
+  .scan-image .hint {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: #888;
+    font-style: italic;
+  }
+  
+  .error-message {
+    margin-top: 1.5rem;
+    color: #d00;
+    background-color: #fee;
+    padding: 1rem;
+    border-radius: 4px;
+  }
+  
+  @media (max-width: 768px) {
+    .scan-options {
+      grid-template-columns: 1fr;
+    }
+  }
