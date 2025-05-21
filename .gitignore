@@ -28,3 +28,9 @@ dist-ssr
 .env.*.local
 
 /scripts/
+
+# Open Food Facts data files
+data/data_keys
+data/data_keys.gz
+data/web_images.txt
+data/image_lookup.json
