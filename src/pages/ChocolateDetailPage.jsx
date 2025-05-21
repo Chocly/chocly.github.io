@@ -195,22 +195,27 @@ function ChocolateDetailPage() {
         ? chocolate.ingredients.split(',').map(item => item.trim())
         : []);
   
-  return (
-    <div className="chocolate-detail-page">
-      <div className="detail-header">
-        <div className="container">
-          <div className="detail-header-content">
-            <div className="detail-image">
-              <img 
-                src={chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate'} 
-                alt={chocolate.name} 
-                className="chocolate-label-image"
-              />
-              <div className="image-caption">Product Label</div>
-            </div>
-            <div className="detail-info">
-              <h1>{chocolate.name}</h1>
-              <p className="maker">{chocolate.maker}</p>
+        return (
+          <div className="chocolate-detail-page">
+            <div className="detail-header">
+              <div className="container">
+                <div className="detail-header-content">
+                  <div className="detail-image">
+                    <img 
+                      src={chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate'} 
+                      alt={chocolate.name} 
+                      className="chocolate-label-image"
+                    />
+                    <div className="image-caption">Product Label</div>
+                  </div>
+                  <div className="detail-info">
+                    <h1>{chocolate.name}</h1>
+                    {/* Make the maker name a clickable link */}
+                    <p className="maker">
+                      <Link to={`/search?query=${encodeURIComponent(chocolate.maker)}`} className="maker-link">
+                        {chocolate.maker}
+                      </Link>
+                    </p>
               
               <div className="rating-section">
                 <div className="average-rating">

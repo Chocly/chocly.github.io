@@ -24,13 +24,21 @@ function ChocolateCard({ chocolate, featured = false }) {
     return stars;
   };
 
+  // Format title to include brand if available
+  const getFormattedTitle = () => {
+    if (chocolate.maker && !chocolate.name.includes(chocolate.maker)) {
+      return `${chocolate.maker} - ${chocolate.name}`;
+    }
+    return chocolate.name;
+  };
+
   return (
     <Link 
       to={`/chocolate/${chocolate.id}`} 
       className={`chocolate-card ${featured ? 'featured' : ''}`}
     >
       <div className="image-container">
-        <img src={chocolate.imageUrl} alt={chocolate.name} />
+        <img src={chocolate.imageUrl} alt={chocolate.name} className="card-image" />
         {featured && (
           <div className="featured-badge">
             <span>Featured</span>
@@ -38,7 +46,7 @@ function ChocolateCard({ chocolate, featured = false }) {
         )}
       </div>
       <div className="card-content">
-        <h3 className="card-title">{chocolate.name}</h3>
+        <h3 className="card-title">{getFormattedTitle()}</h3>
         <p className="card-maker">{chocolate.maker}</p>
         
         <div className="card-details">

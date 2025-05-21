@@ -2,31 +2,14 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ImageUploader from '../components/ImageUploader';
-//import ProductImageSearch from '../components/ProductImageSearch';
 import { addChocolate } from '../services/chocolateFirebaseService';
-// Removed script imports
+import addInitialChocolates from '../../scripts/addInitialChocolates';
+import addCommercialChocolates from '../../scripts/addCommercialChocolates';
+import addMoreCommercialChocolates from '../../scripts/addMoreCommercialChocolates';
+import updateDatabaseProducts from '../../scripts/updateDatabaseProducts';
+import { downloadAndProcessS3List, updateChocolateImages, runImageUpdate } from '../../scripts/processS3ImageList';
+import ChocolateMatchingTool from '../components/admin/ChocolateMatchingTool';
 import './AdminPage.css';
-
-// Create dummy functions instead of importing from scripts
-const addInitialChocolates = () => {
-  console.warn('This function is only available in development mode.');
-  return Promise.resolve('Operation not available in production build.');
-};
-
-const addCommercialChocolates = () => {
-  console.warn('This function is only available in development mode.');
-  return Promise.resolve('Operation not available in production build.');
-};
-
-const addMoreCommercialChocolates = () => {
-  console.warn('This function is only available in development mode.');
-  return Promise.resolve('Operation not available in production build.');
-};
-
-const enrichChocolateDatabase = () => {
-  console.warn('This function is only available in development mode.');
-  return Promise.resolve('Operation not available in production build.');
-};
 
 function AdminPage() {
   const [loading, setLoading] = useState(false);
@@ -46,7 +29,6 @@ function AdminPage() {
   // Image handling state
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
-  const [showImageSearch, setShowImageSearch] = useState(false);
   const [uploading, setUploading] = useState(false);
   
   const handleChange = (e) => {
@@ -61,13 +43,6 @@ function AdminPage() {
   const handleImageSelected = (file) => {
     setSelectedImage(file);
     setSelectedImageUrl(URL.createObjectURL(file));
-  };
-  
-  // Handle image selection from the ProductImageSearch component
-  const handleSearchImageSelected = (file, url) => {
-    setSelectedImage(file);
-    setSelectedImageUrl(url);
-    setShowImageSearch(false); // Hide search after selection
   };
   
   const handleSubmit = async (e) => {
@@ -117,31 +92,13 @@ function AdminPage() {
   const handleBulkUpload = async () => {
     try {
       setLoading(true);
+      setCurrentOperation('Adding initial chocolates');
       setMessage('');
-      // Replaced with dummy function call
-      const result = await addInitialChocolates();
-      setMessage('This feature is only available in development mode. Please run the script locally.');
+      await addInitialChocolates();
+      setMessage('Successfully added initial chocolates! Check the console for details.');
     } catch (error) {
-      setMessage(`Error: ${error.message}`);
+      setMessage(`Error adding chocolates: ${error.message}`);
       console.error('Error in bulk upload:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-  const handleEnrichDatabase = async () => {
-    try {
-      setLoading(true);
-      setCurrentOperation('Enriching database with Open Food Facts data');
-      setMessage('This feature is only available in development mode. Please run the script locally.');
-      
-      // Replaced with dummy function call
-      await enrichChocolateDatabase();
-      
-      setMessage('Database enrichment feature is not available in production build.');
-    } catch (error) {
-      setMessage(`Error: ${error.message}`);
-      console.error('Error in database enrichment:', error);
     } finally {
       setLoading(false);
       setCurrentOperation('');
@@ -159,6 +116,7 @@ function AdminPage() {
           </div>
         </div>
         
+        {/* Database Actions Section */}
         <div className="admin-section">
           <h2>Database Actions</h2>
           <div className="admin-actions">
@@ -167,13 +125,24 @@ function AdminPage() {
               className="admin-button primary"
               disabled={loading}
             >
-              {loading ? 'Adding Chocolates...' : 'Add Initial Chocolates'}
+              {loading && currentOperation === 'Adding initial chocolates' ? 'Adding Chocolates...' : 'Add Initial Chocolates'}
             </button>
             
             <button 
-              onClick={() => {
-                setMessage('This feature is only available in development mode.');
-                addCommercialChocolates();
+              onClick={async () => {
+                try {
+                  setLoading(true);
+                  setCurrentOperation('Adding commercial chocolates');
+                  setMessage('Adding commercial chocolates to the database...');
+                  await addCommercialChocolates();
+                  setMessage('Successfully added commercial chocolates! Check the console for details.');
+                } catch (error) {
+                  setMessage(`Error adding chocolates: ${error.message}`);
+                  console.error('Error:', error);
+                } finally {
+                  setLoading(false);
+                  setCurrentOperation('');
+                }
               }}
               className="admin-button secondary"
               disabled={loading}
@@ -182,48 +151,149 @@ function AdminPage() {
             </button>
             
             <button 
-              onClick={() => {
-                setMessage('This feature is only available in development mode.');
-                addMoreCommercialChocolates();
+              onClick={async () => {
+                try {
+                  setLoading(true);
+                  setCurrentOperation('Adding more commercial chocolates');
+                  setMessage('Adding 100 more popular chocolates to the database...');
+                  await addMoreCommercialChocolates();
+                  setMessage('Successfully added 100 more chocolates! Check the console for details.');
+                } catch (error) {
+                  setMessage(`Error adding chocolates: ${error.message}`);
+                  console.error('Error:', error);
+                } finally {
+                  setLoading(false);
+                  setCurrentOperation('');
+                }
               }}
               className="admin-button secondary"
               disabled={loading}
             >
               Add 100 More Popular Chocolates
             </button>
-            
-            {message && <div className="message">{message}</div>}
+          </div>
+          
+          {message && <div className="message">{message}</div>}
+        </div>
+        
+        {/* Database Maintenance Section */}
+        <div className="admin-section">
+          <h2>Database Maintenance</h2>
+          <div className="admin-actions">
+            <button 
+              onClick={async () => {
+                try {
+                  setLoading(true);
+                  setCurrentOperation('Updating database products');
+                  setMessage('Updating product titles and data...');
+                  await updateDatabaseProducts();
+                  setMessage('Successfully updated product titles and data!');
+                } catch (error) {
+                  setMessage(`Error updating products: ${error.message}`);
+                  console.error('Error:', error);
+                } finally {
+                  setLoading(false);
+                  setCurrentOperation('');
+                }
+              }}
+              className="admin-button primary"
+              disabled={loading}
+            >
+              Update Product Titles & Data
+            </button>
           </div>
         </div>
         
-        {/* Add this new section here for the Open Food Facts integration  */}
+        {/* Open Food Facts S3 Integration Section */}
         <div className="admin-section">
-        <h2>Open Food Facts Integration</h2>
-        <div className="admin-actions">
+          <h2>Image Management (Open Food Facts S3)</h2>
+          <div className="admin-actions">
             <button 
-            onClick={handleEnrichDatabase}
-            className="admin-button primary"
-            disabled={loading}
+              onClick={async () => {
+                try {
+                  setLoading(true);
+                  setCurrentOperation('Downloading S3 image list');
+                  setMessage('Downloading and processing the list of available images from Open Food Facts S3...');
+                  await downloadAndProcessS3List();
+                  setMessage('Successfully downloaded and processed the S3 image list. You can now update images.');
+                } catch (error) {
+                  setMessage(`Error downloading S3 image list: ${error.message}`);
+                  console.error('Error:', error);
+                } finally {
+                  setLoading(false);
+                  setCurrentOperation('');
+                }
+              }}
+              className="admin-button"
+              disabled={loading}
             >
-            {loading && currentOperation === 'Enriching database' 
-                ? 'Enriching Database...' 
-                : 'Enrich Database with Open Food Facts'}
+              1. Download S3 Image List
             </button>
+            
+            <button 
+              onClick={async () => {
+                try {
+                  setLoading(true);
+                  setCurrentOperation('Updating images using S3 lookup');
+                  setMessage('Updating chocolate images using the S3 lookup table...');
+                  await updateChocolateImages();
+                  setMessage('Successfully updated chocolate images using the S3 lookup table.');
+                } catch (error) {
+                  setMessage(`Error updating images: ${error.message}`);
+                  console.error('Error:', error);
+                } finally {
+                  setLoading(false);
+                  setCurrentOperation('');
+                }
+              }}
+              className="admin-button"
+              disabled={loading}
+            >
+              2. Update Images Using S3 Lookup
+            </button>
+            
+            <button 
+              onClick={async () => {
+                try {
+                  setLoading(true);
+                  setCurrentOperation('Running full image update');
+                  setMessage('Downloading S3 image list and updating all chocolate images...');
+                  await runImageUpdate();
+                  setMessage('Successfully completed the full image update process.');
+                } catch (error) {
+                  setMessage(`Error in image update process: ${error.message}`);
+                  console.error('Error:', error);
+                } finally {
+                  setLoading(false);
+                  setCurrentOperation('');
+                }
+              }}
+              className="admin-button primary"
+              disabled={loading}
+            >
+              Run Complete Image Update
+            </button>
+          </div>
+          
+          <div className="admin-help">
+            <p><strong>How the S3 image update works:</strong></p>
+            <ol>
+              <li>The process first downloads the complete list of available images from Open Food Facts' S3 bucket</li>
+              <li>It builds a lookup table mapping barcodes to available image types</li>
+              <li>Then it updates your chocolates with the correct S3 image URLs</li>
+              <li>This method is much more efficient than checking each image URL individually</li>
+            </ol>
+          </div>
+        </div>
         
-            <div className="admin-section">
-                <h2>Chocolate Matching Tool</h2>
-                <p>Match your chocolates with Open Food Facts database</p>
-                <p className="note">This feature is only available in development mode.</p>
-                {/* Removed ChocolateMatchingTool component */}
-            </div>
-
-            <p className="help-text">
-            This will search for matching products in Open Food Facts and 
-            update your database with barcodes, images, and additional information.
-            </p>
+        {/* Open Food Facts Matching Tool Section */}
+        <div className="admin-section">
+          <h2>Chocolate Matching Tool</h2>
+          <p>Match your chocolates with Open Food Facts database</p>
+          <ChocolateMatchingTool />
         </div>
-        </div>
-
+        
+        {/* Add New Chocolate Section */}
         <div className="admin-section">
           <h2>Add New Chocolate</h2>
           <form onSubmit={handleSubmit} className="admin-form">
@@ -286,19 +356,6 @@ function AdminPage() {
             {/* Image uploader section */}
             <div className="form-group full-width">
               <label>Chocolate Label Image</label>
-              <div className="image-options">
-                <button 
-                  type="button" 
-                  className="toggle-search-button"
-                  onClick={() => setShowImageSearch(!showImageSearch)}
-                >
-                  {showImageSearch ? 'Hide Product Search' : 'Search Product Database'}
-                </button>
-              </div>
-              
-              {showImageSearch && (
-                <p>Product search feature is only available in development mode.</p>
-              )}
               
               <ImageUploader 
                 onImageSelected={handleImageSelected}
