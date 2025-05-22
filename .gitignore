@@ -27,31 +27,20 @@ dist-ssr
 .env.local
 .env.*.local
 
-/scripts/
-
-# Open Food Facts data files
+# Data files - keep local only
 data/data_keys
 data/data_keys.gz
 data/web_images.txt
 data/image_lookup.json
-
-echo "data/data_keys" >> .gitignore
-echo "data/*.csv" >> .gitignore  # Also ignore any other large data files
-echo "data/*.json" >> .gitignore
-
-# Large data files
-data/data_keys
 data/*.csv
 data/*.json
+data/*.xlsx
+data/*.txt
+data/*.gz
 *.db
+
+# Development scripts only (not main scripts)
 scripts/development/
-
-# Node modules
-node_modules/
-
-# Build files
-dist/
-build/
 
 # Environment variables
 .env
@@ -60,5 +49,4 @@ build/
 .env.production
 
 # Editor files
-.vscode/
 .idea/chocolate-backup/
