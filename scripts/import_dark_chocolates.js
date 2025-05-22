@@ -1,9 +1,8 @@
-// scripts/import_dark_chocolates.js
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import * as XLSX from 'xlsx';  // Fixed import
+import XLSX from 'xlsx';  // Fixed: Use default import for ES modules
 import { initializeApp } from 'firebase/app';
 import { 
   getFirestore, 
