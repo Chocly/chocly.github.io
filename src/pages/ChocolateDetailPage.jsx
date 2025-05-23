@@ -1,6 +1,6 @@
 // src/pages/ChocolateDetailPage.jsx
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { doc, getDoc, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import RatingStars from '../components/RatingStars';

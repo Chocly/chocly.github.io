@@ -1,0 +1,515 @@
+// src/scripts/addCommercialChocolates.js
+import { db } from '../firebase';
+import { 
+  collection, 
+  addDoc, 
+  getDocs, 
+  Timestamp 
+} from 'firebase/firestore';
+
+const addCommercialChocolates = async () => {
+  console.log('Starting to add commercial chocolate brands...');
+  
+  // First, get all makers and tags to find their IDs
+  const makersSnapshot = await getDocs(collection(db, 'makers'));
+  const tagsSnapshot = await getDocs(collection(db, 'tags'));
+  
+  // Create maps of maker and tag names to their IDs for easy lookup
+  const makers = {};
+  makersSnapshot.forEach(doc => {
+    makers[doc.data().name] = doc.id;
+  });
+  
+  const tags = {};
+  tagsSnapshot.forEach(doc => {
+    tags[doc.data().name] = doc.id;
+  });
+  
+  console.log('Loaded makers and tags');
+  
+  // Create any new makers needed
+  const newMakers = [
+    { name: "Hershey's", country: "United States", website: "https://www.hersheys.com" },
+    { name: "Mars", country: "United States", website: "https://www.mars.com" },
+    { name: "Ferrero", country: "Italy", website: "https://www.ferrero.com" },
+    { name: "Nestlé", country: "Switzerland", website: "https://www.nestle.com" },
+    { name: "Cadbury", country: "United Kingdom", website: "https://www.cadbury.co.uk" },
+    { name: "Chocolove", country: "United States", website: "https://www.chocolove.com" },
+    { name: "Green & Black's", country: "United Kingdom", website: "https://www.greenandblacks.co.uk" },
+    { name: "Endangered Species", country: "United States", website: "https://www.chocolatebar.com" },
+    { name: "Divine", country: "United Kingdom", website: "https://www.divinechocolate.com" },
+    { name: "Hu", country: "United States", website: "https://hukitchen.com" },
+    { name: "Alter Eco", country: "United States", website: "https://www.alterecofoods.com" },
+    { name: "Ritter Sport", country: "Germany", website: "https://www.ritter-sport.de/en" },
+    { name: "Milka", country: "Switzerland", website: "https://www.milka.com" },
+    { name: "Tony's Chocolonely", country: "Netherlands", website: "https://tonyschocolonely.com" },
+    { name: "Dove", country: "United States", website: "https://www.dovechocolate.com" },
+    { name: "Ghirardelli", country: "United States", website: "https://www.ghirardelli.com" },
+    { name: "Taza", country: "United States", website: "https://www.tazachocolate.com" },
+    { name: "Equal Exchange", country: "United States", website: "https://equalexchange.coop" },
+    { name: "Toblerone", country: "Switzerland", website: "https://www.toblerone.com" },
+    { name: "Guittard", country: "United States", website: "https://www.guittard.com" }
+  ];
+  
+  // Add new makers if they don't exist yet
+  const makersCollection = collection(db, 'makers');
+  for (const makerData of newMakers) {
+    // Skip if maker already exists in our map
+    if (makers[makerData.name]) {
+      console.log(`Maker "${makerData.name}" already exists, skipping`);
+      continue;
+    }
+    
+    try {
+      const docRef = await addDoc(makersCollection, makerData);
+      console.log(`Added new maker: ${makerData.name} with ID: ${docRef.id}`);
+      makers[makerData.name] = docRef.id;
+    } catch (error) {
+      console.error(`Error adding maker ${makerData.name}:`, error);
+    }
+  }
+  
+  // Define commercial chocolates data - organized by price tier
+  
+  // Mass Market Tier (commonly found in drugstores, supermarkets)
+  const massMarketChocolates = [
+    {
+      name: "Hershey's Milk Chocolate Bar",
+      makerId: makers["Hershey's"],
+      type: "Milk",
+      origin: "Blend",
+      cacaoPercentage: 11,
+      description: "The classic American milk chocolate bar with a sweet, slightly tangy flavor profile that's instantly recognizable.",
+      ingredients: "Sugar, milk, chocolate, cocoa butter, lactose, milk fat, soy lecithin, PGPR, vanillin",
+      tagIds: [tags["Milk"]],
+      imageUrl: "https://placehold.co/300x300?text=Hershey",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Hershey's Special Dark",
+      makerId: makers["Hershey's"],
+      type: "Dark",
+      origin: "Blend",
+      cacaoPercentage: 45,
+      description: "A slightly darker chocolate offering from Hershey's with a more pronounced cocoa flavor than their milk chocolate.",
+      ingredients: "Sugar, chocolate, cocoa butter, cocoa processed with alkali, milk fat, soy lecithin, vanillin, milk",
+      tagIds: [tags["Dark"]],
+      imageUrl: "https://placehold.co/300x300?text=HersheyDark",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Cadbury Dairy Milk",
+      makerId: makers["Cadbury"],
+      type: "Milk",
+      origin: "Blend",
+      cacaoPercentage: 26,
+      description: "Smooth, creamy milk chocolate with a distinctive flavor profile and higher milk content than many competitors.",
+      ingredients: "Milk, sugar, cocoa butter, cocoa mass, vegetable fats, emulsifiers, flavourings",
+      tagIds: [tags["Milk"], tags["Creamy"]],
+      imageUrl: "https://placehold.co/300x300?text=Cadbury",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Mars Bar",
+      makerId: makers["Mars"],
+      type: "Milk",
+      origin: "Blend",
+      cacaoPercentage: 25,
+      description: "Nougat and caramel covered in milk chocolate, creating a sweet, chewy treat with multiple textures.",
+      ingredients: "Sugar, glucose syrup, milk solids, cocoa butter, cocoa mass, vegetable fat, barley malt extract, emulsifier, salt, egg white, natural flavor",
+      tagIds: [tags["Milk"], tags["Caramel"]],
+      imageUrl: "https://placehold.co/300x300?text=Mars",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Nestlé Crunch",
+      makerId: makers["Nestlé"],
+      type: "Milk",
+      origin: "Blend",
+      cacaoPercentage: 22,
+      description: "Milk chocolate with crisped rice, creating a distinctive crunchy texture and sweet flavor.",
+      ingredients: "Sugar, chocolate, cocoa butter, milk, crisped rice, soy lecithin, vanillin",
+      tagIds: [tags["Milk"]],
+      imageUrl: "https://placehold.co/300x300?text=Crunch",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Milka Alpine Milk Chocolate",
+      makerId: makers["Milka"],
+      type: "Milk",
+      origin: "Blend (European)",
+      cacaoPercentage: 30,
+      description: "Creamy European milk chocolate with a distinctive flavor from Alpine milk. Smoother and less sweet than American counterparts.",
+      ingredients: "Sugar, cocoa butter, cocoa mass, whey powder, butterfat, emulsifier, hazelnut paste, flavoring",
+      tagIds: [tags["Milk"], tags["Creamy"]],
+      imageUrl: "https://placehold.co/300x300?text=Milka",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Dove Milk Chocolate",
+      makerId: makers["Dove"],
+      type: "Milk",
+      origin: "Blend",
+      cacaoPercentage: 33,
+      description: "Silky, smooth milk chocolate with a melt-in-your-mouth texture and less sweetness than other mass market brands.",
+      ingredients: "Sugar, cocoa butter, chocolate, skim milk, milk fat, soy lecithin, artificial flavors",
+      tagIds: [tags["Milk"], tags["Creamy"]],
+      imageUrl: "https://placehold.co/300x300?text=Dove",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Toblerone Milk Chocolate",
+      makerId: makers["Toblerone"],
+      type: "Milk",
+      origin: "Switzerland",
+      cacaoPercentage: 28,
+      description: "Distinctive triangular sections of Swiss milk chocolate with honey and almond nougat pieces.",
+      ingredients: "Sugar, whole milk powder, cocoa butter, cocoa mass, honey, almonds, emulsifier, egg white, vanilla",
+      tagIds: [tags["Milk"], tags["Nutty"], tags["Honey"]],
+      imageUrl: "https://placehold.co/300x300?text=Toblerone",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Ritter Sport Milk Chocolate",
+      makerId: makers["Ritter Sport"],
+      type: "Milk",
+      origin: "Germany",
+      cacaoPercentage: 30,
+      description: "Square-shaped German milk chocolate bar with a distinct snap and creamy flavor.",
+      ingredients: "Sugar, cocoa butter, cocoa mass, whole milk powder, lactose, whey powder, butterfat, soy lecithin, natural vanilla",
+      tagIds: [tags["Milk"]],
+      imageUrl: "https://placehold.co/300x300?text=RitterSport",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Ferrero Rocher",
+      makerId: makers["Ferrero"],
+      type: "Milk",
+      origin: "Blend",
+      cacaoPercentage: 30,
+      description: "Whole hazelnut encased in a thin wafer shell filled with hazelnut cream and covered in milk chocolate and chopped hazelnuts.",
+      ingredients: "Milk chocolate, hazelnuts, sugar, palm oil, wheat flour, whey powder, cocoa powder, soy lecithin, vanillin",
+      tagIds: [tags["Milk"], tags["Nutty"]],
+      imageUrl: "https://placehold.co/300x300?text=Ferrero",
+      averageRating: 0,
+      reviewCount: 0
+    }
+  ];
+  
+  // Mid-tier Chocolates (found in grocery stores, including some specialty sections)
+  const midTierChocolates = [
+    {
+      name: "Ghirardelli Milk Chocolate",
+      makerId: makers["Ghirardelli"],
+      type: "Milk",
+      origin: "Blend",
+      cacaoPercentage: 31,
+      description: "Smooth, creamy milk chocolate with a more refined flavor profile than mass market options.",
+      ingredients: "Sugar, whole milk powder, cocoa butter, unsweetened chocolate, soy lecithin, vanilla",
+      tagIds: [tags["Milk"], tags["Creamy"]],
+      imageUrl: "https://placehold.co/300x300?text=Ghirardelli",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Ghirardelli 60% Cacao Dark Chocolate",
+      makerId: makers["Ghirardelli"],
+      type: "Dark",
+      origin: "Blend",
+      cacaoPercentage: 60,
+      description: "Intensely flavorful dark chocolate with a good balance of sweetness and bitterness.",
+      ingredients: "Unsweetened chocolate, sugar, cocoa butter, milk fat, soy lecithin, vanilla",
+      tagIds: [tags["Dark"], tags["Bittersweet"]],
+      imageUrl: "https://placehold.co/300x300?text=GhirardelliDark",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Chocolove Almonds & Sea Salt in Dark Chocolate",
+      makerId: makers["Chocolove"],
+      type: "Dark",
+      origin: "Blend",
+      cacaoPercentage: 55,
+      description: "Dark chocolate with crunchy almonds and sea salt, featuring a love poem printed inside each wrapper.",
+      ingredients: "Unsweetened chocolate, sugar, cocoa butter, almonds, sea salt, soy lecithin, vanilla",
+      tagIds: [tags["Dark"], tags["Nutty"]],
+      imageUrl: "https://placehold.co/300x300?text=Chocolove",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Green & Black's Organic Dark 70%",
+      makerId: makers["Green & Black's"],
+      type: "Dark",
+      origin: "Blend",
+      cacaoPercentage: 70,
+      description: "Intensely rich dark chocolate with a robust flavor profile and smooth finish.",
+      ingredients: "Organic chocolate, organic raw cane sugar, organic cocoa butter, soy lecithin, organic vanilla extract",
+      tagIds: [tags["Dark"], tags["Organic"], tags["Fair Trade"]],
+      imageUrl: "https://placehold.co/300x300?text=GreenAndBlacks",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Endangered Species Dark Chocolate with Sea Salt & Almonds",
+      makerId: makers["Endangered Species"],
+      type: "Dark",
+      origin: "Blend",
+      cacaoPercentage: 72,
+      description: "Bold dark chocolate with roasted almonds and a touch of sea salt. Each purchase supports wildlife conservation.",
+      ingredients: "Chocolate liquor, cane sugar, cocoa butter, almonds, sea salt, soy lecithin, vanilla",
+      tagIds: [tags["Dark"], tags["Nutty"], tags["Fair Trade"]],
+      imageUrl: "https://placehold.co/300x300?text=EndangeredSpecies",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Lindt Excellence 70% Cocoa",
+      makerId: makers["Lindt"],
+      type: "Dark",
+      origin: "Blend",
+      cacaoPercentage: 70,
+      description: "Smooth dark chocolate with well-balanced bitterness and subtle fruity notes.",
+      ingredients: "Chocolate, sugar, cocoa butter, cocoa powder, bourbon vanilla beans",
+      tagIds: [tags["Dark"], tags["Fruity"]],
+      imageUrl: "https://placehold.co/300x300?text=LindtExcellence",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Divine Dark Chocolate with Mint",
+      makerId: makers["Divine"],
+      type: "Dark",
+      origin: "Ghana",
+      cacaoPercentage: 70,
+      description: "Rich dark chocolate with natural mint oil for a refreshing taste. Made with fair trade cocoa from Ghanaian farmer cooperatives.",
+      ingredients: "Cocoa mass, sugar, cocoa butter, peppermint oil, vanilla",
+      tagIds: [tags["Dark"], tags["Fair Trade"], tags["Single Origin"]],
+      imageUrl: "https://placehold.co/300x300?text=Divine",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Tony's Chocolonely Milk Chocolate",
+      makerId: makers["Tony's Chocolonely"],
+      type: "Milk",
+      origin: "West Africa",
+      cacaoPercentage: 32,
+      description: "Creamy milk chocolate with an irregular chunky shape, committed to slave-free chocolate production.",
+      ingredients: "Sugar, dry whole milk, cocoa butter, cocoa mass, soy lecithin",
+      tagIds: [tags["Milk"], tags["Fair Trade"]],
+      imageUrl: "https://placehold.co/300x300?text=Tonys",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Ritter Sport Dark Chocolate with Whole Hazelnuts",
+      makerId: makers["Ritter Sport"],
+      type: "Dark",
+      origin: "Blend",
+      cacaoPercentage: 50,
+      description: "German dark chocolate squares filled with whole hazelnuts for a satisfying crunch.",
+      ingredients: "Cocoa mass, sugar, hazelnuts, cocoa butter, butterfat, soy lecithin, natural flavoring",
+      tagIds: [tags["Dark"], tags["Nutty"]],
+      imageUrl: "https://placehold.co/300x300?text=RitterNuts",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Guittard 64% Semisweet Chocolate Baking Bar",
+      makerId: makers["Guittard"],
+      type: "Dark",
+      origin: "Blend",
+      cacaoPercentage: 64,
+      description: "High-quality semisweet chocolate from a 150-year-old American chocolate maker, equally good for baking or eating.",
+      ingredients: "Cacao beans, pure cane sugar, cocoa butter, sunflower lecithin, vanilla beans",
+      tagIds: [tags["Dark"], tags["Bittersweet"]],
+      imageUrl: "https://placehold.co/300x300?text=Guittard",
+      averageRating: 0,
+      reviewCount: 0
+    }
+  ];
+  
+  // Premium Tier (specialty or organic grocery stores like Whole Foods)
+  const premiumChocolates = [
+    {
+      name: "Theo Pure 70% Dark Chocolate",
+      makerId: makers["Theo Chocolate"],
+      type: "Dark",
+      origin: "Blend (Congo, Peru)",
+      cacaoPercentage: 70,
+      description: "Organic, fair trade dark chocolate with a complex flavor profile featuring notes of cherry and toasted nuts.",
+      ingredients: "Cocoa beans, cane sugar, cocoa butter, ground vanilla bean",
+      tagIds: [tags["Dark"], tags["Organic"], tags["Fair Trade"], tags["Bean to Bar"]],
+      imageUrl: "https://placehold.co/300x300?text=Theo",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Theo Salted Almond 70% Dark Chocolate",
+      makerId: makers["Theo Chocolate"],
+      type: "Dark",
+      origin: "Blend (Congo, Peru)",
+      cacaoPercentage: 70,
+      description: "Organic dark chocolate with chunks of toasted almonds and a sprinkle of sea salt.",
+      ingredients: "Cocoa beans, cane sugar, almonds, cocoa butter, sea salt, ground vanilla bean",
+      tagIds: [tags["Dark"], tags["Nutty"], tags["Organic"], tags["Fair Trade"], tags["Bean to Bar"]],
+      imageUrl: "https://placehold.co/300x300?text=TheoAlmond",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Hu Simple Dark Chocolate",
+      makerId: makers["Hu"],
+      type: "Dark",
+      origin: "Blend",
+      cacaoPercentage: 70,
+      description: "Minimally processed dark chocolate made with just three ingredients. Vegan, paleo, and free from refined sugar.",
+      ingredients: "Organic cacao, organic coconut sugar, organic cocoa butter",
+      tagIds: [tags["Dark"], tags["Organic"], tags["Vegan"], tags["Gluten-Free"]],
+      imageUrl: "https://placehold.co/300x300?text=Hu",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Hu Cashew Butter + Vanilla Bean Dark Chocolate",
+      makerId: makers["Hu"],
+      type: "Dark",
+      origin: "Blend",
+      cacaoPercentage: 70,
+      description: "Dark chocolate filled with house-made cashew butter and vanilla bean. Vegan-friendly with clean ingredients.",
+      ingredients: "Organic cacao, organic coconut sugar, organic cocoa butter, cashews, vanilla bean",
+      tagIds: [tags["Dark"], tags["Nutty"], tags["Organic"], tags["Vegan"], tags["Gluten-Free"]],
+      imageUrl: "https://placehold.co/300x300?text=HuCashew",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Alter Eco Dark Blackout Organic Chocolate",
+      makerId: makers["Alter Eco"],
+      type: "Dark",
+      origin: "Ecuador",
+      cacaoPercentage: 85,
+      description: "Intensely dark chocolate with minimal sugar and pronounced cocoa flavor. Organic and fair trade certified.",
+      ingredients: "Cocoa beans, cocoa butter, raw cane sugar, vanilla beans",
+      tagIds: [tags["Dark"], tags["Organic"], tags["Fair Trade"], tags["Single Origin"]],
+      imageUrl: "https://placehold.co/300x300?text=AlterEco",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Taza Stone Ground 70% Dark",
+      makerId: makers["Taza"],
+      type: "Dark",
+      origin: "Dominican Republic",
+      cacaoPercentage: 70,
+      description: "Minimally processed, stone-ground dark chocolate with a distinctively rustic texture and bold flavor.",
+      ingredients: "Organic cacao beans, organic cane sugar, organic cocoa butter",
+      tagIds: [tags["Dark"], tags["Organic"], tags["Single Origin"], tags["Bean to Bar"]],
+      imageUrl: "https://placehold.co/300x300?text=Taza",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Dandelion Small Batch Chocolate Madagascar",
+      makerId: makers["Dandelion Chocolate"],
+      type: "Dark",
+      origin: "Madagascar",
+      cacaoPercentage: 70,
+      description: "Single-origin craft chocolate featuring bright, fruity notes characteristic of Madagascar cacao.",
+      ingredients: "Cocoa beans, cane sugar",
+      tagIds: [tags["Dark"], tags["Fruity"], tags["Single Origin"], tags["Bean to Bar"]],
+      imageUrl: "https://placehold.co/300x300?text=Dandelion",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Equal Exchange Organic Very Dark Chocolate",
+      makerId: makers["Equal Exchange"],
+      type: "Dark",
+      origin: "Blend (Latin America)",
+      cacaoPercentage: 71,
+      description: "Fairly traded dark chocolate with a smooth texture and deep flavor from small-scale farmer cooperatives.",
+      ingredients: "Organic chocolate liquor, organic raw cane sugar, organic cocoa butter, organic vanilla beans",
+      tagIds: [tags["Dark"], tags["Organic"], tags["Fair Trade"]],
+      imageUrl: "https://placehold.co/300x300?text=EqualExchange",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Valrhona Caraïbe 66%",
+      makerId: makers["Valrhona"],
+      type: "Dark",
+      origin: "Blend (Caribbean)",
+      cacaoPercentage: 66,
+      description: "Professional-quality dark chocolate with balanced bitterness and notes of dried fruit from selected Caribbean beans.",
+      ingredients: "Cocoa beans, sugar, cocoa butter, soy lecithin, natural vanilla extract",
+      tagIds: [tags["Dark"], tags["Fruity"]],
+      imageUrl: "https://placehold.co/300x300?text=Valrhona",
+      averageRating: 0,
+      reviewCount: 0
+    },
+    {
+      name: "Amedei Toscano Black 70%",
+      makerId: makers["Amedei"],
+      type: "Dark",
+      origin: "Blend",
+      cacaoPercentage: 70,
+      description: "Artisanal Italian dark chocolate with perfect balance and complexity from a blend of carefully selected cacao beans.",
+      ingredients: "Cocoa mass, cane sugar, cocoa butter, vanilla",
+      tagIds: [tags["Dark"], tags["Bean to Bar"]],
+      imageUrl: "https://placehold.co/300x300?text=Amedei",
+      averageRating: 0,
+      reviewCount: 0
+    }
+  ];
+  
+  // Combine all tiers into one array
+  const allCommercialChocolates = [
+    ...massMarketChocolates,
+    ...midTierChocolates,
+    ...premiumChocolates
+  ];
+  
+  // Add each chocolate to Firestore
+  const chocolatesCollection = collection(db, 'chocolates');
+  for (const chocolate of allCommercialChocolates) {
+    try {
+      // Check if we have the maker ID
+      if (!chocolate.makerId) {
+        console.error(`Missing maker ID for chocolate: ${chocolate.name}`);
+        continue;
+      }
+      
+      // Check if we have all the tag IDs
+      const missingTags = chocolate.tagIds.some(id => !id);
+      if (missingTags) {
+        console.error(`Missing tag IDs for chocolate: ${chocolate.name}`);
+        continue;
+      }
+      
+      const now = Timestamp.now();
+      await addDoc(chocolatesCollection, {
+        ...chocolate,
+        createdAt: now,
+        updatedAt: now
+      });
+      console.log(`Added chocolate: ${chocolate.name}`);
+    } catch (error) {
+      console.error(`Error adding ${chocolate.name}:`, error);
+    }
+  }
+  
+  console.log('Finished adding commercial chocolates');
+};
+
+export default addCommercialChocolates;
