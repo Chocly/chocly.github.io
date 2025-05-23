@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getFeaturedChocolates } from '../services/chocolateFirebaseService';
-import { getRecentTopReviews } from '../services/reviewService';
+import { getFeaturedReviews } from '../services/reviewService';
 import ChocolateCard from '../components/ChocolateCard';
 import './HomePage.css';
 
@@ -12,7 +12,7 @@ import heroBackground from '../assets/Stock-Photo-Preview.jpeg'; // Make sure to
 function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [featuredChocolates, setFeaturedChocolates] = useState([]);
-  const [recentReviews, setRecentReviews] = useState([]);
+  const [featuredReviews, setFeaturedReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -30,13 +30,17 @@ function HomePage() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        // Get featured chocolates - use your actual service
-        const chocolates = await getFeaturedChocolates(3); // Limit to 3 for featured section
+        console.log('Fetching homepage data...');
+        
+        // Get featured chocolates - now with enhanced algorithm
+        const chocolates = await getFeaturedChocolates(6); // Get 6 featured chocolates
+        console.log('Featured chocolates:', chocolates);
         setFeaturedChocolates(chocolates);
         
-        // Get recent top reviews
-        const reviews = await getRecentTopReviews(2); // Get top 2 recent reviews
-        setRecentReviews(reviews);
+        // Get featured reviews - will be empty if no reviews exist
+        const reviews = await getFeaturedReviews(3); // Get top 3 featured reviews
+        console.log('Featured reviews:', reviews);
+        setFeaturedReviews(reviews);
         
         setLoading(false);
       } catch (err) {
@@ -66,6 +70,25 @@ function HomePage() {
     }
     
     return stars;
+  };
+
+  // Format review date
+  const formatReviewDate = (createdAt) => {
+    if (!createdAt) return '';
+    
+    try {
+      const date = typeof createdAt.toDate === 'function' 
+        ? createdAt.toDate() 
+        : new Date(createdAt.seconds * 1000);
+      
+      return date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric',
+        year: 'numeric'
+      });
+    } catch (error) {
+      return '';
+    }
   };
 
   if (loading) {
@@ -116,37 +139,24 @@ function HomePage() {
         <div className="container">
           <div className="section-header">
             <h2 className="section-title">Featured Chocolates</h2>
-            <p className="section-subtitle">Exceptional chocolates curated by our community</p>
-            <Link to="/browse" className="view-all">View All</Link>
+            <p className="section-subtitle">Premium chocolates from renowned makers, curated for excellence</p>
+            <Link to="/browse" className="view-all">View All Chocolates</Link>
           </div>
           
           <div className="chocolate-cards">
             {featuredChocolates.length > 0 ? (
               featuredChocolates.map(chocolate => (
-                <Link key={chocolate.id} to={`/chocolate/${chocolate.id}`} className="chocolate-card">
-                  <div className="card-image-container">
-                    <img src={chocolate.imageUrl || '/placeholder-chocolate.jpg'} alt={chocolate.name} className="card-image" />
-                    <div className="card-badge">{chocolate.type}</div>
-                  </div>
-                  <div className="card-content">
-                    <h3 className="card-title">{chocolate.name}</h3>
-                    <p className="card-maker">{chocolate.maker}</p>
-                    <div className="card-meta">
-                      <span className="card-origin">{chocolate.origin}</span>
-                      <span className="card-percentage">{chocolate.cacaoPercentage}% Cacao</span>
-                    </div>
-                    <div className="card-rating">
-                      <div className="rating-stars">
-                        {renderStars(chocolate.averageRating || 0)}
-                      </div>
-                      <span className="rating-number">{(chocolate.averageRating || 0).toFixed(1)}</span>
-                      <span className="rating-count">({chocolate.ratings || 0})</span>
-                    </div>
-                  </div>
-                </Link>
+                <ChocolateCard 
+                  key={chocolate.id} 
+                  chocolate={chocolate} 
+                  featured={true}
+                />
               ))
             ) : (
-              <p className="no-chocolates-message">No featured chocolates available yet. Check back soon!</p>
+              <div className="no-chocolates-message">
+                <p>Featured chocolates are being curated. Check back soon!</p>
+                <Link to="/browse" className="btn btn-primary btn-sm">Browse All Chocolates</Link>
+              </div>
             )}
           </div>
         </div>
@@ -232,27 +242,26 @@ function HomePage() {
         </div>
       </section>
       
-      {/* Recent Reviews Section */}
+      {/* Featured Reviews Section - Enhanced */}
       <section className="reviews-section">
         <div className="container">
           <div className="section-header">
             <h2 className="section-title">Community Reviews</h2>
             <p className="section-subtitle">Discover what chocolate lovers are saying</p>
-            <Link to="/reviews" className="view-all">View All</Link>
+            {featuredReviews.length > 0 && (
+              <Link to="/browse" className="view-all">Explore More Chocolates</Link>
+            )}
           </div>
           
           <div className="reviews-grid">
-            {recentReviews.length > 0 ? (
-              recentReviews.map(review => (
+            {featuredReviews.length > 0 ? (
+              featuredReviews.map(review => (
                 <div key={review.id} className="review-card">
                   <div className="review-header">
                     <div className="review-user">
-                      <span className="user-name">{review.user}</span>
+                      <span className="user-name">{review.user || 'Anonymous User'}</span>
                       <span className="review-date">
-                        {review.createdAt && new Date(review.createdAt.seconds * 1000).toLocaleDateString(undefined, { 
-                          month: 'short', 
-                          day: 'numeric' 
-                        })}
+                        {formatReviewDate(review.createdAt)}
                       </span>
                     </div>
                     <div className="review-rating">
@@ -261,7 +270,7 @@ function HomePage() {
                   </div>
                   <div className="review-chocolate">
                     <img 
-                      src={review.chocolate?.imageUrl || '/placeholder-chocolate.jpg'} 
+                      src={review.chocolate?.imageUrl || 'https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=60&h=60&fit=crop'} 
                       alt={review.chocolate?.name} 
                       className="chocolate-image"
                     />
@@ -270,14 +279,22 @@ function HomePage() {
                       <p className="chocolate-maker">{review.chocolate?.maker}</p>
                     </div>
                   </div>
-                  <p className="review-text">{review.text}</p>
-                  <Link to={`/chocolate/${review.chocolateId}`} className="read-more">Read Full Review</Link>
+                  <p className="review-text">
+                    {review.text && review.text.length > 150 
+                      ? `${review.text.substring(0, 150)}...`
+                      : review.text
+                    }
+                  </p>
+                  <Link to={`/chocolate/${review.chocolateId}`} className="read-more">
+                    Read Full Review
+                  </Link>
                 </div>
               ))
             ) : (
               <div className="no-reviews-message">
-                <p>No reviews yet! Be the first to review a chocolate.</p>
-                <Link to="/browse" className="btn btn-primary btn-sm">Find chocolates to review</Link>
+                <h3>Be the First to Review!</h3>
+                <p>No reviews yet, but that's where you come in! Share your chocolate discoveries with the community.</p>
+                <Link to="/browse" className="btn btn-primary btn-sm">Find Chocolates to Review</Link>
               </div>
             )}
           </div>

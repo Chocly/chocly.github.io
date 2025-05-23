@@ -205,100 +205,183 @@ export const getMakerById = async (id) => {
   }
 };
 
-// Enhanced getFeaturedChocolates function in src/services/chocolateFirebaseService.js
-
-// Function to get featured chocolates based on ratings or other criteria
-export const getFeaturedChocolates = async (limit = 10) => {
+// UPDATED: Enhanced getFeaturedChocolates function with smart selection logic
+export const getFeaturedChocolates = async (limit = 6) => {
   try {
-    // Create a query that sorts by average rating and limits results
-    const q = query(
-      collection(db, 'chocolates'),
-      where('averageRating', '>', 0), // Only get chocolates with ratings
-      orderBy('averageRating', 'desc'), // Highest rated first
-      orderBy('reviewCount', 'desc'), // Among equally rated, prioritize those with more reviews
-      limit(limit) // Limit to specified number of chocolates
-    );
+    // Try to get chocolates from the database first
+    const chocolatesSnapshot = await getDocs(chocolatesCollection);
     
-    const snapshot = await getDocs(q);
-    
-    // If no results (which might happen in a new system), fall back to sample data
-    if (snapshot.empty) {
-      return getSampleFeaturedChocolates(limit);
+    if (!chocolatesSnapshot.empty) {
+      // If we have chocolates in the database, use smart selection logic
+      const chocolates = chocolatesSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      
+      // Get recent reviews to determine activity
+      const recentReviewsQuery = query(
+        collection(db, 'reviews'),
+        orderBy('createdAt', 'desc'),
+        limit(50) // Look at last 50 reviews
+      );
+      
+      const recentReviews = await getDocs(recentReviewsQuery);
+      const recentlyReviewedChocolateIds = new Set();
+      recentReviews.docs.forEach(doc => {
+        recentlyReviewedChocolateIds.add(doc.data().chocolateId);
+      });
+      
+      // Score chocolates based on rating, review count, and recent activity
+      const scoredChocolates = chocolates.map(chocolate => {
+        const rating = chocolate.averageRating || 0;
+        const reviewCount = chocolate.reviewCount || 0;
+        const hasRecentActivity = recentlyReviewedChocolateIds.has(chocolate.id);
+        
+        // Scoring algorithm: rating weight + review count weight + recency bonus
+        const score = (rating * 0.4) + (Math.min(reviewCount / 10, 1) * 0.4) + (hasRecentActivity ? 0.2 : 0);
+        
+        return {
+          ...chocolate,
+          featuredScore: score
+        };
+      });
+      
+      // Sort by score and return top results
+      return scoredChocolates
+        .sort((a, b) => b.featuredScore - a.featuredScore)
+        .slice(0, limit);
     }
     
-    // Return the chocolates with their IDs
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    // If no database chocolates, fall back to sample data
+    return getSampleFeaturedChocolates(limit);
   } catch (error) {
     console.error('Error getting featured chocolates:', error);
-    // Return sample data in case of error to prevent UI disruption
+    // Return sample data in case of error
     return getSampleFeaturedChocolates(limit);
   }
 };
 
-// Sample featured chocolates for development/demo
+// UPDATED: Sample featured chocolates with real name brands
 const getSampleFeaturedChocolates = (limit) => {
   const sampleChocolates = [
     {
-      id: '1',
-      name: 'Madagascan Dark 72%',
-      maker: 'Terroir Artisan',
+      id: 'sample-godiva-1',
+      name: 'Dark Chocolate 72% Cacao',
+      maker: 'Godiva',
       type: 'Dark',
-      origin: 'Madagascar',
-      cacaoPercentage: 72,
-      averageRating: 4.8,
-      ratings: 186,
-      imageUrl: '/placeholder-chocolate.jpg'
-    },
-    {
-      id: '2',
-      name: 'Sea Salt Caramel',
-      maker: 'Wild Coast Chocolate',
-      type: 'Dark Milk',
       origin: 'Ecuador',
-      cacaoPercentage: 55,
-      averageRating: 4.9,
-      ratings: 203,
-      imageUrl: '/placeholder-chocolate.jpg'
+      cacaoPercentage: 72,
+      averageRating: 4.6,
+      reviewCount: 342,
+      ratings: 342,
+      imageUrl: 'https://images.unsplash.com/photo-1549007992-85de76ce6969?w=300&h=300&fit=crop',
+      description: 'Rich and sophisticated dark chocolate with notes of dried fruit and subtle spice.',
+      featuredScore: 4.2
     },
     {
-      id: '3',
-      name: 'Peruvian Single Origin',
-      maker: 'Craft Origins',
+      id: 'sample-lindt-1',
+      name: 'Excellence 85% Cocoa Dark Chocolate',
+      maker: 'Lindt',
+      type: 'Dark',
+      origin: 'Various',
+      cacaoPercentage: 85,
+      averageRating: 4.8,
+      reviewCount: 567,
+      ratings: 567,
+      imageUrl: 'https://images.unsplash.com/photo-1511381939415-e44015466834?w=300&h=300&fit=crop',
+      description: 'Intense dark chocolate with complex flavor notes for the true connoisseur.',
+      featuredScore: 4.5
+    },
+    {
+      id: 'sample-hu-1',
+      name: 'Vanilla Crunch Dark Chocolate',
+      maker: 'Hu Kitchen',
       type: 'Dark',
       origin: 'Peru',
       cacaoPercentage: 70,
       averageRating: 4.7,
-      ratings: 156,
-      imageUrl: '/placeholder-chocolate.jpg'
+      reviewCount: 289,
+      ratings: 289,
+      imageUrl: 'https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=300&h=300&fit=crop',
+      description: 'Organic, paleo-friendly dark chocolate with real vanilla and crunchy cacao nibs.',
+      featuredScore: 4.3
     },
     {
-      id: '4',
-      name: 'Vanilla Bean White',
-      maker: 'Alpine Confections',
-      type: 'White',
-      origin: 'Various',
-      cacaoPercentage: 33,
+      id: 'sample-theo-1',
+      name: 'Salted Almond 70% Dark Chocolate',
+      maker: 'Theo Chocolate',
+      type: 'Dark',
+      origin: 'Madagascar',
+      cacaoPercentage: 70,
       averageRating: 4.5,
-      ratings: 98,
-      imageUrl: '/placeholder-chocolate.jpg'
+      reviewCount: 198,
+      ratings: 198,
+      imageUrl: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=300&fit=crop',
+      description: 'Fair trade dark chocolate with roasted almonds and a touch of sea salt.',
+      featuredScore: 4.1
     },
     {
-      id: '5',
-      name: 'Hazelnut Crunch',
-      maker: 'Artisan Delights',
-      type: 'Milk',
-      origin: 'Italy',
-      cacaoPercentage: 45,
-      averageRating: 4.6,
-      ratings: 124,
-      imageUrl: '/placeholder-chocolate.jpg'
+      id: 'sample-green-1',
+      name: 'Mint Dark Chocolate',
+      maker: 'Green & Black\'s',
+      type: 'Dark',
+      origin: 'Various',
+      cacaoPercentage: 70,
+      averageRating: 4.4,
+      reviewCount: 156,
+      ratings: 156,
+      imageUrl: 'https://images.unsplash.com/photo-1587736793421-4c5c5b6bf4d7?w=300&h=300&fit=crop',
+      description: 'Organic dark chocolate with refreshing natural mint flavor.',
+      featuredScore: 4.0
+    },
+    {
+      id: 'sample-ghirardelli-1',
+      name: 'Sea Salt Soirée Dark Chocolate',
+      maker: 'Ghirardelli',
+      type: 'Dark',
+      origin: 'Various',
+      cacaoPercentage: 72,
+      averageRating: 4.3,
+      reviewCount: 423,
+      ratings: 423,
+      imageUrl: 'https://images.unsplash.com/photo-1585065763852-4cc3bc97e8b0?w=300&h=300&fit=crop',
+      description: 'Premium dark chocolate with roasted almonds and sea salt crystals.',
+      featuredScore: 3.9
+    },
+    {
+      id: 'sample-valrhona-1',
+      name: 'Guanaja 70% Dark Chocolate',
+      maker: 'Valrhona',
+      type: 'Dark',
+      origin: 'South America',
+      cacaoPercentage: 70,
+      averageRating: 4.9,
+      reviewCount: 234,
+      ratings: 234,
+      imageUrl: 'https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=300&h=300&fit=crop',
+      description: 'Professional-grade dark chocolate with exceptional balance and complexity.',
+      featuredScore: 4.6
+    },
+    {
+      id: 'sample-endangered-1',
+      name: 'Dark Chocolate + Sea Salt + Caramel',
+      maker: 'Endangered Species',
+      type: 'Dark',
+      origin: 'Various',
+      cacaoPercentage: 72,
+      averageRating: 4.4,
+      reviewCount: 312,
+      ratings: 312,
+      imageUrl: 'https://images.unsplash.com/photo-1571197102-95815e6a2769?w=300&h=300&fit=crop',
+      description: 'Ethically sourced dark chocolate with gooey caramel and sea salt.',
+      featuredScore: 4.0
     }
   ];
   
-  return sampleChocolates.slice(0, limit);
+  // Sort by featured score and return top results
+  return sampleChocolates
+    .sort((a, b) => b.featuredScore - a.featuredScore)
+    .slice(0, limit);
 };
 
 // Add to chocolateFirebaseService.js
@@ -366,8 +449,6 @@ export const batchProcessImages = async (chocolates, imageUrlField = 'externalIm
   
   return results;
 };
-
-// Add this function to src/services/chocolateFirebaseService.js
 
 // Function to get chocolates by category or tag
 export const getChocolatesByCategory = async (filter) => {
