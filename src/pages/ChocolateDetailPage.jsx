@@ -1,4 +1,4 @@
-// src/pages/ChocolateDetailPage.jsx - Complete updated version
+// src/pages/ChocolateDetailPage.jsx
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { doc, getDoc, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
@@ -20,6 +20,36 @@ function ChocolateDetailPage() {
   const [reviewText, setReviewText] = useState('');
   const [reviewSuccess, setReviewSuccess] = useState(false);
   const { currentUser } = useAuth();
+  
+  // Get maker display name with multiple fallbacks
+  const getMakerName = (chocolate) => {
+    // Check for maker field (string)
+    if (typeof chocolate.maker === 'string' && chocolate.maker.trim()) {
+      return chocolate.maker;
+    }
+    
+    // Check for maker object with name
+    if (chocolate.maker && typeof chocolate.maker === 'object' && chocolate.maker.name) {
+      return chocolate.maker.name;
+    }
+    
+    // Check for brand field as fallback
+    if (chocolate.brand && typeof chocolate.brand === 'string' && chocolate.brand.trim()) {
+      return chocolate.brand;
+    }
+    
+    // Check for manufacturer field
+    if (chocolate.manufacturer && typeof chocolate.manufacturer === 'string' && chocolate.manufacturer.trim()) {
+      return chocolate.manufacturer;
+    }
+    
+    // Check for company field
+    if (chocolate.company && typeof chocolate.company === 'string' && chocolate.company.trim()) {
+      return chocolate.company;
+    }
+    
+    return 'Artisan Chocolate';
+  };
   
   // Function to fetch reviews
   const fetchReviews = async () => {
@@ -131,7 +161,7 @@ function ChocolateDetailPage() {
         chocolate: {
           id: chocolate.id,
           name: chocolate.name,
-          maker: chocolate.maker,
+          maker: getMakerName(chocolate),
           imageUrl: chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate'
         }
       };
@@ -195,6 +225,8 @@ function ChocolateDetailPage() {
         ? chocolate.ingredients.split(',').map(item => item.trim())
         : []);
   
+  const makerName = getMakerName(chocolate);
+  
   return (
     <div className="chocolate-detail-page">
       <div className="detail-header">
@@ -209,153 +241,153 @@ function ChocolateDetailPage() {
               <div className="image-caption">Product Label</div>
             </div>
             <div className="detail-info">
-              {/* Display maker prominently at the top, clickable */}
-              <Link 
-                to={`/maker?maker=${encodeURIComponent(chocolate.maker)}`} 
-                className="maker-link-prominent"
-              >
-                <p className="maker-name-prominent">{chocolate.maker}</p>
-              </Link>
-              
-              {/* Chocolate name as main heading */}
-              <h1 className="chocolate-name">{chocolate.name}</h1>
-              
-              <div className="rating-section">
-                <div className="average-rating">
-                  <span className="rating-number">{(chocolate.averageRating || 0).toFixed(1)}</span>
-                  <RatingStars rating={chocolate.averageRating || 0} size="large" />
-                  <span className="rating-count">({chocolate.reviewCount || 0} ratings)</span>
-                </div>
-                
-                <div className="user-rating">
-                  <p>Your Rating:</p>
-                  <RatingStars 
-                    rating={userRating} 
-                    size="large" 
-                    interactive={true}
-                    onRatingChange={handleRatingChange}
-                  />
+              <div className="chocolate-header">
+                <h1>{chocolate.name}</h1>
+                {/* Make the maker name prominent and clickable */}
+                <div className="maker-info">
+                  <span className="maker-label">by</span>
+                  <Link to={`/search?query=${encodeURIComponent(makerName)}`} className="maker-link">
+                    {makerName}
+                  </Link>
                 </div>
               </div>
-              
-              <div className="chocolate-meta">
-                <div className="meta-item">
-                  <span className="meta-label">Origin</span>
-                  <span className="meta-value">{chocolate.origin || 'Various'}</span>
-                </div>
-                <div className="meta-item">
-                  <span className="meta-label">Cacao</span>
-                  <span className="meta-value">{chocolate.cacaoPercentage || 0}%</span>
-                </div>
-                <div className="meta-item">
-                  <span className="meta-label">Type</span>
-                  <span className="meta-value">{chocolate.type || 'N/A'}</span>
-                </div>
-              </div>
-              
-              {tags.length > 0 && (
-                <div className="chocolate-tags">
-                  {tags.map(tag => (
-                    <span key={tag} className="tag">{tag}</span>
-                  ))}
-                </div>
-              )}
-            </div>
+        
+        <div className="rating-section">
+          <div className="average-rating">
+            <span className="rating-number">{(chocolate.averageRating || 0).toFixed(1)}</span>
+            <RatingStars rating={chocolate.averageRating || 0} size="large" />
+            <span className="rating-count">({chocolate.reviewCount || 0} ratings)</span>
+          </div>
+          
+          <div className="user-rating">
+            <p>Your Rating:</p>
+            <RatingStars 
+              rating={userRating} 
+              size="large" 
+              interactive={true}
+              onRatingChange={handleRatingChange}
+            />
           </div>
         </div>
-      </div>
-      
-      <div className="container">
-        <section className="description-section">
-          <h2>Description</h2>
-          <p>{chocolate.description || 'No description available.'}</p>
-        </section>
         
-        <section className="flavor-section">
-          <h2>Flavor Profile</h2>
-          <div className="flavor-list">
-            {flavorProfile.map(flavor => (
-              <div key={flavor.name} className="flavor-item">
-                <span className="flavor-name">{flavor.name}</span>
-                <div className="flavor-bar">
-                  <div 
-                    className="flavor-level" 
-                    style={{ width: `${(flavor.intensity || 0) * 20}%` }}
-                  ></div>
-                </div>
-              </div>
+        <div className="chocolate-meta">
+          <div className="meta-item">
+            <span className="meta-label">Origin</span>
+            <span className="meta-value">{chocolate.origin || 'Various'}</span>
+          </div>
+          <div className="meta-item">
+            <span className="meta-label">Cacao</span>
+            <span className="meta-value">{chocolate.cacaoPercentage || 0}%</span>
+          </div>
+          <div className="meta-item">
+            <span className="meta-label">Type</span>
+            <span className="meta-value">{chocolate.type || 'N/A'}</span>
+          </div>
+        </div>
+        
+        {tags.length > 0 && (
+          <div className="chocolate-tags">
+            {tags.map(tag => (
+              <span key={tag} className="tag">{tag}</span>
             ))}
           </div>
-        </section>
-        
-        <section className="ingredients-section">
-          <h2>Ingredients</h2>
-          {ingredients.length > 0 ? (
-            <ul className="ingredients-list">
-              {ingredients.map((ingredient, index) => (
-                <li key={index}>{ingredient}</li>
-              ))}
-            </ul>
-          ) : (
-            <p>Ingredients information not available.</p>
-          )}
-        </section>
-        
-        {chocolate.nutritionalInfo && (
-          <section className="nutrition-section">
-            <h2>Nutritional Information</h2>
-            <div className="nutrition-info">
-              {Object.entries(chocolate.nutritionalInfo).map(([key, value]) => (
-                <div className="nutrition-item" key={key}>
-                  <span className="nutrition-label">
-                    {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}
-                  </span>
-                  <span className="nutrition-value">
-                    {typeof value === 'number' ? value + (key.includes('calories') ? '' : 'g') : value}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </section>
         )}
-        
-        <section className="reviews-section">
-          <h2>Reviews</h2>
-          {reviews.length > 0 ? (
-            <div className="reviews-list">
-              {reviews.map(review => (
-                <ReviewItem key={review.id} review={review} />
-              ))}
-            </div>
-          ) : (
-            <p className="no-reviews">No reviews yet. Be the first to review this chocolate!</p>
-          )}
-          
-          <div className="add-review">
-            <h3>Add Your Review</h3>
-            {reviewSuccess && (
-              <div className="review-success">
-                Your review has been submitted successfully!
-              </div>
-            )}
-            <form onSubmit={handleReviewSubmit}>
-              <textarea 
-                placeholder="Share your thoughts on this chocolate..."
-                value={reviewText}
-                onChange={(e) => setReviewText(e.target.value)}
-                required
-              ></textarea>
-              <button 
-                type="submit" 
-                className="submit-review"
-                disabled={!currentUser || loading}
-              >
-                {loading ? 'Submitting...' : 'Submit Review'}
-              </button>
-            </form>
-          </div>
-        </section>
       </div>
+    </div>
+  </div>
+</div>
+
+<div className="container">
+  <section className="description-section">
+    <h2>Description</h2>
+    <p>{chocolate.description || 'No description available.'}</p>
+  </section>
+  
+  <section className="flavor-section">
+    <h2>Flavor Profile</h2>
+    <div className="flavor-list">
+      {flavorProfile.map(flavor => (
+        <div key={flavor.name} className="flavor-item">
+          <span className="flavor-name">{flavor.name}</span>
+          <div className="flavor-bar">
+            <div 
+              className="flavor-level" 
+              style={{ width: `${(flavor.intensity || 0) * 20}%` }}
+            ></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+  
+  <section className="ingredients-section">
+    <h2>Ingredients</h2>
+    {ingredients.length > 0 ? (
+      <ul className="ingredients-list">
+        {ingredients.map((ingredient, index) => (
+          <li key={index}>{ingredient}</li>
+        ))}
+      </ul>
+    ) : (
+      <p>Ingredients information not available.</p>
+    )}
+  </section>
+  
+  {chocolate.nutritionalInfo && (
+    <section className="nutrition-section">
+      <h2>Nutritional Information</h2>
+      <div className="nutrition-info">
+        {Object.entries(chocolate.nutritionalInfo).map(([key, value]) => (
+          <div className="nutrition-item" key={key}>
+            <span className="nutrition-label">
+              {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}
+            </span>
+            <span className="nutrition-value">
+              {typeof value === 'number' ? value + (key.includes('calories') ? '' : 'g') : value}
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+  
+  <section className="reviews-section">
+    <h2>Reviews</h2>
+    {reviews.length > 0 ? (
+      <div className="reviews-list">
+        {reviews.map(review => (
+          <ReviewItem key={review.id} review={review} />
+        ))}
+      </div>
+    ) : (
+      <p className="no-reviews">No reviews yet. Be the first to review this chocolate!</p>
+    )}
+    
+    <div className="add-review">
+      <h3>Add Your Review</h3>
+      {reviewSuccess && (
+        <div className="review-success">
+          Your review has been submitted successfully!
+        </div>
+      )}
+      <form onSubmit={handleReviewSubmit}>
+        <textarea 
+          placeholder="Share your thoughts on this chocolate..."
+          value={reviewText}
+          onChange={(e) => setReviewText(e.target.value)}
+          required
+        ></textarea>
+        <button 
+          type="submit" 
+          className="submit-review"
+          disabled={!currentUser || loading}
+        >
+          {loading ? 'Submitting...' : 'Submit Review'}
+        </button>
+      </form>
+    </div>
+  </section>
+</div>
     </div>
   );
 }
