@@ -1,4 +1,4 @@
-// Modified src/App.jsx
+// Modified src/App.jsx - Complete version with maker routes
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import ChocolateDetailPage from './pages/ChocolateDetailPage';
@@ -6,7 +6,8 @@ import SearchResultsPage from './pages/SearchResultsPage';
 import ProfilePage from './pages/ProfilePage';
 import BrowseAllPage from './pages/BrowseAllPage';
 import BarcodeSearchPage from './pages/BarcodeSearchPage';
-import CategoryPage from './pages/CategoryPage'; // Import the new CategoryPage
+import CategoryPage from './pages/CategoryPage';
+import MakerPage from './pages/MakerPage'; // Import the new MakerPage
 import SignUpForm from './components/auth/SignUpForm';
 import LoginForm from './components/auth/LoginForm';
 import { AuthProvider } from './contexts/AuthContext';
@@ -43,7 +44,9 @@ function App() {
               <Route path="/admin" element={<AdminPage />} />
               <Route path="/admin/batch-upload" element={<BatchImageUploadPage />} />
               <Route path="/category/:categorySlug" element={<CategoryPage />} />
-
+              {/* New maker routes */}
+              <Route path="/maker" element={<MakerPage />} />
+              <Route path="/maker/:makerName" element={<MakerPage />} />
             </Routes>
           </main>
           <Footer />

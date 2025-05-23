@@ -1,14 +1,14 @@
-/* src/components/ChocolateCard.css */
+/* src/components/ChocolateCard.css - Complete version with clickable maker */
 .chocolate-card {
-  display: block;
   background-color: white;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
-  text-decoration: none;
   color: var(--text-dark);
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .chocolate-card:hover {
@@ -18,6 +18,13 @@
 
 .chocolate-card.featured {
   border: 2px solid var(--accent);
+}
+
+/* Link styling */
+.chocolate-link,
+.chocolate-title-link {
+  text-decoration: none;
+  color: inherit;
 }
 
 .image-container {
@@ -30,9 +37,9 @@
 .image-container img {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* Changed from 'cover' to 'contain' */
+  object-fit: contain;
   transition: transform 0.5s ease;
-  padding: 10px; /* Add some padding around the image */
+  padding: 10px;
 }
 
 .chocolate-card:hover .image-container img {
@@ -55,21 +62,79 @@
 
 .card-content {
   padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-.card-title {
-  margin: 0 0 0.3rem 0;
-  font-size: 1.25rem;
-  color: var(--primary-dark);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+/* Clickable maker link styling */
+.card-maker-link {
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease;
+  display: block;
+  margin-bottom: 0.5rem;
+  position: relative;
+  width: fit-content;
+}
+
+.card-maker-link:hover {
+  transform: translateX(3px);
+}
+
+.card-maker-link:hover .card-maker {
+  color: var(--accent);
+}
+
+/* Add underline effect on hover */
+.card-maker-link::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--accent);
+  transform: scaleX(0);
+  transition: transform 0.2s ease;
+  transform-origin: bottom right;
+}
+
+.card-maker-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
 
 .card-maker {
   color: var(--primary);
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+/* Title styling */
+.chocolate-title-link {
+  transition: all 0.2s ease;
+}
+
+.card-title {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  color: var(--text-dark);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+
+.chocolate-title-link:hover .card-title {
+  color: var(--primary);
 }
 
 .card-details {
@@ -142,8 +207,40 @@
   background-color: #f0e6d2;
 }
 
+/* Focus states for accessibility */
+.card-maker-link:focus,
+.chocolate-title-link:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .image-container {
     height: 180px;
+  }
+  
+  .card-maker {
+    font-size: 0.9rem;
+  }
+  
+  .card-title {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-content {
+    padding: 1rem;
+  }
+  
+  .card-maker {
+    font-size: 0.85rem;
+    letter-spacing: 0.3px;
+  }
+  
+  .card-title {
+    font-size: 0.95rem;
   }
 }

@@ -1,7 +1,6 @@
-// src/components/ChocolateCard.jsx
+// src/components/ChocolateCard.jsx - Complete version with clickable maker
 import React from 'react';
 import { Link } from 'react-router-dom';
-// Remove the Expo vector icons import
 import './ChocolateCard.css';
 
 function ChocolateCard({ chocolate, featured = false }) {
@@ -24,30 +23,47 @@ function ChocolateCard({ chocolate, featured = false }) {
     return stars;
   };
 
-  // Format title to include brand if available
-  const getFormattedTitle = () => {
-    if (chocolate.maker && !chocolate.name.includes(chocolate.maker)) {
-      return `${chocolate.maker} - ${chocolate.name}`;
-    }
+  // Always show maker and name separately for better clarity
+  const getDisplayTitle = () => {
     return chocolate.name;
   };
 
+  const getDisplayMaker = () => {
+    return chocolate.maker || 'Unknown Maker';
+  };
+
   return (
-    <Link 
-      to={`/chocolate/${chocolate.id}`} 
-      className={`chocolate-card ${featured ? 'featured' : ''}`}
-    >
-      <div className="image-container">
-        <img src={chocolate.imageUrl} alt={chocolate.name} className="card-image" />
-        {featured && (
-          <div className="featured-badge">
-            <span>Featured</span>
-          </div>
-        )}
-      </div>
+    <div className={`chocolate-card ${featured ? 'featured' : ''}`}>
+      {/* Chocolate image - links to detail page */}
+      <Link to={`/chocolate/${chocolate.id}`} className="chocolate-link">
+        <div className="image-container">
+          <img src={chocolate.imageUrl} alt={chocolate.name} className="card-image" />
+          {featured && (
+            <div className="featured-badge">
+              <span>Featured</span>
+            </div>
+          )}
+        </div>
+      </Link>
+      
       <div className="card-content">
-        <h3 className="card-title">{getFormattedTitle()}</h3>
-        <p className="card-maker">{chocolate.maker}</p>
+        {/* Clickable maker name - links to maker page */}
+        <Link 
+          to={`/maker?maker=${encodeURIComponent(getDisplayMaker())}`} 
+          className="card-maker-link"
+          onClick={(e) => e.stopPropagation()} // Prevent card click when clicking maker
+        >
+          <p className="card-maker">{getDisplayMaker()}</p>
+        </Link>
+        
+        {/* Clickable chocolate title - links to detail page */}
+        <Link 
+          to={`/chocolate/${chocolate.id}`} 
+          className="chocolate-title-link"
+          onClick={(e) => e.stopPropagation()} // Prevent card click when clicking title
+        >
+          <h3 className="card-title">{getDisplayTitle()}</h3>
+        </Link>
         
         <div className="card-details">
           <span className="origin">{chocolate.origin}</span>
@@ -55,14 +71,14 @@ function ChocolateCard({ chocolate, featured = false }) {
         </div>
         
         <div className="card-rating">
-          <span className="rating-value">{chocolate.averageRating.toFixed(1)}</span>
+          <span className="rating-value">{(chocolate.averageRating || 0).toFixed(1)}</span>
           <div className="stars">
-            {renderStars(chocolate.averageRating)}
+            {renderStars(chocolate.averageRating || 0)}
           </div>
-          <span className="rating-count">({chocolate.ratings})</span>
+          <span className="rating-count">({chocolate.ratings || 0})</span>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 
