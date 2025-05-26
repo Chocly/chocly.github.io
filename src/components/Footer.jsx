@@ -1,4 +1,4 @@
-// src/components/Footer.jsx
+// src/components/Footer.jsx - Updated without favorites
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.css';
@@ -25,6 +25,7 @@ function Footer() {
                 <li><Link to="/category/dark">Dark Chocolate</Link></li>
                 <li><Link to="/category/milk">Milk Chocolate</Link></li>
                 <li><Link to="/category/origin">Single Origin</Link></li>
+                <li><Link to="/barcode">Barcode Search</Link></li>
               </ul>
             </div>
             
@@ -34,7 +35,6 @@ function Footer() {
                 <li><Link to="/signup">Sign Up</Link></li>
                 <li><Link to="/login">Log In</Link></li>
                 <li><Link to="/profile">My Profile</Link></li>
-                <li><Link to="/favorites">My Favorites</Link></li>
               </ul>
             </div>
             

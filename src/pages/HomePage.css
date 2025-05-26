@@ -1232,3 +1232,19 @@ body {
   box-shadow: none !important;
   border-radius: 0 !important;
 }
+
+/* Update the primary button in hero to have better contrast */
+.hero-section .btn-primary {
+  background: var(--white) !important;
+  color: var(--chocolate-primary) !important;
+  border: 2px solid var(--white) !important;
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.3) !important;
+  font-weight: 700 !important;
+}
+
+.hero-section .btn-primary:hover {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: var(--chocolate-primary) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.4) !important;
+}

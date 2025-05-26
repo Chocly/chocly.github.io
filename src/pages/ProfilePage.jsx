@@ -1,4 +1,4 @@
-// src/pages/ProfilePage.jsx
+// src/pages/ProfilePage.jsx - Clean version with favorites
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -314,9 +314,9 @@ function ProfilePage() {
                 <div className="section-header">
                   <h3>Recommended For You</h3>
                 </div>
-                {/* In a real app, this would show personalized recommendations */}
                 <div className="recommendation-message">
                   <p>Keep reviewing chocolates to get personalized recommendations based on your taste preferences!</p>
+                  <Link to="/browse" className="action-button">Browse Chocolates</Link>
                 </div>
               </div>
             </div>
