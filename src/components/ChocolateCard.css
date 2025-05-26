@@ -1,36 +1,52 @@
-/* src/components/ChocolateCard.css */
+/* src/components/ChocolateCard.css - Modern Premium Design */
 .chocolate-card {
   display: block;
-  background-color: white;
-  border-radius: 12px;
+  background-color: #FFFFFF;
+  border: 1px solid #E9ECEF;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
-  color: var(--text-dark);
+  color: inherit;
   height: 100%;
   position: relative;
+  group: hover;
 }
 
 .chocolate-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+  border-color: #F4A261;
 }
 
 .chocolate-card.featured {
-  border: 2px solid var(--accent);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  border: 2px solid #F4A261;
+  box-shadow: 0 8px 32px rgba(244, 162, 97, 0.15);
+  background: linear-gradient(180deg, #FFFFFF 0%, #FDFCFC 100%);
 }
 
 .chocolate-card.featured:hover {
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 20px 56px rgba(244, 162, 97, 0.25);
+  transform: translateY(-12px);
+}
+
+.chocolate-card.featured::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(135deg, #F4A261 0%, #F4D03F 100%);
+  z-index: 1;
 }
 
 .image-container {
-  height: 220px;
+  height: 240px;
   overflow: hidden;
   position: relative;
-  background-color: #f9f9f9;
+  background: linear-gradient(180deg, #FDFCFC 0%, #F8F9FA 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,136 +55,147 @@
 .image-container img {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* Changed back to contain for product images */
-  transition: transform 0.5s ease;
-  padding: 8px; /* Add padding to prevent edge cropping */
+  object-fit: contain;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 12px;
 }
 
 .chocolate-card:hover .image-container img {
-  transform: scale(1.02); /* Reduced scale to prevent overflow */
+  transform: scale(1.03);
 }
 
 .featured-badge {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  background-color: var(--accent);
-  color: var(--primary-dark);
+  top: 16px;
+  right: 16px;
+  background: linear-gradient(135deg, #F4A261 0%, #F4D03F 100%);
+  color: #2D1810;
   font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.4rem 0.8rem;
+  font-weight: 700;
+  padding: 6px 12px;
   border-radius: 20px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(244, 162, 97, 0.3);
   z-index: 2;
+  font-family: 'Inter', sans-serif;
 }
 
 .card-content {
-  padding: 1.5rem;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  height: calc(100% - 220px);
+  height: calc(100% - 240px);
+  min-height: 200px;
 }
 
 .card-title {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem; /* Slightly smaller to fit longer titles */
-  color: var(--primary-dark);
-  font-weight: 600;
-  line-height: 1.3;
+  margin: 0 0 8px 0;
+  font-size: 1.125rem;
+  color: #2D1810;
+  font-weight: 700;
+  line-height: 1.4;
+  font-family: 'Inter', sans-serif;
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Allow 3 lines for longer titles */
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: 3.9rem; /* Adjust for 3 lines */
-  word-wrap: break-word;
-  hyphens: auto;
+  min-height: 4.2rem;
+  letter-spacing: -0.01em;
 }
 
 .card-meta-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.75rem;
-  gap: 0.5rem;
+  margin-bottom: 16px;
+  gap: 8px;
 }
 
 .card-origin-label,
 .card-type-label {
-  font-size: 0.8rem;
-  font-weight: 500;
-  padding: 0.2rem 0.6rem;
-  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
+  font-family: 'Inter', sans-serif;
 }
 
 .card-origin-label {
-  background-color: var(--brown-light, #D7CCC8);
-  color: var(--brown-dark, #5D4037);
+  background: linear-gradient(135deg, #E8F5E8 0%, #C8E6C9 100%);
+  color: #2E7D32;
   flex: 1;
   text-align: center;
+  border: 1px solid #E8F5E8;
 }
 
 .card-type-label {
-  background-color: var(--accent);
-  color: var(--primary-dark);
+  background: linear-gradient(135deg, #F4A261 0%, #F4D03F 100%);
+  color: #2D1810;
   white-space: nowrap;
+  border: 1px solid #F4A261;
 }
 
 .card-details {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1rem;
-  font-size: 0.85rem;
-  color: var(--text-dark);
+  margin-bottom: 20px;
+  gap: 8px;
   flex-wrap: wrap;
-  gap: 0.5rem;
 }
 
 .card-percentage,
 .card-year {
-  background-color: var(--off-white, #f8f8f8);
-  padding: 0.2rem 0.6rem;
+  background: #F8F9FA;
+  color: #6C757D;
+  padding: 4px 10px;
   border-radius: 12px;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 0.8rem;
+  border: 1px solid #E9ECEF;
+  font-family: 'Inter', sans-serif;
 }
 
 .card-rating {
   display: flex;
   align-items: center;
-  margin-top: auto; /* Push to bottom of card */
-  gap: 0.5rem;
+  margin-top: auto;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #F8F9FA;
 }
 
 .rating-value {
-  font-weight: 700;
-  color: var(--primary-dark);
-  font-size: 1.1rem;
-  min-width: 2rem;
+  font-weight: 800;
+  color: #2D1810;
+  font-size: 1.25rem;
+  min-width: 2.5rem;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.02em;
 }
 
 .stars {
   display: flex;
-  margin-right: 0.3rem;
+  margin-right: 6px;
+  gap: 1px;
 }
 
 .star {
-  color: #E0E0E0;
-  font-size: 0.9rem;
-  margin-right: 1px;
-  transition: color 0.2s ease;
+  color: #E5E7EB;
+  font-size: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .star.filled {
-  color: var(--accent);
+  color: #F4A261;
+  text-shadow: 0 1px 2px rgba(244, 162, 97, 0.3);
 }
 
 .star.half {
   position: relative;
-  color: #E0E0E0;
+  color: #E5E7EB;
 }
 
 .star.half::before {
@@ -178,13 +205,35 @@
   top: 0;
   width: 50%;
   overflow: hidden;
-  color: var(--accent);
+  color: #F4A261;
+  text-shadow: 0 1px 2px rgba(244, 162, 97, 0.3);
 }
 
 .rating-count {
-  font-size: 0.8rem;
-  color: var(--text-medium, #777);
+  font-size: 0.875rem;
+  color: #6C757D;
   font-weight: 500;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Enhanced hover effects */
+.chocolate-card:hover .card-title {
+  color: #8B4513;
+}
+
+.chocolate-card:hover .stars .star.filled {
+  color: #F4D03F;
+  transform: scale(1.1);
+}
+
+.chocolate-card:hover .card-origin-label {
+  background: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%);
+  transform: translateY(-1px);
+}
+
+.chocolate-card:hover .card-type-label {
+  background: linear-gradient(135deg, #F4D03F 0%, #F4A261 100%);
+  transform: translateY(-1px);
 }
 
 /* Special styling for featured cards */
@@ -192,36 +241,16 @@
   position: relative;
 }
 
-.chocolate-card.featured .card-content::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 1.5rem;
-  right: 1.5rem;
-  height: 1px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    var(--accent) 20%, 
-    var(--accent) 80%, 
-    transparent 100%);
-}
-
 .chocolate-card.featured .card-type-label {
-  background-color: var(--accent);
-  color: var(--primary-dark);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background: linear-gradient(135deg, #F4D03F 0%, #F4A261 100%);
+  box-shadow: 0 2px 8px rgba(244, 162, 97, 0.2);
 }
 
-/* Hover effects */
-.chocolate-card:hover .card-title {
-  color: var(--accent);
+.chocolate-card.featured .rating-value {
+  color: #8B4513;
 }
 
-.chocolate-card:hover .stars .star.filled {
-  color: var(--accent-light, #FFD54F);
-}
-
-/* Loading state for images */
+/* Loading state */
 .image-container::before {
   content: '';
   position: absolute;
@@ -229,10 +258,21 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background: linear-gradient(90deg, #F8F9FA 25%, #E9ECEF 50%, #F8F9FA 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
   z-index: 1;
   opacity: 0;
   transition: opacity 0.3s ease;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 .image-container img[src=""] + ::before,
@@ -240,25 +280,37 @@
   opacity: 1;
 }
 
-/* Responsive adjustments */
+/* Responsive design */
 @media (max-width: 768px) {
   .image-container {
-    height: 180px;
+    height: 200px;
   }
   
   .card-content {
-    padding: 1.25rem;
-    height: calc(100% - 180px);
+    padding: 20px;
+    height: calc(100% - 200px);
+    min-height: 180px;
   }
   
   .card-title {
-    font-size: 1.1rem;
-    min-height: 2.2rem;
+    font-size: 1rem;
+    min-height: 3.6rem;
+    -webkit-line-clamp: 2;
+  }
+  
+  .card-meta-info {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+  
+  .card-origin-label {
+    text-align: center;
   }
   
   .card-details {
     flex-direction: column;
-    gap: 0.3rem;
+    gap: 6px;
   }
   
   .card-percentage,
@@ -267,117 +319,28 @@
   }
 }
 
-/* Loading state for images */
-.image-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(45deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.image-container img[src=""] + ::before,
-.image-container img:not([src]) + ::before {
-  opacity: 1;
-}
-
-/* Add to ChocolateDetailPage.css */
-.chocolate-header {
-  margin-bottom: 1.5rem;
-}
-
-.detail-info h1 {
-  margin: 0 0 0.5rem 0;
-  color: var(--primary-dark);
-  font-size: 2.5rem;
-  line-height: 1.2;
-}
-
-.maker-info {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.maker-label {
-  font-size: 1.1rem;
-  color: var(--text-medium);
-  font-weight: 400;
-}
-
-.maker-link {
-  font-size: 1.3rem;
-  color: var(--accent);
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  position: relative;
-}
-
-.maker-link:hover {
-  color: var(--primary);
-  transform: translateY(-1px);
-}
-
-.maker-link::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  bottom: -2px;
-  left: 0;
-  background-color: var(--accent);
-  transform: scaleX(0);
-  transition: transform 0.2s ease;
-  transform-origin: bottom right;
-}
-
-.maker-link:hover::after {
-  transform: scaleX(1);
-  transform-origin: bottom left;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .detail-info h1 {
-    font-size: 2rem;
-  }
-  
-  .maker-info {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.2rem;
-  }
-  
-  .maker-link {
-    font-size: 1.2rem;
-  }
-}
-
 @media (max-width: 480px) {
   .chocolate-card {
-    margin-bottom: 1rem;
+    margin-bottom: 16px;
   }
   
   .card-content {
-    padding: 1rem;
+    padding: 16px;
   }
   
   .card-title {
-    font-size: 1rem;
-    min-height: 2rem;
+    font-size: 0.95rem;
+    min-height: 3.2rem;
   }
   
   .featured-badge {
-    top: 8px;
-    right: 8px;
+    top: 12px;
+    right: 12px;
     font-size: 0.7rem;
-    padding: 0.3rem 0.6rem;
+    padding: 4px 8px;
+  }
+  
+  .rating-value {
+    font-size: 1.1rem;
   }
 }

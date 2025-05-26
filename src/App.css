@@ -20,7 +20,7 @@ html, body, #root {
   --primary: #6B4226;         /* Medium chocolate brown */
   --primary-light: #A67951;   /* Light chocolate brown */
   --accent: #D4A76A;          /* Caramel accent */
-  --background: #FDF6E9;      /* Cream background */
+  --background: #FFFFFF;      /* White background */
   --text-dark: #2C2012;       /* Dark text */
   --text-light: #F9F3E9;      /* Light text */
 }
