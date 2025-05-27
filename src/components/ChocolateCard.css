@@ -344,3 +344,53 @@
     font-size: 1.1rem;
   }
 }
+
+/* Heart button positioning over image */
+.chocolate-card .favorite-button.card-overlay {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.chocolate-card:hover .favorite-button.card-overlay {
+  opacity: 1;
+}
+
+/* Make sure the image container has relative positioning */
+.image-container {
+  position: relative;
+}
+
+/* Ensure heart button appears above featured badge */
+.chocolate-card .favorite-button.card-overlay {
+  z-index: 15;
+}
+
+.featured-badge {
+  z-index: 10;
+}
+
+/* Mobile responsiveness for heart button */
+@media (max-width: 768px) {
+  .chocolate-card .favorite-button.card-overlay {
+    top: 8px;
+    right: 8px;
+    opacity: 1; /* Always visible on mobile */
+  }
+}
+
+/* Better contrast for heart button on different backgrounds */
+.chocolate-card .favorite-button.card-overlay {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Heart button hover effect on cards */
+.chocolate-card:hover .favorite-button.card-overlay {
+  opacity: 1;
+  transform: scale(1.05);
+}

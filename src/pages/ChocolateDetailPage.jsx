@@ -6,6 +6,7 @@ import { doc, getDoc, collection, query, where, getDocs, orderBy } from 'firebas
 import { db } from '../firebase';
 import RatingStars from '../components/RatingStars';
 import ReviewItem from '../components/ReviewItem';
+import FavoriteButton from '../components/FavoriteButton';
 import './ChocolateDetailPage.css';
 import { useAuth } from '../contexts/AuthContext';
 import { addReview } from '../services/reviewService';

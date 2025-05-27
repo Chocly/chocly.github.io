@@ -76,20 +76,25 @@ export const getFavoriteChocolates = async (userId) => {
     
     const favorites = userDoc.data().favorites || [];
     
-    // If no favorites, return sample favorites for demo
+    // If no favorites, return empty array (no more sample data)
     if (favorites.length === 0) {
-      return getSampleFavorites();
+      return [];
     }
     
     // Get the chocolate documents for each favorite ID
     const chocolates = [];
     for (const id of favorites) {
-      const chocolateDoc = await getDoc(doc(db, "chocolates", id));
-      if (chocolateDoc.exists()) {
-        chocolates.push({
-          id: chocolateDoc.id,
-          ...chocolateDoc.data()
-        });
+      try {
+        const chocolateDoc = await getDoc(doc(db, "chocolates", id));
+        if (chocolateDoc.exists()) {
+          chocolates.push({
+            id: chocolateDoc.id,
+            ...chocolateDoc.data()
+          });
+        }
+      } catch (error) {
+        console.error(`Error fetching chocolate ${id}:`, error);
+        // Continue with other chocolates if one fails
       }
     }
     
@@ -115,41 +120,53 @@ export const updateUserPreferences = async (userId, preferences) => {
   }
 };
 
-// Sample favorites for demo purposes
-const getSampleFavorites = () => {
-  return [
-    {
-      id: '1',
-      name: 'Valrhona Guanaja 70%',
-      maker: 'Valrhona',
-      type: 'Dark',
-      origin: 'Blend (South America and Caribbean)',
-      cacaoPercentage: 70,
-      averageRating: 4.5,
-      ratings: 356,
-      imageUrl: 'https://placehold.co/300x300?text=Chocolate'
-    },
-    {
-      id: '5',
-      name: 'Sea Salt Caramel Crunch',
-      maker: 'Coastal Confections',
-      type: 'Dark Milk',
-      origin: 'Belgium',
-      cacaoPercentage: 55,
-      averageRating: 4.8,
-      ratings: 425,
-      imageUrl: 'https://placehold.co/300x300?text=Chocolate'
-    },
-    {
-      id: '3',
-      name: 'Dandelion Madagascar',
-      maker: 'Dandelion Chocolate',
-      type: 'Dark',
-      origin: 'Madagascar',
-      cacaoPercentage: 70,
-      averageRating: 4.7,
-      ratings: 178,
-      imageUrl: 'https://placehold.co/300x300?text=Chocolate'
+// Check if a chocolate is in user's favorites
+export const isChocolateFavorited = async (userId, chocolateId) => {
+  try {
+    const userDoc = await getDoc(doc(db, "users", userId));
+    
+    if (!userDoc.exists()) {
+      return false;
     }
-  ];
+    
+    const favorites = userDoc.data().favorites || [];
+    return favorites.includes(chocolateId);
+  } catch (error) {
+    console.error("Error checking if chocolate is favorited:", error);
+    return false;
+  }
+};
+
+// Toggle favorite status for a chocolate
+export const toggleFavorite = async (userId, chocolateId) => {
+  try {
+    const userRef = doc(db, "users", userId);
+    const userDoc = await getDoc(userRef);
+    
+    if (!userDoc.exists()) {
+      throw new Error("User not found");
+    }
+    
+    const favorites = userDoc.data().favorites || [];
+    const isFavorited = favorites.includes(chocolateId);
+    
+    if (isFavorited) {
+      // Remove from favorites
+      await updateDoc(userRef, {
+        favorites: arrayRemove(chocolateId),
+        updatedAt: serverTimestamp()
+      });
+      return false; // Now not favorited
+    } else {
+      // Add to favorites
+      await updateDoc(userRef, {
+        favorites: arrayUnion(chocolateId),
+        updatedAt: serverTimestamp()
+      });
+      return true; // Now favorited
+    }
+  } catch (error) {
+    console.error("Error toggling favorite:", error);
+    throw error;
+  }
 };

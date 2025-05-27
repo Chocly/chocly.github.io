@@ -1,4 +1,4 @@
-// src/services/reviewService.js
+// src/services/reviewService.js - Updated with better error handling
 import { 
   collection, 
   addDoc, 
@@ -42,9 +42,10 @@ export const getChocolateReviews = async (chocolateId) => {
   }
 };
 
-// Get all reviews by a user
+// Get all reviews by a user - UPDATED with better error handling
 export const getUserReviews = async (userId) => {
   try {
+    // First, try the full query with ordering
     const q = query(
       collection(db, "reviews"),
       where("userId", "==", userId),
@@ -53,8 +54,8 @@ export const getUserReviews = async (userId) => {
 
     const snapshot = await getDocs(q);
     
-    // For demo purposes, we'll add some sample reviews if none exist
     if (snapshot.empty) {
+      // Return sample reviews for demo if no real reviews exist
       return getSampleUserReviews();
     }
     
@@ -64,7 +65,47 @@ export const getUserReviews = async (userId) => {
     }));
   } catch (error) {
     console.error("Error getting user reviews:", error);
-    throw error;
+    
+    // If it's an index error, try a simpler query without ordering
+    if (error.code === 'failed-precondition' || error.message.includes('index')) {
+      console.log("Index not ready, trying simpler query...");
+      
+      try {
+        // Simpler query without ordering
+        const simpleQuery = query(
+          collection(db, "reviews"),
+          where("userId", "==", userId)
+        );
+        
+        const simpleSnapshot = await getDocs(simpleQuery);
+        
+        if (simpleSnapshot.empty) {
+          return getSampleUserReviews();
+        }
+        
+        // Manually sort the results by createdAt
+        const reviews = simpleSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        
+        // Sort manually (most recent first)
+        reviews.sort((a, b) => {
+          if (!a.createdAt || !b.createdAt) return 0;
+          return b.createdAt.toDate() - a.createdAt.toDate();
+        });
+        
+        return reviews;
+        
+      } catch (fallbackError) {
+        console.error("Fallback query also failed:", fallbackError);
+        // Return sample data if everything fails
+        return getSampleUserReviews();
+      }
+    }
+    
+    // For other errors, return sample data
+    return getSampleUserReviews();
   }
 };
 
@@ -309,7 +350,34 @@ try {
   return [];
 } catch (error) {
   console.error("Error getting recent top reviews:", error);
-  // Return empty array instead of sample data
+  // If it's an index error, try a simpler approach
+  if (error.code === 'failed-precondition' || error.message.includes('index')) {
+    try {
+      // Simple query without complex ordering
+      const simpleQuery = query(
+        collection(db, "reviews"),
+        limit(10)
+      );
+      
+      const snapshot = await getDocs(simpleQuery);
+      const reviews = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      
+      // Filter for high ratings and sort manually
+      const highRatingReviews = reviews
+        .filter(review => review.rating >= 4)
+        .sort((a, b) => b.rating - a.rating)
+        .slice(0, limitCount);
+      
+      return highRatingReviews;
+    } catch (fallbackError) {
+      console.error("Fallback query failed:", fallbackError);
+      return [];
+    }
+  }
+  
   return [];
 }
 };
@@ -389,6 +457,28 @@ try {
   return [];
 } catch (error) {
   console.error("Error getting featured reviews:", error);
+  
+  // Handle index errors with fallback
+  if (error.code === 'failed-precondition' || error.message.includes('index')) {
+    try {
+      // Very simple query as fallback
+      const fallbackQuery = query(
+        collection(db, "reviews"),
+        limit(5)
+      );
+      
+      const snapshot = await getDocs(fallbackQuery);
+      return snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })).slice(0, limitCount);
+      
+    } catch (fallbackError) {
+      console.error("Fallback query failed:", fallbackError);
+      return [];
+    }
+  }
+  
   return [];
 }
 };

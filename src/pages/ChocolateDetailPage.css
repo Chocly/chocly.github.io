@@ -461,3 +461,114 @@ h2::after {
   transform: scaleX(1);
   transform-origin: bottom left;
 }
+
+.rating-section {
+  margin-bottom: 1.5rem;
+}
+
+.average-rating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.rating-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.user-rating {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-rating p {
+  margin: 0;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.favorite-section {
+  display: flex;
+  align-items: center;
+}
+
+.rating-section {
+  margin-bottom: 1.5rem;
+}
+
+.average-rating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.rating-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+}
+
+.user-rating {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-rating p {
+  margin: 0;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.favorite-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.favorite-label {
+  color: var(--primary);
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+/* Special styling for detail page heart button */
+.favorite-section .favorite-button {
+  background-color: white;
+  border: 2px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.favorite-section .favorite-button:hover {
+  border-color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.05);
+  transform: scale(1.1);
+}
+
+.favorite-section .favorite-button.favorited {
+  border-color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .rating-actions {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+  
+  .user-rating,
+  .favorite-section {
+    justify-content: center;
+  }
+}

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserReviews } from '../services/reviewService';
-import { getFavoriteChocolates } from '../services/userService';
+import { getFavoriteChocolates, removeFromFavorites } from '../services/userService';
 import './ProfilePage.css';
 
 // SVG Icons
@@ -73,6 +73,26 @@ function ProfilePage() {
 
     loadUserData();
   }, [currentUser, navigate, loading]);
+
+  // ADD THE DEBUG BLOCK HERE (inside the function)
+  useEffect(() => {
+    if (currentUser) {
+      console.log("🔍 DEBUG: User ID being used for query:", currentUser.uid);
+      
+      const testQuery = async () => {
+        try {
+          const userReviews = await getUserReviews(currentUser.uid);
+          console.log("🔍 DEBUG: Reviews returned:", userReviews);
+          console.log("🔍 DEBUG: Number of reviews:", userReviews.length);
+        } catch (error) {
+          console.error("🔍 DEBUG: Query error:", error);
+        }
+      };
+      
+      testQuery();
+    }
+  }, [currentUser]);
+
 
   // Calculate user statistics
   const calculateStats = () => {
@@ -371,48 +391,65 @@ function ProfilePage() {
             </div>
           )}
 
-          {/* Favorites Tab */}
-          {activeTab === 'favorites' && (
-            <div className="favorites-tab">
-              <div className="section-header">
-                <h2>Your Favorite Chocolates</h2>
+ {/* Favorites Tab */}
+{activeTab === 'favorites' && (
+  <div className="favorites-tab">
+    <div className="section-header">
+      <h2>Your Favorite Chocolates</h2>
+    </div>
+    
+    {favorites.length > 0 ? (
+      <div className="favorites-grid">
+        {favorites.map(chocolate => (
+          <div className="favorite-card" key={chocolate.id}>
+            <Link to={`/chocolate/${chocolate.id}`} className="favorite-link">
+              <div className="favorite-image">
+                <img src={chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate'} alt={chocolate.name} />
               </div>
-              
-              {favorites.length > 0 ? (
-                <div className="favorites-grid">
-                  {favorites.map(chocolate => (
-                    <div className="favorite-card" key={chocolate.id}>
-                      <Link to={`/chocolate/${chocolate.id}`} className="favorite-link">
-                        <div className="favorite-image">
-                          <img src={chocolate.imageUrl} alt={chocolate.name} />
-                        </div>
-                        <div className="favorite-info">
-                          <h3>{chocolate.name}</h3>
-                          <p>{chocolate.maker}</p>
-                          <div className="favorite-details">
-                            <span>{chocolate.type}</span>
-                            <span>{chocolate.cacaoPercentage}% Cacao</span>
-                          </div>
-                          <div className="favorite-rating">
-                            {[1, 2, 3, 4, 5].map(star => (
-                              <span key={star} className={`star ${star <= chocolate.averageRating ? 'filled' : ''}`}>★</span>
-                            ))}
-                            <span className="rating-count">({chocolate.ratings})</span>
-                          </div>
-                        </div>
-                      </Link>
-                      <button className="remove-favorite">Remove</button>
-                    </div>
+              <div className="favorite-info">
+                <h3>{chocolate.name}</h3>
+                <p>{chocolate.maker}</p>
+                <div className="favorite-details">
+                  <span>{chocolate.type}</span>
+                  <span>{chocolate.cacaoPercentage}% Cacao</span>
+                </div>
+                <div className="favorite-rating">
+                  {[1, 2, 3, 4, 5].map(star => (
+                    <span key={star} className={`star ${star <= (chocolate.averageRating || 0) ? 'filled' : ''}`}>★</span>
                   ))}
+                  <span className="rating-count">({chocolate.ratings || chocolate.reviewCount || 0})</span>
                 </div>
-              ) : (
-                <div className="empty-state">
-                  <p>You haven't added any favorites yet.</p>
-                  <Link to="/" className="action-button">Find Chocolates to Love</Link>
-                </div>
-              )}
-            </div>
-          )}
+              </div>
+            </Link>
+            <button 
+              className="remove-favorite"
+              onClick={async () => {
+                try {
+                  await removeFromFavorites(currentUser.uid, chocolate.id);
+                  // Refresh favorites list
+                  const updatedFavorites = await getFavoriteChocolates(currentUser.uid);
+                  setFavorites(updatedFavorites);
+                } catch (error) {
+                  console.error('Error removing favorite:', error);
+                  alert('Error removing favorite. Please try again.');
+                }
+              }}
+              title="Remove from favorites"
+              aria-label="Remove from favorites"
+            >
+            </button>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div className="empty-state">
+        <p>You haven't added any favorites yet.</p>
+        <p>Click the heart ❤️ button on chocolates you love to save them here!</p>
+        <Link to="/browse" className="action-button">Discover Chocolates</Link>
+      </div>
+    )}
+  </div>
+)}
 
           {/* Preferences Tab */}
           {activeTab === 'preferences' && (

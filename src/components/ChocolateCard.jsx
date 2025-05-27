@@ -1,6 +1,7 @@
-// src/components/ChocolateCard.jsx - Clean version
+// src/components/ChocolateCard.jsx - Clean version with heart button
 import React from 'react';
 import { Link } from 'react-router-dom';
+import FavoriteButton from './FavoriteButton';
 import './ChocolateCard.css';
 
 function ChocolateCard({ chocolate, featured = false }) {
@@ -45,6 +46,13 @@ function ChocolateCard({ chocolate, featured = false }) {
           )}
         </div>
       </Link>
+      
+      {/* Heart/Favorite button - positioned over the image */}
+      <FavoriteButton 
+        chocolateId={chocolate.id} 
+        size="medium" 
+        className="card-overlay"
+      />
       
       <div className="card-content">
         {/* Clickable maker name - links to maker page */}
