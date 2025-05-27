@@ -663,3 +663,80 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ADD THESE STYLES TO YOUR ProfilePage.css to fix avatar display */
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 1.5rem;
+  background-color: var(--primary-light);
+  flex-shrink: 0;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: white;
+  font-weight: bold;
+  background: linear-gradient(135deg, #F4A261 0%, #F4D03F 100%);
+  border-radius: 50%;
+}
+
+/* Mobile responsive avatar fixes */
+@media (max-width: 768px) {
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+    margin-right: 1rem;
+  }
+  
+  .avatar-placeholder {
+    font-size: 2.5rem;
+  }
+  
+  .user-avatar {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .user-initials {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-avatar {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .avatar-placeholder {
+    font-size: 2rem;
+  }
+  
+  .user-avatar {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .user-initials {
+    font-size: 0.75rem;
+  }
+}

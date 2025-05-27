@@ -11,6 +11,7 @@ function SignUpForm() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -46,8 +47,14 @@ function SignUpForm() {
     
     try {
       setLoading(true);
-      await registerWithEmailPassword(email, password, displayName);
-      navigate('/profile');
+      const user = await registerWithEmailPassword(email, password, displayName);
+      console.log("Email signup successful:", user?.uid);
+      
+      // Show success message briefly, then redirect
+      setShowSuccess(true);
+      setTimeout(() => {
+        navigate('/profile');
+      }, 2000);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -61,7 +68,12 @@ function SignUpForm() {
       setError('');
       const user = await signInWithGoogle();
       console.log("Google signup successful:", user?.uid);
-      navigate('/profile');
+      
+      // Show success message briefly, then redirect
+      setShowSuccess(true);
+      setTimeout(() => {
+        navigate('/profile');
+      }, 2000);
     } catch (error) {
       console.error("Google signup error:", error);
       setError(error.message || "Failed to sign up with Google");
@@ -73,8 +85,14 @@ function SignUpForm() {
   const handleFacebookSignUp = async () => {
     try {
       setLoading(true);
-      await signInWithFacebook();
-      navigate('/profile');
+      const user = await signInWithFacebook();
+      console.log("Facebook signup successful:", user?.uid);
+      
+      // Show success message briefly, then redirect
+      setShowSuccess(true);
+      setTimeout(() => {
+        navigate('/profile');
+      }, 2000);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -84,6 +102,32 @@ function SignUpForm() {
 
   return (
     <div className="enhanced-signup-page">
+      {/* Success Overlay */}
+      {showSuccess && (
+        <div className="success-overlay">
+          <div className="success-modal">
+            <div className="success-animation">
+              <div className="checkmark">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="12" fill="#10B981"/>
+                  <path d="M8 12l2.5 2.5L16 9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <h2>Welcome to Chocly! 🎉</h2>
+            <p>Your account has been created successfully. Get ready to discover amazing chocolates!</p>
+            <div className="success-redirect">
+              <div className="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <p>Taking you to your profile...</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Hero Section */}
       <div className="signup-hero">
         <div className="hero-content">

@@ -10,6 +10,7 @@ function LoginForm() {
   const [error, setError] = useState('');
   const [resetMessage, setResetMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const navigate = useNavigate();
 
   const handleEmailLogin = async (e) => {
@@ -18,7 +19,12 @@ function LoginForm() {
     try {
       setLoading(true);
       await loginWithEmailPassword(email, password);
-      navigate('/profile');
+      
+      // Show brief success, then redirect
+      setShowSuccess(true);
+      setTimeout(() => {
+        navigate('/profile');
+      }, 1500);
     } catch (error) {
       setError('Invalid email or password');
     } finally {
@@ -32,7 +38,12 @@ function LoginForm() {
       setError('');
       const user = await signInWithGoogle();
       console.log("Google login successful:", user?.uid);
-      navigate('/profile');
+      
+      // Show brief success, then redirect
+      setShowSuccess(true);
+      setTimeout(() => {
+        navigate('/profile');
+      }, 1500);
     } catch (error) {
       console.error("Google login error:", error);
       setError(error.message || "Failed to log in with Google");
@@ -45,7 +56,12 @@ function LoginForm() {
     try {
       setLoading(true);
       await signInWithFacebook();
-      navigate('/profile');
+      
+      // Show brief success, then redirect
+      setShowSuccess(true);
+      setTimeout(() => {
+        navigate('/profile');
+      }, 1500);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -70,6 +86,32 @@ function LoginForm() {
 
   return (
     <div className="enhanced-auth-page login-page">
+      {/* Success Overlay */}
+      {showSuccess && (
+        <div className="success-overlay">
+          <div className="success-modal">
+            <div className="success-animation">
+              <div className="checkmark">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="12" fill="#10B981"/>
+                  <path d="M8 12l2.5 2.5L16 9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <h2>Welcome back! 👋</h2>
+            <p>You're successfully signed in. Let's continue your chocolate journey!</p>
+            <div className="success-redirect">
+              <div className="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <p>Taking you to your profile...</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="auth-container">
         <div className="auth-form-section">
           <div className="form-header">
