@@ -1,4 +1,4 @@
-// src/services/chocolateFirebaseService.js - Updated to fetch maker names
+// src/services/chocolateFirebaseService.js - FIXED VERSION with proper imports
 import { db, storage } from '../firebase';
 import { 
   collection, 
@@ -11,7 +11,7 @@ import {
   query, 
   where,
   orderBy,
-  limit
+  limit  // <-- FIXED: Added missing import
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -149,21 +149,22 @@ export const searchChocolates = async (searchTerm) => {
   }
 };
 
-// Updated getFeaturedChocolates function
-export const getFeaturedChocolates = async (limit = 10) => {
+// FIXED: Updated getFeaturedChocolates function with proper limit import
+export const getFeaturedChocolates = async (limitCount = 10) => {
   try {
     const q = query(
       collection(db, 'chocolates'),
       where('averageRating', '>', 0),
       orderBy('averageRating', 'desc'),
       orderBy('reviewCount', 'desc'),
-      limit(limit)
+      limit(limitCount)  // <-- This should now work properly
     );
     
     const snapshot = await getDocs(q);
     
     if (snapshot.empty) {
-      return getSampleFeaturedChocolates(limit);
+      console.log('No chocolates found in database, returning sample data');
+      return getSampleFeaturedChocolates(limitCount);
     }
     
     const chocolates = snapshot.docs.map(doc => ({
@@ -171,11 +172,14 @@ export const getFeaturedChocolates = async (limit = 10) => {
       ...doc.data()
     }));
     
+    console.log(`Found ${chocolates.length} chocolates in database`);
+    
     // Enrich with maker names
     return await enrichChocolatesWithMakers(chocolates);
   } catch (error) {
     console.error('Error getting featured chocolates:', error);
-    return getSampleFeaturedChocolates(limit);
+    console.log('Falling back to sample data due to error');
+    return getSampleFeaturedChocolates(limitCount);
   }
 };
 
@@ -370,7 +374,7 @@ export const batchProcessImages = async (chocolates, imageUrlField = 'externalIm
 };
 
 // Sample data functions (keeping your existing ones)
-const getSampleFeaturedChocolates = (limit) => {
+const getSampleFeaturedChocolates = (limitCount) => {
   const sampleChocolates = [
     {
       id: '1',
@@ -429,7 +433,7 @@ const getSampleFeaturedChocolates = (limit) => {
     }
   ];
   
-  return sampleChocolates.slice(0, limit);
+  return sampleChocolates.slice(0, limitCount);
 };
 
 const getSampleCategoryChocolates = (category) => {

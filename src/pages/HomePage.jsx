@@ -1,4 +1,4 @@
-// src/pages/HomePage.jsx - Enhanced with Carousel
+// src/pages/HomePage.jsx - Enhanced with Carousel and Real Data Fetching
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getFeaturedChocolates } from '../services/chocolateFirebaseService';
@@ -109,8 +109,61 @@ function HomePage() {
         setLoading(true);
         console.log('Fetching homepage data...');
         
-        // Get featured chocolates - use sample data for now
-        setFeaturedChocolates(sampleChocolates);
+        // Define your preferred makers for featured chocolates
+        const preferredMakers = ['Lindt', 'Theo', 'Alter Eco', 'Hu'];
+        
+        // TRY TO GET REAL CHOCOLATES FIRST
+        try {
+          // Get more chocolates than we need so we can filter by maker
+          const allChocolates = await getFeaturedChocolates(50); // Get up to 50 to have options
+          console.log('All chocolates fetched:', allChocolates);
+          
+          if (allChocolates && allChocolates.length > 0) {
+            // Filter by preferred makers first
+            const preferredChocolates = allChocolates.filter(chocolate => 
+              chocolate.maker && preferredMakers.some(preferredMaker => 
+                chocolate.maker.toLowerCase().includes(preferredMaker.toLowerCase())
+              )
+            );
+            
+            console.log('Chocolates from preferred makers:', preferredChocolates);
+            
+            let finalChocolates = [];
+            
+            if (preferredChocolates.length >= 6) {
+              // We have enough from preferred makers, take the top 6
+              finalChocolates = preferredChocolates.slice(0, 6);
+              console.log('Using 6 chocolates from preferred makers:', finalChocolates.map(c => `${c.name} by ${c.maker}`));
+            } else if (preferredChocolates.length > 0) {
+              // We have some from preferred makers, fill the rest with others
+              const remainingSlots = 6 - preferredChocolates.length;
+              const otherChocolates = allChocolates.filter(chocolate => 
+                !preferredMakers.some(preferredMaker => 
+                  chocolate.maker && chocolate.maker.toLowerCase().includes(preferredMaker.toLowerCase())
+                )
+              ).slice(0, remainingSlots);
+              
+              finalChocolates = [...preferredChocolates, ...otherChocolates];
+              console.log(`Using ${preferredChocolates.length} from preferred makers and ${otherChocolates.length} others:`, 
+                finalChocolates.map(c => `${c.name} by ${c.maker}`));
+            } else {
+              // No preferred makers found, use top 6 overall
+              finalChocolates = allChocolates.slice(0, 6);
+              console.log('No preferred makers found, using top 6 overall:', finalChocolates.map(c => `${c.name} by ${c.maker}`));
+            }
+            
+            setFeaturedChocolates(finalChocolates);
+            console.log('Final featured chocolates set');
+          } else {
+            // No real chocolates, use sample data
+            console.log('No real chocolates found, using sample data');
+            setFeaturedChocolates(sampleChocolates);
+          }
+        } catch (chocolateError) {
+          console.error('Error fetching real chocolates:', chocolateError);
+          console.log('Falling back to sample chocolates');
+          setFeaturedChocolates(sampleChocolates);
+        }
         
         // Get featured reviews - will be empty if no reviews exist
         const reviews = await getFeaturedReviews(3); // Get top 3 featured reviews
@@ -121,6 +174,8 @@ function HomePage() {
       } catch (err) {
         console.error("Error fetching homepage data:", err);
         setError(err.message);
+        // Even if there's an error, show sample data
+        setFeaturedChocolates(sampleChocolates);
         setLoading(false);
       }
     };
@@ -232,7 +287,7 @@ function HomePage() {
         </div>
       </section>
       
-      {/* Featured Chocolates Section with Carousel */}
+      {/* Featured Chocolates Section - Now using ChocolateCard component */}
       <section className="featured-section">
         <div className="container">
           <div className="section-header">
@@ -244,20 +299,11 @@ function HomePage() {
           <div className="featured-container">
             <div className="chocolate-cards">
               {currentSlideChocolates.map(chocolate => (
-                <div key={chocolate.id} className={`chocolate-card ${chocolate.className}`}>
-                  <div className="image-container"></div>
-                  <div className="card-content">
-                    <h3 className="card-title">{chocolate.name}</h3>
-                    <p className="card-maker">{chocolate.maker}</p>
-                    <div className="card-rating">
-                      <span className="rating-value">{chocolate.averageRating}</span>
-                      <div className="stars">
-                        {renderStars(chocolate.averageRating)}
-                      </div>
-                      <span className="rating-count">({chocolate.ratings})</span>
-                    </div>
-                  </div>
-                </div>
+                <ChocolateCard 
+                  key={chocolate.id} 
+                  chocolate={chocolate} 
+                  featured={true}
+                />
               ))}
             </div>
             

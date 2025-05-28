@@ -383,23 +383,35 @@ body {
   transform: none;
 }
 
+/* Add this to your HomePage.css file - Updated carousel indicators */
+
 .carousel-indicators {
   display: flex;
   gap: var(--space-sm);
+  align-items: center;
 }
 
 .carousel-dot {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--border-medium);
   cursor: pointer;
   transition: all 0.3s ease;
+  border: none;
+  padding: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .carousel-dot.active {
   background: var(--chocolate-accent);
-  transform: scale(1.2);
+  transform: scale(1.3);
+  box-shadow: 0 4px 8px rgba(210, 105, 30, 0.3);
+}
+
+.carousel-dot:hover {
+  background: var(--chocolate-secondary);
+  transform: scale(1.1);
 }
 
 /* Chocolate Card with Placeholder Images */
