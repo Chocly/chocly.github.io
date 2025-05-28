@@ -1,10 +1,10 @@
-// src/components/FavoriteButton.jsx
+// src/components/FavoriteButton.jsx - Beautiful production version
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { toggleFavorite, isChocolateFavorited } from '../services/userService';
 import './FavoriteButton.css';
 
-function FavoriteButton({ chocolateId, size = 'medium' }) {
+function FavoriteButton({ chocolateId, size = 'medium', className = '' }) {
   const { currentUser } = useAuth();
   const [isFavorited, setIsFavorited] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -27,7 +27,7 @@ function FavoriteButton({ chocolateId, size = 'medium' }) {
   }, [currentUser, chocolateId]);
 
   const handleToggleFavorite = async (e) => {
-    e.preventDefault(); // Prevent link navigation if button is inside a link
+    e.preventDefault();
     e.stopPropagation();
 
     if (!currentUser) {
@@ -58,8 +58,8 @@ function FavoriteButton({ chocolateId, size = 'medium' }) {
   return (
     <button
       onClick={handleToggleFavorite}
-      disabled={loading || !currentUser}
-      className={`favorite-button ${size} ${isFavorited ? 'favorited' : ''} ${isAnimating ? 'animating' : ''} ${loading ? 'loading' : ''}`}
+      disabled={loading}
+      className={`favorite-button ${size} ${isFavorited ? 'favorited' : ''} ${isAnimating ? 'animating' : ''} ${loading ? 'loading' : ''} ${className}`}
       title={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
       aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
     >

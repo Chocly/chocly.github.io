@@ -214,27 +214,37 @@ function ChocolateDetailPage() {
                 </p>
               </Link>
               
-              {/* Chocolate name as main heading */}
-              <h1 className="chocolate-name">{chocolate.name}</h1>
-              
-              <div className="rating-section">
-                <div className="average-rating">
-                  <span className="rating-number">{(chocolate.averageRating || 0).toFixed(1)}</span>
-                  <RatingStars rating={chocolate.averageRating || 0} size="large" />
-                  <span className="rating-count">({chocolate.reviewCount || 0} ratings)</span>
-                </div>
-                
-                <div className="user-rating">
-                  <p>Your Rating:</p>
-                  <RatingStars 
-                    rating={userRating} 
-                    size="large" 
-                    interactive={true}
-                    onRatingChange={handleRatingChange}
-                  />
-                </div>
-              </div>
-              
+{/* Chocolate name as main heading */}
+<h1 className="chocolate-name">{chocolate.name}</h1>
+                       
+                       <div className="rating-section">
+                         <div className="average-rating">
+                           <span className="rating-number">{(chocolate.averageRating || 0).toFixed(1)}</span>
+                           <RatingStars rating={chocolate.averageRating || 0} size="large" />
+                           <span className="rating-count">({chocolate.reviewCount || 0} ratings)</span>
+                         </div>
+                         
+                         <div className="rating-actions">
+                           <div className="user-rating">
+                             <p>Your Rating:</p>
+                             <RatingStars 
+                               rating={userRating} 
+                               size="large" 
+                               interactive={true}
+                               onRatingChange={handleRatingChange}
+                             />
+                           </div>
+                           
+                           <div className="favorite-section">
+                             <span className="favorite-label">Add to Favorites:</span>
+                             <FavoriteButton 
+                               chocolateId={chocolate.id} 
+                               size="large" 
+                             />
+                           </div>
+                         </div>
+                       </div>
+                                     
               <div className="chocolate-meta">
                 <div className="meta-item">
                   <span className="meta-label">Origin</span>
