@@ -1,10 +1,9 @@
-// src/pages/ProfilePage.jsx - Clean version with favorites
+// src/pages/ProfilePage.jsx - FIXED VERSION
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserReviews } from '../services/reviewService';
 import { getFavoriteChocolates, removeFromFavorites } from '../services/userService';
-import { getUserContributionStats, getUserContributedChocolates } from '../services/chocolateFirebaseService';
 import './ProfilePage.css';
 
 // SVG Icons
@@ -44,77 +43,47 @@ function ProfilePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Redirect if not logged in
-    if (!currentUser && !loading) {
-      navigate('/login');
-      return;
-    }
-
     // Load user data
     const loadUserData = async () => {
+      if (!currentUser) {
+        setLoading(false);
+        return;
+      }
+
       try {
         setLoading(true);
         
-        if (currentUser) {
-        // Load reviews, favorites, and contribution stats in parallel
-        const [userReviews, userFavorites, contributionStats, contributedChocolates] = await Promise.all([
+        // Load reviews and favorites in parallel
+        const [userReviews, userFavorites] = await Promise.all([
           getUserReviews(currentUser.uid),
-          getFavoriteChocolates(currentUser.uid),
-          getUserContributionStats(currentUser.uid),
-          getUserContributedChocolates(currentUser.uid)
+          getFavoriteChocolates(currentUser.uid)
         ]);
-          
+        
         setReviews(userReviews);
         setFavorites(userFavorites);
-        setContributionStats(contributionStats); // Add this state
-        setContributedChocolates(contributedChocolates); // Add this state
+      } catch (error) {
+        console.error("Error loading user data:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error loading user data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
     loadUserData();
-  }, [currentUser, navigate, loading]);
-
-  // ADD THE DEBUG BLOCK HERE (inside the function)
-  useEffect(() => {
-    if (currentUser) {
-      console.log("🔍 DEBUG: User ID being used for query:", currentUser.uid);
-      
-      const testQuery = async () => {
-        try {
-          const userReviews = await getUserReviews(currentUser.uid);
-          console.log("🔍 DEBUG: Reviews returned:", userReviews);
-          console.log("🔍 DEBUG: Number of reviews:", userReviews.length);
-        } catch (error) {
-          console.error("🔍 DEBUG: Query error:", error);
-        }
-      };
-      
-      testQuery();
-    }
   }, [currentUser]);
-
-// Add these new state variables at the top of your component:
-const [contributionStats, setContributionStats] = useState({
-  chocolatesAdded: 0,
-  reviewsWritten: 0,
-  totalContributions: 0
-});
-
 
   // Calculate user statistics
   const calculateStats = () => {
-    if (!userProfile) return {};
+    if (!userProfile) return {
+      totalReviews: 0,
+      totalTasted: 0,
+      averageRating: 0,
+      favoriteType: 'None yet',
+      favoriteMaker: 'None yet'
+    };
 
     // Basic stats
     const totalReviews = reviews.length;
     const totalTasted = reviews.length;
-    const totalContributions = contributionStats.chocolatesAdded;
-
     
     // Calculate average rating given by user
     const averageRating = totalReviews > 0 
@@ -124,8 +93,10 @@ const [contributionStats, setContributionStats] = useState({
     // Find most reviewed type
     const typeCount = {};
     reviews.forEach(review => {
-      const type = review.chocolate.type;
-      typeCount[type] = (typeCount[type] || 0) + 1;
+      if (review.chocolate && review.chocolate.type) {
+        const type = review.chocolate.type;
+        typeCount[type] = (typeCount[type] || 0) + 1;
+      }
     });
     
     let favoriteType = 'None yet';
@@ -141,8 +112,10 @@ const [contributionStats, setContributionStats] = useState({
     // Find top maker
     const makerCount = {};
     reviews.forEach(review => {
-      const maker = review.chocolate.maker;
-      makerCount[maker] = (makerCount[maker] || 0) + 1;
+      if (review.chocolate && review.chocolate.maker) {
+        const maker = review.chocolate.maker;
+        makerCount[maker] = (makerCount[maker] || 0) + 1;
+      }
     });
     
     let favoriteMaker = 'None yet';
@@ -159,66 +132,81 @@ const [contributionStats, setContributionStats] = useState({
       totalReviews,
       totalTasted,
       averageRating,
-      totalContributions,
       favoriteType,
       favoriteMaker
     };
   };
 
-// Update your badges function to include contribution badges:
-const getBadges = () => {
-  if (!userProfile) return [];
-  
-  // Get existing badges and add contribution-based ones
-  const badges = [...(userProfile.badges || ['Newcomer'])];
-  
-  // Add contribution badges based on stats
-  const chocolatesAdded = contributionStats.chocolatesAdded;
-  
-  if (chocolatesAdded >= 1 && !badges.includes('Contributor')) {
-    badges.push('Contributor');
-  }
-  if (chocolatesAdded >= 5 && !badges.includes('Chocolate Scout')) {
-    badges.push('Chocolate Scout');
-  }
-  if (chocolatesAdded >= 10 && !badges.includes('Database Builder')) {
-    badges.push('Database Builder');
-  }
-  
-  return badges;
-};
+  // Calculate badges
+  const getBadges = () => {
+    if (!userProfile) return ['Newcomer'];
+    
+    // Default badges - in a real app, these would be calculated based on activity
+    const badges = userProfile.badges || ['Newcomer'];
+    
+    return badges;
+  };
 
-// Add this new BadgeIcon for contribution badges in your existing BadgeIcon component:
-const contributionBadges = {
-  'Contributor': (
-    <svg className="badge-icon contributor" viewBox="0 0 24 24">
-      <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" />
-    </svg>
-  ),
-  'Chocolate Scout': (
-    <svg className="badge-icon scout" viewBox="0 0 24 24">
-      <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6L15.5,7.5L17,11L15.5,14.5L12,16L8.5,14.5L7,11L8.5,7.5L12,6M12,8.2L10,9L9.2,11L10,13L12,13.8L14,13L14.8,11L14,9L12,8.2Z" />
-    </svg>
-  ),
-  'Database Builder': (
-    <svg className="badge-icon builder" viewBox="0 0 24 24">
-      <path d="M12,3C7.58,3 4,4.79 4,7C4,9.21 7.58,11 12,11C16.42,11 20,9.21 20,7C20,4.79 16.42,3 12,3M4,9V12C4,14.21 7.58,16 12,16C16.42,16 20,14.21 20,12V9C20,11.21 16.42,13 12,13C7.58,13 4,11.21 4,9M4,14V17C4,19.21 7.58,21 12,21C16.42,21 20,19.21 20,17V14C20,16.21 16.42,18 12,18C7.58,18 4,16.21 4,14Z" />
-    </svg>
-  )
-};
+  // Handle removing favorites
+  const handleRemoveFavorite = async (chocolateId) => {
+    try {
+      await removeFromFavorites(currentUser.uid, chocolateId);
+      // Refresh favorites list
+      const updatedFavorites = await getFavoriteChocolates(currentUser.uid);
+      setFavorites(updatedFavorites);
+    } catch (error) {
+      console.error('Error removing favorite:', error);
+      alert('Error removing favorite. Please try again.');
+    }
+  };
 
   const stats = calculateStats();
   const badges = getBadges();
 
-  if (!currentUser || !userProfile) {
+  // Show login prompt if not logged in
+  if (!currentUser) {
     return (
-      <div className="container">
-        <div className="profile-not-logged-in">
-          <h2>You need to sign in</h2>
-          <p>Please log in or create an account to view your profile.</p>
-          <div className="auth-buttons">
-           <Link to="/login" className="auth-button">Log In</Link>
-            <Link to="/signup" className="auth-button signup">Sign Up</Link>
+      <div className="profile-page">
+        <div className="container">
+          <div className="profile-not-logged-in">
+            <h2>You need to sign in</h2>
+            <p>Please log in or create an account to view your profile.</p>
+            <div className="auth-buttons">
+             <Link to="/login" className="auth-button">Log In</Link>
+              <Link to="/signup" className="auth-button signup">Sign Up</Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="profile-page">
+        <div className="container">
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p>Loading your profile...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error if no user profile
+  if (!userProfile) {
+    return (
+      <div className="profile-page">
+        <div className="container">
+          <div className="profile-not-logged-in">
+            <h2>Profile Not Found</h2>
+            <p>We couldn't load your profile. Please try refreshing the page.</p>
+            <div className="auth-buttons">
+             <Link to="/login" className="auth-button">Log In</Link>
+              <Link to="/signup" className="auth-button signup">Sign Up</Link>
+            </div>
           </div>
         </div>
       </div>
@@ -235,12 +223,16 @@ const contributionBadges = {
               {userProfile.photoURL ? (
                 <img src={userProfile.photoURL} alt={userProfile.displayName} />
               ) : (
-                <div className="avatar-placeholder">{userProfile.displayName.charAt(0)}</div>
+                <div className="avatar-placeholder">
+                  {userProfile.displayName ? userProfile.displayName.charAt(0) : 'U'}
+                </div>
               )}
             </div>
             <div className="profile-info">
-              <h1>{userProfile.displayName}</h1>
-              <p className="member-since">Member since {userProfile.createdAt?.toDate().toLocaleDateString() || 'Recently'}</p>
+              <h1>{userProfile.displayName || 'User'}</h1>
+              <p className="member-since">
+                Member since {userProfile.createdAt?.toDate().toLocaleDateString() || 'Recently'}
+              </p>
               <div className="profile-badges">
                 {badges.map(badge => (
                   <div className="badge" key={badge}>
@@ -300,10 +292,6 @@ const contributionBadges = {
                     <div className="stat-value">{stats.totalReviews}</div>
                     <div className="stat-label">Reviews Written</div>
                   </div>
-                  <div className="stat-card contribution-stat">
-                    <div className="stat-value">{stats.totalContributions}</div>
-                    <div className="stat-label">Chocolates Added</div>
-                  </div>                  
                   <div className="stat-card">
                     <div className="stat-value">{stats.averageRating.toFixed(1)}</div>
                     <div className="stat-label">Average Rating</div>
@@ -348,11 +336,14 @@ const contributionBadges = {
                     <div className="recent-reviews">
                       {reviews.slice(0, 3).map(review => (
                         <div className="recent-review" key={review.id}>
-                          <Link to={`/chocolate/${review.chocolate.id}`} className="review-chocolate">
-                            <img src={review.chocolate.imageUrl} alt={review.chocolate.name} />
+                          <Link to={`/chocolate/${review.chocolate?.id || review.chocolateId}`} className="review-chocolate">
+                            <img 
+                              src={review.chocolate?.imageUrl || 'https://placehold.co/50x50?text=🍫'} 
+                              alt={review.chocolate?.name || 'Chocolate'} 
+                            />
                             <div className="review-chocolate-info">
-                              <h4>{review.chocolate.name}</h4>
-                              <p>{review.chocolate.maker}</p>
+                              <h4>{review.chocolate?.name || 'Unknown Chocolate'}</h4>
+                              <p>{review.chocolate?.maker || 'Unknown Maker'}</p>
                             </div>
                           </Link>
                           <div className="review-content">
@@ -361,21 +352,33 @@ const contributionBadges = {
                                 <span key={star} className={`star ${star <= review.rating ? 'filled' : ''}`}>★</span>
                               ))}
                               <span className="review-date">
-                                {new Date(review.createdAt.toDate()).toLocaleDateString()}
+                                {review.createdAt?.toDate ? 
+                                  review.createdAt.toDate().toLocaleDateString() : 
+                                  'Recently'
+                                }
                               </span>
                             </div>
-                            <p className="review-text">{review.text.substring(0, 120)}...</p>
+                            <p className="review-text">
+                              {review.text ? 
+                                (review.text.length > 120 ? `${review.text.substring(0, 120)}...` : review.text) : 
+                                'No review text'
+                              }
+                            </p>
                           </div>
                         </div>
                       ))}
-                      <Link to="#" onClick={() => setActiveTab('reviews')} className="see-all-link">
+                      <button 
+                        onClick={() => setActiveTab('reviews')} 
+                        className="see-all-link"
+                        style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                      >
                         See all reviews
-                      </Link>
+                      </button>
                     </div>
                   ) : (
                     <div className="empty-state">
                       <p>You haven't written any reviews yet.</p>
-                      <Link to="/" className="action-button">Discover Chocolates to Review</Link>
+                      <Link to="/browse" className="action-button">Discover Chocolates to Review</Link>
                     </div>
                   )}
                 </div>
@@ -405,11 +408,14 @@ const contributionBadges = {
                   {reviews.map(review => (
                     <div className="review-card" key={review.id}>
                       <div className="review-card-header">
-                        <Link to={`/chocolate/${review.chocolate.id}`} className="review-chocolate">
-                          <img src={review.chocolate.imageUrl} alt={review.chocolate.name} />
+                        <Link to={`/chocolate/${review.chocolate?.id || review.chocolateId}`} className="review-chocolate">
+                          <img 
+                            src={review.chocolate?.imageUrl || 'https://placehold.co/50x50?text=🍫'} 
+                            alt={review.chocolate?.name || 'Chocolate'} 
+                          />
                           <div className="review-chocolate-info">
-                            <h3>{review.chocolate.name}</h3>
-                            <p>{review.chocolate.maker}</p>
+                            <h3>{review.chocolate?.name || 'Unknown Chocolate'}</h3>
+                            <p>{review.chocolate?.maker || 'Unknown Maker'}</p>
                           </div>
                         </Link>
                         <div className="review-meta">
@@ -419,12 +425,15 @@ const contributionBadges = {
                             ))}
                           </div>
                           <div className="review-date">
-                            {new Date(review.createdAt.toDate()).toLocaleDateString()}
+                            {review.createdAt?.toDate ? 
+                              review.createdAt.toDate().toLocaleDateString() : 
+                              'Recently'
+                            }
                           </div>
                         </div>
                       </div>
                       <div className="review-card-body">
-                        <p className="review-text">{review.text}</p>
+                        <p className="review-text">{review.text || 'No review text'}</p>
                       </div>
                       <div className="review-card-actions">
                         <button className="edit-review">Edit</button>
@@ -436,71 +445,64 @@ const contributionBadges = {
               ) : (
                 <div className="empty-state">
                   <p>You haven't written any reviews yet.</p>
-                  <Link to="/" className="action-button">Discover Chocolates to Review</Link>
+                  <Link to="/browse" className="action-button">Discover Chocolates to Review</Link>
                 </div>
               )}
             </div>
           )}
 
- {/* Favorites Tab */}
-{activeTab === 'favorites' && (
-  <div className="favorites-tab">
-    <div className="section-header">
-      <h2>Your Favorite Chocolates</h2>
-    </div>
-    
-    {favorites.length > 0 ? (
-      <div className="favorites-grid">
-        {favorites.map(chocolate => (
-          <div className="favorite-card" key={chocolate.id}>
-            <Link to={`/chocolate/${chocolate.id}`} className="favorite-link">
-              <div className="favorite-image">
-                <img src={chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate'} alt={chocolate.name} />
+          {/* Favorites Tab */}
+          {activeTab === 'favorites' && (
+            <div className="favorites-tab">
+              <div className="section-header">
+                <h2>Your Favorite Chocolates</h2>
               </div>
-              <div className="favorite-info">
-                <h3>{chocolate.name}</h3>
-                <p>{chocolate.maker}</p>
-                <div className="favorite-details">
-                  <span>{chocolate.type}</span>
-                  <span>{chocolate.cacaoPercentage}% Cacao</span>
-                </div>
-                <div className="favorite-rating">
-                  {[1, 2, 3, 4, 5].map(star => (
-                    <span key={star} className={`star ${star <= (chocolate.averageRating || 0) ? 'filled' : ''}`}>★</span>
+              
+              {favorites.length > 0 ? (
+                <div className="favorites-grid">
+                  {favorites.map(chocolate => (
+                    <div className="favorite-card" key={chocolate.id}>
+                      <Link to={`/chocolate/${chocolate.id}`} className="favorite-link">
+                        <div className="favorite-image">
+                          <img 
+                            src={chocolate.imageUrl || 'https://placehold.co/300x300?text=🍫'} 
+                            alt={chocolate.name || 'Chocolate'} 
+                          />
+                        </div>
+                        <div className="favorite-info">
+                          <h3>{chocolate.name || 'Unknown Chocolate'}</h3>
+                          <p>{chocolate.maker || 'Unknown Maker'}</p>
+                          <div className="favorite-details">
+                            <span>{chocolate.type || 'Unknown Type'}</span>
+                            <span>{chocolate.cacaoPercentage || 0}% Cacao</span>
+                          </div>
+                          <div className="favorite-rating">
+                            {[1, 2, 3, 4, 5].map(star => (
+                              <span key={star} className={`star ${star <= (chocolate.averageRating || 0) ? 'filled' : ''}`}>★</span>
+                            ))}
+                            <span className="rating-count">({chocolate.ratings || chocolate.reviewCount || 0})</span>
+                          </div>
+                        </div>
+                      </Link>
+                      <button 
+                        className="remove-favorite"
+                        onClick={() => handleRemoveFavorite(chocolate.id)}
+                        title="Remove from favorites"
+                        aria-label="Remove from favorites"
+                      >
+                      </button>
+                    </div>
                   ))}
-                  <span className="rating-count">({chocolate.ratings || chocolate.reviewCount || 0})</span>
                 </div>
-              </div>
-            </Link>
-            <button 
-              className="remove-favorite"
-              onClick={async () => {
-                try {
-                  await removeFromFavorites(currentUser.uid, chocolate.id);
-                  // Refresh favorites list
-                  const updatedFavorites = await getFavoriteChocolates(currentUser.uid);
-                  setFavorites(updatedFavorites);
-                } catch (error) {
-                  console.error('Error removing favorite:', error);
-                  alert('Error removing favorite. Please try again.');
-                }
-              }}
-              title="Remove from favorites"
-              aria-label="Remove from favorites"
-            >
-            </button>
-          </div>
-        ))}
-      </div>
-    ) : (
-      <div className="empty-state">
-        <p>You haven't added any favorites yet.</p>
-        <p>Click the heart ❤️ button on chocolates you love to save them here!</p>
-        <Link to="/browse" className="action-button">Discover Chocolates</Link>
-      </div>
-    )}
-  </div>
-)}
+              ) : (
+                <div className="empty-state">
+                  <p>You haven't added any favorites yet.</p>
+                  <p>Click the heart ❤️ button on chocolates you love to save them here!</p>
+                  <Link to="/browse" className="action-button">Discover Chocolates</Link>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Preferences Tab */}
           {activeTab === 'preferences' && (
@@ -516,7 +518,7 @@ const contributionBadges = {
                     <label className="checkbox-label">
                       <input 
                         type="checkbox" 
-                        checked={userProfile.preferences?.favoriteTypes?.includes('Dark')} 
+                        checked={userProfile.preferences?.favoriteTypes?.includes('Dark') || false} 
                         onChange={() => {}} 
                       />
                       Dark Chocolate
@@ -524,7 +526,7 @@ const contributionBadges = {
                     <label className="checkbox-label">
                       <input 
                         type="checkbox" 
-                        checked={userProfile.preferences?.favoriteTypes?.includes('Milk')} 
+                        checked={userProfile.preferences?.favoriteTypes?.includes('Milk') || false} 
                         onChange={() => {}} 
                       />
                       Milk Chocolate
@@ -532,7 +534,7 @@ const contributionBadges = {
                     <label className="checkbox-label">
                       <input 
                         type="checkbox" 
-                        checked={userProfile.preferences?.favoriteTypes?.includes('White')} 
+                        checked={userProfile.preferences?.favoriteTypes?.includes('White') || false} 
                         onChange={() => {}} 
                       />
                       White Chocolate
@@ -540,7 +542,7 @@ const contributionBadges = {
                     <label className="checkbox-label">
                       <input 
                         type="checkbox" 
-                        checked={userProfile.preferences?.favoriteTypes?.includes('Single Origin')} 
+                        checked={userProfile.preferences?.favoriteTypes?.includes('Single Origin') || false} 
                         onChange={() => {}} 
                       />
                       Single Origin
@@ -548,7 +550,7 @@ const contributionBadges = {
                     <label className="checkbox-label">
                       <input 
                         type="checkbox" 
-                        checked={userProfile.preferences?.favoriteTypes?.includes('Flavored')} 
+                        checked={userProfile.preferences?.favoriteTypes?.includes('Flavored') || false} 
                         onChange={() => {}} 
                       />
                       Flavored/Infused
@@ -562,7 +564,7 @@ const contributionBadges = {
                     <label className="checkbox-label">
                       <input 
                         type="checkbox" 
-                        checked={userProfile.preferences?.flavorPreferences?.includes('Fruity')} 
+                        checked={userProfile.preferences?.flavorPreferences?.includes('Fruity') || false} 
                         onChange={() => {}} 
                       />
                       Fruity
@@ -570,7 +572,7 @@ const contributionBadges = {
                     <label className="checkbox-label">
                       <input 
                         type="checkbox" 
-                        checked={userProfile.preferences?.flavorPreferences?.includes('Nutty')} 
+                        checked={userProfile.preferences?.flavorPreferences?.includes('Nutty') || false} 
                         onChange={() => {}} 
                       />
                       Nutty
@@ -578,7 +580,7 @@ const contributionBadges = {
                     <label className="checkbox-label">
                       <input 
                         type="checkbox" 
-                        checked={userProfile.preferences?.flavorPreferences?.includes('Floral')} 
+                        checked={userProfile.preferences?.flavorPreferences?.includes('Floral') || false} 
                         onChange={() => {}} 
                       />
                       Floral
@@ -586,7 +588,7 @@ const contributionBadges = {
                     <label className="checkbox-label">
                       <input 
                         type="checkbox" 
-                        checked={userProfile.preferences?.flavorPreferences?.includes('Spicy')} 
+                        checked={userProfile.preferences?.flavorPreferences?.includes('Spicy') || false} 
                         onChange={() => {}} 
                       />
                       Spicy
@@ -594,7 +596,7 @@ const contributionBadges = {
                     <label className="checkbox-label">
                       <input 
                         type="checkbox" 
-                        checked={userProfile.preferences?.flavorPreferences?.includes('Earthy')} 
+                        checked={userProfile.preferences?.flavorPreferences?.includes('Earthy') || false} 
                         onChange={() => {}} 
                       />
                       Earthy
@@ -602,7 +604,7 @@ const contributionBadges = {
                     <label className="checkbox-label">
                       <input 
                         type="checkbox" 
-                        checked={userProfile.preferences?.flavorPreferences?.includes('Caramel')} 
+                        checked={userProfile.preferences?.flavorPreferences?.includes('Caramel') || false} 
                         onChange={() => {}} 
                       />
                       Caramel
@@ -616,7 +618,7 @@ const contributionBadges = {
                     <label className="checkbox-label">
                       <input 
                         type="checkbox" 
-                        checked={userProfile.preferences?.dietaryRestrictions?.includes('Dairy-Free')} 
+                        checked={userProfile.preferences?.dietaryRestrictions?.includes('Dairy-Free') || false} 
                         onChange={() => {}} 
                       />
                       Dairy-Free
@@ -624,7 +626,7 @@ const contributionBadges = {
                     <label className="checkbox-label">
                       <input 
                         type="checkbox" 
-                        checked={userProfile.preferences?.dietaryRestrictions?.includes('Vegan')} 
+                        checked={userProfile.preferences?.dietaryRestrictions?.includes('Vegan') || false} 
                         onChange={() => {}} 
                       />
                       Vegan
@@ -632,7 +634,7 @@ const contributionBadges = {
                     <label className="checkbox-label">
                       <input 
                         type="checkbox" 
-                        checked={userProfile.preferences?.dietaryRestrictions?.includes('Gluten-Free')} 
+                        checked={userProfile.preferences?.dietaryRestrictions?.includes('Gluten-Free') || false} 
                         onChange={() => {}} 
                       />
                       Gluten-Free
@@ -640,7 +642,7 @@ const contributionBadges = {
                     <label className="checkbox-label">
                       <input 
                         type="checkbox" 
-                        checked={userProfile.preferences?.dietaryRestrictions?.includes('Nut-Free')} 
+                        checked={userProfile.preferences?.dietaryRestrictions?.includes('Nut-Free') || false} 
                         onChange={() => {}} 
                       />
                       Nut-Free
@@ -648,7 +650,7 @@ const contributionBadges = {
                     <label className="checkbox-label">
                       <input 
                         type="checkbox" 
-                        checked={userProfile.preferences?.dietaryRestrictions?.includes('Sugar-Free')} 
+                        checked={userProfile.preferences?.dietaryRestrictions?.includes('Sugar-Free') || false} 
                         onChange={() => {}} 
                       />
                       Sugar-Free
@@ -656,7 +658,7 @@ const contributionBadges = {
                     <label className="checkbox-label">
                       <input 
                         type="checkbox" 
-                        checked={userProfile.preferences?.dietaryRestrictions?.includes('Fair Trade')} 
+                        checked={userProfile.preferences?.dietaryRestrictions?.includes('Fair Trade') || false} 
                         onChange={() => {}} 
                       />
                       Fair Trade
@@ -673,84 +675,5 @@ const contributionBadges = {
     </div>
   );
 }
-
-// Add a new "Contributions" tab to your navigation:
-<button 
-  className={`profile-nav-link ${activeTab === 'contributions' ? 'active' : ''}`}
-  onClick={() => setActiveTab('contributions')}
->
-  My Contributions ({contributionStats.chocolatesAdded})
-</button>
-
-// Add the Contributions tab content:
-{activeTab === 'contributions' && (
-  <div className="contributions-tab">
-    <div className="section-header">
-      <h2>Your Chocolate Contributions</h2>
-      <p>Thank you for helping build our chocolate database!</p>
-    </div>
-    
-    {contributedChocolates.length > 0 ? (
-      <div className="contributions-grid">
-        {contributedChocolates.map(chocolate => (
-          <div className="contribution-card" key={chocolate.id}>
-            <Link to={`/chocolate/${chocolate.id}`} className="contribution-link">
-              <div className="contribution-image">
-                <img src={chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate'} alt={chocolate.name} />
-              </div>
-              <div className="contribution-info">
-                <h3>{chocolate.name}</h3>
-                <p className="contribution-maker">{chocolate.maker}</p>
-                <div className="contribution-meta">
-                  <span className="contribution-date">
-                    Added {chocolate.createdAt?.toDate().toLocaleDateString()}
-                  </span>
-                  <span className="contribution-status approved">✓ Approved</span>
-                </div>
-                <div className="contribution-stats">
-                  <span className="stat">
-                    ⭐ {(chocolate.averageRating || 0).toFixed(1)} 
-                    ({chocolate.reviewCount || 0} reviews)
-                  </span>
-                </div>
-              </div>
-            </Link>
-          </div>
-        ))}
-      </div>
-    ) : (
-      <div className="empty-state">
-        <div className="empty-icon">🍫</div>
-        <h3>Start Contributing!</h3>
-        <p>Help fellow chocolate lovers by adding chocolates you've discovered to our database.</p>
-        <Link to="/add-chocolate" className="action-button">
-          Add Your First Chocolate
-        </Link>
-      </div>
-    )}
-    
-    <div className="contribution-achievements">
-      <h3>Your Impact</h3>
-      <div className="achievement-stats">
-        <div className="achievement-item">
-          <div className="achievement-number">{contributionStats.chocolatesAdded}</div>
-          <div className="achievement-label">Chocolates Added</div>
-        </div>
-        <div className="achievement-item">
-          <div className="achievement-number">
-            {contributedChocolates.reduce((sum, chocolate) => sum + (chocolate.reviewCount || 0), 0)}
-          </div>
-          <div className="achievement-label">Reviews on Your Chocolates</div>
-        </div>
-        <div className="achievement-item">
-          <div className="achievement-number">
-            {(contributedChocolates.reduce((sum, chocolate) => sum + (chocolate.averageRating || 0), 0) / Math.max(contributedChocolates.length, 1)).toFixed(1)}
-          </div>
-          <div className="achievement-label">Average Rating</div>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
 
 export default ProfilePage;
