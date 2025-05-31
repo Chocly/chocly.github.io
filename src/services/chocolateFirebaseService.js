@@ -11,7 +11,10 @@ import {
   query, 
   where,
   orderBy,
-  limit  // <-- FIXED: Added missing import
+  limit,  // <-- FIXED: Added missing import
+  increment, 
+  serverTimestamp,
+  setDoc
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -455,4 +458,209 @@ const getSampleCategoryChocolates = (category) => {
   
   // Return appropriate sample data based on category
   return darkChocolates; // Simplified for brevity
+};
+
+// Add these functions to the END of your existing chocolateFirebaseService.js file
+
+// Add a chocolate contributed by a user
+export const addUserChocolate = async (chocolateData, imageFile) => {
+  try {
+    let imageUrl = null;
+    
+    // Upload image if provided
+    if (imageFile) {
+      const timestamp = Date.now();
+      const fileName = `user-contributions/${chocolateData.createdBy}/${timestamp}_${imageFile.name}`;
+      const storageRef = ref(storage, fileName);
+      
+      await uploadBytes(storageRef, imageFile);
+      imageUrl = await getDownloadURL(storageRef);
+    }
+    
+    // Prepare chocolate data
+    const newChocolate = {
+      ...chocolateData,
+      imageUrl,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      averageRating: 0,
+      reviewCount: 0,
+      status: 'approved', // You can change this to 'pending' if you want moderation
+      isUserContributed: true,
+      contributionDate: serverTimestamp()
+    };
+    
+    // Add the chocolate to the database
+    const docRef = await addDoc(chocolatesCollection, newChocolate);
+    
+    // Update user's contribution count
+    await updateUserContributionStats(chocolateData.createdBy, 'chocolatesAdded');
+    
+    // Award badges if needed
+    await checkAndAwardContributionBadges(chocolateData.createdBy);
+    
+    return {
+      id: docRef.id,
+      ...newChocolate
+    };
+  } catch (error) {
+    console.error('Error adding user chocolate:', error);
+    throw error;
+  }
+};
+
+// Update user contribution statistics
+export const updateUserContributionStats = async (userId, statType, increment_value = 1) => {
+  try {
+    const userRef = doc(db, 'users', userId);
+    
+    // Check if user document exists
+    const userDoc = await getDoc(userRef);
+    
+    if (userDoc.exists()) {
+      // Update existing user
+      await updateDoc(userRef, {
+        [`stats.${statType}`]: increment(increment_value),
+        updatedAt: serverTimestamp()
+      });
+    } else {
+      // Create new user stats if user document doesn't exist
+      await setDoc(userRef, {
+        stats: {
+          [statType]: increment_value
+        },
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+    }
+  } catch (error) {
+    console.error('Error updating user contribution stats:', error);
+    throw error;
+  }
+};
+
+// Check and award badges based on contributions
+export const checkAndAwardContributionBadges = async (userId) => {
+  try {
+    const userRef = doc(db, 'users', userId);
+    const userDoc = await getDoc(userRef);
+    
+    if (!userDoc.exists()) return;
+    
+    const userData = userDoc.data();
+    const stats = userData.stats || {};
+    const currentBadges = userData.badges || [];
+    const newBadges = [...currentBadges];
+    
+    // Contribution badges based on chocolates added
+    const chocolatesAdded = stats.chocolatesAdded || 0;
+    
+    if (chocolatesAdded >= 1 && !newBadges.includes('Contributor')) {
+      newBadges.push('Contributor');
+    }
+    
+    if (chocolatesAdded >= 5 && !newBadges.includes('Chocolate Scout')) {
+      newBadges.push('Chocolate Scout');
+    }
+    
+    if (chocolatesAdded >= 10 && !newBadges.includes('Database Builder')) {
+      newBadges.push('Database Builder');
+    }
+    
+    if (chocolatesAdded >= 25 && !newBadges.includes('Chocolate Curator')) {
+      newBadges.push('Chocolate Curator');
+    }
+    
+    if (chocolatesAdded >= 50 && !newBadges.includes('Master Contributor')) {
+      newBadges.push('Master Contributor');
+    }
+    
+    // Update badges if new ones were earned
+    if (newBadges.length > currentBadges.length) {
+      await updateDoc(userRef, {
+        badges: newBadges,
+        updatedAt: serverTimestamp()
+      });
+    }
+  } catch (error) {
+    console.error('Error checking and awarding badges:', error);
+  }
+};
+
+// Get user's contribution statistics
+export const getUserContributionStats = async (userId) => {
+  try {
+    const userRef = doc(db, 'users', userId);
+    const userDoc = await getDoc(userRef);
+    
+    if (!userDoc.exists()) {
+      return {
+        chocolatesAdded: 0,
+        reviewsWritten: 0,
+        totalContributions: 0
+      };
+    }
+    
+    const userData = userDoc.data();
+    const stats = userData.stats || {};
+    
+    return {
+      chocolatesAdded: stats.chocolatesAdded || 0,
+      reviewsWritten: stats.reviewsWritten || 0,
+      totalContributions: (stats.chocolatesAdded || 0) + (stats.reviewsWritten || 0)
+    };
+  } catch (error) {
+    console.error('Error getting user contribution stats:', error);
+    return {
+      chocolatesAdded: 0,
+      reviewsWritten: 0,
+      totalContributions: 0
+    };
+  }
+};
+
+// Get chocolates contributed by a specific user
+export const getUserContributedChocolates = async (userId) => {
+  try {
+    const q = query(
+      chocolatesCollection,
+      where('createdBy', '==', userId),
+      orderBy('createdAt', 'desc')
+    );
+    
+    const snapshot = await getDocs(q);
+    const chocolates = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    
+    // Enrich with maker names
+    return await enrichChocolatesWithMakers(chocolates);
+  } catch (error) {
+    console.error('Error getting user contributed chocolates:', error);
+    throw error;
+  }
+};
+
+// Get recent user contributions for community feed
+export const getRecentContributions = async (limitCount = 10) => {
+  try {
+    const q = query(
+      chocolatesCollection,
+      where('isUserContributed', '==', true),
+      orderBy('createdAt', 'desc'),
+      limit(limitCount)
+    );
+    
+    const snapshot = await getDocs(q);
+    const chocolates = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    
+    return await enrichChocolatesWithMakers(chocolates);
+  } catch (error) {
+    console.error('Error getting recent contributions:', error);
+    return [];
+  }
 };

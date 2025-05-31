@@ -740,3 +740,381 @@
     font-size: 0.75rem;
   }
 }
+
+/* Add these styles to your existing ProfilePage.css */
+
+/* Contribution Badge Icons */
+.badge-icon.contributor {
+  fill: #10B981;
+}
+
+.badge-icon.scout {
+  fill: #F59E0B;
+}
+
+.badge-icon.builder {
+  fill: #8B5CF6;
+}
+
+/* Contribution Stat Card */
+.stat-card.contribution-stat {
+  background: linear-gradient(135deg, #F4A261 0%, #F4D03F 100%);
+  color: var(--primary-dark);
+}
+
+.stat-card.contribution-stat .stat-value {
+  color: var(--primary-dark);
+  font-weight: 800;
+}
+
+.stat-card.contribution-stat .stat-label {
+  color: rgba(45, 24, 16, 0.8);
+  font-weight: 600;
+}
+
+/* Contributions Tab */
+.contributions-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.contributions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.contribution-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #F3F4F6;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.contribution-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.contribution-card::before {
+  content: '🍫';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 1.5rem;
+  opacity: 0.7;
+  z-index: 2;
+}
+
+.contribution-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.contribution-image {
+  height: 180px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.contribution-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.contribution-card:hover .contribution-image img {
+  transform: scale(1.05);
+}
+
+.contribution-info {
+  padding: 1.5rem;
+}
+
+.contribution-info h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.contribution-maker {
+  color: var(--medium-gray);
+  font-size: 0.95rem;
+  margin: 0 0 1rem 0;
+  font-weight: 500;
+}
+
+.contribution-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.contribution-date {
+  font-size: 0.85rem;
+  color: var(--medium-gray);
+}
+
+.contribution-status {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.contribution-status.approved {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.contribution-status.pending {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.contribution-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contribution-stats .stat {
+  font-size: 0.9rem;
+  color: var(--dark-gray);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Empty State for Contributions */
+.contributions-tab .empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #FDFCFC 0%, #F8F9FA 100%);
+  border-radius: 20px;
+  border: 2px dashed #E5E7EB;
+  margin: 2rem 0;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.8;
+}
+
+.contributions-tab .empty-state h3 {
+  color: var(--primary-dark);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.contributions-tab .empty-state p {
+  color: var(--medium-gray);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Contribution Achievements */
+.contribution-achievements {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #F3F4F6;
+  margin-top: 2rem;
+}
+
+.contribution-achievements h3 {
+  color: var(--primary-dark);
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+}
+
+.achievement-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem;
+}
+
+.achievement-item {
+  text-align: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+  border-radius: 16px;
+  border: 1px solid #E5E7EB;
+  transition: transform 0.3s ease;
+}
+
+.achievement-item:hover {
+  transform: translateY(-2px);
+}
+
+.achievement-item:nth-child(1) {
+  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  border-color: #F59E0B;
+}
+
+.achievement-item:nth-child(2) {
+  background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+  border-color: #3B82F6;
+}
+
+.achievement-item:nth-child(3) {
+  background: linear-gradient(135deg, #F3E8FF 0%, #E9D5FF 100%);
+  border-color: #8B5CF6;
+}
+
+.achievement-number {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+  margin-bottom: 0.5rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.achievement-label {
+  font-size: 0.875rem;
+  color: var(--medium-gray);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Add Chocolate CTA */
+.add-chocolate-cta {
+  background: linear-gradient(135deg, var(--accent) 0%, #F4D03F 100%);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  margin: 2rem 0;
+  border: 1px solid var(--accent);
+  box-shadow: 0 8px 32px rgba(244, 162, 97, 0.2);
+}
+
+.add-chocolate-cta h3 {
+  color: var(--primary-dark);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.add-chocolate-cta p {
+  color: rgba(45, 24, 16, 0.8);
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.add-chocolate-cta .action-button {
+  background: var(--primary-dark);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 16px rgba(45, 24, 16, 0.3);
+}
+
+.add-chocolate-cta .action-button:hover {
+  background: #2A1703;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(45, 24, 16, 0.4);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .contributions-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+  
+  .contribution-info {
+    padding: 1rem;
+  }
+  
+  .contribution-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .achievement-stats {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .achievement-item {
+    padding: 1rem;
+  }
+  
+  .achievement-number {
+    font-size: 1.5rem;
+  }
+  
+  .add-chocolate-cta {
+    padding: 1.5rem;
+  }
+  
+  .add-chocolate-cta h3 {
+    font-size: 1.25rem;
+  }
+  
+  .add-chocolate-cta p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contributions-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .contribution-card::before {
+    font-size: 1.25rem;
+    top: 8px;
+    right: 8px;
+  }
+  
+  .contributions-tab .empty-state {
+    padding: 2rem 1rem;
+  }
+  
+  .empty-icon {
+    font-size: 3rem;
+  }
+  
+  .contribution-achievements {
+    padding: 1.5rem;
+  }
+}

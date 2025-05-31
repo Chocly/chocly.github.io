@@ -625,3 +625,145 @@
     width: auto;
   }
 }
+
+/* Add these styles to your existing Header.css file */
+
+/* Add Chocolate Button */
+.add-chocolate-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #F4A261 0%, #F4D03F 100%);
+  color: #2D1810;
+  text-decoration: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(244, 162, 97, 0.3);
+  border: 2px solid transparent;
+}
+
+.add-chocolate-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s;
+}
+
+.add-chocolate-btn:hover::before {
+  left: 100%;
+}
+
+.add-chocolate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(244, 162, 97, 0.4);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.add-chocolate-btn:active {
+  transform: translateY(0);
+}
+
+.add-chocolate-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.add-chocolate-btn:hover svg {
+  transform: rotate(90deg);
+}
+
+/* Responsive behavior for Add Chocolate button */
+@media (max-width: 768px) {
+  .add-chocolate-text {
+    display: none;
+  }
+  
+  .add-chocolate-btn {
+    padding: 0.75rem;
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .add-chocolate-btn {
+    padding: 0.6rem;
+    min-width: 40px;
+    min-height: 40px;
+  }
+  
+  .add-chocolate-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Update header actions to accommodate the new button */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Make sure the add chocolate button in dropdown is styled consistently */
+.user-dropdown-item svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* Special styling for the Add Chocolate item in dropdown */
+.user-dropdown .user-dropdown-item[href="/add-chocolate"] {
+  background: linear-gradient(135deg, rgba(244, 162, 97, 0.1) 0%, rgba(244, 208, 63, 0.1) 100%);
+  color: var(--chocolate-primary);
+  font-weight: 600;
+}
+
+.user-dropdown .user-dropdown-item[href="/add-chocolate"]:hover {
+  background: linear-gradient(135deg, rgba(244, 162, 97, 0.2) 0%, rgba(244, 208, 63, 0.2) 100%);
+}
+
+/* Navigation section styling for Add Chocolate */
+.nav-section a[href="/add-chocolate"] {
+  background: linear-gradient(135deg, rgba(244, 162, 97, 0.1) 0%, rgba(244, 208, 63, 0.1) 100%);
+  border-radius: 8px;
+  margin: 0.25rem 0;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  color: var(--chocolate-primary);
+}
+
+.nav-section a[href="/add-chocolate"]:hover {
+  background: linear-gradient(135deg, rgba(244, 162, 97, 0.2) 0%, rgba(244, 208, 63, 0.2) 100%);
+  padding-left: 1.5rem;
+}
+
+/* Pulse animation for the Add Chocolate button to draw attention */
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 4px 16px rgba(244, 162, 97, 0.3);
+  }
+  50% {
+    box-shadow: 0 6px 20px rgba(244, 162, 97, 0.5);
+  }
+  100% {
+    box-shadow: 0 4px 16px rgba(244, 162, 97, 0.3);
+  }
+}
+
+.add-chocolate-btn {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.add-chocolate-btn:hover {
+  animation: none;
+}

@@ -1,4 +1,4 @@
-// src/components/Header.jsx - Updated with user indicator
+// src/components/Header.jsx - Updated with Add Chocolate button
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -103,6 +103,18 @@ function Header() {
         )}
         
         <div className="header-actions">
+          {/* Add Chocolate Button - Only show if user is logged in */}
+          {currentUser && (
+            <Link to="/add-chocolate" className="add-chocolate-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="16"></line>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+              </svg>
+              <span className="add-chocolate-text">Add Chocolate</span>
+            </Link>
+          )}
+          
           {/* User Menu for Logged In Users */}
           {currentUser ? (
             <div className="user-menu-container" ref={userMenuRef}>
@@ -127,6 +139,14 @@ function Header() {
                     <circle cx="12" cy="7" r="4"></circle>
                   </svg>
                   My Profile
+                </Link>
+                <Link to="/add-chocolate" onClick={() => setUserMenuOpen(false)} className="user-dropdown-item">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="16"></line>
+                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                  </svg>
+                  Add Chocolate
                 </Link>
                 <button onClick={handleLogout} className="user-dropdown-item logout">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -168,7 +188,10 @@ function Header() {
                 <Link to="/category/white" onClick={() => setMenuOpen(false)}>White Chocolate</Link>
               </div>
               <div className="nav-section">
-                <h3>About</h3>
+                <h3>Community</h3>
+                {currentUser && (
+                  <Link to="/add-chocolate" onClick={() => setMenuOpen(false)}>Add Chocolate</Link>
+                )}
                 <Link to="/about" onClick={() => setMenuOpen(false)}>About Us</Link>
                 <Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
               </div>

@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserReviews } from '../services/reviewService';
 import { getFavoriteChocolates, removeFromFavorites } from '../services/userService';
+import { getUserContributionStats, getUserContributedChocolates } from '../services/chocolateFirebaseService';
 import './ProfilePage.css';
 
 // SVG Icons
@@ -55,21 +56,25 @@ function ProfilePage() {
         setLoading(true);
         
         if (currentUser) {
-          // Load reviews and favorites in parallel
-          const [userReviews, userFavorites] = await Promise.all([
-            getUserReviews(currentUser.uid),
-            getFavoriteChocolates(currentUser.uid)
-          ]);
+        // Load reviews, favorites, and contribution stats in parallel
+        const [userReviews, userFavorites, contributionStats, contributedChocolates] = await Promise.all([
+          getUserReviews(currentUser.uid),
+          getFavoriteChocolates(currentUser.uid),
+          getUserContributionStats(currentUser.uid),
+          getUserContributedChocolates(currentUser.uid)
+        ]);
           
-          setReviews(userReviews);
-          setFavorites(userFavorites);
-        }
-      } catch (error) {
-        console.error("Error loading user data:", error);
-      } finally {
-        setLoading(false);
+        setReviews(userReviews);
+        setFavorites(userFavorites);
+        setContributionStats(contributionStats); // Add this state
+        setContributedChocolates(contributedChocolates); // Add this state
       }
-    };
+    } catch (error) {
+      console.error("Error loading user data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
     loadUserData();
   }, [currentUser, navigate, loading]);
@@ -93,6 +98,13 @@ function ProfilePage() {
     }
   }, [currentUser]);
 
+// Add these new state variables at the top of your component:
+const [contributionStats, setContributionStats] = useState({
+  chocolatesAdded: 0,
+  reviewsWritten: 0,
+  totalContributions: 0
+});
+
 
   // Calculate user statistics
   const calculateStats = () => {
@@ -101,6 +113,8 @@ function ProfilePage() {
     // Basic stats
     const totalReviews = reviews.length;
     const totalTasted = reviews.length;
+    const totalContributions = contributionStats.chocolatesAdded;
+
     
     // Calculate average rating given by user
     const averageRating = totalReviews > 0 
@@ -145,20 +159,53 @@ function ProfilePage() {
       totalReviews,
       totalTasted,
       averageRating,
+      totalContributions,
       favoriteType,
       favoriteMaker
     };
   };
 
-  // Calculate badges
-  const getBadges = () => {
-    if (!userProfile) return [];
-    
-    // Default badges - in a real app, these would be calculated based on activity
-    const badges = userProfile.badges || ['Newcomer'];
-    
-    return badges;
-  };
+// Update your badges function to include contribution badges:
+const getBadges = () => {
+  if (!userProfile) return [];
+  
+  // Get existing badges and add contribution-based ones
+  const badges = [...(userProfile.badges || ['Newcomer'])];
+  
+  // Add contribution badges based on stats
+  const chocolatesAdded = contributionStats.chocolatesAdded;
+  
+  if (chocolatesAdded >= 1 && !badges.includes('Contributor')) {
+    badges.push('Contributor');
+  }
+  if (chocolatesAdded >= 5 && !badges.includes('Chocolate Scout')) {
+    badges.push('Chocolate Scout');
+  }
+  if (chocolatesAdded >= 10 && !badges.includes('Database Builder')) {
+    badges.push('Database Builder');
+  }
+  
+  return badges;
+};
+
+// Add this new BadgeIcon for contribution badges in your existing BadgeIcon component:
+const contributionBadges = {
+  'Contributor': (
+    <svg className="badge-icon contributor" viewBox="0 0 24 24">
+      <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" />
+    </svg>
+  ),
+  'Chocolate Scout': (
+    <svg className="badge-icon scout" viewBox="0 0 24 24">
+      <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6L15.5,7.5L17,11L15.5,14.5L12,16L8.5,14.5L7,11L8.5,7.5L12,6M12,8.2L10,9L9.2,11L10,13L12,13.8L14,13L14.8,11L14,9L12,8.2Z" />
+    </svg>
+  ),
+  'Database Builder': (
+    <svg className="badge-icon builder" viewBox="0 0 24 24">
+      <path d="M12,3C7.58,3 4,4.79 4,7C4,9.21 7.58,11 12,11C16.42,11 20,9.21 20,7C20,4.79 16.42,3 12,3M4,9V12C4,14.21 7.58,16 12,16C16.42,16 20,14.21 20,12V9C20,11.21 16.42,13 12,13C7.58,13 4,11.21 4,9M4,14V17C4,19.21 7.58,21 12,21C16.42,21 20,19.21 20,17V14C20,16.21 16.42,18 12,18C7.58,18 4,16.21 4,14Z" />
+    </svg>
+  )
+};
 
   const stats = calculateStats();
   const badges = getBadges();
@@ -253,6 +300,10 @@ function ProfilePage() {
                     <div className="stat-value">{stats.totalReviews}</div>
                     <div className="stat-label">Reviews Written</div>
                   </div>
+                  <div className="stat-card contribution-stat">
+                    <div className="stat-value">{stats.totalContributions}</div>
+                    <div className="stat-label">Chocolates Added</div>
+                  </div>                  
                   <div className="stat-card">
                     <div className="stat-value">{stats.averageRating.toFixed(1)}</div>
                     <div className="stat-label">Average Rating</div>
@@ -622,5 +673,84 @@ function ProfilePage() {
     </div>
   );
 }
+
+// Add a new "Contributions" tab to your navigation:
+<button 
+  className={`profile-nav-link ${activeTab === 'contributions' ? 'active' : ''}`}
+  onClick={() => setActiveTab('contributions')}
+>
+  My Contributions ({contributionStats.chocolatesAdded})
+</button>
+
+// Add the Contributions tab content:
+{activeTab === 'contributions' && (
+  <div className="contributions-tab">
+    <div className="section-header">
+      <h2>Your Chocolate Contributions</h2>
+      <p>Thank you for helping build our chocolate database!</p>
+    </div>
+    
+    {contributedChocolates.length > 0 ? (
+      <div className="contributions-grid">
+        {contributedChocolates.map(chocolate => (
+          <div className="contribution-card" key={chocolate.id}>
+            <Link to={`/chocolate/${chocolate.id}`} className="contribution-link">
+              <div className="contribution-image">
+                <img src={chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate'} alt={chocolate.name} />
+              </div>
+              <div className="contribution-info">
+                <h3>{chocolate.name}</h3>
+                <p className="contribution-maker">{chocolate.maker}</p>
+                <div className="contribution-meta">
+                  <span className="contribution-date">
+                    Added {chocolate.createdAt?.toDate().toLocaleDateString()}
+                  </span>
+                  <span className="contribution-status approved">✓ Approved</span>
+                </div>
+                <div className="contribution-stats">
+                  <span className="stat">
+                    ⭐ {(chocolate.averageRating || 0).toFixed(1)} 
+                    ({chocolate.reviewCount || 0} reviews)
+                  </span>
+                </div>
+              </div>
+            </Link>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div className="empty-state">
+        <div className="empty-icon">🍫</div>
+        <h3>Start Contributing!</h3>
+        <p>Help fellow chocolate lovers by adding chocolates you've discovered to our database.</p>
+        <Link to="/add-chocolate" className="action-button">
+          Add Your First Chocolate
+        </Link>
+      </div>
+    )}
+    
+    <div className="contribution-achievements">
+      <h3>Your Impact</h3>
+      <div className="achievement-stats">
+        <div className="achievement-item">
+          <div className="achievement-number">{contributionStats.chocolatesAdded}</div>
+          <div className="achievement-label">Chocolates Added</div>
+        </div>
+        <div className="achievement-item">
+          <div className="achievement-number">
+            {contributedChocolates.reduce((sum, chocolate) => sum + (chocolate.reviewCount || 0), 0)}
+          </div>
+          <div className="achievement-label">Reviews on Your Chocolates</div>
+        </div>
+        <div className="achievement-item">
+          <div className="achievement-number">
+            {(contributedChocolates.reduce((sum, chocolate) => sum + (chocolate.averageRating || 0), 0) / Math.max(contributedChocolates.length, 1)).toFixed(1)}
+          </div>
+          <div className="achievement-label">Average Rating</div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
 
 export default ProfilePage;

@@ -1,4 +1,4 @@
-// Modified src/App.jsx - Complete version with maker routes
+// Modified src/App.jsx - Complete version with add chocolate route
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import ChocolateDetailPage from './pages/ChocolateDetailPage';
@@ -7,7 +7,8 @@ import ProfilePage from './pages/ProfilePage';
 import BrowseAllPage from './pages/BrowseAllPage';
 import BarcodeSearchPage from './pages/BarcodeSearchPage';
 import CategoryPage from './pages/CategoryPage';
-import MakerPage from './pages/MakerPage'; // Import the new MakerPage
+import MakerPage from './pages/MakerPage';
+import AddChocolatePage from './pages/AddChocolatePage'; // Add this import
 import SignUpForm from './components/auth/SignUpForm';
 import LoginForm from './components/auth/LoginForm';
 import { AuthProvider } from './contexts/AuthContext';
@@ -44,9 +45,10 @@ function App() {
               <Route path="/admin" element={<AdminPage />} />
               <Route path="/admin/batch-upload" element={<BatchImageUploadPage />} />
               <Route path="/category/:categorySlug" element={<CategoryPage />} />
-              {/* New maker routes */}
               <Route path="/maker" element={<MakerPage />} />
               <Route path="/maker/:makerName" element={<MakerPage />} />
+              {/* New Add Chocolate Route */}
+              <Route path="/add-chocolate" element={<AddChocolatePage />} />
             </Routes>
           </main>
           <Footer />
