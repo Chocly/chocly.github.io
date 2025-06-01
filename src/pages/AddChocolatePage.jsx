@@ -114,44 +114,79 @@ function AddChocolatePage() {
     }
   };
 
-  const handleSubmit = async (e) => {
+// Updated handleSubmit function for AddChocolatePage.jsx
+
+const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!currentUser) {
       alert('Please sign in to add chocolates');
       return;
     }
-
-    if (!selectedImage) {
-      alert('Please add an image of the chocolate');
-      return;
-    }
-
+  
     try {
       setLoading(true);
-
+  
       // Combine all tags
       const allTags = [
         ...formData.flavorTags,
         ...formData.attributeTags,
         ...formData.customTags.split(',').map(tag => tag.trim()).filter(tag => tag)
       ];
-
+  
       const chocolateData = {
         name: formData.name.trim(),
-        maker: formData.maker.trim(),
+        maker: formData.maker.trim(), // Store maker name directly
         type: formData.type,
         origin: formData.origin.trim() || 'Unknown',
         cacaoPercentage: formData.cacaoPercentage ? parseInt(formData.cacaoPercentage) : 0,
         description: formData.description.trim(),
         tags: allTags,
         createdBy: currentUser.uid,
-        createdByName: currentUser.displayName || 'Anonymous User',
-        status: 'pending', // For moderation if needed
+        createdByName: currentUser.displayName || currentUser.email || 'Anonymous User',
+        status: 'approved', // Auto-approve user contributions
         isUserContributed: true
       };
-
-      const result = await addUserChocolate(chocolateData, selectedImage);
+  
+      console.log('Submitting chocolate data:', {
+        ...chocolateData,
+        imageFile: selectedImage ? {
+          name: selectedImage.name,
+          size: selectedImage.size,
+          type: selectedImage.type
+        } : 'No image'
+      });
+  
+      let result;
+      
+      if (selectedImage) {
+        // Upload with image
+        console.log('Uploading chocolate with image...');
+        result = await addUserChocolate(chocolateData, selectedImage);
+        console.log('Upload successful:', result);
+      } else {
+        // Add without image - use placeholder
+        console.log('Adding chocolate without image...');
+        const chocolateWithPlaceholder = {
+          ...chocolateData,
+          imageUrl: `https://placehold.co/300x300?text=${encodeURIComponent(chocolateData.name)}`
+        };
+        
+        // Use regular addDoc since we don't need image upload
+        const docRef = await addDoc(collection(db, 'chocolates'), {
+          ...chocolateWithPlaceholder,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+          averageRating: 0,
+          reviewCount: 0
+        });
+        
+        result = {
+          id: docRef.id,
+          ...chocolateWithPlaceholder
+        };
+        console.log('Added without image:', result);
+      }
       
       setSuccess(true);
       
@@ -159,15 +194,37 @@ function AddChocolatePage() {
       setTimeout(() => {
         navigate(`/chocolate/${result.id}`);
       }, 3000);
-
+  
     } catch (error) {
       console.error('Error adding chocolate:', error);
-      alert(`Error adding chocolate: ${error.message}`);
+      
+      // Provide specific error messages
+      let errorMessage = 'Error adding chocolate. ';
+      
+      if (error.code === 'storage/unauthorized') {
+        errorMessage += 'Permission denied. Please make sure you are signed in.';
+      } else if (error.code === 'storage/canceled') {
+        errorMessage += 'Upload was canceled. Please try again.';
+      } else if (error.code === 'storage/retry-limit-exceeded') {
+        errorMessage += 'Upload failed due to network issues. Please try again.';
+      } else if (error.message.includes('CORS')) {
+        errorMessage += 'Network configuration issue. Please try again in a few minutes.';
+      } else if (error.message.includes('storage')) {
+        errorMessage += 'Image upload failed. Please try a different image or upload without an image.';
+      } else if (error.message.includes('permission')) {
+        errorMessage += 'Permission denied. Please make sure you are signed in.';
+      } else if (error.message.includes('network')) {
+        errorMessage += 'Network error. Please check your connection and try again.';
+      } else {
+        errorMessage += error.message || 'Please try again.';
+      }
+      
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }
   };
-
+  
   // Don't render if not logged in
   if (!currentUser) {
     return null;

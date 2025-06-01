@@ -1,4 +1,4 @@
-// src/components/ImageUploader.jsx - Updated with HEIC support and better error handling
+// src/components/ImageUploader.jsx - Improved HEIC handling
 import { useState } from 'react';
 import './ImageUploader.css';
 
@@ -6,69 +6,64 @@ function ImageUploader({ onImageSelected, currentImageUrl = null }) {
   const [preview, setPreview] = useState(currentImageUrl);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
+  const [processingMessage, setProcessingMessage] = useState('');
   
-  // Convert HEIC to JPEG using canvas
-  const convertHeicToJpeg = async (file) => {
+  // Convert any image to JPEG using canvas
+  const convertToJpeg = async (file) => {
     return new Promise((resolve, reject) => {
       const img = new Image();
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       
       img.onload = () => {
-        // Set canvas size (max 1200px width to reduce file size)
-        const maxWidth = 1200;
-        const scale = Math.min(maxWidth / img.width, maxWidth / img.height);
-        canvas.width = img.width * scale;
-        canvas.height = img.height * scale;
-        
-        // Draw and convert to JPEG
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        canvas.toBlob(resolve, 'image/jpeg', 0.8); // 80% quality
-      };
-      
-      img.onerror = reject;
-      img.src = URL.createObjectURL(file);
-    });
-  };
-  
-  // Compress large images
-  const compressImage = async (file) => {
-    // If file is already small enough, return as is
-    if (file.size <= 2 * 1024 * 1024) { // 2MB
-      return file;
-    }
-    
-    return new Promise((resolve) => {
-      const img = new Image();
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      
-      img.onload = () => {
-        // Calculate new dimensions to reduce file size
-        const maxWidth = 1200;
-        const maxHeight = 1200;
-        let { width, height } = img;
-        
-        if (width > height) {
-          if (width > maxWidth) {
-            height = (height * maxWidth) / width;
-            width = maxWidth;
+        try {
+          // Calculate dimensions (max 1200px on longest side)
+          const maxSize = 1200;
+          let { width, height } = img;
+          
+          if (width > height) {
+            if (width > maxSize) {
+              height = (height * maxSize) / width;
+              width = maxSize;
+            }
+          } else {
+            if (height > maxSize) {
+              width = (width * maxSize) / height;
+              height = maxSize;
+            }
           }
-        } else {
-          if (height > maxHeight) {
-            width = (width * maxHeight) / height;
-            height = maxHeight;
-          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          
+          // Draw and convert to JPEG
+          ctx.fillStyle = 'white'; // White background for transparency
+          ctx.fillRect(0, 0, width, height);
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          canvas.toBlob((blob) => {
+            if (blob) {
+              resolve(blob);
+            } else {
+              reject(new Error('Failed to convert image'));
+            }
+          }, 'image/jpeg', 0.85); // 85% quality
+        } catch (error) {
+          reject(error);
         }
-        
-        canvas.width = width;
-        canvas.height = height;
-        
-        ctx.drawImage(img, 0, 0, width, height);
-        canvas.toBlob(resolve, 'image/jpeg', 0.7); // Lower quality for compression
       };
       
-      img.src = URL.createObjectURL(file);
+      img.onerror = () => reject(new Error('Failed to load image'));
+      
+      // Create object URL for the file
+      const objectUrl = URL.createObjectURL(file);
+      img.src = objectUrl;
+      
+      // Clean up object URL after loading
+      img.onload = (originalOnload => function() {
+        URL.revokeObjectURL(objectUrl);
+        return originalOnload.apply(this, arguments);
+      })(img.onload);
     });
   };
   
@@ -77,89 +72,120 @@ function ImageUploader({ onImageSelected, currentImageUrl = null }) {
       const originalFile = e.target.files[0];
       setError('');
       setUploading(true);
+      setProcessingMessage('Processing image...');
       
       try {
-        let processedFile = originalFile;
-        
-        // Check file size (max 10MB before processing)
-        if (originalFile.size > 10 * 1024 * 1024) {
-          setError('File too large. Please choose an image under 10MB.');
-          setUploading(false);
-          return;
+        // Check file size (max 15MB before processing)
+        if (originalFile.size > 15 * 1024 * 1024) {
+          throw new Error('File too large. Please choose an image under 15MB.');
         }
         
-        // Check if it's a HEIC file
+        let processedFile = originalFile;
+        
+        // Check if it's a HEIC file or any image that needs conversion
         const isHeic = originalFile.type === 'image/heic' || 
                       originalFile.type === 'image/heif' ||
                       originalFile.name.toLowerCase().endsWith('.heic') ||
                       originalFile.name.toLowerCase().endsWith('.heif');
         
-        if (isHeic) {
-          console.log('Converting HEIC file to JPEG...');
+        const needsConversion = isHeic || 
+                               originalFile.size > 3 * 1024 * 1024 || // Over 3MB
+                               originalFile.type === 'image/png'; // Convert PNG to JPG for smaller size
+        
+        if (needsConversion) {
+          setProcessingMessage(isHeic ? 'Converting HEIC to JPEG...' : 'Optimizing image...');
+          
           try {
-            processedFile = await convertHeicToJpeg(originalFile);
-            processedFile = new File([processedFile], 
-              originalFile.name.replace(/\.(heic|heif)$/i, '.jpg'), 
-              { type: 'image/jpeg' }
-            );
+            const convertedBlob = await convertToJpeg(originalFile);
+            
+            // Create new filename
+            const originalName = originalFile.name.replace(/\.(heic|heif|png)$/i, '.jpg');
+            const newFileName = originalName.includes('.jpg') ? originalName : originalName + '.jpg';
+            
+            processedFile = new File([convertedBlob], newFileName, { 
+              type: 'image/jpeg',
+              lastModified: Date.now()
+            });
+            
+            console.log('Image conversion successful:', {
+              originalSize: (originalFile.size / 1024 / 1024).toFixed(2) + 'MB',
+              processedSize: (processedFile.size / 1024 / 1024).toFixed(2) + 'MB',
+              originalType: originalFile.type,
+              processedType: processedFile.type
+            });
+            
           } catch (conversionError) {
-            console.error('HEIC conversion failed:', conversionError);
-            setError('Could not convert HEIC file. Please try a JPG or PNG image.');
-            setUploading(false);
-            return;
+            console.error('Image conversion failed:', conversionError);
+            throw new Error('Could not process image. Please try a different image or JPG format.');
           }
         }
         
-        // Compress if still too large
-        if (processedFile.size > 2 * 1024 * 1024) {
-          console.log('Compressing large image...');
-          processedFile = await compressImage(processedFile);
-          processedFile = new File([processedFile], 
-            processedFile.name || 'compressed_image.jpg', 
-            { type: 'image/jpeg' }
-          );
+        // Final size check
+        if (processedFile.size > 5 * 1024 * 1024) {
+          throw new Error('Processed image is still too large. Please try a smaller image.');
         }
         
         // Create preview
+        setProcessingMessage('Creating preview...');
         const reader = new FileReader();
         reader.onload = (event) => {
           setPreview(event.target.result);
+          setProcessingMessage('');
+        };
+        reader.onerror = () => {
+          throw new Error('Failed to create image preview');
         };
         reader.readAsDataURL(processedFile);
         
         // Pass processed file to parent
         onImageSelected(processedFile);
         
-        console.log('Image processed successfully:', {
-          originalSize: (originalFile.size / 1024 / 1024).toFixed(2) + 'MB',
-          processedSize: (processedFile.size / 1024 / 1024).toFixed(2) + 'MB',
-          type: processedFile.type
-        });
+        console.log('Image processing completed successfully');
         
       } catch (error) {
         console.error('Error processing image:', error);
-        setError('Error processing image. Please try again.');
+        setError(error.message || 'Error processing image. Please try again.');
+        setPreview(null);
+        onImageSelected(null);
       } finally {
         setUploading(false);
+        setProcessingMessage('');
       }
     }
+  };
+  
+  const handleRemoveImage = () => {
+    setPreview(null);
+    setError('');
+    onImageSelected(null);
   };
   
   return (
     <div className="image-uploader">
       <div className="image-preview-container">
         {preview ? (
-          <img src={preview} alt="Preview" className="image-preview" />
+          <div className="preview-wrapper">
+            <img src={preview} alt="Preview" className="image-preview" />
+            <button 
+              type="button" 
+              className="remove-image-btn"
+              onClick={handleRemoveImage}
+              title="Remove image"
+            >
+              ×
+            </button>
+          </div>
         ) : (
           <div className="image-placeholder">
-            <span>📷 No Image Selected</span>
+            <span>📷</span>
+            <span>No Image Selected</span>
           </div>
         )}
       </div>
       
       <div className="upload-controls">
         <label className={`upload-button ${uploading ? 'disabled' : ''}`}>
-          {uploading ? 'Processing...' : (currentImageUrl ? 'Change Image' : 'Upload Label Image')}
+          {uploading ? (processingMessage || 'Processing...') : (preview ? 'Change Image' : 'Upload Label Image')}
           <input 
             type="file" 
             accept="image/*,.heic,.heif" 
@@ -168,30 +194,18 @@ function ImageUploader({ onImageSelected, currentImageUrl = null }) {
             style={{ display: 'none' }} 
           />
         </label>
-        {uploading && <span className="uploading-text">Processing image...</span>}
       </div>
       
       {error && (
-        <div className="error-message" style={{
-          color: '#dc2626',
-          fontSize: '0.875rem',
-          marginTop: '0.5rem',
-          padding: '0.5rem',
-          backgroundColor: '#fee2e2',
-          borderRadius: '4px',
-          border: '1px solid #fca5a5'
-        }}>
+        <div className="error-message">
           {error}
         </div>
       )}
       
-      <div className="upload-info" style={{
-        fontSize: '0.75rem',
-        color: '#6b7280',
-        marginTop: '0.5rem',
-        textAlign: 'center'
-      }}>
-        Supports JPG, PNG, WebP, and HEIC files up to 10MB
+      <div className="upload-info">
+        Supports JPG, PNG, WebP, and HEIC files up to 15MB
+        <br />
+        <small>HEIC files will be automatically converted to JPG</small>
       </div>
     </div>
   );

@@ -473,25 +473,34 @@ export const addUserChocolate = async (chocolateData, imageFile) => {
       const fileName = `user-contributions/${chocolateData.createdBy}/${timestamp}_${imageFile.name}`;
       const storageRef = ref(storage, fileName);
       
+      console.log('Uploading file:', fileName);
       await uploadBytes(storageRef, imageFile);
       imageUrl = await getDownloadURL(storageRef);
+      console.log('Image uploaded successfully:', imageUrl);
     }
+
     
-    // Prepare chocolate data
+    // Prepare chocolate data - FIXED: Store maker name directly, not as ID
     const newChocolate = {
       ...chocolateData,
       imageUrl,
+      // IMPORTANT: Store the maker name directly, not as makerId
+      maker: chocolateData.maker, // This ensures the maker name is preserved
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
       averageRating: 0,
       reviewCount: 0,
-      status: 'approved', // You can change this to 'pending' if you want moderation
+      status: 'approved',
       isUserContributed: true,
       contributionDate: serverTimestamp()
     };
     
+    console.log('Adding chocolate to database:', newChocolate);
+    
     // Add the chocolate to the database
     const docRef = await addDoc(chocolatesCollection, newChocolate);
+    
+    console.log('Chocolate added with ID:', docRef.id);
     
     // Update user's contribution count
     await updateUserContributionStats(chocolateData.createdBy, 'chocolatesAdded');
