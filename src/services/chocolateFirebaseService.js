@@ -76,7 +76,8 @@ export const getAllChocolates = async () => {
   }
 };
 
-// Updated getChocolateById function
+// Update this function in your chocolateFirebaseService.js
+
 export const getChocolateById = async (id) => {
   console.log('getChocolateById called with ID:', id);
   try {
@@ -91,10 +92,31 @@ export const getChocolateById = async (id) => {
         ...snapshot.data()
       };
       
-      // Enrich with maker name
-      const enrichedData = await enrichChocolateWithMaker(chocolateData);
-      console.log('Returning enriched chocolate data:', enrichedData);
-      return enrichedData;
+      console.log('Raw chocolate data from database:', chocolateData);
+      
+      // FIXED: Check if maker is already a string (for user-contributed chocolates)
+      if (chocolateData.maker && typeof chocolateData.maker === 'string') {
+        // Maker is already stored as a string, use it directly
+        console.log('Using direct maker name:', chocolateData.maker);
+        return chocolateData;
+      } else if (chocolateData.makerId || chocolateData.MakerID) {
+        // Legacy chocolates with maker IDs - look up the maker name
+        console.log('Looking up maker by ID:', chocolateData.makerId || chocolateData.MakerID);
+        const makerName = await getMakerName(chocolateData.makerId || chocolateData.MakerID);
+        const enrichedData = {
+          ...chocolateData,
+          maker: makerName
+        };
+        console.log('Returning enriched chocolate data:', enrichedData);
+        return enrichedData;
+      } else {
+        // No maker info at all
+        console.log('No maker information found, using Unknown Maker');
+        return {
+          ...chocolateData,
+          maker: 'Unknown Maker'
+        };
+      }
     } else {
       console.log('Chocolate not found in database');
       throw new Error('Chocolate not found');
@@ -462,58 +484,117 @@ const getSampleCategoryChocolates = (category) => {
 
 // Add these functions to the END of your existing chocolateFirebaseService.js file
 
-// Add a chocolate contributed by a user
+// Replace your addUserChocolate function with this enhanced version
+
 export const addUserChocolate = async (chocolateData, imageFile) => {
+  console.log('🍫 Starting addUserChocolate process...');
+  console.log('📄 Chocolate data received:', chocolateData);
+  console.log('🖼️ Image file received:', imageFile ? {
+    name: imageFile.name,
+    size: `${(imageFile.size / 1024 / 1024).toFixed(2)}MB`,
+    type: imageFile.type
+  } : 'No image file');
+
   try {
     let imageUrl = null;
     
     // Upload image if provided
     if (imageFile) {
+      console.log('📤 Starting image upload...');
+      
       const timestamp = Date.now();
-      const fileName = `user-contributions/${chocolateData.createdBy}/${timestamp}_${imageFile.name}`;
+      const cleanFileName = imageFile.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+      const fileName = `user-contributions/${chocolateData.createdBy}/${timestamp}_${cleanFileName}`;
+      
+      console.log('📁 Upload path:', fileName);
+      
       const storageRef = ref(storage, fileName);
       
-      console.log('Uploading file:', fileName);
-      await uploadBytes(storageRef, imageFile);
-      imageUrl = await getDownloadURL(storageRef);
-      console.log('Image uploaded successfully:', imageUrl);
+      try {
+        console.log('⬆️ Uploading to Firebase Storage...');
+        const uploadResult = await uploadBytes(storageRef, imageFile);
+        console.log('✅ Upload successful, getting download URL...');
+        
+        imageUrl = await getDownloadURL(storageRef);
+        console.log('🔗 Download URL obtained:', imageUrl);
+        
+      } catch (uploadError) {
+        console.error('❌ Image upload failed:', uploadError);
+        
+        // Don't fail the entire process - just proceed without image
+        console.log('⚠️ Proceeding without image due to upload failure');
+        imageUrl = `https://placehold.co/300x300?text=${encodeURIComponent(chocolateData.name.substring(0, 20))}`;
+      }
+    } else {
+      console.log('📷 No image provided, using placeholder');
+      imageUrl = `https://placehold.co/300x300?text=${encodeURIComponent(chocolateData.name.substring(0, 20))}`;
     }
-
     
-    // Prepare chocolate data - FIXED: Store maker name directly, not as ID
+    // Prepare chocolate data with explicit maker field
     const newChocolate = {
-      ...chocolateData,
-      imageUrl,
-      // IMPORTANT: Store the maker name directly, not as makerId
-      maker: chocolateData.maker, // This ensures the maker name is preserved
+      // Core chocolate data
+      name: chocolateData.name,
+      maker: chocolateData.maker, // 🔑 CRITICAL: Store maker as string
+      type: chocolateData.type,
+      origin: chocolateData.origin,
+      cacaoPercentage: chocolateData.cacaoPercentage,
+      description: chocolateData.description,
+      tags: chocolateData.tags || [],
+      
+      // Image
+      imageUrl: imageUrl,
+      
+      // User contribution metadata
+      createdBy: chocolateData.createdBy,
+      createdByName: chocolateData.createdByName,
+      isUserContributed: true,
+      status: 'approved',
+      
+      // Timestamps
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
+      contributionDate: serverTimestamp(),
+      
+      // Rating defaults
       averageRating: 0,
       reviewCount: 0,
-      status: 'approved',
-      isUserContributed: true,
-      contributionDate: serverTimestamp()
+      ratings: 0 // For compatibility
     };
     
-    console.log('Adding chocolate to database:', newChocolate);
+    console.log('💾 Final chocolate object to save:', newChocolate);
     
     // Add the chocolate to the database
+    console.log('📝 Adding to Firestore...');
     const docRef = await addDoc(chocolatesCollection, newChocolate);
+    console.log('✅ Chocolate added with ID:', docRef.id);
     
-    console.log('Chocolate added with ID:', docRef.id);
+    // Update user stats (don't let this fail the main process)
+    try {
+      console.log('📊 Updating user contribution stats...');
+      await updateUserContributionStats(chocolateData.createdBy, 'chocolatesAdded');
+      await checkAndAwardContributionBadges(chocolateData.createdBy);
+      console.log('✅ User stats updated');
+    } catch (statsError) {
+      console.error('⚠️ Failed to update user stats (non-critical):', statsError);
+    }
     
-    // Update user's contribution count
-    await updateUserContributionStats(chocolateData.createdBy, 'chocolatesAdded');
-    
-    // Award badges if needed
-    await checkAndAwardContributionBadges(chocolateData.createdBy);
-    
-    return {
+    const result = {
       id: docRef.id,
-      ...newChocolate
+      ...newChocolate,
+      // Ensure maker is explicitly set in the result
+      maker: chocolateData.maker
     };
+    
+    console.log('🎉 addUserChocolate completed successfully:', result);
+    return result;
+    
   } catch (error) {
-    console.error('Error adding user chocolate:', error);
+    console.error('💥 Error in addUserChocolate:', error);
+    console.error('📋 Error details:', {
+      code: error.code,
+      message: error.message,
+      stack: error.stack
+    });
     throw error;
   }
 };

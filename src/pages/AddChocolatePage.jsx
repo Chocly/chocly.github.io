@@ -114,18 +114,42 @@ function AddChocolatePage() {
     }
   };
 
-// Updated handleSubmit function for AddChocolatePage.jsx
+// Replace the handleSubmit function in your AddChocolatePage.jsx
 
 const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    console.log('🚀 Form submission started');
     
     if (!currentUser) {
       alert('Please sign in to add chocolates');
       return;
     }
   
+    // Validate required fields
+    if (!formData.name.trim()) {
+      alert('Please enter a chocolate name');
+      return;
+    }
+  
+    if (!formData.maker.trim()) {
+      alert('Please enter a maker name');
+      return;
+    }
+  
+    if (!formData.type) {
+      alert('Please select a chocolate type');
+      return;
+    }
+  
+    if (!formData.description.trim()) {
+      alert('Please enter a description');
+      return;
+    }
+  
     try {
       setLoading(true);
+      console.log('📝 Processing form data...');
   
       // Combine all tags
       const allTags = [
@@ -136,89 +160,66 @@ const handleSubmit = async (e) => {
   
       const chocolateData = {
         name: formData.name.trim(),
-        maker: formData.maker.trim(), // Store maker name directly
+        maker: formData.maker.trim(), // 🔑 This is critical - maker as string
         type: formData.type,
         origin: formData.origin.trim() || 'Unknown',
         cacaoPercentage: formData.cacaoPercentage ? parseInt(formData.cacaoPercentage) : 0,
         description: formData.description.trim(),
         tags: allTags,
         createdBy: currentUser.uid,
-        createdByName: currentUser.displayName || currentUser.email || 'Anonymous User',
-        status: 'approved', // Auto-approve user contributions
-        isUserContributed: true
+        createdByName: currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User'
       };
   
-      console.log('Submitting chocolate data:', {
-        ...chocolateData,
-        imageFile: selectedImage ? {
-          name: selectedImage.name,
-          size: selectedImage.size,
-          type: selectedImage.type
-        } : 'No image'
-      });
+      console.log('📦 Prepared chocolate data:', chocolateData);
+      console.log('🖼️ Selected image:', selectedImage ? {
+        name: selectedImage.name,
+        size: `${(selectedImage.size / 1024 / 1024).toFixed(2)}MB`,
+        type: selectedImage.type
+      } : 'No image selected');
   
-      let result;
+      // Call the upload function
+      console.log('📤 Calling addUserChocolate...');
+      const result = await addUserChocolate(chocolateData, selectedImage);
       
-      if (selectedImage) {
-        // Upload with image
-        console.log('Uploading chocolate with image...');
-        result = await addUserChocolate(chocolateData, selectedImage);
-        console.log('Upload successful:', result);
-      } else {
-        // Add without image - use placeholder
-        console.log('Adding chocolate without image...');
-        const chocolateWithPlaceholder = {
-          ...chocolateData,
-          imageUrl: `https://placehold.co/300x300?text=${encodeURIComponent(chocolateData.name)}`
-        };
-        
-        // Use regular addDoc since we don't need image upload
-        const docRef = await addDoc(collection(db, 'chocolates'), {
-          ...chocolateWithPlaceholder,
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-          averageRating: 0,
-          reviewCount: 0
-        });
-        
-        result = {
-          id: docRef.id,
-          ...chocolateWithPlaceholder
-        };
-        console.log('Added without image:', result);
+      console.log('✅ Upload completed successfully:', result);
+      
+      // Verify the result has the maker
+      if (result.maker === 'Unknown Maker' || !result.maker) {
+        console.error('⚠️ WARNING: Result has incorrect maker:', result.maker);
+        console.error('Expected maker:', chocolateData.maker);
       }
       
       setSuccess(true);
       
       // Show success for 3 seconds, then redirect
       setTimeout(() => {
+        console.log('🔄 Redirecting to chocolate page:', `/chocolate/${result.id}`);
         navigate(`/chocolate/${result.id}`);
       }, 3000);
   
     } catch (error) {
-      console.error('Error adding chocolate:', error);
+      console.error('💥 Submit error:', error);
       
       // Provide specific error messages
-      let errorMessage = 'Error adding chocolate. ';
+      let errorMessage = 'Failed to add chocolate. ';
       
       if (error.code === 'storage/unauthorized') {
-        errorMessage += 'Permission denied. Please make sure you are signed in.';
+        errorMessage += 'Storage permission denied. Please try signing out and back in.';
       } else if (error.code === 'storage/canceled') {
-        errorMessage += 'Upload was canceled. Please try again.';
+        errorMessage += 'Upload was canceled.';
       } else if (error.code === 'storage/retry-limit-exceeded') {
         errorMessage += 'Upload failed due to network issues. Please try again.';
-      } else if (error.message.includes('CORS')) {
+      } else if (error.message?.includes('CORS')) {
         errorMessage += 'Network configuration issue. Please try again in a few minutes.';
-      } else if (error.message.includes('storage')) {
-        errorMessage += 'Image upload failed. Please try a different image or upload without an image.';
-      } else if (error.message.includes('permission')) {
+      } else if (error.message?.includes('storage')) {
+        errorMessage += 'Image upload failed. The chocolate data was saved but without the image.';
+      } else if (error.code === 'permission-denied') {
         errorMessage += 'Permission denied. Please make sure you are signed in.';
-      } else if (error.message.includes('network')) {
-        errorMessage += 'Network error. Please check your connection and try again.';
       } else {
-        errorMessage += error.message || 'Please try again.';
+        errorMessage += error.message || 'Unknown error occurred.';
       }
       
+      errorMessage += '\n\nPlease try again or contact support if the problem persists.';
       alert(errorMessage);
     } finally {
       setLoading(false);
