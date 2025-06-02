@@ -76,15 +76,13 @@ export const getAllChocolates = async () => {
   }
 };
 
-// Update this function in your chocolateFirebaseService.js
+// Replace your getChocolateById function in chocolateFirebaseService.js
 
 export const getChocolateById = async (id) => {
-  console.log('getChocolateById called with ID:', id);
+  console.log('🔍 getChocolateById called with ID:', id);
   try {
     const docRef = doc(db, 'chocolates', id);
     const snapshot = await getDoc(docRef);
-    
-    console.log('Snapshot exists?', snapshot.exists());
     
     if (snapshot.exists()) {
       const chocolateData = {
@@ -92,37 +90,52 @@ export const getChocolateById = async (id) => {
         ...snapshot.data()
       };
       
-      console.log('Raw chocolate data from database:', chocolateData);
+      console.log('📄 Raw chocolate data from database:', {
+        maker: chocolateData.maker,
+        makerId: chocolateData.makerId,
+        MakerID: chocolateData.MakerID,
+        isUserContributed: chocolateData.isUserContributed
+      });
       
-      // FIXED: Check if maker is already a string (for user-contributed chocolates)
-      if (chocolateData.maker && typeof chocolateData.maker === 'string') {
-        // Maker is already stored as a string, use it directly
-        console.log('Using direct maker name:', chocolateData.maker);
-        return chocolateData;
-      } else if (chocolateData.makerId || chocolateData.MakerID) {
-        // Legacy chocolates with maker IDs - look up the maker name
-        console.log('Looking up maker by ID:', chocolateData.makerId || chocolateData.MakerID);
+      // 🔑 KEY FIX: Check the storage method in the right order
+      
+      // FIRST: Check if it's a user-contributed chocolate with direct maker name
+      if (chocolateData.isUserContributed && chocolateData.maker && typeof chocolateData.maker === 'string') {
+        console.log('✅ User-contributed chocolate with direct maker name:', chocolateData.maker);
+        return chocolateData; // Return as-is, maker is already correct
+      }
+      
+      // SECOND: Check if ANY chocolate has a direct maker string (not just user-contributed)
+      if (chocolateData.maker && typeof chocolateData.maker === 'string' && chocolateData.maker !== 'Unknown Maker') {
+        console.log('✅ Chocolate with direct maker name:', chocolateData.maker);
+        return chocolateData; // Return as-is, maker is already correct
+      }
+      
+      // THIRD: Legacy chocolates with maker IDs - look up the maker name
+      if (chocolateData.makerId || chocolateData.MakerID) {
+        console.log('🔄 Legacy chocolate, looking up maker by ID:', chocolateData.makerId || chocolateData.MakerID);
         const makerName = await getMakerName(chocolateData.makerId || chocolateData.MakerID);
         const enrichedData = {
           ...chocolateData,
-          maker: makerName
+          maker: makerName || 'Unknown Maker'
         };
-        console.log('Returning enriched chocolate data:', enrichedData);
+        console.log('✅ Enriched legacy chocolate data with maker:', enrichedData.maker);
         return enrichedData;
-      } else {
-        // No maker info at all
-        console.log('No maker information found, using Unknown Maker');
-        return {
-          ...chocolateData,
-          maker: 'Unknown Maker'
-        };
       }
+      
+      // FOURTH: No maker info at all - fallback
+      console.log('❌ No maker information found, using Unknown Maker');
+      return {
+        ...chocolateData,
+        maker: 'Unknown Maker'
+      };
+      
     } else {
-      console.log('Chocolate not found in database');
+      console.log('❌ Chocolate not found in database');
       throw new Error('Chocolate not found');
     }
   } catch (error) {
-    console.error('Error in getChocolateById:', error);
+    console.error('💥 Error in getChocolateById:', error);
     throw error;
   }
 };
@@ -561,12 +574,15 @@ export const addUserChocolate = async (chocolateData, imageFile) => {
       ratings: 0 // For compatibility
     };
     
-    console.log('💾 Final chocolate object to save:', newChocolate);
+    console.log('💾 Final chocolate object (check maker field):', {
+      maker: newChocolate.maker,
+      isUserContributed: newChocolate.isUserContributed,
+      name: newChocolate.name
+    });
     
-    // Add the chocolate to the database
-    console.log('📝 Adding to Firestore...');
+    // Save to database
     const docRef = await addDoc(chocolatesCollection, newChocolate);
-    console.log('✅ Chocolate added with ID:', docRef.id);
+    console.log('✅ Chocolate saved with ID:', docRef.id);
     
     // Update user stats (don't let this fail the main process)
     try {
