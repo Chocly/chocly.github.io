@@ -42,36 +42,63 @@ const getMakerName = async (makerId) => {
   return 'Unknown Maker';
 };
 
-// Helper function to enrich chocolate data with maker names
+// 🔧 Fix 1: Updated enrichChocolateWithMaker function
 const enrichChocolateWithMaker = async (chocolate) => {
-  const makerName = await getMakerName(chocolate.makerId || chocolate.MakerID);
+  // Check if maker is already a string (user-contributed chocolates)
+  if (chocolate.maker && typeof chocolate.maker === 'string' && chocolate.maker !== 'Unknown Maker') {
+    console.log('✅ Chocolate already has direct maker name:', chocolate.maker);
+    return chocolate; // Return as-is
+  }
+  
+  // Check if it's a legacy chocolate with maker ID
+  if (chocolate.makerId || chocolate.MakerID) {
+    console.log('🔄 Looking up maker by ID for legacy chocolate');
+    const makerName = await getMakerName(chocolate.makerId || chocolate.MakerID);
+    return {
+      ...chocolate,
+      maker: makerName || 'Unknown Maker'
+    };
+  }
+  
+  // No maker info found
   return {
     ...chocolate,
-    maker: makerName
+    maker: 'Unknown Maker'
   };
 };
 
-// Helper function to enrich multiple chocolates with maker names
+// 🔧 Fix 2: Updated enrichChocolatesWithMakers function
 const enrichChocolatesWithMakers = async (chocolates) => {
+  console.log('🔄 Enriching', chocolates.length, 'chocolates with maker names...');
+  
   const enrichedChocolates = await Promise.all(
     chocolates.map(chocolate => enrichChocolateWithMaker(chocolate))
   );
+  
+  console.log('✅ Enrichment complete');
   return enrichedChocolates;
 };
 
-// Updated getAllChocolates function
+
+// 🔧 Fix 4: Updated getAllChocolates function
 export const getAllChocolates = async () => {
   try {
+    console.log('📥 Fetching all chocolates...');
     const snapshot = await getDocs(chocolatesCollection);
     const chocolates = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
     
+    console.log('📊 Raw chocolates fetched:', chocolates.length);
+    
     // Enrich with maker names
-    return await enrichChocolatesWithMakers(chocolates);
+    const enrichedChocolates = await enrichChocolatesWithMakers(chocolates);
+    console.log('✅ All chocolates enriched with maker names');
+    
+    return enrichedChocolates;
   } catch (error) {
-    console.error('Error fetching chocolates:', error);
+    console.error('💥 Error fetching chocolates:', error);
     throw error;
   }
 };
@@ -140,9 +167,11 @@ export const getChocolateById = async (id) => {
   }
 };
 
-// Updated searchChocolates function
+// 🔧 Fix 3: Updated searchChocolates function
 export const searchChocolates = async (searchTerm) => {
   try {
+    console.log('🔍 Searching for:', searchTerm);
+    
     // First, check if we are searching for a tag
     const tagsSnapshot = await getDocs(tagsCollection);
     const tags = {};
@@ -158,13 +187,16 @@ export const searchChocolates = async (searchTerm) => {
       ...doc.data()
     }));
     
-    // Enrich with maker names
+    console.log('📊 Total chocolates in database:', chocolates.length);
+    
+    // Enrich with maker names FIRST
     const enrichedChocolates = await enrichChocolatesWithMakers(chocolates);
     
-    const term = searchTerm.toLowerCase();
+    const term = searchTerm.toLowerCase().trim();
+    console.log('🎯 Searching for term:', term);
     
     // Filter chocolates that match the search term
-    return enrichedChocolates.filter(chocolate => {
+    const matchedChocolates = enrichedChocolates.filter(chocolate => {
       // Check basic fields
       const nameMatch = chocolate.name && chocolate.name.toLowerCase().includes(term);
       const makerMatch = chocolate.maker && chocolate.maker.toLowerCase().includes(term);
@@ -179,29 +211,41 @@ export const searchChocolates = async (searchTerm) => {
         });
       }
       
-      return nameMatch || makerMatch || originMatch || typeMatch || tagMatch;
+      const matches = nameMatch || makerMatch || originMatch || typeMatch || tagMatch;
+      
+      if (matches) {
+        console.log('✅ Match found:', chocolate.name, 'by', chocolate.maker);
+      }
+      
+      return matches;
     });
+    
+    console.log('🎯 Search results:', matchedChocolates.length, 'matches found');
+    return matchedChocolates;
+    
   } catch (error) {
-    console.error("Error searching chocolates:", error);
+    console.error("💥 Error searching chocolates:", error);
     throw error;
   }
 };
 
-// FIXED: Updated getFeaturedChocolates function with proper limit import
+// 🔧 Fix 5: Updated getFeaturedChocolates function
 export const getFeaturedChocolates = async (limitCount = 10) => {
   try {
+    console.log('⭐ Fetching featured chocolates...');
+    
     const q = query(
       collection(db, 'chocolates'),
       where('averageRating', '>', 0),
       orderBy('averageRating', 'desc'),
       orderBy('reviewCount', 'desc'),
-      limit(limitCount)  // <-- This should now work properly
+      limit(limitCount)
     );
     
     const snapshot = await getDocs(q);
     
     if (snapshot.empty) {
-      console.log('No chocolates found in database, returning sample data');
+      console.log('📭 No chocolates found in database, returning sample data');
       return getSampleFeaturedChocolates(limitCount);
     }
     
@@ -210,13 +254,16 @@ export const getFeaturedChocolates = async (limitCount = 10) => {
       ...doc.data()
     }));
     
-    console.log(`Found ${chocolates.length} chocolates in database`);
+    console.log(`📊 Found ${chocolates.length} featured chocolates in database`);
     
     // Enrich with maker names
-    return await enrichChocolatesWithMakers(chocolates);
+    const enrichedChocolates = await enrichChocolatesWithMakers(chocolates);
+    console.log('✅ Featured chocolates enriched with maker names');
+    
+    return enrichedChocolates;
   } catch (error) {
-    console.error('Error getting featured chocolates:', error);
-    console.log('Falling back to sample data due to error');
+    console.error('💥 Error getting featured chocolates:', error);
+    console.log('🔄 Falling back to sample data due to error');
     return getSampleFeaturedChocolates(limitCount);
   }
 };

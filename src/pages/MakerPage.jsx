@@ -1,7 +1,8 @@
-// src/pages/MakerPage.jsx
+// Update your MakerPage.jsx with better maker matching
+
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { searchChocolates } from '../services/chocolateFirebaseService';
+import { getAllChocolates } from '../services/chocolateFirebaseService'; // Changed from searchChocolates
 import ChocolateCard from '../components/ChocolateCard';
 import './MakerPage.css';
 
@@ -24,19 +25,42 @@ function MakerPage() {
       
       try {
         setLoading(true);
-        // Search for chocolates by this maker
-        const results = await searchChocolates(currentMaker);
+        console.log('🔍 Searching for chocolates by maker:', currentMaker);
         
-        // Filter to only include chocolates where the maker exactly matches
-        const makerChocolates = results.filter(chocolate => 
-          chocolate.maker && 
-          chocolate.maker.toLowerCase() === currentMaker.toLowerCase()
-        );
+        // Get ALL chocolates (this will enrich them with maker names)
+        const allChocolates = await getAllChocolates();
+        console.log('📊 Total chocolates retrieved:', allChocolates.length);
+        
+        // Filter to only include chocolates where the maker matches
+        // Use case-insensitive matching and trim whitespace
+        const makerChocolates = allChocolates.filter(chocolate => {
+          if (!chocolate.maker) return false;
+          
+          const chocolateMaker = chocolate.maker.toLowerCase().trim();
+          const searchMaker = currentMaker.toLowerCase().trim();
+          
+          // Try exact match first
+          if (chocolateMaker === searchMaker) {
+            console.log('✅ Exact match found:', chocolate.name, 'by', chocolate.maker);
+            return true;
+          }
+          
+          // Try partial match (in case of slight differences)
+          if (chocolateMaker.includes(searchMaker) || searchMaker.includes(chocolateMaker)) {
+            console.log('✅ Partial match found:', chocolate.name, 'by', chocolate.maker);
+            return true;
+          }
+          
+          return false;
+        });
+        
+        console.log('🎯 Chocolates found for maker:', makerChocolates.length);
+        console.log('📋 Maker chocolates:', makerChocolates.map(c => `${c.name} by ${c.maker}`));
         
         setChocolates(makerChocolates);
         setLoading(false);
       } catch (err) {
-        console.error("Error fetching maker chocolates:", err);
+        console.error("💥 Error fetching maker chocolates:", err);
         setError(err.message);
         setLoading(false);
       }
@@ -52,13 +76,13 @@ function MakerPage() {
         case 'rating':
           return (b.averageRating || 0) - (a.averageRating || 0);
         case 'popularity':
-          return (b.ratings || 0) - (a.ratings || 0);
+          return (b.ratings || b.reviewCount || 0) - (a.ratings || a.reviewCount || 0);
         case 'cacao-high':
           return (b.cacaoPercentage || 0) - (a.cacaoPercentage || 0);
         case 'cacao-low':
           return (a.cacaoPercentage || 0) - (b.cacaoPercentage || 0);
         case 'name':
-          return a.name.localeCompare(b.name);
+          return (a.name || '').localeCompare(b.name || '');
         default:
           return 0;
       }
@@ -123,8 +147,13 @@ function MakerPage() {
           </div>
         ) : (
           <div className="no-chocolates">
-            <p>No chocolates found for {currentMaker}.</p>
-            <p>This might be due to variations in how the maker name is stored in our database.</p>
+            <p>No chocolates found for "{currentMaker}".</p>
+            <p>This might be due to variations in how the maker name is stored.</p>
+            <div className="debug-info" style={{marginTop: '1rem', padding: '1rem', background: '#f5f5f5', borderRadius: '8px'}}>
+              <p><strong>Debug Info:</strong></p>
+              <p>Searched for: "{currentMaker}"</p>
+              <p>Try searching for part of the maker name in the main search.</p>
+            </div>
           </div>
         )}
       </div>
