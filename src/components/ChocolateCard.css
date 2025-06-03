@@ -1,34 +1,48 @@
-/* src/components/ChocolateCard.css - Modern Premium Design */
+/* src/components/ChocolateCard.css - MOBILE-FIRST REDESIGN */
+
+:root {
+  --card-radius: 16px;
+  --touch-target: 44px;
+  --primary-color: #2D1810;
+  --accent-color: #F4A261;
+  --text-dark: #374151;
+  --text-medium: #6B7280;
+  --white: #FFFFFF;
+  --border-light: #E5E7EB;
+  --heart-color: #EF4444;
+}
+
+/* MOBILE-FIRST CHOCOLATE CARD */
 .chocolate-card {
   display: block;
-  background-color: #FFFFFF;
-  border: 1px solid #E9ECEF;
-  border-radius: 16px;
+  background: var(--white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--card-radius);
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
   color: inherit;
   height: 100%;
   position: relative;
-  group: hover;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.chocolate-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
-  border-color: #F4A261;
+.chocolate-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: var(--accent-color);
 }
 
 .chocolate-card.featured {
-  border: 2px solid #F4A261;
-  box-shadow: 0 8px 32px rgba(244, 162, 97, 0.15);
-  background: linear-gradient(180deg, #FFFFFF 0%, #FDFCFC 100%);
+  border: 2px solid var(--accent-color);
+  box-shadow: 0 4px 16px rgba(244, 162, 97, 0.2);
+  background: linear-gradient(180deg, var(--white) 0%, #FDFCFC 100%);
 }
 
-.chocolate-card.featured:hover {
-  box-shadow: 0 20px 56px rgba(244, 162, 97, 0.25);
-  transform: translateY(-12px);
+.chocolate-card.featured:active {
+  box-shadow: 0 12px 32px rgba(244, 162, 97, 0.3);
+  transform: scale(0.97);
 }
 
 .chocolate-card.featured::before {
@@ -37,13 +51,14 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
-  background: linear-gradient(135deg, #F4A261 0%, #F4D03F 100%);
+  height: 3px;
+  background: linear-gradient(135deg, var(--accent-color) 0%, #F4D03F 100%);
   z-index: 1;
 }
 
+/* MOBILE-OPTIMIZED IMAGE CONTAINER */
 .image-container {
-  height: 240px;
+  height: 180px;
   overflow: hidden;
   position: relative;
   background: linear-gradient(180deg, #FDFCFC 0%, #F8F9FA 100%);
@@ -56,140 +71,145 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 12px;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 8px;
 }
 
-.chocolate-card:hover .image-container img {
-  transform: scale(1.03);
+.chocolate-card:active .image-container img {
+  transform: scale(1.02);
 }
 
+/* FEATURED BADGE - MOBILE POSITIONED */
 .featured-badge {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  background: linear-gradient(135deg, #F4A261 0%, #F4D03F 100%);
-  color: #2D1810;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 6px 12px;
-  border-radius: 20px;
+  top: 12px;
+  left: 12px;
+  background: linear-gradient(135deg, var(--accent-color) 0%, #F4D03F 100%);
+  color: var(--primary-color);
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 0 4px 12px rgba(244, 162, 97, 0.3);
+  box-shadow: 0 2px 8px rgba(244, 162, 97, 0.4);
   z-index: 2;
   font-family: 'Inter', sans-serif;
 }
 
+/* MOBILE-OPTIMIZED CARD CONTENT */
 .card-content {
-  padding: 24px;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  height: calc(100% - 240px);
-  min-height: 200px;
+  height: calc(100% - 180px);
+  min-height: 140px;
 }
 
 .card-title {
-  margin: 0 0 8px 0;
-  font-size: 1.125rem;
-  color: #2D1810;
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  color: var(--primary-color);
   font-weight: 700;
-  line-height: 1.4;
+  line-height: 1.3;
   font-family: 'Inter', sans-serif;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: 4.2rem;
+  min-height: 2.6rem;
   letter-spacing: -0.01em;
 }
 
-.card-meta-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  gap: 8px;
+/* MOBILE-FRIENDLY MAKER LINK */
+.card-maker-link {
+  text-decoration: none;
+  color: inherit;
+  margin-bottom: 0.75rem;
+  transition: color 0.2s ease;
 }
 
-.card-origin-label,
-.card-type-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-family: 'Inter', sans-serif;
+.card-maker-link:active {
+  color: var(--accent-color);
 }
 
-.card-origin-label {
-  background: linear-gradient(135deg, #E8F5E8 0%, #C8E6C9 100%);
-  color: #2E7D32;
-  flex: 1;
-  text-align: center;
-  border: 1px solid #E8F5E8;
-}
-
-.card-type-label {
-  background: linear-gradient(135deg, #F4A261 0%, #F4D03F 100%);
-  color: #2D1810;
+.card-maker {
+  font-size: 0.875rem;
+  color: var(--text-medium);
+  font-weight: 500;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
-  border: 1px solid #F4A261;
 }
 
+/* MOBILE-OPTIMIZED CHOCOLATE TITLE LINK */
+.chocolate-title-link {
+  text-decoration: none;
+  color: inherit;
+  margin-bottom: 0.75rem;
+}
+
+/* MOBILE-FRIENDLY META INFO */
 .card-details {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
-  gap: 8px;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
-.card-percentage,
-.card-year {
-  background: #F8F9FA;
-  color: #6C757D;
-  padding: 4px 10px;
-  border-radius: 12px;
+.card-details .origin,
+.card-details .percentage {
+  background: var(--border-light);
+  color: var(--text-medium);
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   border: 1px solid #E9ECEF;
   font-family: 'Inter', sans-serif;
+  flex: 1;
+  text-align: center;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+/* MOBILE-OPTIMIZED RATING */
 .card-rating {
   display: flex;
   align-items: center;
   margin-top: auto;
-  gap: 8px;
-  padding-top: 8px;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
   border-top: 1px solid #F8F9FA;
 }
 
 .rating-value {
   font-weight: 800;
-  color: #2D1810;
-  font-size: 1.25rem;
-  min-width: 2.5rem;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  min-width: 2rem;
   font-family: 'Inter', sans-serif;
   letter-spacing: -0.02em;
 }
 
 .stars {
   display: flex;
-  margin-right: 6px;
+  margin-right: 0.5rem;
   gap: 1px;
 }
 
 .star {
   color: #E5E7EB;
-  font-size: 1rem;
+  font-size: 0.9rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .star.filled {
-  color: #F4A261;
+  color: var(--accent-color);
   text-shadow: 0 1px 2px rgba(244, 162, 97, 0.3);
 }
 
@@ -205,53 +225,276 @@
   top: 0;
   width: 50%;
   overflow: hidden;
-  color: #F4A261;
+  color: var(--accent-color);
   text-shadow: 0 1px 2px rgba(244, 162, 97, 0.3);
 }
 
 .rating-count {
-  font-size: 0.875rem;
-  color: #6C757D;
+  font-size: 0.8rem;
+  color: var(--text-medium);
   font-weight: 500;
   font-family: 'Inter', sans-serif;
 }
 
-/* Enhanced hover effects */
-.chocolate-card:hover .card-title {
-  color: #8B4513;
+/* MOBILE-OPTIMIZED FAVORITE BUTTON */
+.chocolate-card .favorite-button.card-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  opacity: 1; /* Always visible on mobile */
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
-.chocolate-card:hover .stars .star.filled {
-  color: #F4D03F;
-  transform: scale(1.1);
+.chocolate-card .favorite-button.card-overlay:active {
+  transform: scale(0.9);
+  background-color: rgba(255, 255, 255, 1);
 }
 
-.chocolate-card:hover .card-origin-label {
-  background: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%);
-  transform: translateY(-1px);
+.chocolate-card .favorite-button.card-overlay.favorited {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: var(--heart-color);
 }
 
-.chocolate-card:hover .card-type-label {
-  background: linear-gradient(135deg, #F4D03F 0%, #F4A261 100%);
-  transform: translateY(-1px);
+.chocolate-card .favorite-button.card-overlay.favorited:active {
+  background-color: rgba(239, 68, 68, 0.2);
 }
 
-/* Special styling for featured cards */
-.chocolate-card.featured .card-content {
-  position: relative;
+/* HEART ICON STYLES */
+.favorite-button .heart-icon {
+  width: 18px;
+  height: 18px;
+  color: #9CA3AF;
+  transition: all 0.3s ease;
+  stroke-width: 2;
 }
 
-.chocolate-card.featured .card-type-label {
-  background: linear-gradient(135deg, #F4D03F 0%, #F4A261 100%);
-  box-shadow: 0 2px 8px rgba(244, 162, 97, 0.2);
+.favorite-button.favorited .heart-icon {
+  color: var(--heart-color);
+  fill: var(--heart-color);
+  stroke: var(--heart-color);
 }
 
-.chocolate-card.featured .rating-value {
-  color: #8B4513;
+/* ENHANCED HOVER EFFECTS FOR LARGER SCREENS */
+@media (min-width: 768px) {
+  .chocolate-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  }
+  
+  .chocolate-card.featured:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(244, 162, 97, 0.25);
+  }
+  
+  .chocolate-card:hover .card-title {
+    color: #8B4513;
+  }
+  
+  .chocolate-card:hover .stars .star.filled {
+    color: #F4D03F;
+    transform: scale(1.1);
+  }
+  
+  .chocolate-card:hover .card-details .origin,
+  .chocolate-card:hover .card-details .percentage {
+    background: #E5E7EB;
+    transform: translateY(-1px);
+  }
+  
+  .chocolate-card .favorite-button.card-overlay {
+    opacity: 0.8;
+  }
+  
+  .chocolate-card:hover .favorite-button.card-overlay {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }
 
-/* Loading state */
-.image-container::before {
+/* RESPONSIVE ADJUSTMENTS */
+
+/* Small Mobile (375px and up) */
+@media (min-width: 375px) {
+  .image-container {
+    height: 200px;
+  }
+  
+  .card-content {
+    padding: 1.25rem;
+    height: calc(100% - 200px);
+    min-height: 150px;
+  }
+  
+  .card-title {
+    font-size: 1.1rem;
+    min-height: 2.9rem;
+  }
+  
+  .card-details .origin,
+  .card-details .percentage {
+    font-size: 0.8rem;
+    padding: 0.375rem 0.625rem;
+  }
+  
+  .rating-value {
+    font-size: 1.2rem;
+  }
+  
+  .star {
+    font-size: 1rem;
+  }
+}
+
+/* Medium Mobile (480px and up) */
+@media (min-width: 480px) {
+  .image-container {
+    height: 220px;
+  }
+  
+  .card-content {
+    height: calc(100% - 220px);
+    min-height: 160px;
+  }
+  
+  .featured-badge {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+  }
+  
+  .card-rating {
+    gap: 0.75rem;
+  }
+}
+
+/* Tablet Portrait (768px and up) */
+@media (min-width: 768px) {
+  .image-container {
+    height: 240px;
+  }
+  
+  .card-content {
+    padding: 1.5rem;
+    height: calc(100% - 240px);
+    min-height: 180px;
+  }
+  
+  .card-title {
+    font-size: 1.125rem;
+    min-height: 3.2rem;
+    -webkit-line-clamp: 2;
+  }
+  
+  .card-details {
+    margin-bottom: 1.25rem;
+  }
+  
+  .chocolate-card .favorite-button.card-overlay {
+    width: 40px;
+    height: 40px;
+    top: 12px;
+    right: 12px;
+  }
+  
+  .favorite-button .heart-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Desktop (1024px and up) */
+@media (min-width: 1024px) {
+  .card-content {
+    padding: 2rem;
+  }
+  
+  .card-title {
+    font-size: 1.25rem;
+    min-height: 3.6rem;
+  }
+  
+  .card-details .origin,
+  .card-details .percentage {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .rating-value {
+    font-size: 1.25rem;
+  }
+  
+  .star {
+    font-size: 1.1rem;
+  }
+}
+
+/* HIGH-DPI DISPLAYS */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .image-container img,
+  .favorite-button .heart-icon {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* DARK MODE SUPPORT */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --white: #1F2937;
+    --border-light: #374151;
+    --primary-color: #F4A261;
+    --text-dark: #F9FAFB;
+    --text-medium: #D1D5DB;
+  }
+  
+  .card-details .origin,
+  .card-details .percentage {
+    background: #374151;
+    color: #D1D5DB;
+    border-color: #4B5563;
+  }
+  
+  .chocolate-card .favorite-button.card-overlay {
+    background-color: rgba(31, 41, 55, 0.95);
+    border-color: rgba(31, 41, 55, 0.8);
+  }
+}
+
+/* REDUCED MOTION */
+@media (prefers-reduced-motion: reduce) {
+  .chocolate-card,
+  .image-container img,
+  .star,
+  .favorite-button {
+    transition: none;
+  }
+  
+  .chocolate-card:hover .stars .star.filled {
+    transform: none;
+  }
+}
+
+/* FOCUS MANAGEMENT FOR ACCESSIBILITY */
+.chocolate-card:focus-visible,
+.card-maker-link:focus-visible,
+.chocolate-title-link:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* LOADING STATE */
+.chocolate-card.loading .image-container::before {
   content: '';
   position: absolute;
   top: 0;
@@ -262,8 +505,6 @@
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
   z-index: 1;
-  opacity: 0;
-  transition: opacity 0.3s ease;
 }
 
 @keyframes shimmer {
@@ -275,122 +516,101 @@
   }
 }
 
-.image-container img[src=""] + ::before,
-.image-container img:not([src]) + ::before {
-  opacity: 1;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .image-container {
-    height: 200px;
-  }
-  
-  .card-content {
-    padding: 20px;
-    height: calc(100% - 200px);
-    min-height: 180px;
-  }
-  
-  .card-title {
-    font-size: 1rem;
-    min-height: 3.6rem;
-    -webkit-line-clamp: 2;
-  }
-  
-  .card-meta-info {
-    flex-direction: column;
-    gap: 8px;
-    align-items: stretch;
-  }
-  
-  .card-origin-label {
-    text-align: center;
-  }
-  
-  .card-details {
-    flex-direction: column;
-    gap: 6px;
-  }
-  
-  .card-percentage,
-  .card-year {
-    align-self: flex-start;
-  }
-}
-
-@media (max-width: 480px) {
+/* SPECIFIC MOBILE PORTRAIT OPTIMIZATIONS */
+@media (max-width: 767px) and (orientation: portrait) {
   .chocolate-card {
-    margin-bottom: 16px;
+    margin-bottom: 8px;
   }
   
   .card-content {
-    padding: 16px;
+    padding: 1rem;
   }
   
   .card-title {
     font-size: 0.95rem;
-    min-height: 3.2rem;
+    min-height: 2.4rem;
+    -webkit-line-clamp: 2;
   }
   
   .featured-badge {
-    top: 12px;
-    right: 12px;
-    font-size: 0.7rem;
-    padding: 4px 8px;
+    top: 8px;
+    left: 8px;
+    font-size: 0.65rem;
+    padding: 3px 6px;
   }
   
-  .rating-value {
-    font-size: 1.1rem;
-  }
-}
-
-/* Heart button positioning over image */
-.chocolate-card .favorite-button.card-overlay {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 10;
-  opacity: 0.8;
-  transition: opacity 0.3s ease;
-}
-
-.chocolate-card:hover .favorite-button.card-overlay {
-  opacity: 1;
-}
-
-/* Make sure the image container has relative positioning */
-.image-container {
-  position: relative;
-}
-
-/* Ensure heart button appears above featured badge */
-.chocolate-card .favorite-button.card-overlay {
-  z-index: 15;
-}
-
-.featured-badge {
-  z-index: 10;
-}
-
-/* Mobile responsiveness for heart button */
-@media (max-width: 768px) {
   .chocolate-card .favorite-button.card-overlay {
     top: 8px;
     right: 8px;
-    opacity: 1; /* Always visible on mobile */
+    width: 32px;
+    height: 32px;
+  }
+  
+  .favorite-button .heart-icon {
+    width: 16px;
+    height: 16px;
   }
 }
 
-/* Better contrast for heart button on different backgrounds */
-.chocolate-card .favorite-button.card-overlay {
-  background-color: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+/* LANDSCAPE MOBILE OPTIMIZATIONS */
+@media (max-height: 500px) and (orientation: landscape) {
+  .image-container {
+    height: 140px;
+  }
+  
+  .card-content {
+    padding: 0.75rem;
+    height: calc(100% - 140px);
+    min-height: 120px;
+  }
+  
+  .card-title {
+    font-size: 0.9rem;
+    min-height: 2rem;
+    -webkit-line-clamp: 1;
+  }
+  
+  .card-details {
+    margin-bottom: 0.5rem;
+  }
+  
+  .card-rating {
+    padding-top: 0.25rem;
+  }
 }
 
-/* Heart button hover effect on cards */
-.chocolate-card:hover .favorite-button.card-overlay {
-  opacity: 1;
-  transform: scale(1.05);
+/* VERY SMALL SCREENS */
+@media (max-width: 320px) {
+  .image-container {
+    height: 160px;
+  }
+  
+  .card-content {
+    padding: 0.875rem;
+    height: calc(100% - 160px);
+    min-height: 130px;
+  }
+  
+  .card-title {
+    font-size: 0.9rem;
+    min-height: 2.2rem;
+  }
+  
+  .card-details .origin,
+  .card-details .percentage {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.375rem;
+  }
+  
+  .rating-value {
+    font-size: 1rem;
+  }
+  
+  .star {
+    font-size: 0.85rem;
+  }
+  
+  .rating-count {
+    font-size: 0.75rem;
+  }
 }
