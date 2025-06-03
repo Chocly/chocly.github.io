@@ -339,41 +339,7 @@ function HomePage() {
           </div>
         </div>
       </section>
-      
-      {/* Categories Section */}
-      <section className="categories-section">
-        <div className="container">
-          <div className="categories-layout">
-            <div className="categories-content">
-              <h2 className="section-title">Explore by Category</h2>
-              <p className="section-subtitle">Find chocolates that match your preferences</p>
-            </div>
             
-            <div className="categories-visual">
-              <Link to="/category/dark" className="category-tile">
-                <h3 className="category-title">Dark Chocolate</h3>
-                <p className="category-description">Bold & intense profiles</p>
-              </Link>
-              
-              <Link to="/category/milk" className="category-tile">
-                <h3 className="category-title">Milk Chocolate</h3>
-                <p className="category-description">Creamy & approachable</p>
-              </Link>
-              
-              <Link to="/category/origin" className="category-tile">
-                <h3 className="category-title">Single Origin</h3>
-                <p className="category-description">Distinctive terroir</p>
-              </Link>
-              
-              <Link to="/category/artisan" className="category-tile">
-                <h3 className="category-title">Artisan Craft</h3>
-                <p className="category-description">Small batch excellence</p>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-      
       {/* How It Works Section */}
       <section className="how-it-works">
         <div className="container">
