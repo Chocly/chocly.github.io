@@ -787,3 +787,193 @@
     font-size: 16px;
   }
 }
+
+
+/* Clean White Header with Brown Text - Add to Header.css */
+
+/* Override any existing header styles for crisp white design */
+.header {
+  background-color: #FFFFFF !important;
+  color: #2D1810 !important;
+  border-bottom: 1px solid rgba(45, 24, 16, 0.08) !important;
+  box-shadow: 0 1px 3px rgba(45, 24, 16, 0.04) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Chocly Logo - Premium Brown */
+.header .logo h1 {
+  color: #2D1810 !important;
+  font-weight: 800 !important;
+  font-size: 1.875rem !important;
+  letter-spacing: -0.02em !important;
+  font-family: 'Playfair Display', serif !important;
+}
+
+/* Logo hover effect */
+.header .logo:hover h1 {
+  color: #F4A261 !important;
+  transition: color 0.3s ease !important;
+}
+
+/* Navigation links - Clean brown */
+.header .nav a {
+  color: #2D1810 !important;
+  font-weight: 500 !important;
+  transition: color 0.3s ease !important;
+}
+
+.header .nav a:hover {
+  color: #F4A261 !important;
+}
+
+/* Search form - Clean white with brown accents */
+.header .search-form input {
+  background-color: #F8F9FA !important;
+  color: #2D1810 !important;
+  border: 1px solid rgba(45, 24, 16, 0.1) !important;
+  font-weight: 500 !important;
+}
+
+.header .search-form input:focus {
+  border-color: #F4A261 !important;
+  box-shadow: 0 0 0 3px rgba(244, 162, 97, 0.1) !important;
+}
+
+.header .search-form input::placeholder {
+  color: rgba(45, 24, 16, 0.6) !important;
+}
+
+.header .search-form button {
+  background-color: #2D1810 !important;
+  color: #FFFFFF !important;
+  font-weight: 600 !important;
+}
+
+.header .search-form button:hover {
+  background-color: #F4A261 !important;
+  color: #2D1810 !important;
+}
+
+/* Menu toggle - Clean brown */
+.header .menu-toggle {
+  color: #2D1810 !important;
+  font-weight: 600 !important;
+}
+
+.header .menu-toggle:hover {
+  color: #F4A261 !important;
+}
+
+.header .menu-icon span {
+  background: #2D1810 !important;
+}
+
+.header .menu-toggle:hover .menu-icon span {
+  background: #F4A261 !important;
+}
+
+/* User menu styling */
+.header .user-menu-toggle {
+  color: #2D1810 !important;
+}
+
+.header .user-menu-toggle:hover {
+  background-color: rgba(45, 24, 16, 0.05) !important;
+}
+
+.header .user-name {
+  color: #2D1810 !important;
+  font-weight: 600 !important;
+}
+
+/* Auth buttons - Clean design */
+.header .auth-btn {
+  font-weight: 600 !important;
+}
+
+.header .login-btn {
+  color: #2D1810 !important;
+  border-color: #2D1810 !important;
+}
+
+.header .login-btn:hover {
+  background: #2D1810 !important;
+  color: #FFFFFF !important;
+}
+
+.header .signup-btn {
+  background: #F4A261 !important;
+  color: #2D1810 !important;
+  border: 2px solid #F4A261 !important;
+}
+
+.header .signup-btn:hover {
+  background: #2D1810 !important;
+  color: #FFFFFF !important;
+  border-color: #2D1810 !important;
+}
+
+/* Add Chocolate Button - Premium styling */
+.header .add-chocolate-btn {
+  background: linear-gradient(135deg, #F4A261 0%, #F4D03F 100%) !important;
+  color: #2D1810 !important;
+  border: 2px solid transparent !important;
+  font-weight: 700 !important;
+}
+
+.header .add-chocolate-btn:hover {
+  background: #2D1810 !important;
+  color: #FFFFFF !important;
+  border-color: #2D1810 !important;
+}
+
+/* Dropdown menus - Clean white */
+.header .nav {
+  background-color: #FFFFFF !important;
+  border: 1px solid rgba(45, 24, 16, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(45, 24, 16, 0.08) !important;
+}
+
+.header .nav h3 {
+  color: #2D1810 !important;
+  border-bottom: 1px solid rgba(45, 24, 16, 0.08) !important;
+}
+
+.header .user-dropdown {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(45, 24, 16, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(45, 24, 16, 0.08) !important;
+}
+
+.header .user-dropdown-item {
+  color: #2D1810 !important;
+}
+
+.header .user-dropdown-item:hover {
+  background-color: rgba(244, 162, 97, 0.1) !important;
+  color: #2D1810 !important;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .header .logo h1 {
+    font-size: 1.6rem !important;
+  }
+  
+  .header .container {
+    padding: 0 1rem !important;
+  }
+}
+
+/* Enhanced contrast for accessibility */
+@media (prefers-contrast: high) {
+  .header {
+    border-bottom: 2px solid #2D1810 !important;
+  }
+  
+  .header .nav,
+  .header .user-dropdown {
+    border: 2px solid #2D1810 !important;
+  }
+}
