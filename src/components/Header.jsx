@@ -1,4 +1,4 @@
-// src/components/Header.jsx - Enhanced with expandable search
+// src/components/Header.jsx - FIXED: No Menu text, proper expandable search
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -9,7 +9,7 @@ function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false); // New state for search
+  const [searchOpen, setSearchOpen] = useState(false);
   const menuRef = useRef(null);
   const userMenuRef = useRef(null);
   const searchRef = useRef(null);
@@ -247,10 +247,9 @@ function Header() {
             </div>
           )}
           
-          {/* Main Navigation Menu */}
+          {/* Main Navigation Menu - HAMBURGER ICON ONLY */}
           <div className="nav-container" ref={menuRef}>
-            <button className="menu-toggle" onClick={toggleMenu}>
-              Menu
+            <button className="menu-toggle" onClick={toggleMenu} aria-label="Menu">
               <span className={`menu-icon ${menuOpen ? 'open' : ''}`}>
                 <span></span>
                 <span></span>
