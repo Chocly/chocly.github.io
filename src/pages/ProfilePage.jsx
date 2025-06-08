@@ -6,7 +6,7 @@ import { getUserReviews } from '../services/reviewService';
 import { getFavoriteChocolates, removeFromFavorites } from '../services/userService';
 import './ProfilePage.css';
 
-// SVG Icons
+// SVG Icons (keep your existing BadgeIcon component)
 const BadgeIcon = ({ name }) => {
   const badgeIcons = {
     'Newcomer': (
@@ -35,7 +35,7 @@ const BadgeIcon = ({ name }) => {
 };
 
 function ProfilePage() {
-  const { currentUser, userProfile } = useAuth();
+  const { currentUser, userProfile, loading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
   const [reviews, setReviews] = useState([]);
   const [favorites, setFavorites] = useState([]);
@@ -68,10 +68,15 @@ function ProfilePage() {
       }
     };
 
-    loadUserData();
-  }, [currentUser]);
+    // Only load data if we have a current user and auth is not loading
+    if (currentUser && !authLoading) {
+      loadUserData();
+    } else if (!authLoading && !currentUser) {
+      setLoading(false);
+    }
+  }, [currentUser, authLoading]);
 
-  // Calculate user statistics
+  // Calculate user statistics (keep your existing function)
   const calculateStats = () => {
     if (!userProfile) return {
       totalReviews: 0,
@@ -81,16 +86,13 @@ function ProfilePage() {
       favoriteMaker: 'None yet'
     };
 
-    // Basic stats
     const totalReviews = reviews.length;
     const totalTasted = reviews.length;
     
-    // Calculate average rating given by user
     const averageRating = totalReviews > 0 
       ? reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews 
       : 0;
     
-    // Find most reviewed type
     const typeCount = {};
     reviews.forEach(review => {
       if (review.chocolate && review.chocolate.type) {
@@ -109,7 +111,6 @@ function ProfilePage() {
       }
     });
     
-    // Find top maker
     const makerCount = {};
     reviews.forEach(review => {
       if (review.chocolate && review.chocolate.maker) {
@@ -137,21 +138,17 @@ function ProfilePage() {
     };
   };
 
-  // Calculate badges
+  // Calculate badges (keep your existing function)
   const getBadges = () => {
     if (!userProfile) return ['Newcomer'];
-    
-    // Default badges - in a real app, these would be calculated based on activity
     const badges = userProfile.badges || ['Newcomer'];
-    
     return badges;
   };
 
-  // Handle removing favorites
+  // Handle removing favorites (keep your existing function)
   const handleRemoveFavorite = async (chocolateId) => {
     try {
       await removeFromFavorites(currentUser.uid, chocolateId);
-      // Refresh favorites list
       const updatedFavorites = await getFavoriteChocolates(currentUser.uid);
       setFavorites(updatedFavorites);
     } catch (error) {
@@ -160,11 +157,8 @@ function ProfilePage() {
     }
   };
 
-  const stats = calculateStats();
-  const badges = getBadges();
-
-  // Show login prompt if not logged in
-  if (!currentUser) {
+  // 🔧 KEY FIX: Show login prompt if not logged in
+  if (!authLoading && !currentUser) {
     return (
       <div className="profile-page">
         <div className="container">
@@ -181,8 +175,8 @@ function ProfilePage() {
     );
   }
 
-  // Show loading state
-  if (loading) {
+  // 🔧 KEY FIX: Show loading while auth is loading OR while user data is loading
+  if (authLoading || loading) {
     return (
       <div className="profile-page">
         <div className="container">
@@ -195,23 +189,31 @@ function ProfilePage() {
     );
   }
 
-  // Show error if no user profile
-  if (!userProfile) {
+  // 🔧 KEY FIX: Handle case where user exists but profile hasn't been created yet
+  // This should rarely happen, but just in case
+  if (currentUser && !userProfile) {
     return (
       <div className="profile-page">
         <div className="container">
           <div className="profile-not-logged-in">
-            <h2>Profile Not Found</h2>
-            <p>We couldn't load your profile. Please try refreshing the page.</p>
-            <div className="auth-buttons">
-             <Link to="/login" className="auth-button">Log In</Link>
-              <Link to="/signup" className="auth-button signup">Sign Up</Link>
+            <h2>Setting up your profile...</h2>
+            <p>We're creating your profile. This should only take a moment.</p>
+            <div className="loading-container">
+              <div className="loading-spinner"></div>
+              <p>Please wait...</p>
             </div>
+            <p style={{ marginTop: '2rem', fontSize: '0.9rem', color: '#666' }}>
+              If this takes too long, try refreshing the page or{' '}
+              <Link to="/login" style={{ color: 'var(--primary)' }}>signing in again</Link>.
+            </p>
           </div>
         </div>
       </div>
     );
   }
+
+  const stats = calculateStats();
+  const badges = getBadges();
 
   return (
     <div className="profile-page">
@@ -231,7 +233,7 @@ function ProfilePage() {
             <div className="profile-info">
               <h1>{userProfile.displayName || 'User'}</h1>
               <p className="member-since">
-                Member since {userProfile.createdAt?.toDate().toLocaleDateString() || 'Recently'}
+                Member since {userProfile.createdAt?.toDate?.()?.toLocaleDateString() || 'Recently'}
               </p>
               <div className="profile-badges">
                 {badges.map(badge => (
@@ -248,6 +250,7 @@ function ProfilePage() {
           </div>
         </div>
 
+        {/* Rest of your existing profile content... */}
         {/* Profile Navigation */}
         <div className="profile-nav">
           <button 

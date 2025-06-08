@@ -1,4 +1,4 @@
-// src/components/Header.jsx - Updated with Add Chocolate button
+// src/components/Header.jsx - Enhanced with expandable search
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -9,8 +9,11 @@ function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false); // New state for search
   const menuRef = useRef(null);
   const userMenuRef = useRef(null);
+  const searchRef = useRef(null);
+  const searchInputRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { currentUser, userProfile } = useAuth();
@@ -23,15 +26,35 @@ function Header() {
     if (searchQuery.trim()) {
       navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
       setSearchQuery('');
+      setSearchOpen(false); // Close search after submitting
     }
   };
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
+    // Close search if menu opens
+    if (!menuOpen) setSearchOpen(false);
   };
 
   const toggleUserMenu = () => {
     setUserMenuOpen(!userMenuOpen);
+    // Close search if user menu opens
+    if (!userMenuOpen) setSearchOpen(false);
+  };
+
+  const toggleSearch = () => {
+    setSearchOpen(!searchOpen);
+    // Close other menus if search opens
+    if (!searchOpen) {
+      setMenuOpen(false);
+      setUserMenuOpen(false);
+      // Focus the input after a brief delay for animation
+      setTimeout(() => {
+        if (searchInputRef.current) {
+          searchInputRef.current.focus();
+        }
+      }, 150);
+    }
   };
 
   const handleLogout = async () => {
@@ -53,6 +76,9 @@ function Header() {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
         setUserMenuOpen(false);
       }
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setSearchOpen(false);
+      }
     }
     
     document.addEventListener("mousedown", handleClickOutside);
@@ -60,6 +86,21 @@ function Header() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // Close search on escape key
+  useEffect(() => {
+    function handleEscape(event) {
+      if (event.key === 'Escape' && searchOpen) {
+        setSearchOpen(false);
+        setSearchQuery('');
+      }
+    }
+    
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [searchOpen]);
 
   // Get user display name or fallback
   const getUserDisplayName = () => {
@@ -89,17 +130,57 @@ function Header() {
           <h1>Chocly</h1>
         </Link>
         
-        {/* Only show search form when NOT on homepage */}
+        {/* Search Section - Only show on non-home pages */}
         {!isHomePage && (
-          <form className="search-form" onSubmit={handleSearch}>
-            <input
-              type="text"
-              placeholder="Search chocolates, makers..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <button type="submit">Search</button>
-          </form>
+          <div className="search-section" ref={searchRef}>
+            {/* Search Toggle Button */}
+            <button 
+              className={`search-toggle ${searchOpen ? 'active' : ''}`}
+              onClick={toggleSearch}
+              aria-label={searchOpen ? 'Close search' : 'Open search'}
+            >
+              <svg 
+                className="search-icon" 
+                width="20" 
+                height="20" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="M21 21l-4.35-4.35"></path>
+              </svg>
+            </button>
+            
+            {/* Expandable Search Form */}
+            <form 
+              className={`search-form-expandable ${searchOpen ? 'open' : ''}`} 
+              onSubmit={handleSearch}
+            >
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder="Search chocolates, makers..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-input-expandable"
+              />
+              <button type="submit" className="search-submit-btn">
+                <svg 
+                  width="16" 
+                  height="16" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2"
+                >
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="M21 21l-4.35-4.35"></path>
+                </svg>
+              </button>
+            </form>
+          </div>
         )}
         
         <div className="header-actions">

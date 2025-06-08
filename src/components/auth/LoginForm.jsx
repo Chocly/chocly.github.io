@@ -1,8 +1,8 @@
-// src/components/auth/LoginForm.jsx - Enhanced version
+// src/components/auth/LoginForm.jsx - MOBILE-FIRST VERSION
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginWithEmailPassword, signInWithGoogle, signInWithFacebook, resetPassword } from '../../services/authService';
-import './EnhancedAuthForms.css';
+import './MobileAuthForms.css';
 
 function LoginForm() {
   const [email, setEmail] = useState('');
@@ -20,7 +20,6 @@ function LoginForm() {
       setLoading(true);
       await loginWithEmailPassword(email, password);
       
-      // Show brief success, then redirect
       setShowSuccess(true);
       setTimeout(() => {
         navigate('/profile');
@@ -39,7 +38,6 @@ function LoginForm() {
       const user = await signInWithGoogle();
       console.log("Google login successful:", user?.uid);
       
-      // Show brief success, then redirect
       setShowSuccess(true);
       setTimeout(() => {
         navigate('/profile');
@@ -57,7 +55,6 @@ function LoginForm() {
       setLoading(true);
       await signInWithFacebook();
       
-      // Show brief success, then redirect
       setShowSuccess(true);
       setTimeout(() => {
         navigate('/profile');
@@ -85,7 +82,7 @@ function LoginForm() {
   };
 
   return (
-    <div className="enhanced-auth-page login-page">
+    <div className="mobile-auth-page login-page">
       {/* Success Overlay */}
       {showSuccess && (
         <div className="success-overlay">
@@ -99,35 +96,35 @@ function LoginForm() {
               </div>
             </div>
             <h2>Welcome back! 👋</h2>
-            <p>You're successfully signed in. Let's continue your chocolate journey!</p>
-            <div className="success-redirect">
-              <div className="loading-dots">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <p>Taking you to your profile...</p>
+            <p>Taking you to your profile...</p>
+            <div className="loading-dots">
+              <span></span>
+              <span></span>
+              <span></span>
             </div>
           </div>
         </div>
       )}
 
-      <div className="auth-container">
-        <div className="auth-form-section">
-          <div className="form-header">
-            <div className="welcome-back-badge">
-              <span className="badge-emoji">👋</span>
-              <span className="badge-text">Welcome Back</span>
-            </div>
-            <h1>Sign in to Chocly</h1>
-            <p>Continue your chocolate journey</p>
+      <div className="mobile-auth-container">
+        {/* Compact Header */}
+        <div className="mobile-auth-header">
+          <div className="brand-logo">
+            <h1>🍫 Chocly</h1>
           </div>
-          
+          <div className="auth-title">
+            <h2>Welcome Back</h2>
+            <p>Sign in to continue</p>
+          </div>
+        </div>
+
+        {/* Main Form */}
+        <div className="mobile-auth-form">
           {error && <div className="error-message">{error}</div>}
           {resetMessage && <div className="success-message">{resetMessage}</div>}
           
-          {/* Social Login Buttons */}
-          <div className="social-auth-buttons">
+          {/* Quick Social Options */}
+          <div className="social-options">
             <button 
               type="button" 
               className="social-btn google-btn" 
@@ -137,7 +134,7 @@ function LoginForm() {
               <svg width="20" height="20" viewBox="0 0 24 24">
                 <path d="M12.545 10.239v3.821h5.445c-0.712 2.315-2.647 3.972-5.445 3.972-3.332 0-6.033-2.701-6.033-6.032s2.701-6.032 6.033-6.032c1.498 0 2.866 0.549 3.921 1.453l2.814-2.814c-1.79-1.677-4.184-2.702-6.735-2.702-5.522 0-10 4.478-10 10s4.478 10 10 10c8.396 0 10.201-7.835 9.412-11.566l-9.412-0.1z"/>
               </svg>
-              Continue with Google
+              Google
             </button>
             
             <button 
@@ -149,7 +146,7 @@ function LoginForm() {
               <svg width="20" height="20" viewBox="0 0 24 24">
                 <path d="M13.397 20.997v-8.196h2.765l0.411-3.209h-3.176v-2.044c0-0.926 0.258-1.559 1.587-1.559h1.684v-2.861c-0.82-0.088-1.643-0.13-2.467-0.131-2.446 0-4.13 1.495-4.13 4.231v2.355h-2.777v3.209h2.777v8.202c2.379 0.253 4.268 0.13 3.326-0.003z"/>
               </svg>
-              Continue with Facebook
+              Facebook
             </button>
           </div>
           
@@ -157,39 +154,35 @@ function LoginForm() {
             <span>or</span>
           </div>
           
-          {/* Email Login Form */}
-          <form onSubmit={handleEmailLogin} className="auth-form">
-            <div className="form-group">
-              <label htmlFor="email">Email Address</label>
+          {/* Email Form - Streamlined */}
+          <form onSubmit={handleEmailLogin} className="email-form">
+            <div className="input-group">
               <input
                 type="email"
-                id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
+                placeholder="Email address"
                 required
               />
             </div>
             
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
+            <div className="input-group">
               <input
                 type="password"
-                id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
+                placeholder="Password"
                 required
               />
             </div>
             
             <div className="forgot-password">
               <button type="button" onClick={handleResetPassword} className="forgot-link">
-                Forgot your password?
+                Forgot password?
               </button>
             </div>
             
-            <button type="submit" className="auth-btn-primary" disabled={loading}>
+            <button type="submit" className="primary-btn" disabled={loading}>
               {loading ? (
                 <>
                   <div className="spinner"></div>
@@ -201,44 +194,20 @@ function LoginForm() {
             </button>
           </form>
           
-          <div className="form-footer">
+          {/* Bottom Links */}
+          <div className="auth-footer">
             <p>
               New to Chocly? 
-              <Link to="/signup" className="signup-link"> Create an account</Link>
+              <Link to="/signup" className="auth-link"> Create account</Link>
             </p>
           </div>
         </div>
-        
-        {/* Side Panel with Benefits */}
-        <div className="auth-side-panel">
-          <div className="side-panel-content">
-            <h2>Continue Your Chocolate Adventure</h2>
-            <p>Track your tastings, discover new favorites, and connect with fellow chocolate enthusiasts.</p>
-            
-            <div className="feature-list">
-              <div className="feature-item">
-                <div className="feature-icon">📊</div>
-                <div className="feature-text">
-                  <h4>Personal Stats</h4>
-                  <p>Track all the chocolates you've tasted</p>
-                </div>
-              </div>
-              <div className="feature-item">
-                <div className="feature-icon">💬</div>
-                <div className="feature-text">
-                  <h4>Share Reviews</h4>
-                  <p>Help others discover great chocolate</p>
-                </div>
-              </div>
-              <div className="feature-item">
-                <div className="feature-icon">🎯</div>
-                <div className="feature-text">
-                  <h4>Get Recommendations</h4>
-                  <p>Find new chocolates based on your taste</p>
-                </div>
-              </div>
-            </div>
-          </div>
+
+        {/* Quick Benefits Preview */}
+        <div className="benefits-preview">
+          <p className="benefits-text">
+            🍫 Track your chocolate journey • ⭐ Rate & review • 🤝 Connect with enthusiasts
+          </p>
         </div>
       </div>
     </div>
