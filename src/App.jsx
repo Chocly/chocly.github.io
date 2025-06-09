@@ -36,8 +36,7 @@ function App() {
               <Route path="/browse" element={<BrowseAllPage />} />
               <Route path="/barcode" element={<BarcodeSearchPage />} />
               <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/signup" element={<SignUpForm />} />
-              <Route path="/login" element={<LoginForm />} />
+              <Route path="/auth" element={<UnifiedAuthPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />

@@ -241,12 +241,9 @@ function Header() {
             </div>
           ) : (
             /* Auth buttons for logged out users */
-            <div className="auth-buttons">
-              <Link to="/login" className="auth-btn login-btn">Log In</Link>
-              <Link to="/signup" className="auth-btn signup-btn">Sign Up</Link>
-            </div>
-          )}
-          
+          <Link to="/auth" className="auth-btn primary-btn">Sign In</Link>
+          )}          
+
           {/* Main Navigation Menu - HAMBURGER ICON ONLY */}
           <div className="nav-container" ref={menuRef}>
             <button className="menu-toggle" onClick={toggleMenu} aria-label="Menu">
