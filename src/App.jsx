@@ -9,8 +9,7 @@ import BarcodeSearchPage from './pages/BarcodeSearchPage';
 import CategoryPage from './pages/CategoryPage';
 import MakerPage from './pages/MakerPage';
 import AddChocolatePage from './pages/AddChocolatePage'; // Add this import
-import SignUpForm from './components/auth/SignUpForm';
-import LoginForm from './components/auth/LoginForm';
+import UnifiedAuthPage from './components/auth/UnifiedAuthPage';
 import { AuthProvider } from './contexts/AuthContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
