@@ -141,17 +141,20 @@ body {
   box-shadow: 0 8px 24px rgba(255, 255, 255, 0.5);
 }
 
-/* HERO SECTION - Mobile-First */
+/* HERO SECTION - Mobile-First with Proper Scaling */
 .hero-section {
+  /* REMOVED: background image since it's using gradient now */
   background: linear-gradient(135deg, var(--chocolate-primary) 0%, var(--chocolate-secondary) 50%, var(--chocolate-light) 100%);
   position: relative;
-  padding: var(--space-3xl) 0;
+  padding: var(--space-2xl) 0; /* Reduced padding for mobile */
   overflow: hidden;
-  min-height: 90vh;
+  min-height: 70vh; /* Reduced from 90vh for mobile */
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
+/* Dark overlay for better text readability */
 .hero-section::before {
   content: '';
   position: absolute;
@@ -163,6 +166,7 @@ body {
   z-index: 1;
 }
 
+/* Subtle pattern overlay */
 .hero-section::after {
   content: '';
   position: absolute;
@@ -174,72 +178,65 @@ body {
   z-index: 1;
 }
 
+/* HERO CONTENT - Better Mobile Sizing */
 .hero-content {
   position: relative;
   z-index: 2;
   text-align: center;
-  max-width: 600px;
+  max-width: 500px; /* Reduced from 600px */
   margin: 0 auto;
   color: var(--white);
+  padding: 0 1rem; /* Added padding for mobile */
 }
 
-/* HERO TEXT - White and Bold */
+/* HERO TITLE - Better Mobile Scaling */
 .hero-section .hero-title,
 .hero-section .display-1,
 .hero-content .hero-title,
 .hero-content .display-1 {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-size: clamp(2rem, 7vw, 4rem); /* Better mobile scaling */
   font-weight: 700;
-  line-height: 1.1;
+  line-height: 1.2; /* Improved line height */
   letter-spacing: -0.02em;
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md); /* Reduced margin */
   color: #FFFFFF !important;
   text-shadow: 0 4px 16px rgba(0,0,0,0.5);
 }
 
+/* HERO SUBTITLE - FIXED OPACITY & BETTER CONTRAST */
 .hero-section .hero-subtitle,
 .hero-content .hero-subtitle {
-  font-size: clamp(1.1rem, 4vw, 1.3rem);
-  font-weight: 400;
-  line-height: 1.6;
-  margin-bottom: var(--space-3xl);
+  font-size: clamp(1rem, 3.5vw, 1.3rem); /* Better mobile scaling */
+  font-weight: 500; /* Increased weight */
+  line-height: 1.5; /* Better line height */
+  margin-bottom: var(--space-xl); /* Reduced margin */
   color: #FFFFFF !important;
-  opacity: 0.95;
-  max-width: 500px;
+  opacity: 0.95; /* Slightly reduced but still readable */
+  max-width: 400px; /* Reduced from 500px */
   margin-left: auto;
   margin-right: auto;
   text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  font-family: 'Inter', sans-serif; /* Better font for readability */
 }
 
-/* Extra specific selectors to override any conflicting styles */
-.hero-section h1,
-.hero-section .hero-title,
-.hero-section .display-1 {
-  color: #FFFFFF !important;
-}
-
-.hero-section p,
-.hero-section .hero-subtitle {
-  color: #FFFFFF !important;
-}
-
-
-/* SEARCH CONTAINER - Mobile Optimized */
+/* SEARCH CONTAINER - Better Mobile Sizing */
 .search-container {
-  margin-bottom: var(--space-3xl);
+  margin-bottom: var(--space-xl); /* Reduced margin */
   position: relative;
-  max-width: 400px;
+  max-width: 350px; /* Reduced from 400px */
   margin-left: auto;
   margin-right: auto;
+  padding: 0 1rem; /* Added padding */
 }
 
+/* SEARCH INPUT - Mobile Optimized */
 .search-input {
   width: 100%;
-  padding: var(--space-lg) var(--space-xl);
-  padding-right: 130px;
+  padding: var(--space-md) var(--space-lg); /* Reduced padding */
+  padding-right: 120px; /* Reduced from 130px */
   border: none;
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg); /* Reduced from radius-xl */
   font-size: 1rem;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
@@ -261,21 +258,22 @@ body {
   font-weight: 500;
 }
 
+/* SEARCH BUTTON - Mobile Optimized */
 .search-button {
   position: absolute;
-  right: 6px;
+  right: 1.25rem; /* Adjusted for padding */
   top: 50%;
   transform: translateY(-50%);
   background: linear-gradient(135deg, var(--coral-pop) 0%, #FF6B35 100%);
   color: var(--white);
   border: none;
-  padding: var(--space-md) var(--space-lg);
-  border-radius: var(--radius-lg);
+  padding: var(--space-sm) var(--space-md); /* Reduced padding */
+  border-radius: var(--radius-md); /* Reduced radius */
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 0.9rem;
-  min-height: 36px;
+  font-size: 0.85rem; /* Reduced font size */
+  min-height: 32px; /* Reduced from 36px */
 }
 
 .search-button:active {
@@ -283,15 +281,118 @@ body {
   box-shadow: 0 4px 16px rgba(231, 111, 81, 0.4);
 }
 
-/* HERO ACTIONS - Mobile Stack */
+/* HERO ACTIONS - Mobile Optimized */
 .hero-actions {
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg);
+  gap: var(--space-md); /* Reduced gap */
   align-items: center;
-  max-width: 300px;
+  max-width: 280px; /* Reduced from 300px */
   margin: 0 auto;
 }
+
+/* MOBILE RESPONSIVE IMPROVEMENTS */
+@media (max-width: 480px) {
+  .hero-section {
+    min-height: 60vh; /* Even shorter on small mobile */
+    padding: var(--space-lg) 0;
+  }
+  
+  .hero-content {
+    max-width: 100%;
+    padding: 0 1.5rem;
+  }
+  
+  .hero-section .hero-title,
+  .hero-section .display-1 {
+    font-size: clamp(1.75rem, 8vw, 2.5rem); /* Smaller on tiny screens */
+    line-height: 1.1;
+    margin-bottom: var(--space-sm);
+  }
+  
+  .hero-section .hero-subtitle {
+    font-size: clamp(0.9rem, 4vw, 1.1rem);
+    margin-bottom: var(--space-lg);
+    max-width: 100%;
+  }
+  
+  .search-container {
+    max-width: 100%;
+    padding: 0;
+  }
+  
+  .search-input {
+    padding: var(--space-sm) var(--space-md);
+    padding-right: 100px;
+    font-size: 0.9rem;
+  }
+  
+  .search-button {
+    right: 6px;
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.8rem;
+    min-height: 28px;
+  }
+  
+  .hero-actions {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+}
+
+/* TABLET IMPROVEMENTS */
+@media (min-width: 768px) {
+  .hero-section {
+    min-height: 75vh;
+    padding: var(--space-3xl) 0;
+  }
+  
+  .hero-content {
+    max-width: 600px;
+    padding: 0 2rem;
+  }
+  
+  .search-container {
+    max-width: 450px;
+  }
+  
+  .hero-actions {
+    flex-direction: row;
+    max-width: 400px;
+    gap: var(--space-lg);
+  }
+}
+
+/* DESKTOP IMPROVEMENTS */
+@media (min-width: 1024px) {
+  .hero-section {
+    min-height: 80vh;
+  }
+  
+  .search-container {
+    max-width: 500px;
+  }
+  
+  .hero-actions {
+    max-width: 450px;
+  }
+}
+
+/* LARGE DESKTOP */
+@media (min-width: 1200px) {
+  .hero-section {
+    min-height: 85vh;
+  }
+  
+  .search-container {
+    max-width: 600px;
+  }
+  
+  .hero-actions {
+    max-width: 500px;
+  }
+}
+
 
 /* FEATURED CHOCOLATES SECTION - Clean White */
 .featured-section {
@@ -321,13 +422,17 @@ body {
   line-height: 1.2;
 }
 
+/* SECTION SUBTITLE - Better Contrast */
 .section-subtitle {
   font-size: clamp(1rem, 3vw, 1.2rem);
-  color: var(--medium-gray);
+  color: #4B5563 !important; /* Darker grey instead of light grey */
   line-height: 1.6;
   max-width: 500px;
   margin: 0 auto var(--space-lg);
+  font-weight: 500; /* Added weight for better readability */
+  opacity: 1 !important; /* Ensure full opacity */
 }
+
 
 .view-all {
   color: var(--coral-pop);
@@ -547,45 +652,22 @@ body {
 }
 
 
-/* REVIEWS SECTION - FIXED CHOCOLATE NAMES VERSION */
+/* FIXED HOMEPAGE COMMUNITY REVIEWS - Add this to HomePage.css */
+
+/* REVIEWS SECTION - White Background Fix */
 .reviews-section {
   padding: var(--space-3xl) 0;
   background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
   width: 100%;
   min-height: 400px;
 }
 
-/* Full width container */
-.reviews-section .container {
-  width: 100%;
-  max-width: none !important; /* Remove any width restrictions */
-  margin: 0 auto;
-  padding: 0 2rem;
-}
-
-/* Section header */
-.reviews-section .section-header {
-  text-align: center;
-  margin-bottom: 3rem;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 3rem;
-}
-
-/* FULL-WIDTH GRID - NO RESTRICTIONS */
-.reviews-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Force exactly 3 equal columns */
-  gap: 2rem;
-  width: 100%;
-  margin: 0;
-  max-width: none !important;
-}
-
-/* REVIEW CARDS - FULL EXPANSION */
+/* REVIEW CARDS - Fixed Background and Text */
 .review-card {
-  background: #FFFFFF;
+  /* FORCE WHITE BACKGROUND */
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
   border-radius: var(--radius-lg);
   padding: 2rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -597,14 +679,10 @@ body {
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border: 1px solid var(--border-light);
-  
-  /* Remove ALL width constraints */
-  width: 100% !important;
-  max-width: none !important;
-  min-width: 0 !important;
+  width: 100%;
 }
 
-/* Top accent */
+/* Top accent border */
 .review-card::before {
   content: '';
   position: absolute;
@@ -659,65 +737,32 @@ body {
   font-size: 1.2rem;
 }
 
-/* CHOCOLATE INFO CARD - REDESIGNED FOR FULL NAMES */
+/* CHOCOLATE INFO SECTION - Fixed Layout */
 .review-chocolate {
   display: flex;
   align-items: flex-start;
-  background: var(--light-gray);
+  /* FORCE WHITE/LIGHT BACKGROUND */
+  background: #F8F9FA !important;
   border-radius: var(--radius-md);
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   transition: all 0.3s ease;
   border: 1px solid var(--border-light);
   width: 100%;
-  gap: 1.5rem;
+  gap: 1rem;
   min-height: 100px;
 }
 
-/* CHOCOLATE IMAGE - FIXED SIZE */
-.chocolate-image {
-  width: 70px;
-  height: 70px;
-  border-radius: var(--radius-md);
-  background: linear-gradient(135deg, var(--chocolate-light) 0%, var(--chocolate-soft) 100%);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  flex-shrink: 0;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.chocolate-image::before {
-  content: '🍫';
-  font-size: 1.8rem;
-  opacity: 0.8;
-}
-
-/* CHOCOLATE INFO CARD - Clean design */
-.review-chocolate {
-  display: flex;
-  align-items: center;
-  background: var(--light-gray);
-  border-radius: var(--radius-md);
-  padding: var(--space-md);
-  margin-bottom: var(--space-lg);
-  transition: all 0.3s ease;
-  border: 1px solid var(--border-light);
-}
-
 .review-chocolate:hover {
-  background: #F0F0F0;
+  background: #F0F0F0 !important;
 }
 
-/* CHOCOLATE IMAGE - Clean placeholder */
+/* CHOCOLATE IMAGE - Placeholder */
 .chocolate-image {
   width: 60px;
   height: 60px;
   border-radius: var(--radius-md);
   background: linear-gradient(135deg, var(--chocolate-light) 0%, var(--chocolate-soft) 100%);
-  margin-right: var(--space-md);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
   position: relative;
@@ -733,32 +778,45 @@ body {
   opacity: 0.8;
 }
 
+/* CHOCOLATE INFO - Fixed Text Display */
 .chocolate-info {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
+/* CHOCOLATE NAME - Fixed Truncation */
 .chocolate-name {
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--chocolate-primary);
-  margin: 0 0 4px 0;
+  margin: 0;
   font-family: 'Playfair Display', serif;
   line-height: 1.3;
-  /* Allow text to wrap on multiple lines */
-  white-space: normal;
-  word-wrap: break-word;
-  hyphens: auto;
+  /* FIX: Allow full text display */
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow: visible !important;
+  text-overflow: none !important;
+  -webkit-line-clamp: none !important;
+  display: block !important;
+  max-width: none !important;
+  width: 100% !important;
 }
 
+/* CHOCOLATE MAKER */
 .chocolate-maker {
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   color: var(--medium-gray);
   margin: 0;
   font-weight: 500;
-  /* Allow text to wrap if needed */
-  white-space: normal;
-  word-wrap: break-word;
+  /* FIX: Allow full text display */
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow: visible !important;
+  text-overflow: none !important;
 }
 
 /* REVIEW TEXT */
@@ -793,31 +851,13 @@ body {
   transition: transform 0.3s ease;
 }
 
-/* EMPTY REVIEWS STATE */
-.no-reviews-message {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 3rem;
-  background: #FFFFFF;
-  border: 2px dashed var(--border-light);
-  border-radius: var(--radius-lg);
-  max-width: 600px;
-  margin: 0 auto;
-  box-shadow: var(--shadow-sm);
+.read-more:hover {
+  color: var(--chocolate-secondary);
+  transform: translateX(4px);
 }
 
-.no-reviews-message h3 {
-  color: var(--chocolate-primary);
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-  font-family: 'Playfair Display', serif;
-}
-
-.no-reviews-message p {
-  margin-bottom: 1.5rem;
-  color: var(--medium-gray);
-  font-size: 1.1rem;
-  line-height: 1.6;
+.read-more:hover::after {
+  transform: translateX(4px);
 }
 
 /* RESPONSIVE BREAKPOINTS */
@@ -839,11 +879,21 @@ body {
   }
   
   .chocolate-name {
-    font-size: 1.2rem;
+    font-size: 1rem !important;
   }
   
   .chocolate-maker {
-    font-size: 0.9rem;
+    font-size: 0.85rem !important;
+  }
+  
+  .review-chocolate {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+  
+  .chocolate-image {
+    width: 50px;
+    height: 50px;
   }
 }
 
@@ -863,11 +913,11 @@ body {
   }
   
   .chocolate-name {
-    font-size: 1.25rem;
+    font-size: 1.1rem !important;
   }
 }
 
-/* Desktop - 3 columns with full width */
+/* Desktop - 3 columns */
 @media (min-width: 1024px) {
   .reviews-section .container {
     padding: 0 2rem;
@@ -885,19 +935,19 @@ body {
   }
   
   .chocolate-name {
-    font-size: 1.4rem;
+    font-size: 1.2rem !important;
   }
   
   .chocolate-maker {
-    font-size: 1.1rem;
+    font-size: 0.95rem !important;
   }
   
   .review-text {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 }
 
-/* Large screens - still 3 columns but with more space */
+/* Large screens */
 @media (min-width: 1200px) {
   .reviews-section .container {
     padding: 0 3rem;
@@ -908,62 +958,52 @@ body {
   }
   
   .chocolate-name {
-    font-size: 1.5rem;
+    font-size: 1.3rem !important;
   }
   
   .chocolate-maker {
-    font-size: 1.2rem;
-  }
-}
-
-/* Extra large screens - still 3 columns for readability */
-@media (min-width: 1400px) {
-  .reviews-section .container {
-    padding: 0 4rem;
-  }
-  
-  .reviews-grid {
-    gap: 4rem;
-  }
-  
-  .review-card {
-    padding: 2.5rem;
-    min-height: 500px;
-  }
-}
-
-/* HOVER EFFECTS */
-@media (hover: hover) and (pointer: fine) {
-  .review-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-  }
-  
-  .review-chocolate:hover {
-    background: #F0F0F0;
-  }
-  
-  .read-more:hover {
-    color: var(--chocolate-secondary);
-    transform: translateX(4px);
-  }
-  
-  .read-more:hover::after {
-    transform: translateX(4px);
+    font-size: 1rem !important;
   }
 }
 
 /* FORCE OVERRIDE ANY CONFLICTING STYLES */
+.reviews-section .review-card,
 .reviews-section .chocolate-name,
-.reviews-section .chocolate-maker {
-  overflow: visible !important;
+.reviews-section .chocolate-maker,
+.reviews-section .review-chocolate {
+  background: #FFFFFF !important;
+}
+
+.reviews-section .review-chocolate {
+  background: #F8F9FA !important;
+}
+
+/* Override any ReviewPreview.css styles that might be interfering */
+.reviews-section .review-card {
+  background-color: #FFFFFF !important;
+}
+
+.reviews-section .review-card:hover {
+  background-color: #FFFFFF !important;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* Ensure chocolate names are fully visible */
+.reviews-section .chocolate-name {
+  max-width: none !important;
   white-space: normal !important;
+  overflow: visible !important;
   text-overflow: none !important;
   -webkit-line-clamp: none !important;
   display: block !important;
-  max-width: none !important;
-  width: 100% !important;
 }
+
+.reviews-section .chocolate-info {
+  min-width: 0;
+  flex: 1;
+}
+
 
 /* CTA SECTION - White Background with Popping Elements */
 .cta-section {
@@ -1529,5 +1569,491 @@ body {
   
   .reviews-grid {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* OVERRIDE ReviewPreview.css - Add this to the END of your HomePage.css */
+
+/* Complete override of ReviewPreview.css styles for homepage */
+.reviews-section .review-card {
+  background-color: #FFFFFF !important;
+  border-radius: 16px !important;
+  padding: 2rem !important;
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid #E5E7EB !important;
+}
+
+.reviews-section .review-card:hover {
+  background-color: #FFFFFF !important;
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12) !important;
+}
+
+.reviews-section .chocolate-info {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 0.25rem !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.reviews-section .chocolate-name {
+  font-size: 1.1rem !important;
+  max-width: none !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: none !important;
+  -webkit-line-clamp: none !important;
+  display: block !important;
+  font-weight: 700 !important;
+  color: #2D1810 !important;
+  margin: 0 !important;
+  line-height: 1.3 !important;
+  word-wrap: break-word !important;
+}
+
+.reviews-section .chocolate-maker {
+  font-size: 0.9rem !important;
+  color: #6B7280 !important;
+  margin: 0 !important;
+  font-weight: 500 !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow: visible !important;
+  text-overflow: none !important;
+}
+
+/* Fix the review header spacing */
+.reviews-section .review-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  margin-bottom: 1.5rem !important;
+  gap: 1rem !important;
+}
+
+.reviews-section .reviewer-info {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.reviews-section .reviewer-name {
+  font-weight: 700 !important;
+  color: #2D1810 !important;
+  margin-bottom: 4px !important;
+  font-size: 1.1rem !important;
+}
+
+.reviews-section .review-rating {
+  display: flex !important;
+  gap: 2px !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
+}
+
+.reviews-section .star {
+  color: #F4A261 !important;
+  font-size: 1.2rem !important;
+  margin-right: 0 !important;
+}
+
+.reviews-section .star.empty {
+  color: rgba(229, 231, 235, 1) !important;
+}
+
+.reviews-section .star.half {
+  position: relative !important;
+  color: rgba(229, 231, 235, 1) !important;
+}
+
+.reviews-section .star.half::before {
+  content: '★' !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 50% !important;
+  overflow: hidden !important;
+  color: #F4A261 !important;
+}
+
+/* Fix the read more link */
+.reviews-section .read-more {
+  color: #E76F51 !important;
+  text-decoration: none !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  align-self: flex-start !important;
+  transition: all 0.3s ease !important;
+  gap: 0.5rem !important;
+}
+
+.reviews-section .read-more:hover {
+  color: #5D2F17 !important;
+  transform: translateX(4px) !important;
+}
+
+.reviews-section .read-more .arrow {
+  margin-left: 0 !important;
+  transition: transform 0.3s ease !important;
+}
+
+.reviews-section .read-more:hover .arrow {
+  transform: translateX(3px) !important;
+}
+
+/* RESPONSIVE COMMUNITY REVIEWS GRID - Add to HomePage.css */
+
+/* REVIEWS SECTION - Container Setup */
+.reviews-section {
+  padding: var(--space-3xl) 0;
+  background: #FFFFFF !important;
+  width: 100%;
+  overflow: hidden;
+}
+
+.reviews-section .container {
+  width: 100%;
+  max-width: 1400px !important;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* SECTION HEADER */
+.reviews-section .section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reviews-section .section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  color: var(--chocolate-primary);
+  margin-bottom: 1rem;
+}
+
+.reviews-section .section-subtitle {
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  color: var(--medium-gray);
+  margin-bottom: 2rem;
+}
+
+/* RESPONSIVE REVIEWS GRID - Perfect for All Devices */
+.reviews-grid {
+  display: grid;
+  gap: 1.5rem;
+  width: 100%;
+  
+  /* Mobile First: 1 column */
+  grid-template-columns: 1fr;
+}
+
+/* REVIEW CARDS - Optimized Height */
+.review-card {
+  background: #FFFFFF !important;
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-light);
+  width: 100%;
+  height: auto;
+  min-height: 320px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Gold accent top border */
+.review-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold-accent) 0%, var(--coral-pop) 100%);
+}
+
+/* TABLET: 2 Columns Side-by-Side */
+@media (min-width: 768px) {
+  .reviews-section .container {
+    padding: 0 2rem;
+  }
+  
+  .reviews-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  
+  .review-card {
+    padding: 2rem;
+    min-height: 380px;
+  }
+}
+
+/* DESKTOP: 3 Columns Side-by-Side */
+@media (min-width: 1024px) {
+  .reviews-section .container {
+    padding: 0 2rem;
+  }
+  
+  .reviews-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+  
+  .review-card {
+    padding: 2rem;
+    min-height: 420px;
+  }
+}
+
+/* LARGE DESKTOP: Keep 3 Columns with More Space */
+@media (min-width: 1200px) {
+  .reviews-section .container {
+    padding: 0 3rem;
+  }
+  
+  .reviews-grid {
+    gap: 3rem;
+  }
+  
+  .review-card {
+    padding: 2.5rem;
+    min-height: 450px;
+  }
+}
+
+/* ULTRA-WIDE: Still 3 Columns for Readability */
+@media (min-width: 1400px) {
+  .reviews-section .container {
+    padding: 0 4rem;
+  }
+  
+  .reviews-grid {
+    gap: 4rem;
+  }
+}
+
+/* REVIEW CARD CONTENT - Optimized Layout */
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.review-user {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-name {
+  font-weight: 700;
+  color: var(--chocolate-primary);
+  margin-bottom: 4px;
+  font-size: 1.1rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.review-date {
+  font-size: 0.9rem;
+  color: var(--medium-gray);
+  font-weight: 500;
+}
+
+.review-rating {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.review-rating .star {
+  color: var(--gold-accent);
+  font-size: 1.2rem;
+}
+
+/* CHOCOLATE INFO SECTION */
+.review-chocolate {
+  display: flex;
+  align-items: flex-start;
+  background: #F8F9FA !important;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-light);
+  gap: 1rem;
+}
+
+.review-chocolate:hover {
+  background: #F0F0F0 !important;
+  transform: translateY(-1px);
+}
+
+.chocolate-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--chocolate-light) 0%, var(--chocolate-soft) 100%);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chocolate-image::before {
+  content: '🍫';
+  font-size: 1.2rem;
+  opacity: 0.8;
+}
+
+.chocolate-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.chocolate-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--chocolate-primary);
+  margin: 0 0 4px 0;
+  font-family: 'Playfair Display', serif;
+  line-height: 1.3;
+  /* Ensure full name display */
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  overflow: visible !important;
+  text-overflow: none !important;
+  -webkit-line-clamp: none !important;
+  display: block !important;
+}
+
+.chocolate-maker {
+  font-size: 0.85rem;
+  color: var(--medium-gray);
+  margin: 0;
+  font-weight: 500;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+}
+
+/* REVIEW TEXT */
+.review-text {
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--dark-gray);
+  flex-grow: 1;
+  font-weight: 400;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* READ MORE BUTTON */
+.read-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--coral-pop);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+  padding: 0.5rem 0;
+  white-space: nowrap;
+}
+
+.read-more::after {
+  content: '→';
+  transition: transform 0.3s ease;
+}
+
+.read-more:hover {
+  color: var(--chocolate-secondary);
+  transform: translateX(4px);
+}
+
+.read-more:hover::after {
+  transform: translateX(4px);
+}
+
+/* HOVER EFFECTS */
+@media (hover: hover) and (pointer: fine) {
+  .review-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  }
+}
+
+/* EMPTY STATE */
+.no-reviews-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+  background: #FFFFFF;
+  border: 2px dashed var(--border-light);
+  border-radius: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.no-reviews-message h3 {
+  color: var(--chocolate-primary);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.no-reviews-message p {
+  margin-bottom: 1.5rem;
+  color: var(--medium-gray);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* ACCESSIBILITY & PERFORMANCE */
+@media (prefers-reduced-motion: reduce) {
+  .review-card,
+  .review-chocolate {
+    transition: none;
+  }
+  
+  .review-card:hover {
+    transform: none;
+  }
+}
+
+/* PRINT STYLES */
+@media print {
+  .reviews-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+  
+  .review-card {
+    break-inside: avoid;
+    min-height: auto !important;
+    padding: 1rem !important;
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
   }
 }

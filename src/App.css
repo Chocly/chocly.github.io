@@ -1,5 +1,7 @@
 /* src/App.css */
 /* Basic Reset */
+@import './styles/colors.css';
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
