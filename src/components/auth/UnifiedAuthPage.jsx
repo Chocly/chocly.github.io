@@ -1,96 +1,138 @@
-import React, { useState } from 'react';
-import { registerWithEmailPassword, loginWithEmailPassword, signInWithGoogle, signInWithFacebook, resetPassword } from '../../services/authService';
-import { useNavigate } from 'react-router-dom';
+// src/components/auth/UnifiedAuthPage.jsx - FIXED REDIRECT VERSION
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { 
+  signInWithGoogle, 
+  signInWithFacebook, 
+  loginWithEmailPassword, 
+  registerWithEmailPassword, 
+  resetPassword 
+} from '../../services/authService';
 
-// Unified Auth Page Component
 function UnifiedAuthPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { currentUser, loading: authLoading } = useAuth();
+  
+  // Debug logging
+  useEffect(() => {
+    console.log('🔍 UnifiedAuthPage Debug Info:');
+    console.log('Current URL:', window.location.href);
+    console.log('Location pathname:', location.pathname);
+    console.log('Current user:', currentUser?.uid || 'None');
+    console.log('Auth loading:', authLoading);
+  }, [location, currentUser, authLoading]);
+
+  // FIXED: More reliable redirect logic
+  useEffect(() => {
+    if (!authLoading && currentUser) {
+      console.log('✅ User already logged in, redirecting to profile');
+      // Use replace to avoid back button issues
+      setTimeout(() => {
+        navigate('/profile', { replace: true });
+      }, 100); // Small delay to ensure DOM is ready
+    }
+  }, [currentUser, authLoading, navigate]);
+
   const [isSignUp, setIsSignUp] = useState(false);
-  const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [displayName, setDisplayName] = useState('');
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [resetMessage, setResetMessage] = useState('');
-  const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const validateForm = () => {
+  const handleSocialAuth = async (provider) => {
+    console.log(`🔑 Starting ${provider} authentication`);
+    setLoading(true);
     setError('');
     
-    if (isSignUp && !displayName.trim()) {
-      setError('Please enter your name');
-      return false;
+    try {
+      let user;
+      if (provider === 'Google') {
+        user = await signInWithGoogle();
+      } else if (provider === 'Facebook') {
+        user = await signInWithFacebook();
+      }
+      
+      console.log(`✅ ${provider} auth successful:`, user.uid);
+      setShowSuccess(true);
+      
+      // FIXED: Better redirect with error handling
+      setTimeout(() => {
+        console.log('🚀 Redirecting to profile after successful auth');
+        try {
+          navigate('/profile', { replace: true });
+        } catch (navError) {
+          console.error('Navigation error:', navError);
+          // Fallback: direct window navigation
+          window.location.href = '/profile';
+        }
+      }, 1500);
+      
+    } catch (error) {
+      console.error(`❌ ${provider} auth error:`, error);
+      setError(error.message || `Failed to sign in with ${provider}`);
+      setShowSuccess(false); // Make sure success screen is hidden on error
+    } finally {
+      setLoading(false);
     }
-    
-    if (!email.trim()) {
-      setError('Please enter your email');
-      return false;
-    }
-    
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters');
-      return false;
-    }
+  };
+
+  const handleEmailAuth = async (e) => {
+    e.preventDefault();
+    console.log(`🔑 Starting ${isSignUp ? 'signup' : 'login'} with email`);
     
     if (isSignUp && password !== confirmPassword) {
       setError('Passwords do not match');
-      return false;
+      return;
     }
     
-    return true;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validateForm()) return;
+    setLoading(true);
+    setError('');
     
     try {
-      setLoading(true);
+      let user;
+      if (isSignUp) {
+        user = await registerWithEmailPassword(email, password, displayName);
+      } else {
+        user = await loginWithEmailPassword(email, password);
+      }
       
-      // Simulate auth process
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      console.log(`✅ Email auth successful:`, user.uid);
       setShowSuccess(true);
+      
       setTimeout(() => {
-        console.log('Navigate to profile');
+        console.log('🚀 Redirecting to profile after successful auth');
+        try {
+          navigate('/profile', { replace: true });
+        } catch (navError) {
+          console.error('Navigation error:', navError);
+          window.location.href = '/profile';
+        }
       }, 1500);
+      
     } catch (error) {
-      setError(isSignUp ? error.message : 'Invalid email or password');
+      console.error(`❌ Email auth error:`, error);
+      setError(error.message);
+      setShowSuccess(false);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSocialAuth = async (provider) => {
-    try {
-      setLoading(true);
-      setError('');
-      
-      // Simulate social auth
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setShowSuccess(true);
-      setTimeout(() => {
-        console.log(`Navigate to profile after ${provider} auth`);
-      }, 1500);
-    } catch (error) {
-      setError(`Failed to authenticate with ${provider}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleResetPassword = async () => {
+  const handlePasswordReset = async () => {
     if (!email) {
       setError('Please enter your email address first');
       return;
     }
     
     try {
-      // Simulate password reset
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setResetMessage('Password reset email sent. Check your inbox.');
+      await resetPassword(email);
+      setResetMessage('Password reset email sent! Check your inbox.');
       setError('');
     } catch (error) {
       setError('Error sending reset email. Please try again.');
@@ -105,6 +147,33 @@ function UnifiedAuthPage() {
     if (!isSignUp) setDisplayName('');
   };
 
+  // Show loading if auth is still loading
+  if (authLoading) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #FDFCFC 0%, #F8F9FA 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '1rem'
+      }}>
+        <div style={{ textAlign: 'center', color: '#2D1810' }}>
+          <div style={{
+            width: '40px',
+            height: '40px',
+            border: '4px solid #f3f3f3',
+            borderTop: '4px solid #F4A261',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 1rem'
+          }}></div>
+          <p>Loading authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -114,6 +183,23 @@ function UnifiedAuthPage() {
       justifyContent: 'center',
       padding: '1rem'
     }}>
+      {/* Debug info - remove this in production */}
+      <div style={{
+        position: 'fixed',
+        top: '10px',
+        left: '10px',
+        background: 'rgba(0,0,0,0.8)',
+        color: 'white',
+        padding: '0.5rem',
+        borderRadius: '4px',
+        fontSize: '12px',
+        zIndex: 1000
+      }}>
+        <div>URL: {window.location.pathname}</div>
+        <div>User: {currentUser?.uid || 'None'}</div>
+        <div>Loading: {authLoading.toString()}</div>
+      </div>
+
       {/* Success Overlay */}
       {showSuccess && (
         <div style={{
@@ -127,8 +213,7 @@ function UnifiedAuthPage() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          zIndex: 9999,
-          animation: 'fadeIn 0.3s ease'
+          zIndex: 9999
         }}>
           <div style={{
             background: 'white',
@@ -136,8 +221,7 @@ function UnifiedAuthPage() {
             padding: '2rem',
             textAlign: 'center',
             maxWidth: '300px',
-            width: '90%',
-            animation: 'slideUp 0.4s ease'
+            width: '90%'
           }}>
             <div style={{ marginBottom: '1rem' }}>
               <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
@@ -146,74 +230,51 @@ function UnifiedAuthPage() {
               </svg>
             </div>
             <h2 style={{ color: '#2D1810', fontSize: '1.5rem', fontWeight: 700, margin: '0 0 0.5rem 0' }}>
-              {isSignUp ? 'Welcome to Chocly! 🎉' : 'Welcome back! 👋'}
+              {isSignUp ? 'Welcome to Chocly! 🎉' : 'Welcome back! 🍫'}
             </h2>
-            <p style={{ color: '#374151', margin: '0 0 1rem 0' }}>
+            <p style={{ color: '#666', margin: 0 }}>
               Taking you to your profile...
             </p>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.25rem' }}>
-              {[0, 1, 2].map(i => (
-                <span 
-                  key={i}
-                  style={{
-                    width: '6px',
-                    height: '6px',
-                    borderRadius: '50%',
-                    background: '#F4A261',
-                    animation: `bounce 1.4s infinite ease-in-out both`,
-                    animationDelay: `${-0.32 + i * 0.16}s`
-                  }}
-                />
-              ))}
-            </div>
+            {/* Add a manual continue button as fallback */}
+            <button 
+              onClick={() => navigate('/profile', { replace: true })}
+              style={{
+                marginTop: '1rem',
+                padding: '0.5rem 1rem',
+                background: '#F4A261',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '0.9rem'
+              }}
+            >
+              Continue to Profile
+            </button>
           </div>
         </div>
       )}
 
+      {/* Auth Form */}
       <div style={{
+        background: 'white',
+        borderRadius: '24px',
+        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.08)',
+        overflow: 'hidden',
         width: '100%',
         maxWidth: '400px',
-        background: 'white',
-        borderRadius: '20px',
-        overflow: 'hidden',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
-        border: '1px solid #E5E7EB'
+        border: '1px solid rgba(244, 162, 97, 0.1)'
       }}>
         {/* Header */}
         <div style={{
-          background: 'linear-gradient(135deg, #2D1810 0%, #3A1F04 100%)',
-          color: 'white',
-          padding: '1.5rem 1rem',
+          background: 'linear-gradient(135deg, #F4A261 0%, #F4D03F 100%)',
+          padding: '2rem 1rem 1.5rem',
           textAlign: 'center',
-          position: 'relative',
-          overflow: 'hidden'
+          color: '#2D1810'
         }}>
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'url(\'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1" fill="rgba(255,255,255,0.08)"/><circle cx="50" cy="70" r="0.8" fill="rgba(255,255,255,0.06)"/></svg>\') repeat',
-            opacity: 0.5
-          }} />
-          
-          <div style={{ position: 'relative', zIndex: 2 }}>
-            <h1 style={{
-              margin: '0 0 0.5rem 0',
-              fontSize: '1.75rem',
-              fontWeight: 800,
-              fontFamily: 'Playfair Display, serif',
-              textShadow: '0 2px 8px rgba(0,0,0,0.3)'
-            }}>
-              🍫 Chocly
-            </h1>
-            <h2 style={{
-              margin: '0 0 0.25rem 0',
-              fontSize: '1.5rem',
-              fontWeight: 700,
-              fontFamily: 'Inter, sans-serif'
-            }}>
+          <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>🍫</div>
+          <div>
+            <h2 style={{ margin: '0 0 0.5rem 0', fontSize: '1.75rem', fontWeight: 700 }}>
               {isSignUp ? 'Join the Community' : 'Welcome Back'}
             </h2>
             <p style={{ margin: 0, fontSize: '1rem', opacity: 0.9, fontWeight: 500 }}>
@@ -313,343 +374,150 @@ function UnifiedAuthPage() {
                 opacity: loading ? 0.7 : 1
               }}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24">
-                <path d="M13.397 20.997v-8.196h2.765l0.411-3.209h-3.176v-2.044c0-0.926 0.258-1.559 1.587-1.559h1.684v-2.861c-0.82-0.088-1.643-0.13-2.467-0.131-2.446 0-4.13 1.495-4.13 4.231v2.355h-2.777v3.209h2.777v8.202c2.379 0.253 4.268 0.13 3.326-0.003z"/>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
               </svg>
               Facebook
             </button>
           </div>
           
-          <div style={{
-            textAlign: 'center',
-            margin: '1rem 0',
-            position: 'relative'
-          }}>
-            <div style={{
-              position: 'absolute',
-              top: '50%',
-              left: 0,
-              right: 0,
-              height: '1px',
-              background: '#E5E7EB'
-            }} />
-            <span style={{
-              background: 'white',
-              padding: '0 1rem',
-              color: '#9CA3AF',
-              fontSize: '0.875rem',
-              fontWeight: 500,
-              position: 'relative'
-            }}>
-              or
-            </span>
-          </div>
-          
-          {/* Email Form */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {/* Email/Password Form */}
+          <form onSubmit={handleEmailAuth}>
             {isSignUp && (
-              <div>
-                <input
-                  type="text"
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  placeholder="Your name"
-                  required
-                  style={{
-                    width: '100%',
-                    padding: '1rem',
-                    border: '2px solid #E5E7EB',
-                    borderRadius: '12px',
-                    fontSize: '1rem',
-                    background: 'white',
-                    color: '#374151',
-                    transition: 'all 0.3s ease',
-                    minHeight: '48px',
-                    boxSizing: 'border-box'
-                  }}
-                />
-              </div>
-            )}
-            
-            <div>
               <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email address"
-                required
+                type="text"
+                placeholder="Full Name"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
                 style={{
                   width: '100%',
-                  padding: '1rem',
+                  padding: '0.875rem',
                   border: '2px solid #E5E7EB',
                   borderRadius: '12px',
                   fontSize: '1rem',
-                  background: 'white',
-                  color: '#374151',
-                  transition: 'all 0.3s ease',
-                  minHeight: '48px',
-                  boxSizing: 'border-box'
+                  marginBottom: '0.75rem',
+                  transition: 'border-color 0.3s ease'
                 }}
+                required
               />
-            </div>
+            )}
             
-            <div>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '0.875rem',
+                border: '2px solid #E5E7EB',
+                borderRadius: '12px',
+                fontSize: '1rem',
+                marginBottom: '0.75rem',
+                transition: 'border-color 0.3s ease'
+              }}
+              required
+            />
+            
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '0.875rem',
+                border: '2px solid #E5E7EB',
+                borderRadius: '12px',
+                fontSize: '1rem',
+                marginBottom: '0.75rem',
+                transition: 'border-color 0.3s ease'
+              }}
+              required
+            />
+            
+            {isSignUp && (
               <input
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder={isSignUp ? "Password (min. 6 characters)" : "Password"}
-                required
-                minLength="6"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 style={{
                   width: '100%',
-                  padding: '1rem',
+                  padding: '0.875rem',
                   border: '2px solid #E5E7EB',
                   borderRadius: '12px',
                   fontSize: '1rem',
-                  background: 'white',
-                  color: '#374151',
-                  transition: 'all 0.3s ease',
-                  minHeight: '48px',
-                  boxSizing: 'border-box'
+                  marginBottom: '0.75rem',
+                  transition: 'border-color 0.3s ease'
                 }}
+                required
               />
-            </div>
-            
-            {isSignUp && (
-              <div>
-                <input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Confirm password"
-                  required
-                  style={{
-                    width: '100%',
-                    padding: '1rem',
-                    border: '2px solid #E5E7EB',
-                    borderRadius: '12px',
-                    fontSize: '1rem',
-                    background: 'white',
-                    color: '#374151',
-                    transition: 'all 0.3s ease',
-                    minHeight: '48px',
-                    boxSizing: 'border-box'
-                  }}
-                />
-              </div>
             )}
             
-            {!isSignUp && (
-              <div style={{ textAlign: 'right', margin: '-0.5rem 0 0.5rem 0' }}>
-                <button 
-                  type="button" 
-                  onClick={handleResetPassword}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#F4A261',
-                    fontSize: '0.9rem',
-                    cursor: 'pointer',
-                    padding: '0.5rem',
-                    transition: 'color 0.3s ease',
-                    fontWeight: 500
-                  }}
-                >
-                  Forgot password?
-                </button>
-              </div>
-            )}
-            
-            <button 
-              type="submit" 
-              onClick={handleSubmit}
+            <button
+              type="submit"
               disabled={loading}
               style={{
+                width: '100%',
+                padding: '0.875rem',
                 background: 'linear-gradient(135deg, #F4A261 0%, #F4D03F 100%)',
                 color: '#2D1810',
                 border: 'none',
-                padding: '1rem',
                 borderRadius: '12px',
-                fontWeight: 700,
-                fontSize: '1.1rem',
+                fontSize: '1rem',
+                fontWeight: 600,
                 cursor: loading ? 'not-allowed' : 'pointer',
                 transition: 'all 0.3s ease',
-                position: 'relative',
-                overflow: 'hidden',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.5rem',
-                boxShadow: '0 4px 16px rgba(244, 162, 97, 0.3)',
-                minHeight: '48px',
-                marginTop: '0.5rem',
+                marginBottom: '1rem',
                 opacity: loading ? 0.7 : 1
               }}
             >
-              {loading ? (
-                <>
-                  <div style={{
-                    width: '18px',
-                    height: '18px',
-                    border: '2px solid rgba(45, 24, 16, 0.3)',
-                    borderTop: '2px solid #2D1810',
-                    borderRadius: '50%',
-                    animation: 'spin 1s linear infinite'
-                  }} />
-                  {isSignUp ? 'Creating...' : 'Signing in...'}
-                </>
-              ) : (
-                isSignUp ? 'Create Account' : 'Sign In'
-              )}
+              {loading ? 'Please wait...' : (isSignUp ? 'Create Account' : 'Sign In')}
             </button>
-          </div>
+          </form>
           
-          {/* Mode Switch */}
-          <div style={{
-            textAlign: 'center',
-            marginTop: '1.5rem',
-            paddingTop: '1rem',
-            borderTop: '1px solid #F3F4F6'
-          }}>
-            <p style={{ margin: '0.5rem 0', fontSize: '0.9rem', color: '#374151' }}>
-              {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
+          {/* Footer Actions */}
+          <div style={{ textAlign: 'center', fontSize: '0.9rem' }}>
+            {!isSignUp && (
+              <button
+                onClick={handlePasswordReset}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#F4A261',
+                  cursor: 'pointer',
+                  textDecoration: 'underline',
+                  marginBottom: '1rem',
+                  fontSize: '0.9rem'
+                }}
+              >
+                Forgot your password?
+              </button>
+            )}
+            
+            <div>
+              <span style={{ color: '#666' }}>
+                {isSignUp ? 'Already have an account?' : "Don't have an account?"}
+              </span>
+              {' '}
               <button
                 onClick={switchMode}
                 style={{
                   background: 'none',
                   border: 'none',
                   color: '#F4A261',
-                  textDecoration: 'none',
-                  fontWeight: 600,
-                  transition: 'color 0.3s ease',
                   cursor: 'pointer',
-                  fontSize: '0.9rem'
+                  fontWeight: 600,
+                  textDecoration: 'underline'
                 }}
               >
-                {isSignUp ? 'Sign in' : 'Create account'}
+                {isSignUp ? 'Sign In' : 'Sign Up'}
               </button>
-            </p>
-            
-            {isSignUp && (
-              <p style={{
-                fontSize: '0.8rem',
-                color: '#9CA3AF',
-                lineHeight: 1.4,
-                margin: '0.5rem 0 0 0'
-              }}>
-                By creating an account, you agree to our{' '}
-                <a href="/terms-of-service" style={{ color: '#6B7280', textDecoration: 'none' }}>
-                  Terms
-                </a>{' '}
-                and{' '}
-                <a href="/privacy-policy" style={{ color: '#6B7280', textDecoration: 'none' }}>
-                  Privacy Policy
-                </a>
-              </p>
-            )}
+            </div>
           </div>
         </div>
-
-        {/* Benefits Preview */}
-        <div style={{
-          padding: '1rem',
-          background: '#FDFCFC',
-          borderTop: '1px solid #F3F4F6',
-          display: 'flex',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          gap: '0.5rem',
-          flexWrap: 'wrap'
-        }}>
-          {[
-            { icon: '📝', text: 'Track tastings' },
-            { icon: '⭐', text: 'Rate & review' },
-            { icon: '🤝', text: 'Connect with others' }
-          ].map((benefit, index) => (
-            <div 
-              key={index}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '0.25rem',
-                flex: 1,
-                minWidth: 0,
-                textAlign: 'center'
-              }}
-            >
-              <span style={{ fontSize: '1.25rem', marginBottom: '0.25rem' }}>
-                {benefit.icon}
-              </span>
-              <span style={{
-                fontSize: '0.8rem',
-                color: '#374151',
-                fontWeight: 500,
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                maxWidth: '100%'
-              }}>
-                {benefit.text}
-              </span>
-            </div>
-          ))}
-        </div>
       </div>
-
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        
-        @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        @keyframes bounce {
-          0%, 80%, 100% {
-            transform: scale(0);
-          }
-          40% {
-            transform: scale(1);
-          }
-        }
-        
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-        
-        button:hover:not(:disabled) {
-          transform: translateY(-1px);
-        }
-        
-        button:active:not(:disabled) {
-          transform: scale(0.98);
-        }
-        
-        input:focus {
-          outline: none;
-          border-color: #F4A261 !important;
-          box-shadow: 0 0 0 3px rgba(244, 162, 97, 0.1);
-          transform: translateY(-1px);
-        }
-        
-        @media (max-width: 480px) {
-          div[style*="grid-template-columns: 1fr 1fr"] {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }

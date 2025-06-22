@@ -1,11 +1,44 @@
-/* src/pages/ProfilePage.css */
+/* src/pages/ProfilePage.css - COMPLETE VERSION WITH ALL STYLES */
+
+/* Base Styles */
 .profile-page {
   padding: 2rem 0;
-  background-color: var(--background);
+  background-color: var(--background, #f8f9fa);
   min-height: calc(100vh - 60px);
 }
 
-/* Profile Header */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Loading States - FIXED */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid var(--primary, #F4A261);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Profile Header - COMPLETE */
 .profile-header {
   display: flex;
   justify-content: space-between;
@@ -28,13 +61,18 @@
   border-radius: 50%;
   overflow: hidden;
   margin-right: 1.5rem;
-  background-color: var(--primary-light);
+  background-color: var(--primary-light, #f4d03f);
+  flex-shrink: 0;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .profile-avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
 }
 
 .avatar-placeholder {
@@ -46,16 +84,21 @@
   font-size: 3rem;
   color: white;
   font-weight: bold;
+  background: linear-gradient(135deg, #F4A261 0%, #F4D03F 100%);
+  border-radius: 50%;
 }
 
 .profile-info h1 {
   margin: 0 0 0.3rem 0;
-  color: var(--primary-dark);
+  color: var(--primary-dark, #2D1810);
+  font-size: 2rem;
+  font-weight: 700;
 }
 
 .member-since {
-  color: var(--primary);
+  color: var(--primary, #F4A261);
   margin-bottom: 0.8rem;
+  font-weight: 500;
 }
 
 .profile-badges {
@@ -71,6 +114,7 @@
   padding: 0.4rem 0.8rem;
   border-radius: 20px;
   font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .badge-icon {
@@ -100,7 +144,7 @@
 }
 
 .edit-profile-button {
-  background-color: var(--primary);
+  background-color: var(--primary, #F4A261);
   color: white;
   border: none;
   padding: 0.6rem 1.2rem;
@@ -111,10 +155,10 @@
 }
 
 .edit-profile-button:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--primary-dark, #e89548);
 }
 
-/* Profile Navigation */
+/* Profile Navigation - COMPLETE */
 .profile-nav {
   display: flex;
   margin-bottom: 1.5rem;
@@ -130,22 +174,25 @@
   border: none;
   border-bottom: 3px solid transparent;
   font-weight: 600;
-  color: var(--text-dark);
+  color: var(--text-dark, #374151);
   cursor: pointer;
   transition: all 0.2s;
+  flex: 1;
+  text-align: center;
 }
 
 .profile-nav-link:hover {
   background-color: #f8f8f8;
-  color: var(--primary);
+  color: var(--primary, #F4A261);
 }
 
 .profile-nav-link.active {
-  border-bottom-color: var(--primary);
-  color: var(--primary);
+  border-bottom-color: var(--primary, #F4A261);
+  color: var(--primary, #F4A261);
+  background-color: rgba(244, 162, 97, 0.05);
 }
 
-/* Profile Content */
+/* Profile Content - COMPLETE */
 .profile-content {
   background-color: white;
   border-radius: 12px;
@@ -153,15 +200,22 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* Overview Tab */
+/* Overview Tab - COMPLETE */
+.overview-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
 .stats-section {
   margin-bottom: 2.5rem;
 }
 
 .stats-section h2 {
   margin-bottom: 1.5rem;
-  color: var(--primary-dark);
+  color: var(--primary-dark, #2D1810);
   font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .stats-grid {
@@ -185,13 +239,14 @@
 .stat-value {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--primary, #F4A261);
   margin-bottom: 0.5rem;
 }
 
 .stat-label {
   font-size: 0.9rem;
-  color: var(--text-dark);
+  color: var(--text-dark, #374151);
+  font-weight: 500;
 }
 
 .profile-sections {
@@ -215,7 +270,8 @@
 
 .section-header h2, .section-header h3 {
   margin: 0;
-  color: var(--primary-dark);
+  color: var(--primary-dark, #2D1810);
+  font-weight: 600;
 }
 
 .taste-profile {
@@ -237,65 +293,49 @@
 
 .taste-value {
   font-weight: 600;
+  color: var(--text-dark, #374151);
 }
 
+/* Recent Reviews Section */
 .recent-reviews {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
 }
 
-.recent-review {
+.recent-review-item {
   display: flex;
   flex-direction: column;
   padding-bottom: 1.2rem;
   border-bottom: 1px solid #eee;
 }
 
-.recent-review:last-child {
+.recent-review-item:last-child {
   border-bottom: none;
 }
 
-.review-chocolate {
+.review-header {
   display: flex;
-  align-items: center;
-  text-decoration: none;
-  color: inherit;
-  margin-bottom: 0.8rem;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.review-chocolate img {
-  width: 50px;
-  height: 50px;
-  border-radius: 4px;
-  margin-right: 1rem;
-  object-fit: cover;
-}
-
-.review-chocolate-info h4 {
-  margin: 0 0 0.2rem 0;
-  font-size: 1.1rem;
-}
-
-.review-chocolate-info p {
+.review-header h4 {
   margin: 0;
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.review-content {
-  margin-left: 60px;
+  color: var(--primary-dark, #2D1810);
+  font-size: 1.1rem;
 }
 
 .review-rating {
   display: flex;
   align-items: center;
-  margin-bottom: 0.5rem;
+  gap: 0.5rem;
 }
 
 .star {
   color: #ddd;
   margin-right: 2px;
+  font-size: 1rem;
 }
 
 .star.filled {
@@ -303,18 +343,18 @@
 }
 
 .review-date {
-  margin-left: 1rem;
   font-size: 0.8rem;
   color: #999;
 }
 
 .review-text {
-  margin: 0;
+  margin: 0.5rem 0 0 0;
   line-height: 1.5;
+  color: var(--text-dark, #374151);
 }
 
 .see-all-link {
-  color: var(--primary);
+  color: var(--primary, #F4A261);
   text-decoration: none;
   font-weight: 600;
   margin-top: 1rem;
@@ -337,7 +377,13 @@
   color: #666;
 }
 
-/* Reviews Tab */
+/* Reviews Tab - COMPLETE */
+.reviews-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
 .reviews-list {
   display: flex;
   flex-direction: column;
@@ -348,6 +394,8 @@
   border: 1px solid #eee;
   border-radius: 8px;
   overflow: hidden;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .review-card-header {
@@ -358,8 +406,24 @@
   align-items: center;
 }
 
+.review-card-header h3 {
+  margin: 0 0 0.3rem 0;
+  color: var(--primary-dark, #2D1810);
+  font-size: 1.2rem;
+}
+
+.review-card-header p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
 .review-meta {
   text-align: right;
+}
+
+.review-rating-large {
+  margin-bottom: 0.5rem;
 }
 
 .review-rating-large .star {
@@ -368,6 +432,12 @@
 
 .review-card-body {
   padding: 1.2rem;
+}
+
+.review-card-body p {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--text-dark, #374151);
 }
 
 .review-card-actions {
@@ -385,10 +455,11 @@
   border-radius: 4px;
   cursor: pointer;
   font-weight: 600;
+  transition: background-color 0.2s;
 }
 
 .edit-review {
-  color: var(--primary);
+  color: var(--primary, #F4A261);
 }
 
 .edit-review:hover {
@@ -403,7 +474,13 @@
   background-color: #fee2e2;
 }
 
-/* Favorites Tab */
+/* Favorites Tab - COMPLETE */
+.favorites-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
 .favorites-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -416,6 +493,12 @@
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: relative;
+  transition: transform 0.2s;
+}
+
+.favorite-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 .favorite-link {
@@ -447,6 +530,7 @@
 .favorite-info h3 {
   margin: 0 0 0.3rem 0;
   font-size: 1.1rem;
+  color: var(--primary-dark, #2D1810);
 }
 
 .favorite-info p {
@@ -500,22 +584,37 @@
   content: "×";
   font-size: 20px;
   color: #ef4444;
+  font-weight: bold;
 }
 
 .favorite-card:hover .remove-favorite {
   opacity: 1;
 }
 
-/* Preferences Tab */
+/* Preferences Tab - COMPLETE */
+.preferences-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
 .preferences-form {
   display: flex;
   flex-direction: column;
   gap: 2rem;
 }
 
+.preference-section {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
 .preference-section h3 {
   margin: 0 0 1rem 0;
-  color: var(--primary-dark);
+  color: var(--primary-dark, #2D1810);
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 .checkbox-group {
@@ -528,15 +627,23 @@
   display: flex;
   align-items: center;
   cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.checkbox-label:hover {
+  background-color: rgba(244, 162, 97, 0.1);
 }
 
 .checkbox-label input {
   margin-right: 0.5rem;
+  cursor: pointer;
 }
 
 .save-preferences {
   align-self: flex-start;
-  background-color: var(--primary);
+  background-color: var(--primary, #F4A261);
   color: white;
   border: none;
   padding: 0.8rem 1.5rem;
@@ -548,10 +655,10 @@
 }
 
 .save-preferences:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--primary-dark, #e89548);
 }
 
-/* Empty States */
+/* Empty States - COMPLETE */
 .empty-state {
   text-align: center;
   padding: 3rem 0;
@@ -560,11 +667,12 @@
 .empty-state p {
   margin-bottom: 1.5rem;
   color: #666;
+  font-size: 1rem;
 }
 
 .action-button {
   display: inline-block;
-  background-color: var(--primary);
+  background-color: var(--primary, #F4A261);
   color: white;
   padding: 0.8rem 1.5rem;
   border-radius: 6px;
@@ -574,11 +682,10 @@
 }
 
 .action-button:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--primary-dark, #e89548);
 }
 
-/* src/pages/ProfilePage.css (continued) */
-/* Not Logged In */
+/* Not Logged In State - COMPLETE */
 .profile-not-logged-in {
   text-align: center;
   background-color: white;
@@ -590,8 +697,9 @@
 }
 
 .profile-not-logged-in h2 {
-  color: var(--primary-dark);
+  color: var(--primary-dark, #2D1810);
   margin-bottom: 1rem;
+  font-size: 1.5rem;
 }
 
 .profile-not-logged-in p {
@@ -611,12 +719,12 @@
   text-decoration: none;
   font-weight: 600;
   transition: all 0.2s;
+  border: 2px solid var(--primary, #F4A261);
 }
 
 .auth-button:first-child {
   background-color: white;
-  color: var(--primary);
-  border: 2px solid var(--primary);
+  color: var(--primary, #F4A261);
 }
 
 .auth-button:first-child:hover {
@@ -624,100 +732,106 @@
 }
 
 .auth-button.signup {
-  background-color: var(--primary);
+  background-color: var(--primary, #F4A261);
   color: white;
-  border: 2px solid var(--primary);
 }
 
 .auth-button.signup:hover {
-  background-color: var(--primary-dark);
-  border-color: var(--primary-dark);
+  background-color: var(--primary-dark, #e89548);
+  border-color: var(--primary-dark, #e89548);
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .profile-header {
-    flex-direction: column;
-  }
-  
-  .profile-actions {
-    margin: 1rem 0 0 0;
-    align-self: flex-start;
-  }
-  
+/* Responsive Design - COMPLETE */
+@media (max-width: 968px) {
   .profile-sections {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
   
-  .review-card-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .review-meta {
-    text-align: left;
-    margin-top: 1rem;
-  }
-  
-  .checkbox-group {
-    grid-template-columns: 1fr;
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* ADD THESE STYLES TO YOUR ProfilePage.css to fix avatar display */
-
-.profile-avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin-right: 1.5rem;
-  background-color: var(--primary-light);
-  flex-shrink: 0;
-  border: 3px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-
-.profile-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 50%;
-}
-
-.avatar-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
-  color: white;
-  font-weight: bold;
-  background: linear-gradient(135deg, #F4A261 0%, #F4D03F 100%);
-  border-radius: 50%;
-}
-
-/* Mobile responsive avatar fixes */
 @media (max-width: 768px) {
+  .profile-page {
+    padding: 1rem 0;
+  }
+  
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
+  
+  .profile-header-main {
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+  }
+  
   .profile-avatar {
+    margin-right: 0;
+    margin-bottom: 1rem;
     width: 80px;
     height: 80px;
-    margin-right: 1rem;
   }
   
   .avatar-placeholder {
     font-size: 2.5rem;
   }
   
-  .user-avatar {
-    width: 32px;
-    height: 32px;
+  .profile-actions {
+    margin: 1rem 0 0 0;
+    width: 100%;
   }
   
-  .user-initials {
-    font-size: 0.8rem;
+  .profile-nav {
+    flex-direction: column;
+  }
+  
+  .profile-nav-link {
+    text-align: center;
+    border-bottom: none;
+    border-right: 3px solid transparent;
+  }
+  
+  .profile-nav-link.active {
+    border-bottom: none;
+    border-right-color: var(--primary, #F4A261);
+  }
+  
+  .profile-content {
+    padding: 1.5rem;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .review-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .review-meta {
+    text-align: left;
+    width: 100%;
+  }
+  
+  .checkbox-group {
+    grid-template-columns: 1fr;
+  }
+  
+  .auth-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .favorites-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
 }
 
@@ -731,390 +845,27 @@
     font-size: 2rem;
   }
   
-  .user-avatar {
-    width: 30px;
-    height: 30px;
-  }
-  
-  .user-initials {
-    font-size: 0.75rem;
-  }
-}
-
-/* Add these styles to your existing ProfilePage.css */
-
-/* Contribution Badge Icons */
-.badge-icon.contributor {
-  fill: #10B981;
-}
-
-.badge-icon.scout {
-  fill: #F59E0B;
-}
-
-.badge-icon.builder {
-  fill: #8B5CF6;
-}
-
-/* Contribution Stat Card */
-.stat-card.contribution-stat {
-  background: linear-gradient(135deg, #F4A261 0%, #F4D03F 100%);
-  color: var(--primary-dark);
-}
-
-.stat-card.contribution-stat .stat-value {
-  color: var(--primary-dark);
-  font-weight: 800;
-}
-
-.stat-card.contribution-stat .stat-label {
-  color: rgba(45, 24, 16, 0.8);
-  font-weight: 600;
-}
-
-/* Contributions Tab */
-.contributions-tab {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.contributions-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.contribution-card {
-  background: white;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border: 1px solid #F3F4F6;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.contribution-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-}
-
-.contribution-card::before {
-  content: '🍫';
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  font-size: 1.5rem;
-  opacity: 0.7;
-  z-index: 2;
-}
-
-.contribution-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-}
-
-.contribution-image {
-  height: 180px;
-  overflow: hidden;
-  background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.contribution-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.contribution-card:hover .contribution-image img {
-  transform: scale(1.05);
-}
-
-.contribution-info {
-  padding: 1.5rem;
-}
-
-.contribution-info h3 {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--primary-dark);
-  margin: 0 0 0.5rem 0;
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.contribution-maker {
-  color: var(--medium-gray);
-  font-size: 0.95rem;
-  margin: 0 0 1rem 0;
-  font-weight: 500;
-}
-
-.contribution-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid #F3F4F6;
-}
-
-.contribution-date {
-  font-size: 0.85rem;
-  color: var(--medium-gray);
-}
-
-.contribution-status {
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 0.25rem 0.5rem;
-  border-radius: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.contribution-status.approved {
-  background: #D1FAE5;
-  color: #065F46;
-}
-
-.contribution-status.pending {
-  background: #FEF3C7;
-  color: #92400E;
-}
-
-.contribution-stats {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.contribution-stats .stat {
-  font-size: 0.9rem;
-  color: var(--dark-gray);
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-/* Empty State for Contributions */
-.contributions-tab .empty-state {
-  text-align: center;
-  padding: 4rem 2rem;
-  background: linear-gradient(135deg, #FDFCFC 0%, #F8F9FA 100%);
-  border-radius: 20px;
-  border: 2px dashed #E5E7EB;
-  margin: 2rem 0;
-}
-
-.empty-icon {
-  font-size: 4rem;
-  margin-bottom: 1.5rem;
-  opacity: 0.8;
-}
-
-.contributions-tab .empty-state h3 {
-  color: var(--primary-dark);
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-  font-family: 'Playfair Display', serif;
-}
-
-.contributions-tab .empty-state p {
-  color: var(--medium-gray);
-  margin-bottom: 2rem;
-  font-size: 1.1rem;
-  line-height: 1.6;
-}
-
-/* Contribution Achievements */
-.contribution-achievements {
-  background: white;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  border: 1px solid #F3F4F6;
-  margin-top: 2rem;
-}
-
-.contribution-achievements h3 {
-  color: var(--primary-dark);
-  margin-bottom: 1.5rem;
-  font-size: 1.5rem;
-  text-align: center;
-  font-family: 'Playfair Display', serif;
-}
-
-.achievement-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1.5rem;
-}
-
-.achievement-item {
-  text-align: center;
-  padding: 1.5rem;
-  background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
-  border-radius: 16px;
-  border: 1px solid #E5E7EB;
-  transition: transform 0.3s ease;
-}
-
-.achievement-item:hover {
-  transform: translateY(-2px);
-}
-
-.achievement-item:nth-child(1) {
-  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-  border-color: #F59E0B;
-}
-
-.achievement-item:nth-child(2) {
-  background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
-  border-color: #3B82F6;
-}
-
-.achievement-item:nth-child(3) {
-  background: linear-gradient(135deg, #F3E8FF 0%, #E9D5FF 100%);
-  border-color: #8B5CF6;
-}
-
-.achievement-number {
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--primary-dark);
-  margin-bottom: 0.5rem;
-  font-family: 'Inter', sans-serif;
-}
-
-.achievement-label {
-  font-size: 0.875rem;
-  color: var(--medium-gray);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Add Chocolate CTA */
-.add-chocolate-cta {
-  background: linear-gradient(135deg, var(--accent) 0%, #F4D03F 100%);
-  border-radius: 16px;
-  padding: 2rem;
-  text-align: center;
-  margin: 2rem 0;
-  border: 1px solid var(--accent);
-  box-shadow: 0 8px 32px rgba(244, 162, 97, 0.2);
-}
-
-.add-chocolate-cta h3 {
-  color: var(--primary-dark);
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  font-family: 'Playfair Display', serif;
-}
-
-.add-chocolate-cta p {
-  color: rgba(45, 24, 16, 0.8);
-  font-size: 1.1rem;
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
-}
-
-.add-chocolate-cta .action-button {
-  background: var(--primary-dark);
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 12px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1.1rem;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  box-shadow: 0 4px 16px rgba(45, 24, 16, 0.3);
-}
-
-.add-chocolate-cta .action-button:hover {
-  background: #2A1703;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(45, 24, 16, 0.4);
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-  .contributions-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1rem;
-  }
-  
-  .contribution-info {
+  .profile-header {
     padding: 1rem;
   }
   
-  .contribution-meta {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-  
-  .achievement-stats {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  
-  .achievement-item {
+  .profile-content {
     padding: 1rem;
   }
   
-  .achievement-number {
-    font-size: 1.5rem;
+  .stat-card {
+    padding: 1rem;
   }
   
-  .add-chocolate-cta {
-    padding: 1.5rem;
+  .stat-value {
+    font-size: 2rem;
   }
   
-  .add-chocolate-cta h3 {
-    font-size: 1.25rem;
-  }
-  
-  .add-chocolate-cta p {
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .contributions-grid {
+  .favorites-grid {
     grid-template-columns: 1fr;
   }
   
-  .contribution-card::before {
-    font-size: 1.25rem;
-    top: 8px;
-    right: 8px;
-  }
-  
-  .contributions-tab .empty-state {
-    padding: 2rem 1rem;
-  }
-  
-  .empty-icon {
-    font-size: 3rem;
-  }
-  
-  .contribution-achievements {
-    padding: 1.5rem;
+  .profile-section {
+    padding: 1rem;
   }
 }
