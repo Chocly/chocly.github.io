@@ -1,4 +1,4 @@
-// Modified src/App.jsx - Complete version with add chocolate route
+// Modified src/App.jsx - Fixed for GitHub Pages deployment
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import ChocolateDetailPage from './pages/ChocolateDetailPage';
@@ -8,7 +8,7 @@ import BrowseAllPage from './pages/BrowseAllPage';
 import BarcodeSearchPage from './pages/BarcodeSearchPage';
 import CategoryPage from './pages/CategoryPage';
 import MakerPage from './pages/MakerPage';
-import AddChocolatePage from './pages/AddChocolatePage'; // Add this import
+import AddChocolatePage from './pages/AddChocolatePage';
 import UnifiedAuthPage from './components/auth/UnifiedAuthPage';
 import { AuthProvider } from './contexts/AuthContext';
 import Header from './components/Header';
@@ -22,8 +22,11 @@ import TermsOfServicePage from './pages/TermsOfServicePage';
 import './App.css';
 
 function App() {
+  // Get the base URL for GitHub Pages
+  const basename = import.meta.env.BASE_URL || '/';
+  
   return (
-    <BrowserRouter basename={import.meta.env.BASE_URL || '/'}>
+    <BrowserRouter basename={basename}>
       <AuthProvider>
         <div className="app">
           <Header />
@@ -36,6 +39,8 @@ function App() {
               <Route path="/barcode" element={<BarcodeSearchPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/auth" element={<UnifiedAuthPage />} />
+              <Route path="/login" element={<UnifiedAuthPage />} />
+              <Route path="/signup" element={<UnifiedAuthPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
@@ -45,8 +50,9 @@ function App() {
               <Route path="/category/:categorySlug" element={<CategoryPage />} />
               <Route path="/maker" element={<MakerPage />} />
               <Route path="/maker/:makerName" element={<MakerPage />} />
-              {/* New Add Chocolate Route */}
               <Route path="/add-chocolate" element={<AddChocolatePage />} />
+              {/* Fallback route for any unmatched paths */}
+              <Route path="*" element={<HomePage />} />
             </Routes>
           </main>
           <Footer />
