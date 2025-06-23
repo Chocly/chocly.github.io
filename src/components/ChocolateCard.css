@@ -614,3 +614,128 @@
     font-size: 0.75rem;
   }
 }
+
+/* ADD THESE NEW STYLES to your existing src/components/ChocolateCard.css */
+
+/* Enhanced Cacao Percentage Styling */
+.card-details .percentage {
+  background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid transparent !important;
+}
+
+.card-details .percentage::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%, rgba(255, 255, 255, 0.1) 100%);
+  border-radius: inherit;
+}
+
+/* Enhanced Origin Styling */
+.card-details .origin {
+  background: linear-gradient(135deg, #E8F5E8 0%, #D4F4DD 100%) !important;
+  color: #2F7D32 !important;
+  border: 2px solid rgba(47, 125, 50, 0.2) !important;
+}
+
+/* Dynamic Star Colors Based on Rating */
+.star.empty {
+  color: #E5E7EB !important;
+}
+
+.star.filled-1 {
+  color: #EF4444 !important; /* Red for 1 star */
+  text-shadow: 0 2px 4px rgba(239, 68, 68, 0.3) !important;
+}
+
+.star.filled-2 {
+  color: #F97316 !important; /* Orange for 2 stars */
+  text-shadow: 0 2px 4px rgba(249, 115, 22, 0.3) !important;
+}
+
+.star.filled-3 {
+  color: #EAB308 !important; /* Yellow for 3 stars */
+  text-shadow: 0 2px 4px rgba(234, 179, 8, 0.3) !important;
+}
+
+.star.filled-4 {
+  color: #84CC16 !important; /* Light green for 4 stars */
+  text-shadow: 0 2px 4px rgba(132, 204, 22, 0.3) !important;
+}
+
+.star.filled-5 {
+  color: #22C55E !important; /* Green for 5 stars */
+  text-shadow: 0 2px 4px rgba(34, 197, 94, 0.3) !important;
+}
+
+.star.half {
+  position: relative;
+  color: #E5E7EB;
+}
+
+.star.half::before {
+  content: '★';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  overflow: hidden;
+  color: inherit;
+  text-shadow: inherit;
+}
+
+/* Enhanced Hover Effects */
+.chocolate-card:hover .card-details .origin,
+.chocolate-card:hover .card-details .percentage {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.chocolate-card:hover .stars .star {
+  transform: scale(1.1);
+}
+
+/* Override any existing star styles to ensure our new colors show */
+.star.filled {
+  color: inherit !important; /* This allows our new color classes to take precedence */
+}
+
+/* Optional: Quality Indicators (you can add these later) */
+.quality-indicators {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.quality-tag {
+  font-size: 0.65rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.quality-tag.organic {
+  background: #DCFCE7;
+  color: #166534;
+}
+
+.quality-tag.award {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.quality-tag.rare {
+  background: #E0E7FF;
+  color: #3730A3;
+}

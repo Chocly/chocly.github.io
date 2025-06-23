@@ -1,21 +1,32 @@
-// src/components/ChocolateCard.jsx - Clean version with heart button
+// src/components/ChocolateCard.jsx - Enhanced version with dynamic star colors
 import React from 'react';
 import { Link } from 'react-router-dom';
 import FavoriteButton from './FavoriteButton';
 import './ChocolateCard.css';
 
 function ChocolateCard({ chocolate, featured = false }) {
-  // Helper function to render star ratings
+  // Enhanced helper function to render star ratings with dynamic colors
   const renderStars = (rating) => {
     const stars = [];
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
     
+    // Determine star color class based on overall rating
+    const getStarColorClass = (rating) => {
+      if (rating >= 4.5) return 'filled-5'; // Green for excellent
+      if (rating >= 3.5) return 'filled-4'; // Light green for good  
+      if (rating >= 2.5) return 'filled-3'; // Yellow for average
+      if (rating >= 1.5) return 'filled-2'; // Orange for below average
+      return 'filled-1'; // Red for poor
+    };
+    
+    const colorClass = getStarColorClass(rating);
+    
     for (let i = 1; i <= 5; i++) {
       if (i <= fullStars) {
-        stars.push(<span key={i} className="star full">★</span>);
+        stars.push(<span key={i} className={`star ${colorClass}`}>★</span>);
       } else if (i === fullStars + 1 && hasHalfStar) {
-        stars.push(<span key={i} className="star half">★</span>);
+        stars.push(<span key={i} className={`star half ${colorClass}`}>★</span>);
       } else {
         stars.push(<span key={i} className="star empty">★</span>);
       }
