@@ -1,6 +1,8 @@
 // src/pages/AboutPage.jsx
 import React from 'react';
 import './AboutPage.css';
+// Import your image
+import founderImage from '../assets/About Us Image.jpg';
 
 function AboutPage() {
   return (
@@ -24,10 +26,17 @@ function AboutPage() {
             </p>
           </div>
           <div className="story-image">
-            {/* Placeholder for image - replace with actual image when available */}
-            <div className="image-placeholder">
-              <span>Our Founder's Story</span>
-            </div>
+            {/* Replace the placeholder with your actual image */}
+            <img 
+              src={founderImage} 
+              alt="Chocly founder and the inspiration behind our chocolate journey" 
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                borderRadius: '12px'
+              }}
+            />
           </div>
         </section>
 

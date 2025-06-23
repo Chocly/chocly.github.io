@@ -7,7 +7,7 @@ import ChocolateCard from '../components/ChocolateCard';
 import './HomePage.css';
 
 // Import your local hero image
-import heroBackground from '../assets/Stock-Photo-Preview.jpeg';
+import heroBackground from '../assets/Firefly hero image.jpg';
 
 // Sample chocolate data for demonstration
 const sampleChocolates = [
