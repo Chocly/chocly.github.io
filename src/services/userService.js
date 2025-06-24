@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 
+
 // Update user profile
 export const updateUserProfile = async (userId, data) => {
   try {
@@ -168,5 +169,60 @@ export const toggleFavorite = async (userId, chocolateId) => {
   } catch (error) {
     console.error("Error toggling favorite:", error);
     throw error;
+  }
+};
+
+export const addToWantToTry = async (userId, chocolate) => {
+  try {
+    const userRef = doc(db, 'users', userId);
+    const wantToTryItem = {
+      chocolateId: chocolate.id,
+      name: chocolate.name,
+      maker: chocolate.maker,
+      imageUrl: chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate',
+      addedAt: new Date()
+    };
+    
+    await updateDoc(userRef, {
+      wantToTry: arrayUnion(wantToTryItem)
+    });
+    
+    return wantToTryItem;
+  } catch (error) {
+    console.error('Error adding to want to try:', error);
+    throw error;
+  }
+};
+
+export const removeFromWantToTry = async (userId, chocolate) => {
+  try {
+    const userRef = doc(db, 'users', userId);
+    
+    // Get current want to try list to find exact item to remove
+    const userDoc = await getDoc(userRef);
+    const wantToTryList = userDoc.data()?.wantToTry || [];
+    const itemToRemove = wantToTryList.find(item => item.chocolateId === chocolate.id);
+    
+    if (itemToRemove) {
+      await updateDoc(userRef, {
+        wantToTry: arrayRemove(itemToRemove)
+      });
+    }
+  } catch (error) {
+    console.error('Error removing from want to try:', error);
+    throw error;
+  }
+};
+
+export const isChocolateInWantToTry = async (userId, chocolateId) => {
+  try {
+    const userRef = doc(db, 'users', userId);
+    const userDoc = await getDoc(userRef);
+    const wantToTryList = userDoc.data()?.wantToTry || [];
+    
+    return wantToTryList.some(item => item.chocolateId === chocolateId);
+  } catch (error) {
+    console.error('Error checking want to try status:', error);
+    return false;
   }
 };

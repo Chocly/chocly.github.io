@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { addUserChocolate, getAllTags, searchChocolates, addReview } from '../services/chocolateFirebaseService';
+import { addUserChocolate, getAllTags, searchChocolates } from '../services/chocolateFirebaseService';
+import { addReview } from '../services/reviewService';
 import ImageUploader from '../components/ImageUploader';
 import './AddChocolatePage.css';
 
@@ -271,15 +272,31 @@ function AddChocolatePage() {
       const reviewPayload = {
         chocolateId: result.id,
         userId: currentUser.uid,
+        user: currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User', // Match field name used in ChocolateDetailPage
         userName: currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User',
+        userPhotoURL: currentUser.photoURL || null,
         rating: reviewData.rating,
         text: reviewData.text.trim(),
         title: reviewData.title.trim() || undefined,
         isFirstReview: true, // Flag to indicate this is the contributor's initial review
-        helpful: 0
+        helpful: 0,
+        chocolate: {
+          id: result.id,
+          name: result.name,
+          maker: result.maker,
+          imageUrl: result.imageUrl || 'https://placehold.co/300x300?text=Chocolate'
+        }
       };
 
       console.log('📝 Adding initial review:', reviewPayload);
+      
+      // Debug the current user information
+      console.log('🔍 Debug Current User Info:');
+      console.log('- UID:', currentUser.uid);
+      console.log('- Display Name:', currentUser.displayName);
+      console.log('- Email:', currentUser.email);
+      console.log('- Photo URL:', currentUser.photoURL);
+      
       await addReview(reviewPayload);
       
       setSuccess(true);

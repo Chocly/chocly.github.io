@@ -3,6 +3,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import FavoriteButton from './FavoriteButton';
 import './ChocolateCard.css';
+import WantToTryButton from './WantToTryButton';
+import { useAuth } from '../contexts/AuthContext';
+
 
 function ChocolateCard({ chocolate, featured = false }) {
   // Enhanced helper function to render star ratings with dynamic colors
@@ -44,6 +47,10 @@ function ChocolateCard({ chocolate, featured = false }) {
     return chocolate.maker || 'Unknown Maker';
   };
 
+  function ChocolateCard({ chocolate }) {
+    // Add this line to get currentUser:
+    const { currentUser } = useAuth();
+  
   return (
     <div className={`chocolate-card ${featured ? 'featured' : ''}`}>
       {/* Chocolate image - links to detail page */}
@@ -65,6 +72,13 @@ function ChocolateCard({ chocolate, featured = false }) {
         className="card-overlay"
       />
       
+                {/* New WantToTryButton */}
+                <WantToTryButton 
+            chocolate={chocolate} 
+            currentUser={currentUser}
+            className="shadow-sm"
+          />
+
       <div className="card-content">
         {/* Clickable maker name - links to maker page */}
         <Link 
@@ -99,6 +113,7 @@ function ChocolateCard({ chocolate, featured = false }) {
       </div>
     </div>
   );
+}
 }
 
 export default ChocolateCard;

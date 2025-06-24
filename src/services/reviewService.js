@@ -15,6 +15,9 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 
+// Enhanced getUserReviews function in reviewService.js
+import { getChocolateById } from './chocolateFirebaseService'; // Import this
+
 // Get all reviews for a chocolate
 export const getChocolateReviews = async (chocolateId) => {
   try {
@@ -42,9 +45,10 @@ export const getChocolateReviews = async (chocolateId) => {
   }
 };
 
-// Get all reviews by a user
 export const getUserReviews = async (userId) => {
   try {
+    console.log('🔍 Getting reviews for user:', userId);
+    
     const q = query(
       collection(db, "reviews"),
       where("userId", "==", userId),
@@ -53,18 +57,66 @@ export const getUserReviews = async (userId) => {
 
     const snapshot = await getDocs(q);
     
-    // For demo purposes, we'll add some sample reviews if none exist
+    // If no reviews found, return empty array (remove the sample data)
     if (snapshot.empty) {
-      return getSampleUserReviews();
+      console.log('No reviews found for user');
+      return [];
     }
     
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    const reviews = [];
+    
+    // Process each review and fetch chocolate data
+    for (const docSnapshot of snapshot.docs) {
+      const reviewData = {
+        id: docSnapshot.id,
+        ...docSnapshot.data()
+      };
+      
+      console.log('📝 Processing review:', reviewData.id);
+      
+      // If the review already has chocolate data, use it
+      if (reviewData.chocolate && reviewData.chocolate.name) {
+        console.log('✅ Review already has chocolate data');
+        reviews.push(reviewData);
+      } else {
+        // Fetch chocolate data using the chocolateId
+        try {
+          console.log('🔍 Fetching chocolate data for ID:', reviewData.chocolateId);
+          const chocolateData = await getChocolateById(reviewData.chocolateId);
+          
+          // Add chocolate info to the review
+          reviewData.chocolate = {
+            id: chocolateData.id,
+            name: chocolateData.name,
+            maker: chocolateData.maker,
+            imageUrl: chocolateData.imageUrl || 'https://placehold.co/300x300?text=Chocolate'
+          };
+          
+          console.log('✅ Added chocolate data:', reviewData.chocolate.name);
+          reviews.push(reviewData);
+          
+        } catch (chocolateError) {
+          console.error('❌ Failed to fetch chocolate for review:', reviewData.id, chocolateError);
+          
+          // Add review with fallback chocolate info
+          reviewData.chocolate = {
+            id: reviewData.chocolateId || 'unknown',
+            name: 'Unknown Chocolate',
+            maker: 'Unknown Maker',
+            imageUrl: 'https://placehold.co/300x300?text=Unknown'
+          };
+          
+          reviews.push(reviewData);
+        }
+      }
+    }
+    
+    console.log('✅ Processed', reviews.length, 'reviews with chocolate data');
+    return reviews;
+    
   } catch (error) {
     console.error("Error getting user reviews:", error);
-    throw error;
+    return []; // Return empty array instead of throwing
   }
 };
 

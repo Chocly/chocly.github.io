@@ -347,30 +347,46 @@ export const getChocolateReviews = async (chocolateId) => {
 };
 
 export const addReview = async (reviewData) => {
-  const docRef = await addDoc(reviewsCollection, {
-    ...reviewData,
-    createdAt: new Date()
-  });
-  
-  const chocolateRef = doc(db, 'chocolates', reviewData.chocolateId);
-  const chocolateDoc = await getDoc(chocolateRef);
-  
-  if (chocolateDoc.exists()) {
-    const chocolateData = chocolateDoc.data();
-    const currentTotal = chocolateData.averageRating * chocolateData.reviewCount;
-    const newCount = chocolateData.reviewCount + 1;
-    const newAverage = (currentTotal + reviewData.rating) / newCount;
+  try {
+    console.log('💾 Adding review to Firestore:', reviewData);
     
-    await updateDoc(chocolateRef, {
-      averageRating: newAverage,
-      reviewCount: newCount
+    const docRef = await addDoc(reviewsCollection, {
+      ...reviewData,
+      createdAt: new Date()
     });
+    
+    console.log('✅ Review added with ID:', docRef.id);
+    
+    const chocolateRef = doc(db, 'chocolates', reviewData.chocolateId);
+    const chocolateDoc = await getDoc(chocolateRef);
+    
+    if (chocolateDoc.exists()) {
+      const chocolateData = chocolateDoc.data();
+      const currentTotal = chocolateData.averageRating * chocolateData.reviewCount;
+      const newCount = chocolateData.reviewCount + 1;
+      const newAverage = (currentTotal + reviewData.rating) / newCount;
+      
+      await updateDoc(chocolateRef, {
+        averageRating: newAverage,
+        reviewCount: newCount
+      });
+      
+      console.log('✅ Updated chocolate rating:', newAverage);
+    } else {
+      console.warn('⚠️ Chocolate not found for review:', reviewData.chocolateId);
+    }
+
+    // Return the complete review object including the ID
+    return {
+      id: docRef.id,
+      ...reviewData,
+      createdAt: new Date()
+    };
+    
+  } catch (error) {
+    console.error('💥 Error adding review:', error);
+    throw error;
   }
-  
-  return {
-    id: docRef.id,
-    ...reviewData
-  };
 };
 
 export const getAllTags = async () => {

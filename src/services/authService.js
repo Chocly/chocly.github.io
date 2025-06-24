@@ -143,6 +143,7 @@ export const createUserProfile = async (user, additionalData = {}) => {
           dietaryRestrictions: [],
           flavorPreferences: []
         },
+        wantToTry: [], // <-- NEW: Array to store want to try items
         ...additionalData
       });
     } catch (error) {
