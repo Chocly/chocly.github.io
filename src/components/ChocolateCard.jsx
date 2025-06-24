@@ -6,8 +6,10 @@ import './ChocolateCard.css';
 import WantToTryButton from './WantToTryButton';
 import { useAuth } from '../contexts/AuthContext';
 
-
 function ChocolateCard({ chocolate, featured = false }) {
+  // Add useAuth hook here
+  const { currentUser } = useAuth();
+
   // Enhanced helper function to render star ratings with dynamic colors
   const renderStars = (rating) => {
     const stars = [];
@@ -47,10 +49,6 @@ function ChocolateCard({ chocolate, featured = false }) {
     return chocolate.maker || 'Unknown Maker';
   };
 
-  function ChocolateCard({ chocolate }) {
-    // Add this line to get currentUser:
-    const { currentUser } = useAuth();
-  
   return (
     <div className={`chocolate-card ${featured ? 'featured' : ''}`}>
       {/* Chocolate image - links to detail page */}
@@ -65,19 +63,22 @@ function ChocolateCard({ chocolate, featured = false }) {
         </div>
       </Link>
       
-      {/* Heart/Favorite button - positioned over the image */}
-      <FavoriteButton 
-        chocolateId={chocolate.id} 
-        size="medium" 
-        className="card-overlay"
-      />
-      
-                {/* New WantToTryButton */}
-                <WantToTryButton 
-            chocolate={chocolate} 
-            currentUser={currentUser}
-            className="shadow-sm"
-          />
+      {/* Action buttons container */}
+      <div className="card-actions">
+        {/* Heart/Favorite button */}
+        <FavoriteButton 
+          chocolateId={chocolate.id} 
+          size="medium" 
+          className="card-overlay"
+        />
+        
+        {/* WantToTryButton */}
+        <WantToTryButton 
+          chocolate={chocolate} 
+          currentUser={currentUser}
+          className="shadow-sm"
+        />
+      </div>
 
       <div className="card-content">
         {/* Clickable maker name - links to maker page */}
@@ -113,7 +114,6 @@ function ChocolateCard({ chocolate, featured = false }) {
       </div>
     </div>
   );
-}
 }
 
 export default ChocolateCard;

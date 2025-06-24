@@ -739,3 +739,12 @@
   background: #E0E7FF;
   color: #3730A3;
 }
+
+.card-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
