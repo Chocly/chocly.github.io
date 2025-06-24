@@ -158,23 +158,20 @@ img {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1.5rem;
   }
-  
-  /* Fix for header on mobile */
-  .header .container {
-    flex-wrap: wrap;
-  }
 }
+  
+
 
 @media (max-width: 480px) {
   .container {
     padding: 0 0.75rem;
   }
   
-  .chocolate-grid,
-  .results-grid,
-  .favorites-grid,
-  .featured-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 1rem;
+    .chocolate-grid,
+    .results-grid,
+    .favorites-grid,
+    .featured-grid {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1rem;
+    }
   }
-}
