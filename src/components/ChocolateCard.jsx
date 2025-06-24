@@ -114,6 +114,6 @@ function ChocolateCard({ chocolate, featured = false }) {
       </div>
     </div>
   );
-}
+}  
 
 export default ChocolateCard;
