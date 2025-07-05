@@ -1,9 +1,10 @@
-// src/pages/ProfilePage.jsx - COMPLETE VERSION WITH ALL FEATURES
+// src/pages/ProfilePage.jsx - IMPROVED: Better loading and error handling
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserReviews } from '../services/reviewService';
 import { getFavoriteChocolates, removeFromFavorites } from '../services/userService';
+import { updateUserProfile } from '../services/authService';
 import './ProfilePage.css';
 
 // SVG Icons - Complete BadgeIcon component
@@ -35,11 +36,21 @@ const BadgeIcon = ({ name }) => {
 };
 
 function ProfilePage() {
-  const { currentUser, userProfile, loading: authLoading } = useAuth();
+  const { currentUser, userProfile, loading: authLoading, error: authError, profileCreating, refreshProfile } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
   const [reviews, setReviews] = useState([]);
   const [favorites, setFavorites] = useState([]);
-  const [loading, setLoading] = useState(false); // FIXED: Don't start as true
+  const [loading, setLoading] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editForm, setEditForm] = useState({
+    displayName: '',
+    bio: '',
+    location: '',
+    favoriteChocolateTypes: [],
+    isProfilePublic: true,
+    profilePicture: null
+  });
   const [preferences, setPreferences] = useState({
     favoriteTypes: [],
     dietaryRestrictions: [],
@@ -47,172 +58,7 @@ function ProfilePage() {
   });
   const navigate = useNavigate();
 
-  // Debug logging
-  useEffect(() => {
-    console.log('🔍 ProfilePage Debug:');
-    console.log('Auth loading:', authLoading);
-    console.log('Current user:', currentUser?.uid || 'None');
-    console.log('User profile:', userProfile ? 'Exists' : 'None');
-  }, [authLoading, currentUser, userProfile]);
-
-  // FIXED: Better data loading logic
-  useEffect(() => {
-    const loadUserData = async () => {
-      if (!currentUser || authLoading) {
-        return;
-      }
-
-      try {
-        setLoading(true);
-        console.log('Loading user data for:', currentUser.uid);
-        
-        // Load reviews and favorites in parallel
-        const [userReviews, userFavorites] = await Promise.all([
-          getUserReviews(currentUser.uid).catch(err => {
-            console.warn('Failed to load reviews:', err);
-            return []; // Return empty array on error
-          }),
-          getFavoriteChocolates(currentUser.uid).catch(err => {
-            console.warn('Failed to load favorites:', err);
-            return []; // Return empty array on error
-          })
-        ]);
-        
-        console.log('Loaded reviews:', userReviews.length);
-        console.log('Loaded favorites:', userFavorites.length);
-        
-        setReviews(userReviews);
-        setFavorites(userFavorites);
-
-        // Load preferences from userProfile
-        if (userProfile?.preferences) {
-          setPreferences(userProfile.preferences);
-        }
-        
-      } catch (error) {
-        console.error("Error loading user data:", error);
-        // Don't throw error, just log it
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    // Only load data if we have a current user and auth is not loading
-    if (currentUser && !authLoading) {
-      loadUserData();
-    }
-  }, [currentUser, authLoading, userProfile]);
-
-  // Calculate user statistics - COMPLETE VERSION
-  const calculateStats = () => {
-    if (!userProfile) return {
-      totalReviews: 0,
-      totalTasted: 0,
-      averageRating: 0,
-      favoriteType: 'None yet',
-      favoriteMaker: 'None yet'
-    };
-
-    const totalReviews = reviews.length;
-    const totalTasted = reviews.length;
-    
-    const averageRating = totalReviews > 0 
-      ? reviews.reduce((sum, review) => sum + (review.rating || 0), 0) / totalReviews 
-      : 0;
-    
-    // Calculate favorite type
-    const typeCount = {};
-    reviews.forEach(review => {
-      if (review.chocolate?.type) {
-        const type = review.chocolate.type;
-        typeCount[type] = (typeCount[type] || 0) + 1;
-      }
-    });
-    
-    let favoriteType = 'None yet';
-    let maxCount = 0;
-    Object.entries(typeCount).forEach(([type, count]) => {
-      if (count > maxCount) {
-        maxCount = count;
-        favoriteType = type;
-      }
-    });
-    
-    // Calculate favorite maker
-    const makerCount = {};
-    reviews.forEach(review => {
-      if (review.chocolate?.maker) {
-        const maker = review.chocolate.maker;
-        makerCount[maker] = (makerCount[maker] || 0) + 1;
-      }
-    });
-    
-    let favoriteMaker = 'None yet';
-    maxCount = 0;
-    Object.entries(makerCount).forEach(([maker, count]) => {
-      if (count > maxCount) {
-        maxCount = count;
-        favoriteMaker = maker;
-      }
-    });
-    
-    return {
-      totalReviews,
-      totalTasted,
-      averageRating,
-      favoriteType,
-      favoriteMaker
-    };
-  };
-
-  // Calculate badges - COMPLETE VERSION
-  const getBadges = () => {
-    if (!userProfile) return ['Newcomer'];
-    
-    const badges = ['Newcomer'];
-    const reviewCount = reviews.length;
-    
-    if (reviewCount >= 5) badges.push('Reviewer');
-    if (reviewCount >= 15) badges.push('Enthusiast');
-    if (reviewCount >= 50) badges.push('Connoisseur');
-    
-    return badges;
-  };
-
-  // Handle removing favorites - COMPLETE VERSION
-  const handleRemoveFavorite = async (chocolateId) => {
-    try {
-      await removeFromFavorites(currentUser.uid, chocolateId);
-      const updatedFavorites = await getFavoriteChocolates(currentUser.uid);
-      setFavorites(updatedFavorites);
-    } catch (error) {
-      console.error('Error removing favorite:', error);
-      alert('Error removing favorite. Please try again.');
-    }
-  };
-
-  // Handle preferences update
-  const handlePreferencesUpdate = (type, value) => {
-    setPreferences(prev => ({
-      ...prev,
-      [type]: prev[type].includes(value) 
-        ? prev[type].filter(item => item !== value)
-        : [...prev[type], value]
-    }));
-  };
-
-  const savePreferences = async () => {
-    try {
-      // In a real app, you would save preferences to Firestore
-      console.log('Saving preferences:', preferences);
-      alert('Preferences saved successfully!');
-    } catch (error) {
-      console.error('Error saving preferences:', error);
-      alert('Error saving preferences. Please try again.');
-    }
-  };
-
-  // FIXED: Better conditional rendering
+  // IMPROVED: Better conditional rendering with retry logic
   if (!authLoading && !currentUser) {
     return (
       <div className="profile-page">
@@ -244,34 +90,280 @@ function ProfilePage() {
     );
   }
 
-  // Handle case where user exists but profile hasn't been created yet
-  if (currentUser && !userProfile) {
+  // IMPROVED: Handle profile creation state better
+  if (currentUser && (!userProfile || profileCreating)) {
     return (
       <div className="profile-page">
         <div className="container">
           <div className="profile-not-logged-in">
-            <h2>Setting up your profile...</h2>
-            <p>We're creating your profile. This should only take a moment.</p>
+            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🍫</div>
+              <h2>Setting up your chocolate journey!</h2>
+              <p>We're creating your profile. This should only take a moment.</p>
+            </div>
+            
             <div className="loading-container">
               <div className="loading-spinner"></div>
-              <p>Please wait...</p>
+              <p>Creating your profile...</p>
             </div>
-            <p style={{ marginTop: '2rem', fontSize: '0.9rem', color: '#666' }}>
-              If this takes too long, try{' '}
-              <button 
-                onClick={() => window.location.reload()} 
-                style={{ color: 'var(--primary)', background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer' }}
-              >
-                refreshing the page
-              </button>
-              {' '}or{' '}
-              <Link to="/auth" style={{ color: 'var(--primary)' }}>signing in again</Link>.
-            </p>
+            
+            {/* IMPROVED: Better retry options */}
+            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+              <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
+                This is taking longer than expected.
+              </p>
+              
+              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <button 
+                  onClick={() => {
+                    setRetryCount(prev => prev + 1);
+                    refreshProfile();
+                  }}
+                  style={{ 
+                    color: 'var(--primary)', 
+                    background: 'white', 
+                    border: '2px solid var(--primary)', 
+                    padding: '0.5rem 1rem',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontSize: '0.9rem'
+                  }}
+                >
+                  Refresh Profile {retryCount > 0 && `(${retryCount})`}
+                </button>
+                
+                <button 
+                  onClick={() => window.location.reload()} 
+                  style={{ 
+                    color: 'var(--primary)', 
+                    background: 'white', 
+                    border: '2px solid var(--primary)', 
+                    padding: '0.5rem 1rem',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontSize: '0.9rem'
+                  }}
+                >
+                  Reload Page
+                </button>
+                
+                <Link 
+                  to="/" 
+                  style={{ 
+                    color: 'white', 
+                    background: 'var(--primary)', 
+                    border: '2px solid var(--primary)', 
+                    padding: '0.5rem 1rem',
+                    borderRadius: '8px',
+                    textDecoration: 'none',
+                    fontSize: '0.9rem'
+                  }}
+                >
+                  Go to Homepage
+                </Link>
+              </div>
+              
+              {authError && (
+                <div style={{ 
+                  marginTop: '1rem', 
+                  padding: '1rem', 
+                  background: '#FEE2E2', 
+                  color: '#DC2626', 
+                  borderRadius: '8px',
+                  fontSize: '0.9rem'
+                }}>
+                  <strong>Error:</strong> {authError}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
     );
   }
+
+  // Load user data
+  useEffect(() => {
+    if (currentUser && userProfile) {
+      loadUserData();
+      // Initialize edit form with current profile data
+      setEditForm({
+        displayName: userProfile.displayName || '',
+        bio: userProfile.bio || '',
+        location: userProfile.location || '',
+        favoriteChocolateTypes: userProfile.favoriteChocolateTypes || [],
+        isProfilePublic: userProfile.isProfilePublic !== false, // Default to true
+        profilePicture: null // File input, not the current URL
+      });
+    }
+  }, [currentUser, userProfile]);
+
+  const loadUserData = async () => {
+    setLoading(true);
+    try {
+      // Load reviews and favorites in parallel
+      const [userReviews, userFavorites] = await Promise.all([
+        getUserReviews(currentUser.uid).catch(() => []),
+        getFavoriteChocolates(currentUser.uid).catch(() => [])
+      ]);
+      
+      setReviews(userReviews);
+      setFavorites(userFavorites);
+      
+      // Set preferences from user profile
+      if (userProfile.preferences) {
+        setPreferences(userProfile.preferences);
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const calculateStats = () => {
+    return {
+      totalReviews: reviews.length,
+      averageRating: reviews.length > 0 
+        ? (reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length).toFixed(1)
+        : 0,
+      favoriteChocolates: favorites.length,
+      tastingCount: userProfile?.tastingCount || 0
+    };
+  };
+
+  const getBadges = () => {
+    const badges = ['Newcomer'];
+    const reviewCount = reviews.length;
+    
+    if (reviewCount >= 5) badges.push('Reviewer');
+    if (reviewCount >= 20) badges.push('Enthusiast');
+    if (reviewCount >= 50) badges.push('Connoisseur');
+    
+    return badges;
+  };
+
+  const handleRemoveFavorite = async (chocolateId) => {
+    try {
+      await removeFromFavorites(currentUser.uid, chocolateId);
+      setFavorites(prev => prev.filter(fav => fav.id !== chocolateId));
+    } catch (error) {
+      console.error('Error removing favorite:', error);
+      alert('Error removing from favorites. Please try again.');
+    }
+  };
+
+  const handlePreferenceChange = (type, value) => {
+    setPreferences(prev => ({
+      ...prev,
+      [type]: prev[type].includes(value) 
+        ? prev[type].filter(item => item !== value)
+        : [...prev[type], value]
+    }));
+  };
+
+  const savePreferences = async () => {
+    try {
+      // In a real app, you would save preferences to Firestore
+      console.log('Saving preferences:', preferences);
+      alert('Preferences saved successfully!');
+    } catch (error) {
+      console.error('Error saving preferences:', error);
+      alert('Error saving preferences. Please try again.');
+    }
+  };
+
+  // Edit Profile Functions
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    // Reset form to current profile data
+    setEditForm({
+      displayName: userProfile.displayName || '',
+      bio: userProfile.bio || '',
+      location: userProfile.location || '',
+      favoriteChocolateTypes: userProfile.favoriteChocolateTypes || [],
+      isProfilePublic: userProfile.isProfilePublic !== false,
+      profilePicture: null
+    });
+  };
+
+  const handleEditFormChange = (field, value) => {
+    setEditForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleChocolateTypeToggle = (type) => {
+    setEditForm(prev => ({
+      ...prev,
+      favoriteChocolateTypes: prev.favoriteChocolateTypes.includes(type)
+        ? prev.favoriteChocolateTypes.filter(t => t !== type)
+        : [...prev.favoriteChocolateTypes, type]
+    }));
+  };
+
+  const handleProfilePictureChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Validate file type and size
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file');
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        alert('Image must be smaller than 5MB');
+        return;
+      }
+      setEditForm(prev => ({
+        ...prev,
+        profilePicture: file
+      }));
+    }
+  };
+
+  const handleSaveProfile = async () => {
+    if (!editForm.displayName.trim()) {
+      alert('Display name is required');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Prepare update data
+      const updateData = {
+        displayName: editForm.displayName.trim(),
+        bio: editForm.bio.trim(),
+        location: editForm.location.trim(),
+        favoriteChocolateTypes: editForm.favoriteChocolateTypes,
+        isProfilePublic: editForm.isProfilePublic
+      };
+
+      // Add profile picture if selected
+      if (editForm.profilePicture) {
+        updateData.profilePicture = editForm.profilePicture;
+      }
+
+      // Update the profile
+      await updateUserProfile(currentUser.uid, updateData);
+      
+      // Refresh profile data
+      await refreshProfile();
+      
+      alert('Profile updated successfully!');
+      setIsEditing(false);
+      
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      alert('Error saving profile: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const stats = calculateStats();
   const badges = getBadges();
@@ -279,7 +371,7 @@ function ProfilePage() {
   return (
     <div className="profile-page">
       <div className="container">
-        {/* Profile Header - COMPLETE VERSION */}
+        {/* Profile Header */}
         <div className="profile-header">
           <div className="profile-header-main">
             <div className="profile-avatar">
@@ -296,6 +388,12 @@ function ProfilePage() {
               <p className="member-since">
                 Member since {userProfile?.createdAt?.toDate?.()?.toLocaleDateString() || 'Recently'}
               </p>
+              {userProfile?.location && (
+                <p className="user-location">📍 {userProfile.location}</p>
+              )}
+              {userProfile?.bio && (
+                <p className="user-bio">{userProfile.bio}</p>
+              )}
               <div className="profile-badges">
                 {badges.map(badge => (
                   <div className="badge" key={badge}>
@@ -307,11 +405,169 @@ function ProfilePage() {
             </div>
           </div>
           <div className="profile-actions">
-            <button className="edit-profile-button">Edit Profile</button>
+            <button 
+              className="edit-profile-button"
+              onClick={handleEditClick}
+              disabled={isEditing}
+            >
+              {isEditing ? 'Editing...' : 'Edit Profile'}
+            </button>
           </div>
         </div>
 
-        {/* Profile Navigation - COMPLETE VERSION */}
+        {/* Edit Profile Modal/Section */}
+        {isEditing && (
+          <div className="edit-profile-section">
+            <div className="edit-profile-header">
+              <h3>Edit Your Profile</h3>
+              <div className="edit-actions">
+                <button 
+                  className="cancel-btn"
+                  onClick={handleCancelEdit}
+                  disabled={loading}
+                >
+                  Cancel
+                </button>
+                <button 
+                  className="save-btn"
+                  onClick={handleSaveProfile}
+                  disabled={loading}
+                >
+                  {loading ? 'Saving...' : 'Save Changes'}
+                </button>
+              </div>
+            </div>
+
+            <div className="edit-profile-form">
+              {/* Profile Picture */}
+              <div className="form-section">
+                <label className="form-label">Profile Picture</label>
+                <div className="profile-picture-upload">
+                  <div className="current-picture">
+                    {userProfile?.photoURL ? (
+                      <img src={userProfile.photoURL} alt="Current profile" />
+                    ) : (
+                      <div className="avatar-placeholder">
+                        {userProfile?.displayName ? userProfile.displayName.charAt(0).toUpperCase() : 'U'}
+                      </div>
+                    )}
+                  </div>
+                  <div className="upload-controls">
+                    <input
+                      type="file"
+                      id="profile-picture"
+                      accept="image/*"
+                      onChange={handleProfilePictureChange}
+                      style={{ display: 'none' }}
+                    />
+                    <label htmlFor="profile-picture" className="upload-btn">
+                      Choose New Picture
+                    </label>
+                    {editForm.profilePicture && (
+                      <p className="file-selected">
+                        ✓ {editForm.profilePicture.name}
+                      </p>
+                    )}
+                    <p className="upload-hint">JPG, PNG or GIF. Max 5MB.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Display Name */}
+              <div className="form-section">
+                <label className="form-label">Display Name *</label>
+                <input
+                  type="text"
+                  value={editForm.displayName}
+                  onChange={(e) => handleEditFormChange('displayName', e.target.value)}
+                  placeholder="Your display name"
+                  className="form-input"
+                  maxLength={50}
+                />
+                <p className="form-hint">This is how other users will see your name</p>
+              </div>
+
+              {/* Location */}
+              <div className="form-section">
+                <label className="form-label">Location</label>
+                <input
+                  type="text"
+                  value={editForm.location}
+                  onChange={(e) => handleEditFormChange('location', e.target.value)}
+                  placeholder="City, Country"
+                  className="form-input"
+                  maxLength={100}
+                />
+                <p className="form-hint">Help others discover chocolate communities near you</p>
+              </div>
+
+              {/* Bio */}
+              <div className="form-section">
+                <label className="form-label">About Me</label>
+                <textarea
+                  value={editForm.bio}
+                  onChange={(e) => handleEditFormChange('bio', e.target.value)}
+                  placeholder="Tell us about your chocolate journey..."
+                  className="form-textarea"
+                  rows={4}
+                  maxLength={500}
+                />
+                <p className="form-hint">{editForm.bio.length}/500 characters</p>
+              </div>
+
+              {/* Favorite Chocolate Types */}
+              <div className="form-section">
+                <label className="form-label">Favorite Chocolate Types</label>
+                <div className="checkbox-grid">
+                  {['Dark Chocolate', 'Milk Chocolate', 'White Chocolate', 'Single Origin', 'Bean-to-Bar', 'Artisanal', 'Organic', 'Fair Trade'].map(type => (
+                    <label key={type} className="checkbox-item">
+                      <input
+                        type="checkbox"
+                        checked={editForm.favoriteChocolateTypes.includes(type)}
+                        onChange={() => handleChocolateTypeToggle(type)}
+                      />
+                      <span>{type}</span>
+                    </label>
+                  ))}
+                </div>
+                <p className="form-hint">These will be highlighted on your profile</p>
+              </div>
+
+              {/* Privacy Settings */}
+              <div className="form-section">
+                <label className="form-label">Privacy Settings</label>
+                <div className="privacy-options">
+                  <label className="radio-item">
+                    <input
+                      type="radio"
+                      name="privacy"
+                      checked={editForm.isProfilePublic === true}
+                      onChange={() => handleEditFormChange('isProfilePublic', true)}
+                    />
+                    <div className="radio-content">
+                      <span className="radio-title">🌍 Public Profile</span>
+                      <span className="radio-description">Other users can see your profile, reviews, and favorites</span>
+                    </div>
+                  </label>
+                  <label className="radio-item">
+                    <input
+                      type="radio"
+                      name="privacy"
+                      checked={editForm.isProfilePublic === false}
+                      onChange={() => handleEditFormChange('isProfilePublic', false)}
+                    />
+                    <div className="radio-content">
+                      <span className="radio-title">🔒 Private Profile</span>
+                      <span className="radio-description">Only you can see your profile details</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Profile Navigation */}
         <div className="profile-nav">
           <button 
             className={`profile-nav-link ${activeTab === 'overview' ? 'active' : ''}`}
@@ -339,247 +595,133 @@ function ProfilePage() {
           </button>
         </div>
 
-        {/* Tab Content - COMPLETE VERSION */}
+        {/* Tab Content */}
         <div className="profile-content">
           {/* Overview Tab */}
           {activeTab === 'overview' && (
             <div className="overview-tab">
-              <div className="stats-section">
-                <h2>Your Chocolate Journey</h2>
-                <div className="stats-grid">
-                  <div className="stat-card">
-                    <div className="stat-value">{stats.totalTasted}</div>
-                    <div className="stat-label">Chocolates Tasted</div>
-                  </div>
-                  <div className="stat-card">
-                    <div className="stat-value">{stats.totalReviews}</div>
-                    <div className="stat-label">Reviews Written</div>
-                  </div>
-                  <div className="stat-card">
-                    <div className="stat-value">{stats.averageRating.toFixed(1)}</div>
-                    <div className="stat-label">Average Rating</div>
-                  </div>
-                  <div className="stat-card">
-                    <div className="stat-value">{favorites.length}</div>
-                    <div className="stat-label">Favorites</div>
-                  </div>
+              <div className="stats-grid">
+                <div className="stat-card">
+                  <div className="stat-number">{stats.totalReviews}</div>
+                  <div className="stat-label">Reviews Written</div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-number">{stats.averageRating}</div>
+                  <div className="stat-label">Average Rating</div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-number">{stats.favoriteChocolates}</div>
+                  <div className="stat-label">Favorite Chocolates</div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-number">{stats.tastingCount}</div>
+                  <div className="stat-label">Tastings Logged</div>
                 </div>
               </div>
 
-              <div className="profile-sections">
-                <div className="profile-section">
-                  <div className="section-header">
-                    <h3>Your Taste Profile</h3>
-                  </div>
-                  <div className="taste-profile">
-                    <div className="taste-item">
-                      <span className="taste-label">Favorite Chocolate Type:</span>
-                      <span className="taste-value">{stats.favoriteType}</span>
-                    </div>
-                    <div className="taste-item">
-                      <span className="taste-label">Favorite Maker:</span>
-                      <span className="taste-value">{stats.favoriteMaker}</span>
-                    </div>
-                    <div className="taste-item">
-                      <span className="taste-label">Top Flavor Notes:</span>
-                      <span className="taste-value">
-                        {preferences.flavorPreferences?.length > 0 
-                          ? preferences.flavorPreferences.slice(0, 3).join(', ')
-                          : 'Keep reviewing to discover your preferences!'
-                        }
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="profile-section">
-                  <div className="section-header">
-                    <h3>Recent Reviews</h3>
-                  </div>
-                  {reviews.length > 0 ? (
-                    <div className="recent-reviews">
-                      {reviews.slice(0, 3).map((review, index) => (
-                        <div key={index} className="recent-review-item">
-                          <div className="review-header">
-                            <h4>{review.chocolate?.name || 'Unknown Chocolate'}</h4>
-                            <div className="review-rating">
-                              {[1, 2, 3, 4, 5].map(star => (
-                                <span key={star} className={`star ${star <= (review.rating || 0) ? 'filled' : ''}`}>★</span>
-                              ))}
-                              <span className="review-date">
-                                {review.createdAt?.toDate ? 
-                                  review.createdAt.toDate().toLocaleDateString() : 
-                                  'Recently'
-                                }
-                              </span>
-                            </div>
-                            <p className="review-text">
-                              {review.text ? 
-                                (review.text.length > 120 ? `${review.text.substring(0, 120)}...` : review.text) : 
-                                'No review text'
-                              }
-                            </p>
-                          </div>
+              <div className="recent-activity">
+                <h3>Recent Activity</h3>
+                {reviews.length > 0 ? (
+                  <div className="activity-list">
+                    {reviews.slice(0, 3).map(review => (
+                      <div key={review.id} className="activity-item">
+                        <div className="activity-content">
+                          <p>Reviewed <strong>{review.chocolate?.name}</strong></p>
+                          <p className="activity-date">{new Date(review.createdAt).toLocaleDateString()}</p>
                         </div>
-                      ))}
-                      <button 
-                        onClick={() => setActiveTab('reviews')} 
-                        className="see-all-link"
-                        style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-                      >
-                        See all reviews
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="empty-state">
-                      <p>You haven't written any reviews yet.</p>
-                      <Link to="/browse" className="action-button">Discover Chocolates to Review</Link>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="recommendations-section">
-                <div className="section-header">
-                  <h3>Recommended For You</h3>
-                </div>
-                <div className="recommendation-message">
-                  <p>Keep reviewing chocolates to get personalized recommendations based on your taste preferences!</p>
-                  <Link to="/browse" className="action-button">Browse Chocolates</Link>
-                </div>
+                        <div className="activity-rating">
+                          {'★'.repeat(review.rating)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p>No reviews yet. <Link to="/browse">Start exploring chocolates!</Link></p>
+                )}
               </div>
             </div>
           )}
 
-          {/* Reviews Tab - COMPLETE VERSION */}
+          {/* Reviews Tab */}
           {activeTab === 'reviews' && (
             <div className="reviews-tab">
-              <div className="section-header">
-                <h2>Your Reviews</h2>
-              </div>
-              
+              <h3>Your Reviews</h3>
               {loading ? (
                 <div className="loading-container">
                   <div className="loading-spinner"></div>
-                  <p>Loading your reviews...</p>
+                  <p>Loading reviews...</p>
                 </div>
               ) : reviews.length > 0 ? (
                 <div className="reviews-list">
-                  {reviews.map((review, index) => (
-                    <div key={index} className="review-card">
-                      <div className="review-card-header">
-                        <div>
-                          <h3>{review.chocolate?.name || 'Unknown Chocolate'}</h3>
-                          <p>{review.chocolate?.maker || 'Unknown Maker'}</p>
-                        </div>
-                        <div className="review-meta">
-                          <div className="review-rating-large">
-                            {[1, 2, 3, 4, 5].map(star => (
-                              <span key={star} className={`star ${star <= (review.rating || 0) ? 'filled' : ''}`}>★</span>
-                            ))}
-                          </div>
-                          <div className="review-date">
-                            {review.createdAt?.toDate?.()?.toLocaleDateString() || 'Recently'}
-                          </div>
+                  {reviews.map(review => (
+                    <div key={review.id} className="review-item">
+                      <div className="review-header">
+                        <h4>{review.chocolate?.name}</h4>
+                        <div className="review-rating">
+                          {'★'.repeat(review.rating)}
                         </div>
                       </div>
-                      <div className="review-card-body">
-                        <p>{review.text || 'No review text provided.'}</p>
-                      </div>
-                      <div className="review-card-actions">
-                        <button className="edit-review">Edit</button>
-                        <button className="delete-review">Delete</button>
-                      </div>
+                      <p>{review.text}</p>
+                      <p className="review-date">{new Date(review.createdAt).toLocaleDateString()}</p>
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className="empty-state">
                   <p>You haven't written any reviews yet.</p>
-                  <Link to="/browse" className="action-button">Start Reviewing Chocolates</Link>
+                  <Link to="/browse" className="btn btn-primary">Find Chocolates to Review</Link>
                 </div>
               )}
             </div>
           )}
 
-          {/* Favorites Tab - COMPLETE VERSION */}
+          {/* Favorites Tab */}
           {activeTab === 'favorites' && (
             <div className="favorites-tab">
-              <div className="section-header">
-                <h2>Your Favorites</h2>
-              </div>
-              
+              <h3>Your Favorite Chocolates</h3>
               {loading ? (
                 <div className="loading-container">
                   <div className="loading-spinner"></div>
-                  <p>Loading your favorites...</p>
+                  <p>Loading favorites...</p>
                 </div>
               ) : favorites.length > 0 ? (
                 <div className="favorites-grid">
-                  {favorites.map((favorite, index) => (
-                    <div key={index} className="favorite-card">
-                      <Link to={`/chocolate/${favorite.id}`} className="favorite-link">
-                        <div className="favorite-image">
-                          <img 
-                            src={favorite.imageUrl || '/placeholder-chocolate.jpg'} 
-                            alt={favorite.name}
-                            onError={(e) => {
-                              e.target.src = '/placeholder-chocolate.jpg';
-                            }}
-                          />
-                        </div>
-                        <div className="favorite-info">
-                          <h3>{favorite.name}</h3>
-                          <p>{favorite.maker}</p>
-                          <div className="favorite-details">
-                            <span>{favorite.type}</span>
-                            <span>{favorite.cacaoPercentage}%</span>
-                          </div>
-                          <div className="favorite-rating">
-                            {[1, 2, 3, 4, 5].map(star => (
-                              <span key={star} className={`star ${star <= (favorite.averageRating || 0) ? 'filled' : ''}`}>★</span>
-                            ))}
-                            <span className="rating-count">({favorite.reviewCount || 0})</span>
-                          </div>
-                        </div>
-                      </Link>
+                  {favorites.map(chocolate => (
+                    <div key={chocolate.id} className="favorite-item">
+                      <h4>{chocolate.name}</h4>
+                      <p>{chocolate.maker}</p>
                       <button 
+                        onClick={() => handleRemoveFavorite(chocolate.id)}
                         className="remove-favorite"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleRemoveFavorite(favorite.id);
-                        }}
-                        title="Remove from favorites"
-                      ></button>
+                      >
+                        Remove
+                      </button>
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className="empty-state">
                   <p>You haven't added any favorites yet.</p>
-                  <Link to="/browse" className="action-button">Discover Amazing Chocolates</Link>
+                  <Link to="/browse" className="btn btn-primary">Discover Chocolates</Link>
                 </div>
               )}
             </div>
           )}
 
-          {/* Preferences Tab - COMPLETE VERSION */}
+          {/* Preferences Tab */}
           {activeTab === 'preferences' && (
             <div className="preferences-tab">
-              <div className="section-header">
-                <h2>Your Preferences</h2>
-              </div>
-              
+              <h3>Your Preferences</h3>
               <div className="preferences-form">
                 <div className="preference-section">
-                  <h3>Favorite Chocolate Types</h3>
-                  <div className="checkbox-group">
-                    {['Dark', 'Milk', 'White', 'Ruby', 'Single Origin', 'Flavored'].map(type => (
-                      <label key={type} className="checkbox-label">
+                  <h4>Favorite Types</h4>
+                  <div className="preference-options">
+                    {['Dark', 'Milk', 'White', 'Single Origin', 'Bean-to-Bar'].map(type => (
+                      <label key={type} className="preference-option">
                         <input
                           type="checkbox"
-                          checked={preferences.favoriteTypes?.includes(type) || false}
-                          onChange={() => handlePreferencesUpdate('favoriteTypes', type)}
+                          checked={preferences.favoriteTypes.includes(type)}
+                          onChange={() => handlePreferenceChange('favoriteTypes', type)}
                         />
                         {type}
                       </label>
@@ -588,14 +730,14 @@ function ProfilePage() {
                 </div>
 
                 <div className="preference-section">
-                  <h3>Dietary Restrictions</h3>
-                  <div className="checkbox-group">
-                    {['Vegan', 'Dairy-Free', 'Gluten-Free', 'Sugar-Free', 'Nut-Free'].map(restriction => (
-                      <label key={restriction} className="checkbox-label">
+                  <h4>Dietary Restrictions</h4>
+                  <div className="preference-options">
+                    {['Vegan', 'Gluten-Free', 'Nut-Free', 'Dairy-Free', 'Sugar-Free'].map(restriction => (
+                      <label key={restriction} className="preference-option">
                         <input
                           type="checkbox"
-                          checked={preferences.dietaryRestrictions?.includes(restriction) || false}
-                          onChange={() => handlePreferencesUpdate('dietaryRestrictions', restriction)}
+                          checked={preferences.dietaryRestrictions.includes(restriction)}
+                          onChange={() => handlePreferenceChange('dietaryRestrictions', restriction)}
                         />
                         {restriction}
                       </label>
@@ -604,14 +746,14 @@ function ProfilePage() {
                 </div>
 
                 <div className="preference-section">
-                  <h3>Flavor Preferences</h3>
-                  <div className="checkbox-group">
-                    {['Fruity', 'Nutty', 'Floral', 'Spicy', 'Earthy', 'Caramel', 'Vanilla', 'Berry', 'Citrus'].map(flavor => (
-                      <label key={flavor} className="checkbox-label">
+                  <h4>Flavor Preferences</h4>
+                  <div className="preference-options">
+                    {['Fruity', 'Nutty', 'Floral', 'Earthy', 'Spicy', 'Sweet'].map(flavor => (
+                      <label key={flavor} className="preference-option">
                         <input
                           type="checkbox"
-                          checked={preferences.flavorPreferences?.includes(flavor) || false}
-                          onChange={() => handlePreferencesUpdate('flavorPreferences', flavor)}
+                          checked={preferences.flavorPreferences.includes(flavor)}
+                          onChange={() => handlePreferenceChange('flavorPreferences', flavor)}
                         />
                         {flavor}
                       </label>
@@ -619,7 +761,7 @@ function ProfilePage() {
                   </div>
                 </div>
 
-                <button className="save-preferences" onClick={savePreferences}>
+                <button onClick={savePreferences} className="save-preferences-btn">
                   Save Preferences
                 </button>
               </div>
