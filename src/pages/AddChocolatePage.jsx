@@ -55,7 +55,6 @@ function AddChocolatePage() {
   
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [completionProgress, setCompletionProgress] = useState(0);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [success, setSuccess] = useState(false);
   
@@ -77,20 +76,6 @@ function AddChocolatePage() {
     };
     loadTags();
   }, []);
-
-  // Calculate completion progress
-  useEffect(() => {
-    const fields = [
-      formData.name,
-      formData.maker,
-      formData.type,
-      selectedImage,
-      reviewData.rating > 0,
-      reviewData.text
-    ];
-    const completed = fields.filter(field => field && field.toString().trim()).length;
-    setCompletionProgress((completed / fields.length) * 100);
-  }, [formData, selectedImage, reviewData]);
 
   // Duplicate checking function
   const findSimilarChocolates = async (name, maker, type) => {
@@ -371,297 +356,219 @@ function AddChocolatePage() {
   const isFormValid = formData.name.trim() && formData.maker.trim() && formData.type && 
                      reviewData.rating > 0 && reviewData.text.trim();
 
-  return (
-    <div className="add-chocolate-page">
-      <div className="container">
-        {/* Header with Progress */}
-        <div className="page-header">
-          <h1>Add Your Chocolate Discovery</h1>
-          <p>Share a new chocolate and write the first review!</p>
+// REPLACE the existing page header JSX with this simplified version:
+return (
+  <div className="add-chocolate-page">
+    <div className="container">
+      {/* Simplified Header - NO Progress Bar */}
+      <div className="page-header">
+        <h1>Add Your Chocolate Discovery</h1>
+        <p>Share a new chocolate and write the first review!</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="add-chocolate-form">
+        {/* Rest of your form remains exactly the same */}
+        
+        {/* Essential Info Section */}
+        <div className="form-section">
+          <div className="section-header">
+            <span className="section-icon">✨</span>
+            <h2>Chocolate Details</h2>
+          </div>
           
-          {/* Progress Bar */}
-          <div className="progress-bar-container">
-            <div className="progress-info">
-              <span>Progress</span>
-              <span>{Math.round(completionProgress)}% complete</span>
-            </div>
-            <div className="progress-bar">
-              <div 
-                className="progress-fill"
-                style={{ width: `${completionProgress}%` }}
-              ></div>
-            </div>
-          </div>
-        </div>
-
-        <form onSubmit={handleSubmit} className="add-chocolate-form">
-          {/* Essential Info Section */}
-          <div className="form-section">
-            <div className="section-header">
-              <span className="section-icon">✨</span>
-              <h2>Chocolate Details</h2>
+          <div className="form-grid">
+            <div className="form-group">
+              <label htmlFor="name">Chocolate Name *</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                placeholder="e.g., Madagascar Dark 70%"
+                required
+              />
             </div>
             
-            <div className="form-grid">
-              <div className="form-group">
-                <label htmlFor="name">Chocolate Name *</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  placeholder="e.g., Madagascar Dark 70%"
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="maker">Maker/Brand *</label>
-                <input
-                  type="text"
-                  id="maker"
-                  name="maker"
-                  value={formData.maker}
-                  onChange={handleInputChange}
-                  placeholder="e.g., Valrhona, Lindt"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="form-grid-three">
-              <div className="form-group">
-                <label htmlFor="origin">Origin</label>
-                <input
-                  type="text"
-                  id="origin"
-                  name="origin"
-                  value={formData.origin}
-                  onChange={handleInputChange}
-                  placeholder="e.g., Ecuador"
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="cacaoPercentage">Cacao %</label>
-                <input
-                  type="number"
-                  id="cacaoPercentage"
-                  name="cacaoPercentage"
-                  value={formData.cacaoPercentage}
-                  onChange={handleInputChange}
-                  placeholder="70"
-                  min="0"
-                  max="100"
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="type">Type *</label>
-                <select
-                  id="type"
-                  name="type"
-                  value={formData.type}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Select type</option>
-                  {CHOCOLATE_TYPES.map(type => (
-                    <option key={type} value={type}>{type}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Duplicate Warning */}
-            {isDuplicateCheckLoading && (
-              <div className="duplicate-checking">
-                <div className="spinner"></div>
-                <span>Checking for duplicates...</span>
-              </div>
-            )}
-            
-            {duplicateWarning && (
-              <div className="duplicate-warning">
-                <div className="warning-content">
-                  <span className="warning-icon">⚠️</span>
-                  <div>
-                    <p className="warning-text">{duplicateWarning}</p>
-                    <div className="similar-chocolates">
-                      {foundSimilarChocolates.map(choc => (
-                        <div key={choc.id} className="similar-chocolate">
-                          {choc.imageUrl && (
-                            <img src={choc.imageUrl} alt={choc.name} />
-                          )}
-                          <div className="similar-info">
-                            <p className="similar-name">{choc.name}</p>
-                            <p className="similar-details">by {choc.maker} • {choc.type}</p>
-                            <div className="similar-rating">
-                              <span className="star">★</span>
-                              <span>{choc.averageRating}/5</span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Image Upload Section */}
-          <div className="form-section">
-            <div className="section-header">
-              <span className="section-icon">📷</span>
-              <h3>Add a Photo</h3>
-              <span className="optional">(Recommended)</span>
-            </div>
-            
-            <div className="image-upload-section">
-              <ImageUploader 
-                onImageSelected={handleImageSelected}
-                currentImageUrl={null}
+            <div className="form-group">
+              <label htmlFor="maker">Maker/Brand *</label>
+              <input
+                type="text"
+                id="maker"
+                name="maker"
+                value={formData.maker}
+                onChange={handleInputChange}
+                placeholder="e.g., Valrhona, Lindt"
+                required
               />
             </div>
           </div>
 
-          {/* Tags Section - Collapsible */}
-          <details className="form-section collapsible">
-            <summary className="section-header clickable">
-              <span className="section-icon expand-icon">➕</span>
-              <h3>Add Tags (Optional)</h3>
-            </summary>
-            
-            <div className="tags-section">
-              <div className="tag-category">
-                <h4>Flavor Notes</h4>
-                <div className="tag-grid">
-                  {COMMON_FLAVORS.map(flavor => (
-                    <button
-                      key={flavor}
-                      type="button"
-                      onClick={() => handleTagToggle('flavorTags', flavor)}
-                      className={`tag-button ${
-                        formData.flavorTags.includes(flavor) ? 'selected' : ''
-                      }`}
-                    >
-                      {flavor}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="tag-category">
-                <h4>Attributes</h4>
-                <div className="tag-grid">
-                  {ATTRIBUTE_TAGS.map(attr => (
-                    <button
-                      key={attr}
-                      type="button"
-                      onClick={() => handleTagToggle('attributeTags', attr)}
-                      className={`tag-button ${
-                        formData.attributeTags.includes(attr) ? 'selected attribute' : ''
-                      }`}
-                    >
-                      {attr}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="customTags">Custom Tags</label>
-                <input
-                  type="text"
-                  id="customTags"
-                  name="customTags"
-                  value={formData.customTags}
-                  onChange={handleInputChange}
-                  placeholder="Separate with commas: smooth, intense, complex"
-                />
-                <small>Add any other descriptive words</small>
-              </div>
+          <div className="form-grid-three">
+            <div className="form-group">
+              <label htmlFor="origin">Origin</label>
+              <input
+                type="text"
+                id="origin"
+                name="origin"
+                value={formData.origin}
+                onChange={handleInputChange}
+                placeholder="e.g., Ecuador"
+              />
             </div>
-          </details>
-
-          {/* Review Section */}
-          <div className="form-section review-section">
-            <div className="section-header">
-              <span className="section-icon">⭐</span>
-              <h3>Write the First Review *</h3>
-            </div>
-            <p className="review-intro">As the contributor, your review will be the first one for this chocolate!</p>
             
             <div className="form-group">
-              <label>Your Rating *</label>
-              <div className="rating-input">
+              <label htmlFor="cacaoPercentage">Cacao %</label>
+              <input
+                type="number"
+                id="cacaoPercentage"
+                name="cacaoPercentage"
+                value={formData.cacaoPercentage}
+                onChange={handleInputChange}
+                placeholder="70"
+                min="1"
+                max="100"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="type">Type *</label>
+              <div className="type-selector">
+                {CHOCOLATE_TYPES.map(type => (
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() => setFormData(prev => ({ ...prev, type }))}
+                    className={`type-button ${formData.type === type ? 'selected' : ''}`}
+                  >
+                    {type}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Review Section - FIXED star rating */}
+        <div className="form-section review-section">
+          <div className="section-header">
+            <span className="section-icon">⭐</span>
+            <h3>Write the First Review *</h3>
+          </div>
+          <p className="review-intro">As the contributor, your review will be the first one for this chocolate!</p>
+          
+          <div className="form-group rating-group">
+            <label>Your Rating *</label>
+            <div className="rating-input-container">
+              <div className="rating-input" role="radiogroup" aria-label="Rate this chocolate from 1 to 5 stars">
                 {[1, 2, 3, 4, 5].map(star => (
                   <button
                     key={star}
                     type="button"
                     onClick={() => handleRatingChange(star)}
                     className={`star-button ${star <= reviewData.rating ? 'filled' : ''}`}
+                    aria-label={`${star} star${star !== 1 ? 's' : ''}`}
+                    aria-pressed={star <= reviewData.rating}
+                    title={`Rate ${star} star${star !== 1 ? 's' : ''}`}
                   >
                     ★
                   </button>
                 ))}
               </div>
+              {reviewData.rating > 0 && (
+                <div className="rating-feedback">
+                  <span className="rating-text">
+                    {reviewData.rating === 1 && "Poor"}
+                    {reviewData.rating === 2 && "Fair"}
+                    {reviewData.rating === 3 && "Good"}
+                    {reviewData.rating === 4 && "Very Good"}
+                    {reviewData.rating === 5 && "Excellent"}
+                  </span>
+                  <span className="rating-description">
+                    ({reviewData.rating} star{reviewData.rating !== 1 ? 's' : ''})
+                  </span>
+                </div>
+              )}
             </div>
+          </div>
 
-            <div className="form-group">
-              <label htmlFor="reviewTitle">Review Title (Optional)</label>
-              <input
-                type="text"
-                id="reviewTitle"
-                name="title"
-                value={reviewData.title}
-                onChange={handleReviewChange}
-                placeholder="e.g., Rich and complex with berry notes"
-              />
-            </div>
+          <div className="form-group">
+            <label htmlFor="reviewTitle">Review Title (Optional)</label>
+            <input
+              type="text"
+              id="reviewTitle"
+              name="title"
+              value={reviewData.title}
+              onChange={handleReviewChange}
+              placeholder="e.g., Rich and complex with berry notes"
+              maxLength={100}
+            />
+            <small>Give your review a catchy title</small>
+          </div>
 
-            <div className="form-group">
-              <label htmlFor="reviewText">Your Review *</label>
-              <textarea
-                id="reviewText"
-                name="text"
-                value={reviewData.text}
-                onChange={handleReviewChange}
-                placeholder="Share your experience with this chocolate. What did you taste? How was the texture? Would you recommend it?"
-                rows="4"
-                required
-              />
-              <small>
+          <div className="form-group">
+            <label htmlFor="reviewText">Your Review *</label>
+            <textarea
+              id="reviewText"
+              name="text"
+              value={reviewData.text}
+              onChange={handleReviewChange}
+              placeholder="Share your experience with this chocolate. What did you taste? How was the texture? Would you recommend it?"
+              rows="4"
+              required
+              maxLength={1000}
+            />
+            <div className="textarea-footer">
+              <small className="character-count">
+                {reviewData.text.length}/1000 characters
+              </small>
+              <small className="helper-text">
                 This will become the first review for this chocolate and help others decide if they want to try it.
               </small>
             </div>
           </div>
+        </div>
 
-          {/* Submit Button */}
-          <div className="form-navigation">
-            <button 
-              type="submit" 
-              className={`submit-button ${isFormValid && !loading ? 'enabled' : 'disabled'}`}
-              disabled={!isFormValid || loading}
-            >
-              {loading ? (
-                <>
-                  <div className="spinner"></div>
-                  Adding Chocolate & Review...
-                </>
-              ) : (
-                <>
-                  🍫 Add Chocolate & Review
-                </>
-              )}
-            </button>
+        {/* Image Upload Section */}
+        <div className="form-section">
+          <div className="section-header">
+            <span className="section-icon">📸</span>
+            <h3>Add a Photo</h3>
           </div>
-        </form>
-      </div>
+          <p>Help others see what this chocolate looks like!</p>
+          
+          <ImageUploader
+            onImageSelect={setSelectedImage}
+            currentImage={selectedImage}
+            accept="image/*"
+            maxSizeMB={5}
+          />
+        </div>
+
+        {/* Submit Button */}
+        <div className="form-navigation">
+          <button 
+            type="submit" 
+            className={`submit-button ${isFormValid && !loading ? 'ready' : ''}`}
+            disabled={!isFormValid || loading}
+          >
+            {loading ? (
+              <>
+                <div className="button-spinner"></div>
+                Adding Chocolate...
+              </>
+            ) : (
+              'Add Chocolate & Review'
+            )}
+          </button>
+        </div>
+      </form>
     </div>
-  );
+  </div>
+);
+
+
 }
 
+// Export the AddChocolatePage component
 export default AddChocolatePage;

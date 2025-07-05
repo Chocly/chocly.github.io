@@ -622,3 +622,434 @@
       font-size: 1.5rem;
     }
   }
+
+  /* Add this CSS to your AddChocolatePage.css or main CSS file */
+/* STAR RATING FIX FOR ADD CHOCOLATE PAGE */
+
+.rating-input {
+  display: flex;
+  gap: 0.25rem; /* Reduced gap for tighter spacing */
+  align-items: center;
+  justify-content: center; /* Center stars to prevent overflow */
+  flex-wrap: nowrap; /* Prevent wrapping */
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem; /* Add padding around the stars */
+  width: 100%; /* Ensure full width usage */
+  box-sizing: border-box;
+}
+
+.star-button {
+  background: none;
+  border: none;
+  font-size: 1.75rem; /* Slightly smaller default size */
+  color: #E5E7EB; /* Gray for unfilled stars */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0.125rem; /* Minimal padding */
+  min-width: 36px; /* Smaller minimum touch target */
+  min-height: 36px; /* Smaller minimum touch target */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  flex-shrink: 0; /* Prevent stars from shrinking */
+}
+
+.star-button:hover {
+  background-color: rgba(244, 162, 97, 0.1);
+  transform: scale(1.1);
+}
+
+.star-button:active {
+  transform: scale(0.95);
+  background-color: rgba(244, 162, 97, 0.2);
+}
+
+.star-button.filled {
+  color: #F4A261; /* Filled star color */
+  text-shadow: 0 2px 4px rgba(244, 162, 97, 0.3);
+}
+
+.star-button:focus {
+  outline: 2px solid #F4A261;
+  outline-offset: 2px;
+}
+/* MOBILE RESPONSIVE BREAKPOINTS */
+
+/* Very small screens (320px - 374px) - Optimized to fit all stars */
+@media (max-width: 374px) {
+  .rating-input {
+    gap: 0.125rem; /* Very tight spacing */
+    justify-content: center; /* Center the stars */
+    padding: 0.25rem;
+  }
+  
+  .star-button {
+    font-size: 1.4rem; /* Smaller stars */
+    min-width: 28px;
+    min-height: 28px;
+    padding: 0.1rem;
+  }
+}
+
+/* Small mobile screens (375px - 479px) */
+@media (min-width: 375px) and (max-width: 479px) {
+  .rating-input {
+    gap: 0.2rem;
+    justify-content: center;
+  }
+  
+  .star-button {
+    font-size: 1.5rem;
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0.125rem;
+  }
+}
+
+/* Medium mobile screens (480px - 767px) */
+@media (min-width: 480px) and (max-width: 767px) {
+  .rating-input {
+    gap: 0.3rem;
+    justify-content: center;
+  }
+  
+  .star-button {
+    font-size: 1.75rem;
+    min-width: 36px;
+    min-height: 36px;
+    padding: 0.15rem;
+  }
+}
+
+/* Tablet and up (768px+) */
+@media (min-width: 768px) {
+  .rating-input {
+    gap: 0.75rem;
+    justify-content: flex-start;
+  }
+  
+  .star-button {
+    font-size: 2.25rem;
+    min-width: 48px;
+    min-height: 48px;
+    padding: 0.375rem;
+  }
+  
+  .star-button:hover {
+    transform: scale(1.15);
+  }
+}
+
+/* Desktop and up (1024px+) */
+@media (min-width: 1024px) {
+  .star-button {
+    font-size: 2.5rem;
+    min-width: 52px;
+    min-height: 52px;
+  }
+}
+
+/* ACCESSIBILITY IMPROVEMENTS */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .star-button {
+    border: 2px solid transparent;
+  }
+  
+  .star-button.filled {
+    border-color: #F4A261;
+  }
+  
+  .star-button:focus {
+    border-color: #000;
+    outline: 2px solid #000;
+  }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .star-button {
+    transition: none;
+  }
+  
+  .star-button:hover,
+  .star-button:active {
+    transform: none;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .star-button {
+    color: #4B5563; /* Darker gray for unfilled stars in dark mode */
+  }
+  
+  .star-button:hover {
+    background-color: rgba(244, 162, 97, 0.15);
+  }
+  
+  .star-button.filled {
+    color: #F4A261;
+  }
+}
+
+/* FORM GROUP STYLING FOR BETTER LAYOUT */
+.form-group:has(.rating-input) {
+  margin-bottom: 1.5rem;
+}
+
+.form-group:has(.rating-input) label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #2D1810;
+}
+
+/* OPTIONAL: Add a subtle container around the stars */
+.rating-input-container {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  margin: 0.5rem 0;
+}
+
+.rating-input-container .rating-input {
+  margin: 0;
+  padding: 0;
+}
+
+/* LANDSCAPE ORIENTATION ON MOBILE */
+@media (max-height: 500px) and (orientation: landscape) {
+  .star-button {
+    font-size: 1.5rem;
+    min-width: 36px;
+    min-height: 36px;
+    padding: 0.15rem;
+  }
+  
+  .rating-input {
+    gap: 0.25rem;
+  }
+}
+/* Additional CSS for the enhanced rating section - add to AddChocolatePage.css */
+
+/* RATING GROUP STYLING */
+.rating-group {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  margin-bottom: 2rem;
+}
+
+.rating-group label {
+  font-weight: 700;
+  color: #2D1810;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* RATING CONTAINER */
+.rating-input-container {
+  background: white;
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* RATING FEEDBACK */
+.rating-feedback {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e9ecef;
+  text-align: center;
+}
+
+.rating-text {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #2D1810;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.rating-description {
+  font-size: 0.9rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Dynamic rating text colors based on rating */
+.rating-feedback[data-rating="1"] .rating-text {
+  color: #dc2626;
+}
+
+.rating-feedback[data-rating="2"] .rating-text {
+  color: #ea580c;
+}
+
+.rating-feedback[data-rating="3"] .rating-text {
+  color: #ca8a04;
+}
+
+.rating-feedback[data-rating="4"] .rating-text {
+  color: #16a34a;
+}
+
+.rating-feedback[data-rating="5"] .rating-text {
+  color: #059669;
+}
+
+/* TEXTAREA ENHANCEMENTS */
+.textarea-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.character-count {
+  font-weight: 600;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.helper-text {
+  color: #6b7280;
+  font-size: 0.85rem;
+  text-align: right;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Character count color changes */
+.character-count[data-warning="true"] {
+  color: #ea580c;
+}
+
+.character-count[data-danger="true"] {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+/* FORM SECTION ENHANCEMENTS */
+.review-section {
+  background: linear-gradient(135deg, #fefefe 0%, #f8f9fa 100%);
+  border: 2px solid #F4A261;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.review-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #F4A261 0%, #F4D03F 50%, #F4A261 100%);
+}
+
+.review-intro {
+  background: rgba(244, 162, 97, 0.1);
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #F4A261;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+  color: #2D1810;
+}
+
+/* MOBILE RESPONSIVE ADJUSTMENTS */
+@media (max-width: 767px) {
+  .rating-group {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .rating-input-container {
+    padding: 1rem;
+  }
+  
+  .textarea-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .helper-text {
+    text-align: left;
+    margin-top: 0.25rem;
+  }
+  
+  .review-section {
+    padding: 1.5rem;
+  }
+  
+  .rating-feedback {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+  }
+  
+  .rating-text {
+    font-size: 1rem;
+  }
+}
+
+/* TABLET ADJUSTMENTS */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .rating-group {
+    padding: 1.25rem;
+  }
+  
+  .review-section {
+    padding: 1.75rem;
+  }
+}
+
+/* ACCESSIBILITY ENHANCEMENTS */
+@media (prefers-reduced-motion: reduce) {
+  .rating-feedback {
+    transition: none;
+  }
+}
+
+/* Focus indicators for form elements */
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #F4A261;
+  box-shadow: 0 0 0 3px rgba(244, 162, 97, 0.1);
+}
+
+/* Error states (for future use) */
+.form-group.error input,
+.form-group.error textarea {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.form-group.error .rating-input-container {
+  border-color: #dc2626;
+}
+
+/* Success states (for future use) */
+.form-group.success input,
+.form-group.success textarea {
+  border-color: #16a34a;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+}
+
+.form-group.success .rating-input-container {
+  border-color: #16a34a;
+}
