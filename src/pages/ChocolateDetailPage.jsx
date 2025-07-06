@@ -1,12 +1,13 @@
-// src/pages/ChocolateDetailPage.jsx - Complete updated version
+// src/pages/ChocolateDetailPage.jsx - Updated with WantToTryButton
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getChocolateById } from '../services/chocolateFirebaseService'; // Use our service instead of direct Firestore
+import { getChocolateById } from '../services/chocolateFirebaseService';
 import { doc, getDoc, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import RatingStars from '../components/RatingStars';
 import ReviewItem from '../components/ReviewItem';
 import FavoriteButton from '../components/FavoriteButton';
+import WantToTryButton from '../components/WantToTryButton';
 import './ChocolateDetailPage.css';
 import { useAuth } from '../contexts/AuthContext';
 import { addReview } from '../services/reviewService';
@@ -49,35 +50,17 @@ function ChocolateDetailPage() {
       try {
         setLoading(true);
         
-        console.log('🎯 ChocolateDetailPage: Fetching chocolate with ID:', id);
-        
-        // Fetch chocolate details using our service
+        // Fetch chocolate details
         const chocolateData = await getChocolateById(id);
-        
-        console.log('🍫 ChocolateDetailPage: Received chocolate data:', chocolateData);
-        console.log('🏷️ ChocolateDetailPage: Maker field value:', chocolateData.maker);
-        console.log('🔗 ChocolateDetailPage: MakerId field value:', chocolateData.makerId || chocolateData.MakerID);
-        
         setChocolate(chocolateData);
-        
-        // Fetch tags if the chocolate has tagIds
-        if (chocolateData.tagIds && chocolateData.tagIds.length > 0) {
-          const tagNames = [];
-          for (const tagId of chocolateData.tagIds) {
-            try {
-              const tagDoc = await getDoc(doc(db, 'tags', tagId));
-              if (tagDoc.exists()) {
-                tagNames.push(tagDoc.data().name);
-              }
-            } catch (err) {
-              console.error("Error fetching tag:", err);
-            }
-          }
-          setTags(tagNames);
-        }
         
         // Fetch reviews
         await fetchReviews();
+        
+        // Fetch tags if available
+        if (chocolateData?.tags) {
+          setTags(chocolateData.tags);
+        }
         
         setLoading(false);
       } catch (err) {
@@ -87,7 +70,9 @@ function ChocolateDetailPage() {
       }
     };
     
-    fetchChocolateData();
+    if (id) {
+      fetchChocolateData();
+    }
   }, [id]);
 
   const handleRatingChange = (rating) => {
@@ -96,7 +81,6 @@ function ChocolateDetailPage() {
   
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
-    
     if (!currentUser) {
       alert('Please sign in to leave a review');
       return;
@@ -113,16 +97,15 @@ function ChocolateDetailPage() {
     }
     
     try {
-      setLoading(true);
-      
-      // Create the review data
       const reviewData = {
         chocolateId: id,
         userId: currentUser.uid,
-        user: currentUser.displayName || 'Anonymous User',
+        user: currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User',
+        userName: currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User',
         userPhotoURL: currentUser.photoURL || null,
         rating: userRating,
-        text: reviewText,
+        text: reviewText.trim(),
+        helpful: 0,
         chocolate: {
           id: chocolate.id,
           name: chocolate.name,
@@ -130,33 +113,24 @@ function ChocolateDetailPage() {
           imageUrl: chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate'
         }
       };
-      
-      // Add the review to Firestore
+
       await addReview(reviewData);
       
-      // Show success message
-      setReviewSuccess(true);
-      
-      // Reset form
+      // Reset form and refresh reviews
       setUserRating(0);
       setReviewText('');
-      
-      // Refresh reviews list
+      setReviewSuccess(true);
       await fetchReviews();
       
       // Hide success message after 3 seconds
-      setTimeout(() => {
-        setReviewSuccess(false);
-      }, 3000);
+      setTimeout(() => setReviewSuccess(false), 3000);
       
     } catch (error) {
       console.error('Error submitting review:', error);
-      alert(`Error submitting review: ${error.message}`);
-    } finally {
-      setLoading(false);
+      alert('Error submitting review. Please try again.');
     }
   };
-
+  
   if (loading) {
     return (
       <div className="loading-container">
@@ -171,7 +145,17 @@ function ChocolateDetailPage() {
   }
   
   if (error || !chocolate) {
-    return <div className="error">Error: {error || 'Chocolate not found'}</div>;
+    return (
+      <div className="chocolate-detail-page">
+        <div className="container">
+          <div className="error-message">
+            <h1>Chocolate Not Found</h1>
+            <p>Sorry, we couldn't find the chocolate you're looking for.</p>
+            <Link to="/browse" className="btn btn-primary">Browse All Chocolates</Link>
+          </div>
+        </div>
+      </div>
+    );
   }
   
   // Prepare flavor profile data or use default if not available
@@ -186,10 +170,10 @@ function ChocolateDetailPage() {
   // Prepare ingredients as array if it's a string
   const ingredients = Array.isArray(chocolate.ingredients) 
     ? chocolate.ingredients 
-    : (typeof chocolate.ingredients === 'string' 
-        ? chocolate.ingredients.split(',').map(item => item.trim())
-        : []);
-  
+    : chocolate.ingredients 
+      ? chocolate.ingredients.split(',').map(i => i.trim()) 
+      : [];
+
   return (
     <div className="chocolate-detail-page">
       <div className="detail-header">
@@ -198,73 +182,60 @@ function ChocolateDetailPage() {
             <div className="detail-image">
               <img 
                 src={chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate'} 
-                alt={chocolate.name} 
-                className="chocolate-label-image"
+                alt={chocolate.name}
               />
-              <div className="image-caption">Product Label</div>
             </div>
             <div className="detail-info">
-              {/* Display maker prominently at the top, clickable */}
+              {/* Maker name - clickable and prominent */}
               <Link 
-                to={`/maker?maker=${encodeURIComponent(chocolate.maker || 'Unknown Maker')}`} 
+                to={`/maker?maker=${encodeURIComponent(chocolate.maker || 'Unknown Maker')}`}
                 className="maker-link-prominent"
               >
-                <p className="maker-name-prominent">
-                  {chocolate.maker || 'Unknown Maker'}
-                </p>
+                <h2 className="maker-name-prominent">{chocolate.maker || 'Unknown Maker'}</h2>
               </Link>
               
-{/* Chocolate name as main heading */}
-<h1 className="chocolate-name">{chocolate.name}</h1>
-                       
-                       <div className="rating-section">
-                         <div className="average-rating">
-                           <span className="rating-number">{(chocolate.averageRating || 0).toFixed(1)}</span>
-                           <RatingStars rating={chocolate.averageRating || 0} size="large" />
-                           <span className="rating-count">({chocolate.reviewCount || 0} ratings)</span>
-                         </div>
-                         
-                         <div className="rating-actions">
-                           <div className="user-rating">
-                             <p>Your Rating:</p>
-                             <RatingStars 
-                               rating={userRating} 
-                               size="large" 
-                               interactive={true}
-                               onRatingChange={handleRatingChange}
-                             />
-                           </div>
-                           
-                           <div className="favorite-section">
-                             <span className="favorite-label">Add to Favorites:</span>
-                             <FavoriteButton 
-                               chocolateId={chocolate.id} 
-                               size="large" 
-                             />
-                           </div>
-                         </div>
-                       </div>
-                                     
-              <div className="chocolate-meta">
-                <div className="meta-item">
-                  <span className="meta-label">Origin</span>
-                  <span className="meta-value">{chocolate.origin || 'Various'}</span>
-                </div>
-                <div className="meta-item">
-                  <span className="meta-label">Cacao</span>
-                  <span className="meta-value">{chocolate.cacaoPercentage || 0}%</span>
-                </div>
-                <div className="meta-item">
-                  <span className="meta-label">Type</span>
-                  <span className="meta-value">{chocolate.type || 'N/A'}</span>
+              {/* Chocolate name */}
+              <h1 className="chocolate-name">{chocolate.name}</h1>
+              
+              {/* Origin and Cacao percentage */}
+              <div className="chocolate-specs">
+                <span className="origin">{chocolate.origin || 'Origin Unknown'}</span>
+                <span className="percentage">{chocolate.cacaoPercentage || 0}% Cacao</span>
+                {chocolate.type && <span className="type">{chocolate.type}</span>}
+              </div>
+              
+              {/* Rating section */}
+              <div className="rating-section">
+                <div className="average-rating">
+                  <span className="rating-number">{(chocolate.averageRating || 0).toFixed(1)}</span>
+                  <RatingStars rating={chocolate.averageRating || 0} />
+                  <span className="rating-count">({reviews.length} review{reviews.length !== 1 ? 's' : ''})</span>
                 </div>
               </div>
               
+              {/* Action buttons */}
+              <div className="action-buttons">
+                <FavoriteButton 
+                  chocolateId={chocolate.id} 
+                  size="large" 
+                  className="detail-page-favorite"
+                />
+                <WantToTryButton 
+                  chocolate={chocolate} 
+                  currentUser={currentUser}
+                  className="detail-page-want-to-try"
+                />
+              </div>
+              
+              {/* Tags */}
               {tags.length > 0 && (
-                <div className="chocolate-tags">
-                  {tags.map(tag => (
-                    <span key={tag} className="tag">{tag}</span>
-                  ))}
+                <div className="tags-section">
+                  <h3>Tags</h3>
+                  <div className="tags-list">
+                    {tags.map((tag, index) => (
+                      <span key={index} className="tag">{tag}</span>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
@@ -273,11 +244,15 @@ function ChocolateDetailPage() {
       </div>
       
       <div className="container">
-        <section className="description-section">
-          <h2>Description</h2>
-          <p>{chocolate.description || 'No description available.'}</p>
-        </section>
+        {/* Description */}
+        {chocolate.description && (
+          <section className="description-section">
+            <h2>About This Chocolate</h2>
+            <p className="description">{chocolate.description}</p>
+          </section>
+        )}
         
+        {/* Flavor Profile */}
         <section className="flavor-section">
           <h2>Flavor Profile</h2>
           <div className="flavor-list">
@@ -295,6 +270,7 @@ function ChocolateDetailPage() {
           </div>
         </section>
         
+        {/* Ingredients */}
         <section className="ingredients-section">
           <h2>Ingredients</h2>
           {ingredients.length > 0 ? (
@@ -308,6 +284,7 @@ function ChocolateDetailPage() {
           )}
         </section>
         
+        {/* Nutritional Information */}
         {chocolate.nutritionalInfo && (
           <section className="nutrition-section">
             <h2>Nutritional Information</h2>
@@ -326,8 +303,44 @@ function ChocolateDetailPage() {
           </section>
         )}
         
+        {/* Reviews Section */}
         <section className="reviews-section">
-          <h2>Reviews</h2>
+          <h2>Reviews ({reviews.length})</h2>
+          
+          {/* Success message */}
+          {reviewSuccess && (
+            <div className="review-success-message">
+              ✅ Your review has been added successfully!
+            </div>
+          )}
+          
+          {/* Add Review Form */}
+          {currentUser && (
+            <div className="add-review">
+              <h3>Add Your Review</h3>
+              <form onSubmit={handleReviewSubmit}>
+                <div className="rating-input">
+                  <label>Rating:</label>
+                  <RatingStars 
+                    rating={userRating} 
+                    onRatingChange={handleRatingChange}
+                    interactive={true}
+                  />
+                </div>
+                <textarea 
+                  placeholder="Share your thoughts on this chocolate..."
+                  value={reviewText}
+                  onChange={(e) => setReviewText(e.target.value)}
+                  required
+                ></textarea>
+                <button type="submit" className="submit-review">
+                  Submit Review
+                </button>
+              </form>
+            </div>
+          )}
+          
+          {/* Reviews List */}
           {reviews.length > 0 ? (
             <div className="reviews-list">
               {reviews.map(review => (
@@ -335,32 +348,13 @@ function ChocolateDetailPage() {
               ))}
             </div>
           ) : (
-            <p className="no-reviews">No reviews yet. Be the first to review this chocolate!</p>
+            <div className="no-reviews">
+              <p>No reviews yet. Be the first to review this chocolate!</p>
+              {!currentUser && (
+                <p><Link to="/login">Sign in</Link> to write the first review.</p>
+              )}
+            </div>
           )}
-          
-          <div className="add-review">
-            <h3>Add Your Review</h3>
-            {reviewSuccess && (
-              <div className="review-success">
-                Your review has been submitted successfully!
-              </div>
-            )}
-            <form onSubmit={handleReviewSubmit}>
-              <textarea 
-                placeholder="Share your thoughts on this chocolate..."
-                value={reviewText}
-                onChange={(e) => setReviewText(e.target.value)}
-                required
-              ></textarea>
-              <button 
-                type="submit" 
-                className="submit-review"
-                disabled={!currentUser || loading}
-              >
-                {loading ? 'Submitting...' : 'Submit Review'}
-              </button>
-            </form>
-          </div>
         </section>
       </div>
     </div>

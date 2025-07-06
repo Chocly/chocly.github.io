@@ -771,3 +771,66 @@
 .featured-badge {
   display: none !important;
 }
+
+/* Add these styles to your ChocolateCard.css to ensure proper positioning of both buttons */
+
+/* Card Actions Container - positions both buttons */
+.card-actions {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+}
+
+/* Ensure both buttons work well together */
+.card-actions .favorite-button,
+.card-actions .want-to-try-button {
+  position: relative !important; /* Override absolute positioning */
+  top: auto !important;
+  right: auto !important;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+}
+
+/* Show buttons on hover */
+.chocolate-card:hover .card-actions .favorite-button,
+.chocolate-card:hover .card-actions .want-to-try-button {
+  opacity: 1;
+}
+
+/* Want to Try Button specific styling for cards */
+.card-actions .want-to-try-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Mobile optimizations for card actions */
+@media (max-width: 768px) {
+  .card-actions {
+    top: 10px;
+    right: 10px;
+    gap: 6px;
+  }
+  
+  .card-actions .favorite-button,
+  .card-actions .want-to-try-button {
+    opacity: 1; /* Always visible on mobile */
+    width: 32px;
+    height: 32px;
+  }
+  
+  .card-actions .want-to-try-button svg {
+    width: 16px;
+    height: 16px;
+  }
+}

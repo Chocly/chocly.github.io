@@ -622,3 +622,204 @@ h2::after {
     justify-content: center;
   }
 }
+
+/* Add these styles to your existing ChocolateDetailPage.css */
+
+/* Action buttons section */
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  align-items: center;
+}
+
+/* Detail page specific button styles */
+.detail-page-favorite,
+.detail-page-want-to-try {
+  position: relative;
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 2px solid;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  text-transform: none;
+  min-width: 140px;
+  justify-content: center;
+}
+
+/* Override the circular shape for detail page buttons */
+.detail-page-favorite {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.detail-page-favorite:hover {
+  background: #ef4444;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.detail-page-favorite.favorited {
+  background: #ef4444;
+  color: white;
+}
+
+.detail-page-favorite.favorited:hover {
+  background: #dc2626;
+}
+
+.detail-page-want-to-try {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.detail-page-want-to-try:hover {
+  background: #3b82f6;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* When chocolate is in want-to-try list */
+.detail-page-want-to-try.in-want-to-try {
+  background: #3b82f6;
+  color: white;
+}
+
+.detail-page-want-to-try.in-want-to-try:hover {
+  background: #2563eb;
+}
+
+/* Review success message */
+.review-success-message {
+  background: #10b981;
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Enhanced add review section */
+.add-review {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 12px;
+  margin: 2rem 0;
+  border: 2px solid #e9ecef;
+}
+
+.add-review h3 {
+  margin: 0 0 1.5rem 0;
+  color: var(--primary-dark);
+}
+
+.rating-input {
+  margin-bottom: 1rem;
+}
+
+.rating-input label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+}
+
+.add-review textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 120px;
+  margin-bottom: 1rem;
+}
+
+.add-review textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(212, 167, 106, 0.1);
+}
+
+.submit-review {
+  background: linear-gradient(135deg, #F4A261 0%, #F4D03F 100%);
+  color: var(--primary-dark);
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-review:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(244, 162, 97, 0.4);
+}
+
+/* No reviews state */
+.no-reviews {
+  text-align: center;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  color: #6b7280;
+}
+
+.no-reviews a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.no-reviews a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile responsiveness for action buttons */
+@media (max-width: 768px) {
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .detail-page-favorite,
+  .detail-page-want-to-try {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .detail-header-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    text-align: center;
+  }
+  
+  .detail-image {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  .add-review {
+    padding: 1.5rem;
+  }
+}
+
+/* Ensure buttons show icons */
+.detail-page-favorite .heart-icon,
+.detail-page-want-to-try svg {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.5rem;
+}

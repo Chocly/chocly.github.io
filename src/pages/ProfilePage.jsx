@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { getUserReviews } from '../services/reviewService';
 import { getFavoriteChocolates, removeFromFavorites } from '../services/userService';
 import { updateUserProfile } from '../services/authService';
+import { getUserWantToTryList, removeFromWantToTry } from '../services/userService';
 import './ProfilePage.css';
 
 // SVG Icons - Complete BadgeIcon component
@@ -43,6 +44,9 @@ function ProfilePage() {
   const [loading, setLoading] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
+  // Add this state variable with your other useState declarations
+const [wantToTryList, setWantToTryList] = useState([]);
+
   const [editForm, setEditForm] = useState({
     displayName: '',
     bio: '',
@@ -182,44 +186,59 @@ function ProfilePage() {
     );
   }
 
-  // Load user data
-  useEffect(() => {
-    if (currentUser && userProfile) {
-      loadUserData();
-      // Initialize edit form with current profile data
-      setEditForm({
-        displayName: userProfile.displayName || '',
-        bio: userProfile.bio || '',
-        location: userProfile.location || '',
-        favoriteChocolateTypes: userProfile.favoriteChocolateTypes || [],
-        isProfilePublic: userProfile.isProfilePublic !== false, // Default to true
-        profilePicture: null // File input, not the current URL
-      });
-    }
-  }, [currentUser, userProfile]);
+// Updated useEffect section - replace your current one with this:
+useEffect(() => {
+  if (currentUser && userProfile) {
+    loadUserData();
+    // Initialize edit form with current profile data
+    setEditForm({
+      displayName: userProfile.displayName || '',
+      bio: userProfile.bio || '',
+      location: userProfile.location || '',
+      favoriteChocolateTypes: userProfile.favoriteChocolateTypes || [],
+      isProfilePublic: userProfile.isProfilePublic !== false, // Default to true
+      profilePicture: null // File input, not the current URL
+    });
+  }
+}, [currentUser, userProfile]);
 
-  const loadUserData = async () => {
-    setLoading(true);
-    try {
-      // Load reviews and favorites in parallel
-      const [userReviews, userFavorites] = await Promise.all([
-        getUserReviews(currentUser.uid).catch(() => []),
-        getFavoriteChocolates(currentUser.uid).catch(() => [])
-      ]);
-      
-      setReviews(userReviews);
-      setFavorites(userFavorites);
-      
-      // Set preferences from user profile
-      if (userProfile.preferences) {
-        setPreferences(userProfile.preferences);
-      }
-    } catch (error) {
-      console.error('Error loading user data:', error);
-    } finally {
-      setLoading(false);
+
+ // Updated loadUserData function - replace your current one with this:
+const loadUserData = async () => {
+  setLoading(true);
+  try {
+    // Load reviews, favorites, and want-to-try list in parallel
+    const [userReviews, userFavorites, userWantToTry] = await Promise.all([
+      getUserReviews(currentUser.uid).catch(() => []),
+      getFavoriteChocolates(currentUser.uid).catch(() => []),
+      getUserWantToTryList(currentUser.uid).catch(() => [])
+    ]);
+    
+    setReviews(userReviews);
+    setFavorites(userFavorites);
+    setWantToTryList(userWantToTry);
+    
+    // Set preferences from user profile
+    if (userProfile.preferences) {
+      setPreferences(userProfile.preferences);
     }
-  };
+  } catch (error) {
+    console.error('Error loading user data:', error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+// Add this function for handling want-to-try removal
+const handleRemoveFromWantToTry = async (chocolate) => {
+  try {
+    await removeFromWantToTry(currentUser.uid, chocolate);
+    setWantToTryList(prev => prev.filter(item => item.chocolateId !== chocolate.id));
+  } catch (error) {
+    console.error('Error removing from want to try:', error);
+    alert('Error removing from want to try list. Please try again.');
+  }
+};
 
   const calculateStats = () => {
     return {
@@ -360,6 +379,18 @@ function ProfilePage() {
         : [...prev.favoriteChocolateTypes, type]
     }));
   };
+
+  // Add this function to fetch want-to-try chocolates
+const fetchWantToTryList = async () => {
+  if (!currentUser) return;
+  
+  try {
+    const wantToTryData = await getUserWantToTryList(currentUser.uid);
+    setWantToTryList(wantToTryData);
+  } catch (error) {
+    console.error('Error fetching want to try list:', error);
+  }
+};
 
   const handleProfilePictureChange = (event) => {
     const file = event.target.files[0];
@@ -626,32 +657,39 @@ function ProfilePage() {
         )}
 
         {/* Profile Navigation */}
-        <div className="profile-nav">
-          <button 
-            className={`profile-nav-link ${activeTab === 'overview' ? 'active' : ''}`}
-            onClick={() => setActiveTab('overview')}
-          >
-            Overview
-          </button>
-          <button 
-            className={`profile-nav-link ${activeTab === 'reviews' ? 'active' : ''}`}
-            onClick={() => setActiveTab('reviews')}
-          >
-            Reviews ({stats.totalReviews})
-          </button>
-          <button 
-            className={`profile-nav-link ${activeTab === 'favorites' ? 'active' : ''}`}
-            onClick={() => setActiveTab('favorites')}
-          >
-            Favorites ({favorites.length})
-          </button>
-          <button 
-            className={`profile-nav-link ${activeTab === 'preferences' ? 'active' : ''}`}
-            onClick={() => setActiveTab('preferences')}
-          >
-            Preferences
-          </button>
-        </div>
+<div className="profile-nav">
+  <button 
+    className={`profile-nav-link ${activeTab === 'overview' ? 'active' : ''}`}
+    onClick={() => setActiveTab('overview')}
+  >
+    Overview
+  </button>
+  <button 
+    className={`profile-nav-link ${activeTab === 'reviews' ? 'active' : ''}`}
+    onClick={() => setActiveTab('reviews')}
+  >
+    Reviews ({stats.totalReviews})
+  </button>
+  <button 
+    className={`profile-nav-link ${activeTab === 'favorites' ? 'active' : ''}`}
+    onClick={() => setActiveTab('favorites')}
+  >
+    Favorites ({favorites.length})
+  </button>
+  {/* ADD THIS NEW BUTTON HERE */}
+  <button 
+    className={`profile-nav-link ${activeTab === 'wantToTry' ? 'active' : ''}`}
+    onClick={() => setActiveTab('wantToTry')}
+  >
+    Want to Try ({wantToTryList.length})
+  </button>
+  <button 
+    className={`profile-nav-link ${activeTab === 'preferences' ? 'active' : ''}`}
+    onClick={() => setActiveTab('preferences')}
+  >
+    Preferences
+  </button>
+</div>
 
         {/* Tab Content */}
         <div className="profile-content">
@@ -834,6 +872,65 @@ function ProfilePage() {
               )}
             </div>
           )}
+
+          {/* Want to Try Tab */}
+          {activeTab === 'wantToTry' && (
+  <div className="profile-section">
+    <div className="section-header">
+      <h3>Want to Try ({wantToTryList.length})</h3>
+      <p>Chocolates you're planning to taste</p>
+    </div>
+    
+    {wantToTryList.length > 0 ? (
+      <div className="want-to-try-grid">
+        {wantToTryList.map((item) => (
+          <div key={item.chocolateId} className="want-to-try-card">
+            <div className="want-to-try-image">
+              {item.imageUrl ? (
+                <img src={item.imageUrl} alt={item.name} />
+              ) : (
+                <div className="placeholder-image">🍫</div>
+              )}
+            </div>
+            
+            <div className="want-to-try-info">
+              <h4 className="want-to-try-name">{item.name}</h4>
+              <p className="want-to-try-maker">{item.maker}</p>
+              <p className="want-to-try-date">
+                Added {formatDate(item.addedAt)}
+              </p>
+            </div>
+            
+            <div className="want-to-try-actions">
+              <Link 
+                to={`/chocolate/${item.chocolateId}`}
+                className="view-chocolate-btn"
+              >
+                View Details
+              </Link>
+              <button 
+                onClick={() => handleRemoveFromWantToTry(item)}
+                className="remove-want-to-try-btn"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div className="empty-state">
+        <div className="empty-icon">📝</div>
+        <h4>No chocolates in your want to try list yet</h4>
+        <p>Start exploring chocolates and click the bookmark icon to add them here!</p>
+        <Link to="/browse" className="browse-chocolates-btn">
+          Browse Chocolates
+        </Link>
+      </div>
+    )}
+  </div>
+)}
+
 
           {/* Preferences Tab */}
           {activeTab === 'preferences' && (

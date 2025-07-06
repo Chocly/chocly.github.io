@@ -226,3 +226,28 @@ export const isChocolateInWantToTry = async (userId, chocolateId) => {
     return false;
   }
 };
+
+// Get user's want to try list
+export const getUserWantToTryList = async (userId) => {
+  try {
+    const userRef = doc(db, 'users', userId);
+    const userDoc = await getDoc(userRef);
+    
+    if (!userDoc.exists()) {
+      return [];
+    }
+    
+    const wantToTryList = userDoc.data()?.wantToTry || [];
+    
+    // Sort by most recently added
+    return wantToTryList.sort((a, b) => {
+      const dateA = a.addedAt instanceof Date ? a.addedAt : new Date(a.addedAt);
+      const dateB = b.addedAt instanceof Date ? b.addedAt : new Date(b.addedAt);
+      return dateB - dateA;
+    });
+    
+  } catch (error) {
+    console.error('Error getting want to try list:', error);
+    throw error;
+  }
+};
