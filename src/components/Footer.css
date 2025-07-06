@@ -177,3 +177,42 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Add this CSS to your Footer.css file */
+
+/* Footer Badge for Under Construction */
+.footer-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #92400e;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  margin-left: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  border: 1px solid #f59e0b;
+  vertical-align: middle;
+}
+
+/* Ensure footer links can accommodate badges */
+.footer-links a {
+  display: inline-flex;
+  align-items: center;
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #F4A261;
+}
+
+.footer-links a:hover .footer-badge {
+  background: linear-gradient(135deg, #F4A261 0%, #F4D03F 100%);
+  color: #2D1810;
+  border-color: #F4A261;
+}

@@ -51,17 +51,14 @@ function ChocolateCard({ chocolate, featured = false }) {
 
   return (
     <div className={`chocolate-card ${featured ? 'featured' : ''}`}>
-      {/* Chocolate image - links to detail page */}
-      <Link to={`/chocolate/${chocolate.id}`} className="chocolate-link">
-        <div className="image-container">
-          <img src={chocolate.imageUrl} alt={chocolate.name} className="card-image" />
-          {featured && (
-            <div className="featured-badge">
-              <span>Featured</span>
-            </div>
-          )}
-        </div>
-      </Link>
+
+
+<Link to={`/chocolate/${chocolate.id}`} className="chocolate-link">
+  <div className="image-container">
+    <img src={chocolate.imageUrl} alt={chocolate.name} className="card-image" />
+  </div>
+</Link>
+
       
       {/* Action buttons container */}
       <div className="card-actions">

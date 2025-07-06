@@ -228,8 +228,62 @@ function ProfilePage() {
         ? (reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length).toFixed(1)
         : 0,
       favoriteChocolates: favorites.length,
-      tastingCount: userProfile?.tastingCount || 0
+      chocolatesDiscovered: reviews.length // Number of unique chocolates they've reviewed
     };
+  };
+
+  // Helper function to format review dates properly
+  const formatReviewDate = (date) => {
+    if (!date) return 'No date available';
+    
+    try {
+      // Handle different date formats
+      let dateObj;
+      
+      if (date.toDate && typeof date.toDate === 'function') {
+        // Firestore Timestamp
+        dateObj = date.toDate();
+      } else if (date.seconds) {
+        // Firestore Timestamp object with seconds
+        dateObj = new Date(date.seconds * 1000);
+      } else if (typeof date === 'string' || typeof date === 'number') {
+        // String or timestamp
+        dateObj = new Date(date);
+      } else if (date instanceof Date) {
+        // Already a Date object
+        dateObj = date;
+      } else {
+        return 'Invalid date';
+      }
+      
+      // Check if date is valid
+      if (isNaN(dateObj.getTime())) {
+        return 'Invalid date';
+      }
+      
+      // Format the date nicely
+      const now = new Date();
+      const diffTime = Math.abs(now - dateObj);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      if (diffDays === 1) {
+        return 'Yesterday';
+      } else if (diffDays < 7) {
+        return `${diffDays} days ago`;
+      } else if (diffDays < 30) {
+        const weeks = Math.floor(diffDays / 7);
+        return `${weeks} week${weeks > 1 ? 's' : ''} ago`;
+      } else {
+        return dateObj.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'short', 
+          day: 'numeric' 
+        });
+      }
+    } catch (error) {
+      console.error('Error formatting date:', error, date);
+      return 'Date unavailable';
+    }
   };
 
   const getBadges = () => {
@@ -428,13 +482,6 @@ function ProfilePage() {
                 >
                   Cancel
                 </button>
-                <button 
-                  className="save-btn"
-                  onClick={handleSaveProfile}
-                  disabled={loading}
-                >
-                  {loading ? 'Saving...' : 'Save Changes'}
-                </button>
               </div>
             </div>
 
@@ -563,6 +610,17 @@ function ProfilePage() {
                   </label>
                 </div>
               </div>
+
+              {/* Save Changes Button - Moved to bottom */}
+              <div className="form-actions-bottom">
+                <button 
+                  className="save-btn-bottom"
+                  onClick={handleSaveProfile}
+                  disabled={loading}
+                >
+                  {loading ? 'Saving Changes...' : 'Save Changes'}
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -614,8 +672,8 @@ function ProfilePage() {
                   <div className="stat-label">Favorite Chocolates</div>
                 </div>
                 <div className="stat-card">
-                  <div className="stat-number">{stats.tastingCount}</div>
-                  <div className="stat-label">Tastings Logged</div>
+                  <div className="stat-number">{stats.chocolatesDiscovered}</div>
+                  <div className="stat-label">Chocolates Discovered</div>
                 </div>
               </div>
 
@@ -626,17 +684,26 @@ function ProfilePage() {
                     {reviews.slice(0, 3).map(review => (
                       <div key={review.id} className="activity-item">
                         <div className="activity-content">
-                          <p>Reviewed <strong>{review.chocolate?.name}</strong></p>
-                          <p className="activity-date">{new Date(review.createdAt).toLocaleDateString()}</p>
+                          <p>Reviewed <strong>{review.chocolate?.name || 'Unknown Chocolate'}</strong></p>
+                          <p className="activity-date">{formatReviewDate(review.createdAt)}</p>
                         </div>
                         <div className="activity-rating">
-                          {'★'.repeat(review.rating)}
+                          {[1, 2, 3, 4, 5].map(star => (
+                            <span 
+                              key={star} 
+                              className={`star ${star <= review.rating ? 'filled' : ''}`}
+                            >
+                              ★
+                            </span>
+                          ))}
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p>No reviews yet. <Link to="/browse">Start exploring chocolates!</Link></p>
+                  <div className="no-activity">
+                    <p>No recent activity. <Link to="/browse">Start exploring chocolates!</Link></p>
+                  </div>
                 )}
               </div>
             </div>
@@ -656,19 +723,40 @@ function ProfilePage() {
                   {reviews.map(review => (
                     <div key={review.id} className="review-item">
                       <div className="review-header">
-                        <h4>{review.chocolate?.name}</h4>
+                        <h4 className="reviewed-chocolate">{review.chocolate?.name || 'Unknown Chocolate'}</h4>
                         <div className="review-rating">
-                          {'★'.repeat(review.rating)}
+                          {[1, 2, 3, 4, 5].map(star => (
+                            <span 
+                              key={star} 
+                              className={`star ${star <= review.rating ? 'filled' : ''}`}
+                            >
+                              ★
+                            </span>
+                          ))}
                         </div>
                       </div>
-                      <p>{review.text}</p>
-                      <p className="review-date">{new Date(review.createdAt).toLocaleDateString()}</p>
+                      <p className="review-maker">{review.chocolate?.maker || 'Unknown Maker'}</p>
+                      {review.title && <h5 className="review-title">"{review.title}"</h5>}
+                      <p className="review-text">{review.text}</p>
+                      <div className="review-footer">
+                        <p className="review-date">
+                          {formatReviewDate(review.createdAt)}
+                        </p>
+                        <Link 
+                          to={`/chocolate/${review.chocolateId}`}
+                          className="view-chocolate-link"
+                        >
+                          View Chocolate
+                        </Link>
+                      </div>
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className="empty-state">
-                  <p>You haven't written any reviews yet.</p>
+                  <div className="empty-icon">📝</div>
+                  <h4>No reviews yet</h4>
+                  <p>Share your chocolate experiences with the community!</p>
                   <Link to="/browse" className="btn btn-primary">Find Chocolates to Review</Link>
                 </div>
               )}
@@ -687,21 +775,60 @@ function ProfilePage() {
               ) : favorites.length > 0 ? (
                 <div className="favorites-grid">
                   {favorites.map(chocolate => (
-                    <div key={chocolate.id} className="favorite-item">
-                      <h4>{chocolate.name}</h4>
-                      <p>{chocolate.maker}</p>
-                      <button 
-                        onClick={() => handleRemoveFavorite(chocolate.id)}
-                        className="remove-favorite"
-                      >
-                        Remove
-                      </button>
+                    <div key={chocolate.id} className="favorite-chocolate-card">
+                      <div className="favorite-image">
+                        {chocolate.imageUrl ? (
+                          <img src={chocolate.imageUrl} alt={chocolate.name} />
+                        ) : (
+                          <div className="placeholder-image">
+                            <span>🍫</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="favorite-info">
+                        <h4 className="favorite-name">{chocolate.name}</h4>
+                        <p className="favorite-maker">{chocolate.maker}</p>
+                        {chocolate.type && (
+                          <span className="favorite-type">{chocolate.type}</span>
+                        )}
+                        {chocolate.averageRating && (
+                          <div className="favorite-rating">
+                            <span className="rating-value">{chocolate.averageRating.toFixed(1)}</span>
+                            <div className="stars">
+                              {[1, 2, 3, 4, 5].map(star => (
+                                <span 
+                                  key={star} 
+                                  className={`star ${star <= Math.round(chocolate.averageRating) ? 'filled' : ''}`}
+                                >
+                                  ★
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="favorite-actions">
+                        <Link 
+                          to={`/chocolate/${chocolate.id}`}
+                          className="view-chocolate-btn"
+                        >
+                          View
+                        </Link>
+                        <button 
+                          onClick={() => handleRemoveFavorite(chocolate.id)}
+                          className="remove-favorite-btn"
+                        >
+                          Remove
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className="empty-state">
-                  <p>You haven't added any favorites yet.</p>
+                  <div className="empty-icon">💔</div>
+                  <h4>No favorites yet</h4>
+                  <p>Start exploring chocolates and add some to your favorites!</p>
                   <Link to="/browse" className="btn btn-primary">Discover Chocolates</Link>
                 </div>
               )}

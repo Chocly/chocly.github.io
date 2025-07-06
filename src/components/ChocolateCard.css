@@ -79,22 +79,40 @@
   transform: scale(1.02);
 }
 
-/* FEATURED BADGE - MOBILE POSITIONED */
+/* FEATURED BADGE - Clean Gold Design with No White Background */
 .featured-badge {
   position: absolute;
   top: 12px;
   left: 12px;
-  background: linear-gradient(135deg, var(--accent-color) 0%, #F4D03F 100%);
-  color: var(--primary-color);
+  background: linear-gradient(135deg, #F4A261 0%, #F59E0B 100%);
+  color: #1F2937; /* Very dark text for maximum contrast */
   font-size: 0.7rem;
-  font-weight: 800;
-  padding: 4px 8px;
-  border-radius: 12px;
+  font-weight: 900;
+  padding: 6px 12px;
+  border-radius: 20px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 2px 8px rgba(244, 162, 97, 0.4);
+  letter-spacing: 0.8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   z-index: 2;
   font-family: 'Inter', sans-serif;
+  border: none; /* Remove any borders */
+  /* Ensure no white backgrounds or highlights */
+  text-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Hover effect for the featured badge */
+.featured-badge:hover {
+  background: linear-gradient(135deg, #e69347 0%, #F4A261 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(244, 162, 97, 0.5);
+}
+
+/* Active state */
+.chocolate-card:active .featured-badge {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* MOBILE-OPTIMIZED CARD CONTENT */
@@ -747,4 +765,9 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+/* FEATURED BADGE - Hidden/Removed */
+.featured-badge {
+  display: none !important;
 }

@@ -255,31 +255,31 @@ function Header() {
             </button>
             
             <nav className={`nav ${menuOpen ? 'open' : ''}`}>
-              <div className="nav-section">
-                <h3>Browse</h3>
-                <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
-                <Link to="/browse" onClick={() => setMenuOpen(false)}>All Chocolates</Link>
-                <Link to="/barcode" onClick={() => setMenuOpen(false)}>Barcode Search</Link>
-                <Link to="/category/dark" onClick={() => setMenuOpen(false)}>Dark Chocolate</Link>
-                <Link to="/category/milk" onClick={() => setMenuOpen(false)}>Milk Chocolate</Link>
-                <Link to="/category/white" onClick={() => setMenuOpen(false)}>White Chocolate</Link>
-              </div>
-              <div className="nav-section">
-                <h3>Community</h3>
-                {currentUser && (
-                  <Link to="/add-chocolate" onClick={() => setMenuOpen(false)}>Add Chocolate</Link>
-                )}
-                <Link to="/about" onClick={() => setMenuOpen(false)}>About Us</Link>
-                <Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
-              </div>
-              {!currentUser && (
-                <div className="nav-section">
-                  <h3>Account</h3>
-                  <Link to="/login" onClick={() => setMenuOpen(false)}>Log In</Link>
-                  <Link to="/signup" onClick={() => setMenuOpen(false)}>Sign Up</Link>
-                </div>
-              )}
-            </nav>
+  <div className="nav-section">
+    <h3>Browse</h3>
+    <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
+    <Link to="/browse" onClick={() => setMenuOpen(false)}>All Chocolates</Link>
+    <Link to="/barcode" onClick={() => setMenuOpen(false)}>
+      Barcode Search 
+      <span className="under-construction">Under Construction</span>
+    </Link>
+  </div>
+  <div className="nav-section">
+    <h3>Community</h3>
+    {currentUser && (
+      <Link to="/add-chocolate" onClick={() => setMenuOpen(false)}>Add Chocolate</Link>
+    )}
+    <Link to="/about" onClick={() => setMenuOpen(false)}>About Us</Link>
+    <Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
+  </div>
+  {!currentUser && (
+    <div className="nav-section">
+      <h3>Account</h3>
+      <Link to="/login" onClick={() => setMenuOpen(false)}>Log In</Link>
+      <Link to="/signup" onClick={() => setMenuOpen(false)}>Sign Up</Link>
+    </div>
+  )}
+</nav>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-// src/components/Footer.jsx - Updated without favorites
+// src/components/Footer.jsx - Updated to remove chocolate type links
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.css';
@@ -22,10 +22,9 @@ function Footer() {
               <h3>Explore</h3>
               <ul>
                 <li><Link to="/browse">All Chocolates</Link></li>
-                <li><Link to="/category/dark">Dark Chocolate</Link></li>
-                <li><Link to="/category/milk">Milk Chocolate</Link></li>
-                <li><Link to="/category/origin">Single Origin</Link></li>
-                <li><Link to="/barcode">Barcode Search</Link></li>
+                <li><Link to="/barcode">Barcode Search <span className="footer-badge">Under Construction</span></Link></li>
+                <li><Link to="/about">About Us</Link></li>
+                <li><Link to="/contact">Contact</Link></li>
               </ul>
             </div>
             
@@ -41,8 +40,6 @@ function Footer() {
             <div className="footer-links-column">
               <h3>Company</h3>
               <ul>
-                <li><Link to="/about">About Us</Link></li>
-                <li><Link to="/contact">Contact</Link></li>
                 <li><Link to="/privacy-policy">Privacy Policy</Link></li>
                 <li><Link to="/terms-of-service">Terms of Service</Link></li>
               </ul>
