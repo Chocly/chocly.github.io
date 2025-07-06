@@ -13,13 +13,13 @@ import UnifiedAuthPage from './components/auth/UnifiedAuthPage';
 import { AuthProvider } from './contexts/AuthContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop'; // NEW: Import ScrollToTop
 import BatchImageUploadPage from './pages/BatchImageUploadPage';
 import AdminPage from './pages/AdminPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
-import ScrollToTop from './components/ScrollToTop'; // NEW: Import ScrollToTop
 import './App.css';
 
 function App() {

@@ -11,6 +11,7 @@ function ContactPage() {
   });
   
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,11 +23,25 @@ function ContactPage() {
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    // In a real implementation, this would send the form data to your backend
-    console.log('Form submitted:', formData);
+    setIsSubmitting(true);
+    
+    // Create mailto link with form data
+    const subject = encodeURIComponent(`Chocly Contact: ${formData.subject}`);
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\n` +
+      `Email: ${formData.email}\n` +
+      `Subject: ${formData.subject}\n\n` +
+      `Message:\n${formData.message}`
+    );
+    
+    const mailtoLink = `mailto:paulemickan@gmail.com?subject=${subject}&body=${body}`;
+    
+    // Open user's email client
+    window.location.href = mailtoLink;
     
     // Show success message
     setSubmitted(true);
+    setIsSubmitting(false);
     
     // Reset form
     setFormData({
@@ -46,14 +61,14 @@ function ContactPage() {
     <div className="contact-page">
       <div className="container">
         <div className="contact-header">
-          <h1>Contact Us</h1>
+          <h1>Get in Touch</h1>
           <p className="tagline">We'd love to hear from you!</p>
         </div>
         
         <div className="contact-content">
           <div className="contact-info">
             <div className="contact-section">
-              <h2>Get in Touch</h2>
+              <h2>Let's Connect</h2>
               <p>
                 Have questions about chocolate? Want to suggest a new feature? 
                 Or maybe you just want to say hello? We're here for all your chocolate-related inquiries.
@@ -61,15 +76,11 @@ function ContactPage() {
             </div>
             
             <div className="contact-section">
-              <h3>Connect With Us</h3>
+              <h3>Follow Us</h3>
               <div className="social-links">
                 <a href="#" className="social-link">
                   <span className="social-icon instagram"></span>
                   <span>@chocly</span>
-                </a>
-                <a href="#" className="social-link">
-                  <span className="social-icon twitter"></span>
-                  <span>@choclyapp</span>
                 </a>
                 <a href="#" className="social-link">
                   <span className="social-icon facebook"></span>
@@ -79,8 +90,7 @@ function ContactPage() {
             </div>
             
             <div className="contact-section">
-              <h3>Email Us</h3>
-              <p className="email-address">hello@chocly.co</p>
+              <h3>Quick Response</h3>
               <p className="email-note">We aim to respond to all inquiries within 48 hours.</p>
             </div>
             
@@ -96,7 +106,7 @@ function ContactPage() {
             
             {submitted && (
               <div className="success-message">
-                <p>Thank you for your message! We'll be in touch soon.</p>
+                <p>Thank you for your message! Your email client should have opened with a pre-filled message. We'll be in touch soon.</p>
               </div>
             )}
             
@@ -149,7 +159,9 @@ function ContactPage() {
                 ></textarea>
               </div>
               
-              <button type="submit" className="submit-button">Send Message</button>
+              <button type="submit" className="submit-button" disabled={isSubmitting}>
+                {isSubmitting ? 'Sending...' : 'Send Message'}
+              </button>
             </form>
           </div>
         </div>

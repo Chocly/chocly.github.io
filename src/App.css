@@ -175,3 +175,44 @@ img {
       gap: 1rem;
     }
   }
+
+  /* Add this to your main App.css or index.css file to fix scroll issues */
+
+/* Ensure proper scroll behavior */
+html {
+  scroll-behavior: auto !important; /* Override any smooth scrolling that might interfere */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden;
+}
+
+/* Fix for sticky header interference */
+.main-content {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+  position: relative;
+}
+
+/* Ensure the app container doesn't interfere with scrolling */
+#root {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+.app {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Remove any transforms that might interfere with scrolling */
+* {
+  scroll-margin-top: 0;
+  scroll-padding-top: 0;
+}

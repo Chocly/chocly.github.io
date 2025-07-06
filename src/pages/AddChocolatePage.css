@@ -1053,3 +1053,96 @@
 .form-group.success .rating-input-container {
   border-color: #16a34a;
 }
+
+/* Add this to your AddChocolatePage.css to fix the white-on-white type buttons */
+
+/* Type Selector - FIXED VISIBILITY */
+.type-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.type-button {
+  padding: 0.875rem 1rem;
+  border: 2px solid #D1D5DB !important; /* Force visible border */
+  border-radius: 12px;
+  background: #FFFFFF !important; /* Force white background */
+  color: #374151 !important; /* Force dark gray text */
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-size: 0.95rem;
+  /* Ensure text is always visible */
+  text-shadow: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.type-button:hover {
+  border-color: #F4A261 !important;
+  background: #FEF3E7 !important; /* Light orange background on hover */
+  color: #2D1810 !important; /* Dark text on hover */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(244, 162, 97, 0.2);
+}
+
+.type-button.selected {
+  border-color: #F4A261 !important;
+  background: #F4A261 !important; /* Orange background when selected */
+  color: #FFFFFF !important; /* White text when selected */
+  font-weight: 600;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(244, 162, 97, 0.4);
+}
+
+/* Ensure buttons work in all contexts */
+.form-group .type-button,
+.add-chocolate-form .type-button,
+.type-selector .type-button {
+  border: 2px solid #D1D5DB !important;
+  background: #FFFFFF !important;
+  color: #374151 !important;
+}
+
+.form-group .type-button:hover,
+.add-chocolate-form .type-button:hover,
+.type-selector .type-button:hover {
+  border-color: #F4A261 !important;
+  background: #FEF3E7 !important;
+  color: #2D1810 !important;
+}
+
+.form-group .type-button.selected,
+.add-chocolate-form .type-button.selected,
+.type-selector .type-button.selected {
+  border-color: #F4A261 !important;
+  background: #F4A261 !important;
+  color: #FFFFFF !important;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .type-selector {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .type-button {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .type-selector {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .type-button {
+    padding: 1rem;
+    font-size: 1rem;
+  }
+}
