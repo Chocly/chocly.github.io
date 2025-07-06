@@ -1,10 +1,15 @@
-// src/components/FavoriteButton.jsx - Beautiful production version
+// src/components/FavoriteButton.jsx - Enhanced version with text support
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { toggleFavorite, isChocolateFavorited } from '../services/userService';
 import './FavoriteButton.css';
 
-function FavoriteButton({ chocolateId, size = 'medium', className = '' }) {
+function FavoriteButton({ 
+  chocolateId, 
+  size = 'medium', 
+  className = '', 
+  showText = false 
+}) {
   const { currentUser } = useAuth();
   const [isFavorited, setIsFavorited] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -55,11 +60,32 @@ function FavoriteButton({ chocolateId, size = 'medium', className = '' }) {
     }
   };
 
+  if (!currentUser) {
+    return null;
+  }
+
+  // Define button text based on state
+  const getButtonText = () => {
+    if (loading) return "Updating...";
+    if (isFavorited) return "Favorited";
+    return "Add to Favorites";
+  };
+
+  // Determine if this is a detail page button
+  const isDetailPage = className.includes('detail-page');
+
   return (
     <button
       onClick={handleToggleFavorite}
       disabled={loading}
-      className={`favorite-button ${size} ${isFavorited ? 'favorited' : ''} ${isAnimating ? 'animating' : ''} ${loading ? 'loading' : ''} ${className}`}
+      className={`
+        favorite-button 
+        ${size} 
+        ${isFavorited ? 'favorited' : ''} 
+        ${isAnimating ? 'animating' : ''} 
+        ${loading ? 'loading' : ''} 
+        ${className}
+      `}
       title={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
       aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
     >
@@ -72,6 +98,13 @@ function FavoriteButton({ chocolateId, size = 'medium', className = '' }) {
       >
         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
       </svg>
+      
+      {/* Show text for detail page buttons */}
+      {(showText || isDetailPage) && (
+        <span className="button-text">
+          {getButtonText()}
+        </span>
+      )}
       
       {loading && (
         <div className="loading-spinner">

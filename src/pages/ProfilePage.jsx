@@ -251,6 +251,64 @@ const handleRemoveFromWantToTry = async (chocolate) => {
     };
   };
 
+  // Helper function to format dates nicely
+  const formatDate = (date) => {
+    if (!date) return 'Recently';
+    
+    try {
+      // Handle different date formats
+      let dateObj;
+      
+      if (date instanceof Date) {
+        dateObj = date;
+      } else if (date?.toDate && typeof date.toDate === 'function') {
+        // Firestore timestamp
+        dateObj = date.toDate();
+      } else if (date?.seconds) {
+        // Firestore timestamp object
+        dateObj = new Date(date.seconds * 1000);
+      } else if (typeof date === 'string' || typeof date === 'number') {
+        dateObj = new Date(date);
+      } else {
+        return 'Recently';
+      }
+  
+      // Check if date is valid
+      if (isNaN(dateObj.getTime())) {
+        return 'Recently';
+      }
+  
+      const now = new Date();
+      const diffTime = now.getTime() - dateObj.getTime();
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  
+      // Return relative time for recent dates
+      if (diffDays === 0) {
+        return 'Today';
+      } else if (diffDays === 1) {
+        return 'Yesterday';
+      } else if (diffDays < 7) {
+        return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+      } else if (diffDays < 30) {
+        const weeks = Math.floor(diffDays / 7);
+        return `${weeks} week${weeks !== 1 ? 's' : ''} ago`;
+      } else if (diffDays < 365) {
+        const months = Math.floor(diffDays / 30);
+        return `${months} month${months !== 1 ? 's' : ''} ago`;
+      } else {
+        // For older dates, show the actual date
+        return dateObj.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'short', 
+          day: 'numeric' 
+        });
+      }
+    } catch (error) {
+      console.error('Error formatting date:', error, date);
+      return 'Recently';
+    }
+  };
+  
   // Helper function to format review dates properly
   const formatReviewDate = (date) => {
     if (!date) return 'No date available';

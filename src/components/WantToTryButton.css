@@ -1,0 +1,264 @@
+/* src/components/WantToTryButton.css */
+
+/* Base want-to-try button styles */
+.want-to-try-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    position: relative;
+    outline: none;
+  }
+  
+  /* Icon-only version (for cards) */
+  .want-to-try-button.icon-only {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.95);
+    color: #6b7280;
+    border: 2px solid #e5e7eb;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .want-to-try-button.icon-only:hover:not(:disabled) {
+    transform: scale(1.1);
+    color: #3b82f6;
+    border-color: #3b82f6;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  }
+  
+  .want-to-try-button.icon-only.in-want-to-try {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  }
+  
+  .want-to-try-button.icon-only.in-want-to-try:hover:not(:disabled) {
+    background: #2563eb;
+    border-color: #2563eb;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  }
+  
+  /* With text version (for detail pages) */
+  .want-to-try-button.with-text {
+    min-height: 56px;
+    border-radius: 12px;
+    padding: 0.875rem 1.5rem;
+    font-weight: 600;
+    gap: 0.75rem;
+    font-size: 1rem;
+    border: 2px solid #3b82f6;
+    background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+    color: #3b82f6;
+    flex: 1; /* Takes equal width in action button container */
+  }
+  
+  .want-to-try-button.with-text:hover:not(:disabled) {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+  }
+  
+  .want-to-try-button.with-text.in-want-to-try {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+  }
+  
+  .want-to-try-button.with-text.in-want-to-try:hover:not(:disabled) {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+  }
+  
+  /* Icon sizing */
+  .want-to-try-button .bookmark-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .want-to-try-button.icon-only .bookmark-icon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .want-to-try-button.with-text .bookmark-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Button text */
+  .want-to-try-button .button-text {
+    font-weight: 600;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+  }
+  
+  /* Loading spinner */
+  .loading-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid currentColor;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Loading state */
+  .want-to-try-button.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+  
+  .want-to-try-button.loading:hover {
+    transform: none !important;
+  }
+  
+  /* Tooltip for icon-only buttons */
+  .tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f2937;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0;
+    animation: tooltipFadeIn 0.3s ease forwards;
+  }
+  
+  .tooltip-arrow {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #1f2937;
+  }
+  
+  @keyframes tooltipFadeIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(4px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+  
+  /* Container positioning */
+  .want-to-try-container.detail-page {
+    position: relative;
+    flex: 1;
+  }
+  
+  .want-to-try-container:not(.detail-page) {
+    position: relative;
+  }
+  
+  /* Focus states for accessibility */
+  .want-to-try-button:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+  
+  /* Mobile adjustments */
+  @media (max-width: 768px) {
+    .want-to-try-button.with-text {
+      min-height: 52px;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      gap: 0.5rem;
+    }
+    
+    .want-to-try-button.with-text .bookmark-icon {
+      width: 18px;
+      height: 18px;
+    }
+    
+    .want-to-try-button.with-text .button-text {
+      font-size: 0.9rem;
+    }
+    
+    .want-to-try-button.icon-only {
+      width: 32px;
+      height: 32px;
+    }
+    
+    .want-to-try-button.icon-only .bookmark-icon {
+      width: 14px;
+      height: 14px;
+    }
+    
+    /* Disable transform on mobile for better touch interaction */
+    .want-to-try-button.icon-only:hover {
+      transform: none;
+    }
+    
+    .want-to-try-button.icon-only:active {
+      transform: scale(0.95);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .want-to-try-button.with-text {
+      min-height: 48px;
+      padding: 0.625rem 0.75rem;
+      font-size: 0.85rem;
+      gap: 0.4rem;
+    }
+    
+    .want-to-try-button.with-text .bookmark-icon {
+      width: 16px;
+      height: 16px;
+    }
+    
+    .want-to-try-button.with-text .button-text {
+      font-size: 0.85rem;
+    }
+  }
+  
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .want-to-try-button.icon-only {
+      border-width: 3px;
+    }
+    
+    .want-to-try-button.with-text {
+      border-width: 3px;
+    }
+  }
+  
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .want-to-try-button,
+    .want-to-try-button .bookmark-icon,
+    .want-to-try-button .button-text,
+    .loading-spinner {
+      transition: none;
+      animation: none;
+    }
+    
+    .want-to-try-button:hover {
+      transform: none;
+    }
+  }

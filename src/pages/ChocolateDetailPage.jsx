@@ -213,20 +213,40 @@ function ChocolateDetailPage() {
                 </div>
               </div>
               
-              {/* Action buttons */}
-              <div className="action-buttons">
-                <FavoriteButton 
-                  chocolateId={chocolate.id} 
-                  size="large" 
-                  className="detail-page-favorite"
-                />
-                <WantToTryButton 
-                  chocolate={chocolate} 
-                  currentUser={currentUser}
-                  className="detail-page-want-to-try"
-                />
-              </div>
-              
+
+                {/* Action buttons */}
+                <div className="action-buttons">
+                  <FavoriteButton 
+                    chocolateId={chocolate.id} 
+                    size="large" 
+                    className="detail-page-favorite"
+                    showText={true}  // This will show "Add to Favorites" or "Favorited"
+                  />
+                  
+                  <WantToTryButton 
+                    chocolate={chocolate} 
+                    currentUser={currentUser}
+                    className="detail-page-want-to-try"
+                    showText={true}   // This will show "Want to Try" or "Added to List"
+                    size="large"
+                  />
+                </div>
+
+                {/* Add helpful description below buttons */}
+                <div className="button-help">
+                  <div className="help-item">
+                    <span className="help-icon">💝</span>
+                    <div className="help-text">
+                      <strong>Favorites:</strong> Chocolates you've tried and loved
+                    </div>
+                  </div>
+                  <div className="help-item">
+                    <span className="help-icon">📝</span>
+                    <div className="help-text">
+                      <strong>Want to Try:</strong> Chocolates you're planning to taste
+                    </div>
+                  </div>
+                </div>
               {/* Tags */}
               {tags.length > 0 && (
                 <div className="tags-section">
