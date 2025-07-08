@@ -1,4 +1,5 @@
 // src/components/Header.jsx - FIXED: No Menu text, proper expandable search
+import logo from '../assets/logo.png';
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -126,8 +127,8 @@ function Header() {
   return (
     <header className="header">
       <div className="container">
-        <Link to="/" className="logo">
-          <h1>Chocly</h1>
+      <Link to="/" className="logo">
+        <img src={logo} alt="Chocly" className="logo-image" />
         </Link>
         
         {/* Search Section - Only show on non-home pages */}

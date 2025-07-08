@@ -1,5 +1,4 @@
-/* src/App.css */
-/* Basic Reset */
+/* src/App.css - Updated with New Brand Colors */
 @import './styles/colors.css';
 
 *, *::before, *::after {
@@ -16,23 +15,11 @@ html, body, #root {
   overflow-x: hidden;
 }
 
-/* Theme Colors */
-:root {
-  --primary-dark: #3A1F04;    /* Dark chocolate brown */
-  --primary: #6B4226;         /* Medium chocolate brown */
-  --primary-light: #A67951;   /* Light chocolate brown */
-  --accent: #D4A76A;          /* Caramel accent */
-  --background: #FFFFFF;      /* White background */
-  --text-dark: #2C2012;       /* Dark text */
-  --text-light: #F9F3E9;      /* Light text */
-}
-
 body {
   font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
-  color: var(--text-dark);
-  background-color: var(--background);
-  /* This ensures content is not hidden behind fixed headers */
+  color: var(--text-primary);
+  background-color: var(--background-primary);
   padding-top: 0 !important;
   margin-top: 0 !important;
 }
@@ -50,7 +37,6 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* Critical fix for the top of content being cut off */
   padding-top: 0;
   margin-top: 0;
 }
@@ -73,24 +59,82 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Ensure top content is visible */
   padding-top: 1rem;
 }
 
-/* Home Page Hero Section Fix */
+/* Home Page Hero Section - Updated with new brand colors */
 .hero-section {
   height: 85vh;
   min-height: 600px;
-  background-image: url('https://images.unsplash.com/photo-1511381939415-e44015466834?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2072&q=80');
+  background-image: 
+    linear-gradient(
+      135deg, 
+      rgba(167, 58, 4, 0.85) 0%, 
+      rgba(108, 108, 78, 0.75) 50%,
+      rgba(120, 131, 144, 0.85) 100%
+    ),
+    url('https://images.unsplash.com/photo-1511381939415-e44015466834?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2072&q=80');
   background-size: cover;
   background-position: center;
   position: relative;
   display: flex;
   align-items: center;
   color: var(--text-light);
-  /* Fix for ensuring the hero is visible and not cut off */
   margin-top: 0;
   width: 100%;
+}
+
+/* Updated Button Styles with New Brand Colors */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  gap: 0.5rem;
+}
+
+.btn-primary {
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:hover {
+  background-color: var(--btn-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-secondary {
+  background-color: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary:hover {
+  background-color: var(--btn-secondary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--btn-outline-text);
+  border: 2px solid var(--btn-outline-border);
+}
+
+.btn-outline:hover {
+  background-color: var(--btn-outline-hover-bg);
+  color: var(--text-light);
+  transform: translateY(-2px);
 }
 
 /* Grids */
@@ -104,24 +148,82 @@ body {
   width: 100%;
 }
 
+/* Card Styles with New Brand Colors */
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+/* Section Headers */
+.section-title {
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+/* Form Elements */
+.form-input,
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--input-border);
+  border-radius: var(--border-radius-md);
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  font-family: 'Merriweather', serif;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus,
+.search-input:focus {
+  outline: none;
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(167, 58, 4, 0.1);
+}
+
 /* Error/Loading States */
 .error, .loading {
   width: 100%;
   text-align: center;
   padding: 3rem 1rem;
+  color: var(--text-secondary);
 }
 
-/* Import Google Fonts */
+/* Typography */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Merriweather:wght@300;400;700&display=swap');
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
   line-height: 1.2;
+  color: var(--text-primary);
 }
 
 p, li, a, button, input, textarea, span {
   font-family: 'Merriweather', serif;
+}
+
+/* Links */
+a {
+  color: var(--primary-color);
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--primary-hover);
 }
 
 /* Responsive images */
@@ -130,89 +232,43 @@ img {
   height: auto;
 }
 
-/* Fix for Footer to ensure it takes full width */
+/* Updated Footer */
 .footer {
   width: 100%;
-  background-color: var(--primary-dark);
+  background-color: var(--background-dark);
   color: var(--text-light);
-  padding: 2rem 0;
-  margin-top: 3rem;
+  margin-top: auto;
 }
 
-/* Media Queries */
-@media (max-width: 1200px) {
-  .container {
-    max-width: 95%;
-  }
+/* Status Messages */
+.success-message {
+  background-color: var(--success-color);
+  color: white;
+  padding: 1rem;
+  border-radius: var(--border-radius-md);
+  margin-bottom: 1rem;
 }
 
-@media (max-width: 768px) {
-  .container {
-    padding: 0 1rem;
-  }
-  
-  .chocolate-grid,
-  .results-grid,
-  .favorites-grid,
-  .featured-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1.5rem;
-  }
-}
-  
-
-
-@media (max-width: 480px) {
-  .container {
-    padding: 0 0.75rem;
-  }
-  
-    .chocolate-grid,
-    .results-grid,
-    .favorites-grid,
-    .featured-grid {
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 1rem;
-    }
-  }
-
-  /* Add this to your main App.css or index.css file to fix scroll issues */
-
-/* Ensure proper scroll behavior */
-html {
-  scroll-behavior: auto !important; /* Override any smooth scrolling that might interfere */
-  overflow-y: auto;
-  overflow-x: hidden;
+.error-message {
+  background-color: var(--error-color);
+  color: white;
+  padding: 1rem;
+  border-radius: var(--border-radius-md);
+  margin-bottom: 1rem;
 }
 
-body {
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow-x: hidden;
+.warning-message {
+  background-color: var(--warning-color);
+  color: white;
+  padding: 1rem;
+  border-radius: var(--border-radius-md);
+  margin-bottom: 1rem;
 }
 
-/* Fix for sticky header interference */
-.main-content {
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-  position: relative;
-}
-
-/* Ensure the app container doesn't interfere with scrolling */
-#root {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-}
-
-.app {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-}
-
-/* Remove any transforms that might interfere with scrolling */
-* {
-  scroll-margin-top: 0;
-  scroll-padding-top: 0;
+.info-message {
+  background-color: var(--info-color);
+  color: white;
+  padding: 1rem;
+  border-radius: var(--border-radius-md);
+  margin-bottom: 1rem;
 }

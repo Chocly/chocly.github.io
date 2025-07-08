@@ -1,50 +1,106 @@
-/* src/styles/colors.css - Unified Chocolate Color System */
+/* src/styles/colors.css - NEW BRAND COLORS */
 
 :root {
-    /* PRIMARY CHOCOLATE PALETTE */
-    --chocolate-primary: #2D1810;      /* Rich dark chocolate - main text */
-    --chocolate-secondary: #5D2F17;    /* Medium chocolate brown */
-    --chocolate-light: #8B4513;        /* Warm chocolate brown */
-    --chocolate-soft: #A67951;         /* Soft milk chocolate */
-    --chocolate-cream: #D2B48C;        /* Chocolate cream */
+    /* ====================================
+       PRIMARY BRAND PALETTE
+    ==================================== */
+    --brand-copper: #A73A04;        /* Rich burnt orange/copper */
+    --brand-sage: #6C6C4E;          /* Muted sage green */
+    --brand-cream: #DFD3C0;         /* Warm cream/beige */
+    --brand-blue-gray: #788390;     /* Cool blue-gray */
+    --brand-taupe: #B09169;         /* Warm taupe/brown */
     
-    /* ACCENT COLORS */
-    --gold-accent: #F4A261;             /* Warm gold - primary accent */
-    --gold-light: #F4D03F;             /* Light gold for highlights */
-    --coral-pop: #E76F51;              /* Coral for buttons that pop */
-    --sage-accent: #2A9D8F;            /* Sage green for trust elements */
+    /* ====================================
+       SEMANTIC COLOR ASSIGNMENTS
+    ==================================== */
+    /* Primary Actions & Headers */
+    --primary-color: var(--brand-copper);           /* Main CTA buttons, links */
+    --primary-hover: #8B2F03;                       /* Darker copper for hover */
+    --primary-light: #C44A15;                       /* Lighter copper for backgrounds */
     
-    /* NEUTRAL FOUNDATION */
-    --white: #FFFFFF;                   /* Pure white */
-    --cream-white: #FEFCF9;            /* Slightly warm white */
-    --light-gray: #F8F9FA;             /* Light background */
-    --medium-gray: #6C757D;            /* Medium text */
-    --dark-gray: #212529;              /* Dark text alternatives */
-    --border-light: #E9ECEF;           /* Subtle borders */
+    /* Secondary Actions */
+    --secondary-color: var(--brand-sage);           /* Secondary buttons */
+    --secondary-hover: #5A5A42;                     /* Darker sage for hover */
+    --secondary-light: #87876B;                     /* Lighter sage */
     
-    /* SEMANTIC COLORS */
-    --success-color: #10B981;          /* Green for success */
-    --warning-color: #F59E0B;          /* Orange for warnings */
-    --error-color: #DC2626;            /* Red for errors */
-    --info-color: #3B82F6;             /* Blue for info */
+    /* Text Colors */
+    --text-primary: #2C2C2C;                        /* Main text (dark) */
+    --text-secondary: var(--brand-blue-gray);       /* Secondary text */
+    --text-muted: #999999;                          /* Muted text */
+    --text-light: #FFFFFF;                          /* White text on dark backgrounds */
     
-    /* LEGACY SUPPORT - Map old variables to new ones */
-    --primary-dark: var(--chocolate-primary);
-    --primary: var(--chocolate-light);
-    --primary-light: var(--chocolate-soft);
-    --accent: var(--gold-accent);
-    --background: var(--white);
-    --text-dark: var(--chocolate-primary);
-    --text-light: var(--white);
-    --text-medium: var(--medium-gray);
+    /* Background Colors */
+    --background-primary: #FFFFFF;                   /* Main background */
+    --background-secondary: var(--brand-cream);      /* Section backgrounds */
+    --background-accent: #F8F6F3;                   /* Very light cream for cards */
+    --background-dark: var(--brand-sage);           /* Dark sections (footer) */
     
-    /* BROWSE PAGE SPECIFIC */
-    --primary-color: var(--chocolate-primary);
-    --accent-color: var(--gold-accent);
-    --bg-light: var(--light-gray);
-    --border-color: var(--border-light);
+    /* Accent & Highlights */
+    --accent-color: var(--brand-copper);            /* Primary accent */
+    --accent-warm: var(--brand-taupe);              /* Warm accent */
+    --accent-cool: var(--brand-blue-gray);          /* Cool accent */
     
-    /* SPACING SYSTEM */
+    /* Borders & Lines */
+    --border-light: #E5E1DC;                        /* Light borders */
+    --border-medium: var(--brand-cream);            /* Medium borders */
+    --border-dark: var(--brand-blue-gray);          /* Dark borders */
+    
+    /* ====================================
+       COMPONENT-SPECIFIC COLORS
+    ==================================== */
+    /* Header */
+    --header-bg: var(--background-primary);
+    --header-text: var(--text-primary);
+    --header-accent: var(--brand-copper);
+    
+    /* Buttons */
+    --btn-primary-bg: var(--brand-copper);
+    --btn-primary-text: var(--text-light);
+    --btn-primary-hover: var(--primary-hover);
+    
+    --btn-secondary-bg: var(--brand-sage);
+    --btn-secondary-text: var(--text-light);
+    --btn-secondary-hover: var(--secondary-hover);
+    
+    --btn-outline-border: var(--brand-copper);
+    --btn-outline-text: var(--brand-copper);
+    --btn-outline-hover-bg: var(--brand-copper);
+    
+    /* Cards & Content */
+    --card-bg: var(--background-primary);
+    --card-border: var(--border-light);
+    --card-shadow: rgba(167, 58, 4, 0.1);
+    
+    /* Forms */
+    --input-border: var(--border-medium);
+    --input-focus: var(--brand-copper);
+    --input-bg: var(--background-primary);
+    
+    /* Status Colors */
+    --success-color: #059669;                        /* Green for success */
+    --warning-color: #D97706;                        /* Orange for warnings */
+    --error-color: #DC2626;                          /* Red for errors */
+    --info-color: var(--brand-blue-gray);           /* Blue-gray for info */
+    
+    /* ====================================
+       LEGACY SUPPORT - Keep existing variable names
+    ==================================== */
+    --primary-dark: var(--brand-sage);
+    --primary: var(--brand-copper);
+    --primary-light: var(--brand-taupe);
+    --accent: var(--brand-copper);
+    --background: var(--background-primary);
+    --text-dark: var(--text-primary);
+    --chocolate-primary: var(--text-primary);
+    --chocolate-secondary: var(--brand-taupe);
+    --chocolate-light: var(--brand-copper);
+    --chocolate-soft: var(--brand-cream);
+    --gold-accent: var(--brand-copper);
+    --sage-accent: var(--brand-sage);
+    
+    /* ====================================
+       SPACING & SIZING SYSTEM
+    ==================================== */
     --space-xs: 0.5rem;   /* 8px */
     --space-sm: 0.75rem;  /* 12px */
     --space-md: 1rem;     /* 16px */
@@ -53,46 +109,16 @@
     --space-2xl: 3rem;    /* 48px */
     --space-3xl: 4rem;    /* 64px */
     
-    /* MOBILE TOUCH TARGETS */
-    --touch-target: 44px;
-    --touch-target-lg: 56px;
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --border-radius-xl: 16px;
     
-    /* BORDER RADIUS */
-    --radius-sm: 8px;
-    --radius-md: 16px;
-    --radius-lg: 24px;
-    --radius-xl: 32px;
-    
-    /* SHADOWS */
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
-    --shadow-chocolate: 0 8px 32px rgba(45, 24, 16, 0.15);
-    
-    /* MOBILE SAFE AREAS */
-    --safe-area-top: env(safe-area-inset-top, 0px);
-    --safe-area-bottom: env(safe-area-inset-bottom, 0px);
-    --safe-area-left: env(safe-area-inset-left, 0px);
-    --safe-area-right: env(safe-area-inset-right, 0px);
-  }
-  
-  /* DARK MODE SUPPORT */
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --white: #1F2937;
-      --cream-white: #111827;
-      --light-gray: #374151;
-      --medium-gray: #D1D5DB;
-      --dark-gray: #F9FAFB;
-      --border-light: #4B5563;
-      --chocolate-primary: #F4A261;
-      
-      /* Adjust other colors for dark mode */
-      --background: #1F2937;
-      --text-dark: #F9FAFB;
-      --text-light: #1F2937;
-      --primary-color: #F4A261;
-      --bg-light: #374151;
-      --border-color: #4B5563;
-    }
-  }
+    /* ====================================
+       ELEVATION & SHADOWS
+    ==================================== */
+    --shadow-sm: 0 1px 2px 0 rgba(167, 58, 4, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(167, 58, 4, 0.1), 0 2px 4px -1px rgba(167, 58, 4, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(167, 58, 4, 0.1), 0 4px 6px -2px rgba(167, 58, 4, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(167, 58, 4, 0.1), 0 10px 10px -5px rgba(167, 58, 4, 0.04);
+}

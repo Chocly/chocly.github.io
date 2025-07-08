@@ -303,3 +303,77 @@
     height: 14px;
   }
 }
+
+/* FOOTER COLOR FIXES - Add these styles to your Footer.css or App.css */
+
+.footer {
+  /* Option 1: Clean cream background (RECOMMENDED) */
+  background-color: var(--brand-cream) !important; /* #DFD3C0 */
+  color: var(--text-primary) !important; /* Dark text for good contrast */
+  
+  /* OR Option 2: Rich dark background (uncomment to use instead) */
+  /* background-color: #2C2C2C !important; */
+  /* color: var(--text-light) !important; */
+  
+  /* OR Option 3: Very subtle background (uncomment to use instead) */
+  /* background-color: #F8F6F3 !important; */
+  /* color: var(--text-primary) !important; */
+}
+
+/* Update footer headings to use brand copper color */
+.footer h2,
+.footer h3 {
+  color: var(--brand-copper) !important; /* #A73A04 */
+}
+
+/* Update "Chocly" logo in footer */
+.footer .logo-link h2 {
+  color: var(--brand-copper) !important;
+}
+
+/* Update tagline color for better readability */
+.footer .tagline {
+  color: var(--text-secondary) !important; /* Blue-gray for subtle text */
+  opacity: 0.8;
+}
+
+/* Update footer links */
+.footer a {
+  color: var(--text-primary) !important;
+  transition: color 0.3s ease;
+}
+
+.footer a:hover {
+  color: var(--brand-copper) !important;
+  padding-left: 3px;
+}
+
+/* Update section headers in footer */
+.footer-links-column h3 {
+  color: var(--brand-copper) !important;
+  font-weight: 600;
+}
+
+/* Update copyright text */
+.footer .copyright {
+  color: var(--text-secondary) !important;
+  opacity: 0.7;
+}
+
+/* Update social icons */
+.footer .social-icon {
+  background-color: rgba(167, 58, 4, 0.1) !important; /* Light copper background */
+  color: var(--brand-copper) !important;
+  border: 1px solid rgba(167, 58, 4, 0.2);
+}
+
+.footer .social-icon:hover {
+  background-color: var(--brand-copper) !important;
+  color: white !important;
+  transform: translateY(-3px);
+}
+
+/* Update any borders in footer */
+.footer-content {
+  border-bottom: 1px solid rgba(167, 58, 4, 0.2) !important;
+}

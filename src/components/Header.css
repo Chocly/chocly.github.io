@@ -764,3 +764,28 @@
     margin-left: 0.4rem;
   }
 }
+
+/* Logo image styles */
+.logo-image {
+  height: 32px; /* Adjust this based on your logo */
+  width: auto;
+  object-fit: contain;
+  transition: opacity 0.3s ease;
+}
+
+.logo:hover .logo-image {
+  opacity: 0.8;
+}
+
+/* Responsive logo sizing */
+@media (min-width: 768px) {
+  .logo-image {
+    height: 40px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .logo-image {
+    height: 45px;
+  }
+}
