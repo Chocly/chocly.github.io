@@ -136,12 +136,23 @@ function ChocolateDetailPage() {
     try {
       const reviewToSubmit = {
         chocolateId: reviewData.chocolateId,
+        userId: currentUser.uid,  // This is what your rules check for
         rating: reviewData.rating,
         text: reviewData.text || '',
-        userId: currentUser.uid,
-        userName: currentUser.displayName || 'Anonymous',
-        createdAt: new Date()
+        // Add ALL the required fields that your regular reviews have:
+        user: currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User',
+        userName: currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User',
+        userPhotoURL: currentUser.photoURL || null,
+        helpful: 0,
+        createdAt: new Date(), // Make sure this is included
+        chocolate: {
+          id: chocolate.id,
+          name: chocolate.name,
+          maker: chocolate.maker,
+          imageUrl: chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate'
+        }
       };
+  
 
       await addReview(reviewToSubmit);
       
