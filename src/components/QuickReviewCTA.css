@@ -1,0 +1,318 @@
+/* QuickReviewCTA.css - SUBTLE, SLEEK DESIGN */
+
+.review-cta-banner {
+  background: rgba(167, 58, 4, 0.02);
+  border: 1px solid rgba(167, 58, 4, 0.15);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  transition: all 0.3s ease;
+}
+
+.review-cta-banner:hover {
+  background: rgba(167, 58, 4, 0.04);
+  border-color: rgba(167, 58, 4, 0.25);
+}
+
+.cta-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cta-icon {
+  font-size: 1.2rem;
+  background: var(--brand-copper);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cta-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.cta-text h3 {
+  margin: 0 0 0.25rem 0;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.cta-text p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.cta-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+/* Compact quick rating */
+.quick-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid var(--border-light);
+  transition: all 0.3s ease;
+}
+
+.quick-rating:hover {
+  border-color: var(--brand-copper);
+  box-shadow: 0 1px 4px rgba(167, 58, 4, 0.1);
+}
+
+.quick-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* Compact CTA Buttons */
+.cta-button {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 1px solid;
+  cursor: pointer;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.cta-button.primary {
+  background: var(--brand-copper);
+  color: white;
+  border-color: var(--brand-copper);
+}
+
+.cta-button.primary:hover {
+  background: #8B2F03;
+  border-color: #8B2F03;
+  transform: translateY(-1px);
+}
+
+.cta-button.secondary {
+  background: white;
+  color: var(--brand-copper);
+  border-color: var(--brand-copper);
+}
+
+.cta-button.secondary:hover {
+  background: var(--brand-copper);
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* Compact Quick Review Form */
+.quick-review-form {
+  width: 100%;
+  background: white;
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-light);
+  margin-top: 0.75rem;
+}
+
+.form-rating {
+  margin-bottom: 0.75rem;
+}
+
+.form-rating label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.form-text {
+  margin-bottom: 0.75rem;
+  position: relative;
+}
+
+.form-text label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.form-text textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+  min-height: 60px;
+}
+
+.form-text textarea:focus {
+  outline: none;
+  border-color: var(--brand-copper);
+  box-shadow: 0 0 0 2px rgba(167, 58, 4, 0.1);
+}
+
+.char-count {
+  position: absolute;
+  bottom: 0.25rem;
+  right: 0.5rem;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  background: white;
+  padding: 0 0.25rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.btn-cancel,
+.btn-submit {
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+}
+
+.btn-cancel {
+  background: white;
+  color: var(--text-secondary);
+  border-color: var(--border-light);
+}
+
+.btn-cancel:hover {
+  background: var(--border-light);
+}
+
+.btn-submit {
+  background: var(--brand-copper);
+  color: white;
+  border-color: var(--brand-copper);
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: #8B2F03;
+  border-color: #8B2F03;
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Completed state - much more subtle */
+.review-cta-completed {
+  background: rgba(34, 197, 94, 0.05);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #166534;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.review-cta-completed .cta-icon {
+  background: #22C55E;
+  color: white;
+  width: 24px;
+  height: 24px;
+  font-size: 0.9rem;
+}
+
+/* Desktop-specific improvements */
+@media (min-width: 1024px) {
+  .review-cta-banner {
+    margin: 1.5rem 0;
+  }
+  
+  .cta-content {
+    gap: 1.5rem;
+  }
+  
+  .quick-rating {
+    padding: 0.6rem 1rem;
+  }
+  
+  .cta-actions {
+    gap: 1.25rem;
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .cta-content {
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+  
+  .cta-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+  }
+  
+  .quick-rating {
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .cta-button {
+    width: 100%;
+  }
+  
+  .form-actions {
+    justify-content: stretch;
+  }
+  
+  .btn-cancel,
+  .btn-submit {
+    flex: 1;
+  }
+}
+
+/* Animation for form appearance */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.quick-review-form {
+  animation: slideDown 0.2s ease-out;
+}

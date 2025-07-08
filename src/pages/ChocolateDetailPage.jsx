@@ -1,4 +1,4 @@
-// src/pages/ChocolateDetailPage.jsx - Updated with WantToTryButton
+// src/pages/ChocolateDetailPage.jsx - FIXED VERSION
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getChocolateById } from '../services/chocolateFirebaseService';
@@ -11,6 +11,7 @@ import WantToTryButton from '../components/WantToTryButton';
 import './ChocolateDetailPage.css';
 import { useAuth } from '../contexts/AuthContext';
 import { addReview } from '../services/reviewService';
+import QuickReviewCTA from '../components/QuickReviewCTA';
 
 function ChocolateDetailPage() {
   const { id } = useParams();
@@ -113,7 +114,6 @@ function ChocolateDetailPage() {
           imageUrl: chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate'
         }
       };
-
       await addReview(reviewData);
       
       // Reset form and refresh reviews
@@ -124,12 +124,43 @@ function ChocolateDetailPage() {
       
       // Hide success message after 3 seconds
       setTimeout(() => setReviewSuccess(false), 3000);
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      alert('Error submitting review. Please try again.');
+    }
+  };
+
+  // COMMENTED OUT QUICK REVIEW FUNCTION FOR NOW
+  
+  const handleQuickReview = async (reviewData) => {
+    try {
+      const reviewToSubmit = {
+        chocolateId: reviewData.chocolateId,
+        rating: reviewData.rating,
+        text: reviewData.text || '',
+        userId: currentUser.uid,
+        userName: currentUser.displayName || 'Anonymous',
+        createdAt: new Date()
+      };
+
+      await addReview(reviewToSubmit);
+      
+      setReviewSuccess(true);
+      await fetchReviews();
+      
+      setTimeout(() => setReviewSuccess(false), 3000);
       
     } catch (error) {
       console.error('Error submitting review:', error);
       alert('Error submitting review. Please try again.');
     }
   };
+  
+
+  // Check if user has already reviewed this chocolate
+  const userHasReviewed = reviews.some(review => 
+    review.userId === currentUser?.uid
+  );
   
   if (loading) {
     return (
@@ -194,6 +225,10 @@ function ChocolateDetailPage() {
                 <h2 className="maker-name-prominent">{chocolate.maker || 'Unknown Maker'}</h2>
               </Link>
               
+              
+            
+              
+
               {/* Chocolate name */}
               <h1 className="chocolate-name">{chocolate.name}</h1>
               
@@ -203,7 +238,15 @@ function ChocolateDetailPage() {
                 <span className="percentage">{chocolate.cacaoPercentage || 0}% Cacao</span>
                 {chocolate.type && <span className="type">{chocolate.type}</span>}
               </div>
-              
+
+              {/* Additional chocolate details - formatted nicely */}
+              {(chocolate.description || chocolate.details || chocolate.subtitle) && (
+                <div className="chocolate-details">
+                  <span className="details-text">
+                    {chocolate.description || chocolate.details || chocolate.subtitle}
+                  </span>
+                </div>
+              )}              
               {/* Rating section */}
               <div className="rating-section">
                 <div className="average-rating">
@@ -213,40 +256,31 @@ function ChocolateDetailPage() {
                 </div>
               </div>
               
+              <QuickReviewCTA 
+                chocolateId={chocolate.id}
+                chocolateName={chocolate.name}
+                onQuickReview={handleQuickReview}
+                hasUserReviewed={userHasReviewed}
+              />
 
-                {/* Action buttons */}
-                <div className="action-buttons">
-                  <FavoriteButton 
-                    chocolateId={chocolate.id} 
-                    size="large" 
-                    className="detail-page-favorite"
-                    showText={true}  // This will show "Add to Favorites" or "Favorited"
-                  />
-                  
-                  <WantToTryButton 
-                    chocolate={chocolate} 
-                    currentUser={currentUser}
-                    className="detail-page-want-to-try"
-                    showText={true}   // This will show "Want to Try" or "Added to List"
-                    size="large"
-                  />
-                </div>
+              {/* Action buttons */}
+              <div className="action-buttons">
+                <FavoriteButton 
+                  chocolateId={chocolate.id} 
+                  size="large" 
+                  className="detail-page-favorite"
+                  showText={true}
+                />
+                
+                <WantToTryButton 
+                  chocolate={chocolate} 
+                  currentUser={currentUser}
+                  className="detail-page-want-to-try"
+                  showText={true}
+                  size="large"
+                />
+              </div>
 
-                {/* Add helpful description below buttons */}
-                <div className="button-help">
-                  <div className="help-item">
-                    <span className="help-icon">💝</span>
-                    <div className="help-text">
-                      <strong>Favorites:</strong> Chocolates you've tried and loved
-                    </div>
-                  </div>
-                  <div className="help-item">
-                    <span className="help-icon">📝</span>
-                    <div className="help-text">
-                      <strong>Want to Try:</strong> Chocolates you're planning to taste
-                    </div>
-                  </div>
-                </div>
               {/* Tags */}
               {tags.length > 0 && (
                 <div className="tags-section">
