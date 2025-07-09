@@ -449,22 +449,22 @@ function HomePage() {
         </div>
       </section>
       
-      {/* Call to Action */}
-      <section className="cta-section">
-        <div className="container">
-          <div className="cta-content">
-            <h2 className="cta-title display-2">Ready to join our chocolate community?</h2>
-            <p className="cta-text">
-              Create a free account to start tracking your tastings, 
-              save favorites, and connect with fellow chocolate enthusiasts
-            </p>
-            <div className="cta-buttons">
-              <Link to="/login" className="btn-sign-in">Sign In</Link>
-              <Link to="/signup" className="btn-create-account">Create Account</Link>
-            </div>
-          </div>
-        </div>
-      </section>
+{/* Call to Action */}
+<section className="cta-section">
+  <div className="container">
+    <div className="cta-content">
+      <h2 className="cta-title">Ready to join our chocolate community?</h2>
+      <p className="cta-text">
+        Create a free account to start tracking your tastings, 
+        save favorites, and connect with fellow chocolate enthusiasts
+      </p>
+      <div className="cta-buttons">
+        <Link to="/login" className="btn-sign-in">Sign In</Link>
+        <Link to="/signup" className="btn-create-account">Create Account</Link>
+      </div>
+    </div>
+  </div>
+</section>
     </div>
   );
 }

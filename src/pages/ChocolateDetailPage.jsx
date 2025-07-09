@@ -272,6 +272,7 @@ function ChocolateDetailPage() {
                 chocolateName={chocolate.name}
                 onQuickReview={handleQuickReview}
                 hasUserReviewed={userHasReviewed}
+                existingReview={userHasReviewed ? reviews.find(review => review.userId === currentUser?.uid) : null}
               />
 
               {/* Action buttons */}
@@ -376,32 +377,6 @@ function ChocolateDetailPage() {
           {reviewSuccess && (
             <div className="review-success-message">
               ✅ Your review has been added successfully!
-            </div>
-          )}
-          
-          {/* Add Review Form */}
-          {currentUser && (
-            <div className="add-review">
-              <h3>Add Your Review</h3>
-              <form onSubmit={handleReviewSubmit}>
-                <div className="rating-input">
-                  <label>Rating:</label>
-                  <RatingStars 
-                    rating={userRating} 
-                    onRatingChange={handleRatingChange}
-                    interactive={true}
-                  />
-                </div>
-                <textarea 
-                  placeholder="Share your thoughts on this chocolate..."
-                  value={reviewText}
-                  onChange={(e) => setReviewText(e.target.value)}
-                  required
-                ></textarea>
-                <button type="submit" className="submit-review">
-                  Submit Review
-                </button>
-              </form>
             </div>
           )}
           

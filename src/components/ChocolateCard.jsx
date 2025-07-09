@@ -1,75 +1,74 @@
-// src/components/ChocolateCard.jsx - Enhanced version with dynamic star colors
+// src/components/ChocolateCard.jsx - FIXED using your existing class names
 import React from 'react';
 import { Link } from 'react-router-dom';
-import FavoriteButton from './FavoriteButton';
-import './ChocolateCard.css';
-import WantToTryButton from './WantToTryButton';
 import { useAuth } from '../contexts/AuthContext';
+import FavoriteButton from './FavoriteButton';
+import WantToTryButton from './WantToTryButton';
+import './ChocolateCard.css';
 
-function ChocolateCard({ chocolate, featured = false }) {
-  // Add useAuth hook here
+
+function ChocolateCard({ chocolate, featured = false, className = '' }) {
   const { currentUser } = useAuth();
-
-  // Enhanced helper function to render star ratings with dynamic colors
+  
+  // Helper function to get display title with fallback
+  const getDisplayTitle = () => {
+    if (!chocolate) return 'Unknown Chocolate';
+    return chocolate.name || chocolate.title || 'Unnamed Chocolate';
+  };
+  
+  // Helper function to get display maker with fallback
+  const getDisplayMaker = () => {
+    if (!chocolate) return 'Unknown Maker';
+    return chocolate.maker || chocolate.brand || 'Unknown Maker';
+  };
+  
+  // FIXED: Properly render filled stars based on rating
   const renderStars = (rating) => {
     const stars = [];
     const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
-    
-    // Determine star color class based on overall rating
-    const getStarColorClass = (rating) => {
-      if (rating >= 4.5) return 'filled-5'; // Green for excellent
-      if (rating >= 3.5) return 'filled-4'; // Light green for good  
-      if (rating >= 2.5) return 'filled-3'; // Yellow for average
-      if (rating >= 1.5) return 'filled-2'; // Orange for below average
-      return 'filled-1'; // Red for poor
-    };
-    
-    const colorClass = getStarColorClass(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
     
     for (let i = 1; i <= 5; i++) {
       if (i <= fullStars) {
-        stars.push(<span key={i} className={`star ${colorClass}`}>★</span>);
+        // Full star - filled with gold
+        stars.push(<span key={i} className="star filled">★</span>);
       } else if (i === fullStars + 1 && hasHalfStar) {
-        stars.push(<span key={i} className={`star half ${colorClass}`}>★</span>);
+        // Half star
+        stars.push(<span key={i} className="star half">★</span>);
       } else {
-        stars.push(<span key={i} className="star empty">★</span>);
+        // Empty star - light gray
+        stars.push(<span key={i} className="star empty">☆</span>);
       }
     }
     
     return stars;
   };
 
-  const getDisplayTitle = () => {
-    return chocolate.name;
-  };
-
-  const getDisplayMaker = () => {
-    // The service now enriches chocolates with maker names
-    return chocolate.maker || 'Unknown Maker';
-  };
+  if (!chocolate) {
+    return <div className="chocolate-card error">Chocolate data not available</div>;
+  }
 
   return (
-    <div className={`chocolate-card ${featured ? 'featured' : ''}`}>
-
-
-<Link to={`/chocolate/${chocolate.id}`} className="chocolate-link">
-  <div className="image-container">
-    <img src={chocolate.imageUrl} alt={chocolate.name} className="card-image" />
-  </div>
-</Link>
-
+    <div className={`chocolate-card ${featured ? 'featured' : ''} ${className}`}>
       
-      {/* Action buttons container */}
+      {/* Image Container with Link - using existing classes */}
+      <Link to={`/chocolate/${chocolate.id}`} className="chocolate-link">
+        <div className="image-container">
+          <img 
+            src={chocolate.imageUrl || '/placeholder-chocolate.jpg'} 
+            alt={getDisplayTitle()} 
+            className="card-image" 
+          />
+        </div>
+      </Link>
+
+      {/* Action buttons - using existing class name */}
       <div className="card-actions">
-        {/* Heart/Favorite button */}
         <FavoriteButton 
           chocolateId={chocolate.id} 
           size="medium" 
           className="card-overlay"
         />
-        
-        {/* WantToTryButton */}
         <WantToTryButton 
           chocolate={chocolate} 
           currentUser={currentUser}
@@ -77,8 +76,10 @@ function ChocolateCard({ chocolate, featured = false }) {
         />
       </div>
 
+      {/* Card Content - using existing classes */}
       <div className="card-content">
-        {/* Clickable maker name - links to maker page */}
+        
+        {/* Maker name */}
         <Link 
           to={`/maker?maker=${encodeURIComponent(getDisplayMaker())}`} 
           className="card-maker-link"
@@ -87,7 +88,7 @@ function ChocolateCard({ chocolate, featured = false }) {
           <p className="card-maker">{getDisplayMaker()}</p>
         </Link>
         
-        {/* Clickable chocolate title - links to detail page */}
+        {/* Chocolate title */}
         <Link 
           to={`/chocolate/${chocolate.id}`} 
           className="chocolate-title-link"
@@ -96,18 +97,24 @@ function ChocolateCard({ chocolate, featured = false }) {
           <h3 className="card-title">{getDisplayTitle()}</h3>
         </Link>
         
+        {/* Origin and Cacao Percentage - using existing classes */}
         <div className="card-details">
-          <span className="origin">{chocolate.origin}</span>
-          <span className="percentage">{chocolate.cacaoPercentage}% Cacao</span>
+          <span className="origin">{chocolate.origin || 'Unknown'}</span>
+          <span className="percentage">{chocolate.cacaoPercentage || 0}% Cacao</span>
         </div>
         
+        {/* Rating Section - using existing classes */}
         <div className="card-rating">
           <span className="rating-value">{(chocolate.averageRating || 0).toFixed(1)}</span>
           <div className="stars">
             {renderStars(chocolate.averageRating || 0)}
           </div>
-          <span className="rating-count">({chocolate.ratings || 0})</span>
+          {/* FIXED: Use both reviewCount and ratings for compatibility */}
+          <span className="rating-count">
+            ({chocolate.reviewCount || chocolate.ratings || 0})
+          </span>
         </div>
+        
       </div>
     </div>
   );
