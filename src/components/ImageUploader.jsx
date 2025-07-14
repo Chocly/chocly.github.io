@@ -1,155 +1,39 @@
-// src/components/ImageUploader.jsx - Improved HEIC handling
+// Simplified ImageUploader.jsx - No HEIC conversion
 import { useState } from 'react';
 import './ImageUploader.css';
 
-function ImageUploader({ onImageSelected, currentImageUrl = null }) {
-  const [preview, setPreview] = useState(currentImageUrl);
-  const [uploading, setUploading] = useState(false);
+function ImageUploader({ onImageSelect, currentImage = null }) {
+  const [preview, setPreview] = useState(currentImage);
   const [error, setError] = useState('');
-  const [processingMessage, setProcessingMessage] = useState('');
   
-  // Convert any image to JPEG using canvas
-  const convertToJpeg = async (file) => {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      
-      img.onload = () => {
-        try {
-          // Calculate dimensions (max 1200px on longest side)
-          const maxSize = 1200;
-          let { width, height } = img;
-          
-          if (width > height) {
-            if (width > maxSize) {
-              height = (height * maxSize) / width;
-              width = maxSize;
-            }
-          } else {
-            if (height > maxSize) {
-              width = (width * maxSize) / height;
-              height = maxSize;
-            }
-          }
-          
-          canvas.width = width;
-          canvas.height = height;
-          
-          // Draw and convert to JPEG
-          ctx.fillStyle = 'white'; // White background for transparency
-          ctx.fillRect(0, 0, width, height);
-          ctx.drawImage(img, 0, 0, width, height);
-          
-          canvas.toBlob((blob) => {
-            if (blob) {
-              resolve(blob);
-            } else {
-              reject(new Error('Failed to convert image'));
-            }
-          }, 'image/jpeg', 0.85); // 85% quality
-        } catch (error) {
-          reject(error);
-        }
-      };
-      
-      img.onerror = () => reject(new Error('Failed to load image'));
-      
-      // Create object URL for the file
-      const objectUrl = URL.createObjectURL(file);
-      img.src = objectUrl;
-      
-      // Clean up object URL after loading
-      img.onload = (originalOnload => function() {
-        URL.revokeObjectURL(objectUrl);
-        return originalOnload.apply(this, arguments);
-      })(img.onload);
-    });
-  };
-  
-  const handleFileChange = async (e) => {
+  const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      const originalFile = e.target.files[0];
+      const file = e.target.files[0];
       setError('');
-      setUploading(true);
-      setProcessingMessage('Processing image...');
       
-      try {
-        // Check file size (max 15MB before processing)
-        if (originalFile.size > 15 * 1024 * 1024) {
-          throw new Error('File too large. Please choose an image under 15MB.');
-        }
-        
-        let processedFile = originalFile;
-        
-        // Check if it's a HEIC file or any image that needs conversion
-        const isHeic = originalFile.type === 'image/heic' || 
-                      originalFile.type === 'image/heif' ||
-                      originalFile.name.toLowerCase().endsWith('.heic') ||
-                      originalFile.name.toLowerCase().endsWith('.heif');
-        
-        const needsConversion = isHeic || 
-                               originalFile.size > 3 * 1024 * 1024 || // Over 3MB
-                               originalFile.type === 'image/png'; // Convert PNG to JPG for smaller size
-        
-        if (needsConversion) {
-          setProcessingMessage(isHeic ? 'Converting HEIC to JPEG...' : 'Optimizing image...');
-          
-          try {
-            const convertedBlob = await convertToJpeg(originalFile);
-            
-            // Create new filename
-            const originalName = originalFile.name.replace(/\.(heic|heif|png)$/i, '.jpg');
-            const newFileName = originalName.includes('.jpg') ? originalName : originalName + '.jpg';
-            
-            processedFile = new File([convertedBlob], newFileName, { 
-              type: 'image/jpeg',
-              lastModified: Date.now()
-            });
-            
-            console.log('Image conversion successful:', {
-              originalSize: (originalFile.size / 1024 / 1024).toFixed(2) + 'MB',
-              processedSize: (processedFile.size / 1024 / 1024).toFixed(2) + 'MB',
-              originalType: originalFile.type,
-              processedType: processedFile.type
-            });
-            
-          } catch (conversionError) {
-            console.error('Image conversion failed:', conversionError);
-            throw new Error('Could not process image. Please try a different image or JPG format.');
-          }
-        }
-        
-        // Final size check
-        if (processedFile.size > 5 * 1024 * 1024) {
-          throw new Error('Processed image is still too large. Please try a smaller image.');
-        }
-        
-        // Create preview
-        setProcessingMessage('Creating preview...');
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          setPreview(event.target.result);
-          setProcessingMessage('');
-        };
-        reader.onerror = () => {
-          throw new Error('Failed to create image preview');
-        };
-        reader.readAsDataURL(processedFile);
-        
-        // Pass processed file to parent
-        onImageSelected(processedFile);
-        
-        console.log('Image processing completed successfully');
-        
-      } catch (error) {
-        console.error('Error processing image:', error);
-        setError(error.message || 'Error processing image. Please try again.');
-        setPreview(null);
-        onImageSelected(null);
-      } finally {
-        setUploading(false);
-        setProcessingMessage('');
+      // Basic validation
+      if (file.size > 5 * 1024 * 1024) {
+        setError('File too large. Please choose an image under 5MB.');
+        return;
+      }
+      
+      // Check file type
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      if (!validTypes.includes(file.type) && !file.name.match(/\.(jpg|jpeg|png|webp)$/i)) {
+        setError('Please upload a JPG, PNG, or WebP image. HEIC files are not supported.');
+        return;
+      }
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setPreview(event.target.result);
+      };
+      reader.readAsDataURL(file);
+      
+      // Pass file to parent
+      if (onImageSelect && typeof onImageSelect === 'function') {
+        onImageSelect(file);
       }
     }
   };
@@ -157,7 +41,9 @@ function ImageUploader({ onImageSelected, currentImageUrl = null }) {
   const handleRemoveImage = () => {
     setPreview(null);
     setError('');
-    onImageSelected(null);
+    if (onImageSelect && typeof onImageSelect === 'function') {
+      onImageSelect(null);
+    }
   };
   
   return (
@@ -184,13 +70,12 @@ function ImageUploader({ onImageSelected, currentImageUrl = null }) {
       </div>
       
       <div className="upload-controls">
-        <label className={`upload-button ${uploading ? 'disabled' : ''}`}>
-          {uploading ? (processingMessage || 'Processing...') : (preview ? 'Change Image' : 'Upload Label Image')}
+        <label className="upload-button">
+          {preview ? 'Change Image' : 'Upload Label Image'}
           <input 
             type="file" 
-            accept="image/*,.heic,.heif" 
-            onChange={handleFileChange} 
-            disabled={uploading}
+            accept="image/jpeg,image/jpg,image/png,image/webp" 
+            onChange={handleFileChange}
             style={{ display: 'none' }} 
           />
         </label>
@@ -203,9 +88,9 @@ function ImageUploader({ onImageSelected, currentImageUrl = null }) {
       )}
       
       <div className="upload-info">
-        Supports JPG, PNG, WebP, and HEIC files up to 15MB
+        Supports JPG, PNG, and WebP files up to 5MB
         <br />
-        <small>HEIC files will be automatically converted to JPG</small>
+        <small>iPhone users: Photos will be automatically converted to JPG</small>
       </div>
     </div>
   );
