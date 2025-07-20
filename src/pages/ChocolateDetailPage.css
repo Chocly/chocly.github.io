@@ -913,3 +913,191 @@ h2::after {
   line-height: 1.4;
   letter-spacing: 0.3px;
 }
+
+/* Add these styles to your ChocolateDetailPage.css file */
+
+/* Chocolate specs section - improved spacing and design */
+.chocolate-specs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  font-size: 1.1rem;
+}
+
+/* Individual spec items */
+.chocolate-specs .origin,
+.chocolate-specs .percentage,
+.chocolate-specs .type {
+  position: relative;
+  padding: 0.5rem 1rem;
+  background: #f8f9fa;
+  border-radius: 20px;
+  font-weight: 500;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+/* Different background colors for each type */
+.chocolate-specs .origin {
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+  color: #065F46;
+  border-color: #A7F3D0;
+}
+
+.chocolate-specs .percentage {
+  background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+  color: #FFFFFF;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  border: none;
+}
+
+.chocolate-specs .type {
+  background: linear-gradient(135deg, #FEF3E7 0%, #FDEAA8 100%);
+  color: #92400E;
+  border-color: #FCD34D;
+}
+
+/* Hover effects */
+.chocolate-specs span:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Alternative design with separators */
+/* Uncomment this section if you prefer separators between items */
+/*
+.chocolate-specs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  margin: 1.5rem 0;
+  font-size: 1.1rem;
+  color: #4B5563;
+}
+
+.chocolate-specs span {
+  padding: 0 1rem;
+  position: relative;
+  font-weight: 500;
+}
+
+.chocolate-specs span:not(:last-child)::after {
+  content: '•';
+  position: absolute;
+  right: -0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #D1D5DB;
+  font-size: 0.8rem;
+}
+
+.chocolate-specs span:first-child {
+  padding-left: 0;
+}
+*/
+
+/* Alternative minimal design */
+/* Uncomment this section for a more minimal approach */
+/*
+.chocolate-specs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2rem;
+  margin: 1.2rem 0 1.8rem 0;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+}
+
+.chocolate-specs span {
+  position: relative;
+  color: #6B7280;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.chocolate-specs span::before {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.2;
+}
+*/
+
+/* Icon-based design (requires adding icons to your JSX) */
+/* This would require updating your JSX to include icons */
+/*
+.chocolate-specs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.chocolate-specs .spec-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: #F9FAFB;
+  border-radius: 12px;
+  border: 1px solid #E5E7EB;
+}
+
+.chocolate-specs .spec-icon {
+  width: 20px;
+  height: 20px;
+  color: #9CA3AF;
+}
+
+.chocolate-specs .spec-label {
+  font-size: 0.8rem;
+  color: #6B7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.chocolate-specs .spec-value {
+  font-weight: 600;
+  color: #1F2937;
+}
+*/
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .chocolate-specs {
+    font-size: 1rem;
+    gap: 0.75rem;
+    margin: 1rem 0;
+  }
+  
+  .chocolate-specs .origin,
+  .chocolate-specs .percentage,
+  .chocolate-specs .type {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .chocolate-specs {
+    font-size: 0.9rem;
+    gap: 0.5rem;
+  }
+  
+  .chocolate-specs span {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.85rem;
+  }
+}

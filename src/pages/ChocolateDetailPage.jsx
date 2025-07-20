@@ -318,7 +318,8 @@ function ChocolateDetailPage() {
           </section>
         )}
         
-        {/* Flavor Profile */}
+        {/* Flavor Profile - TODO: Add back when user reviews are implemented */}
+        {/* 
         <section className="flavor-section">
           <h2>Flavor Profile</h2>
           <div className="flavor-list">
@@ -335,6 +336,8 @@ function ChocolateDetailPage() {
             ))}
           </div>
         </section>
+        */}
+
         
         {/* Ingredients */}
         <section className="ingredients-section">

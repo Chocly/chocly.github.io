@@ -1,4 +1,4 @@
-// src/components/QuickReviewCTA.jsx - REDESIGNED UX
+// src/components/QuickReviewCTA.jsx - FIXED VERSION
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import './QuickReviewCTA.css';
@@ -10,6 +10,11 @@ function QuickReviewCTA({ chocolateId, chocolateName, onQuickReview, hasUserRevi
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewText, setReviewText] = useState(existingReview?.text || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Debug logs - inside the component where variables exist
+  console.log('QuickReviewCTA - currentUser:', currentUser);
+  console.log('QuickReviewCTA - hasUserReviewed:', hasUserReviewed);
+  console.log('QuickReviewCTA - existingReview:', existingReview);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,7 +92,6 @@ function QuickReviewCTA({ chocolateId, chocolateName, onQuickReview, hasUserRevi
   if (hasUserReviewed && !existingReview) {
     return (
       <div className="review-cta-completed">
-        <div className="cta-icon">✅</div>
         <span>Thanks for your review!</span>
         <button 
           className="edit-review-btn"
@@ -104,7 +108,6 @@ function QuickReviewCTA({ chocolateId, chocolateName, onQuickReview, hasUserRevi
     return (
       <div className="review-cta-banner">
         <div className="cta-content">
-          <div className="cta-icon">⭐</div>
           <div className="cta-text">
             <h3>Rate {chocolateName}</h3>
             <p>Share your experience with fellow chocolate lovers</p>
@@ -123,7 +126,6 @@ function QuickReviewCTA({ chocolateId, chocolateName, onQuickReview, hasUserRevi
   return (
     <div className="review-cta-banner">
       <div className="cta-content">
-        <div className="cta-icon">⭐</div>
         <div className="cta-text">
           <h3>{hasUserReviewed ? 'Update Your Review' : 'Rate This Chocolate'}</h3>
           <p>Click stars to rate, then optionally add your thoughts</p>
