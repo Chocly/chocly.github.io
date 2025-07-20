@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getFeaturedChocolates } from '../services/chocolateFirebaseService';
 import { getFeaturedReviews } from '../services/reviewService';
 import ChocolateCard from '../components/ChocolateCard';
+import SEO from '../components/SEO';
 import './HomePage.css';
 
 // Import your local hero image
@@ -255,6 +256,13 @@ function HomePage() {
   
   return (
     <div className="home-page">
+          <SEO
+      title="Best Chocolate Reviews & Ratings"
+      description="Discover the world's finest chocolates through expert reviews and ratings. Join our community of chocolate enthusiasts to explore, review, and share premium chocolates."
+      keywords="chocolate reviews, chocolate ratings, best chocolate, dark chocolate, milk chocolate, artisan chocolate, chocolate tasting, chocolate community"
+      url="/"
+           />
+           
       {/* Hero Section with locally stored image */}
       <section 
         className="hero-section" 

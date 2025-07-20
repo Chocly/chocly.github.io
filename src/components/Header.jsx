@@ -288,4 +288,53 @@ function Header() {
   );
 }
 
+// In your existing Header component, add this section to the nav:
+
+<div className="nav-section">
+  <h3>Popular Categories</h3>
+  
+  {/* Percentage Categories */}
+  <div className="category-group">
+    <span className="category-label">By Cacao %</span>
+    <Link to="/category/percentage/70" onClick={() => setMenuOpen(false)}>
+      70% Dark Chocolate
+    </Link>
+    <Link to="/category/percentage/85" onClick={() => setMenuOpen(false)}>
+      85% Dark Chocolate
+    </Link>
+    <Link to="/category/percentage/100" onClick={() => setMenuOpen(false)}>
+      100% Pure Chocolate
+    </Link>
+  </div>
+  
+  {/* Origin Categories */}
+  <div className="category-group">
+    <span className="category-label">By Origin</span>
+    <Link to="/category/origin/ecuador" onClick={() => setMenuOpen(false)}>
+      Ecuador Chocolate
+    </Link>
+    <Link to="/category/origin/madagascar" onClick={() => setMenuOpen(false)}>
+      Madagascar Chocolate
+    </Link>
+    <Link to="/category/origin/venezuela" onClick={() => setMenuOpen(false)}>
+      Venezuela Chocolate
+    </Link>
+  </div>
+  
+  {/* Type Categories */}
+  <div className="category-group">
+    <span className="category-label">By Type</span>
+    <Link to="/category/type/dark" onClick={() => setMenuOpen(false)}>
+      Dark Chocolate
+    </Link>
+    <Link to="/category/type/milk" onClick={() => setMenuOpen(false)}>
+      Milk Chocolate
+    </Link>
+    <Link to="/category/type/white" onClick={() => setMenuOpen(false)}>
+      White Chocolate
+    </Link>
+  </div>
+</div>
+
+
 export default Header;

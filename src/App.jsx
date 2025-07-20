@@ -1,4 +1,4 @@
-// Modified src/App.jsx - Fixed for GitHub Pages deployment
+// src/App.jsx - Updated with category routes
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import ChocolateDetailPage from './pages/ChocolateDetailPage';
@@ -7,13 +7,14 @@ import ProfilePage from './pages/ProfilePage';
 import BrowseAllPage from './pages/BrowseAllPage';
 import BarcodeSearchPage from './pages/BarcodeSearchPage';
 import CategoryPage from './pages/CategoryPage';
+import CategoryLandingPage from './pages/CategoryLandingPage'; // NEW
 import MakerPage from './pages/MakerPage';
 import AddChocolatePage from './pages/AddChocolatePage';
 import UnifiedAuthPage from './components/auth/UnifiedAuthPage';
 import { AuthProvider } from './contexts/AuthContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import ScrollToTop from './components/ScrollToTop'; // NEW: Import ScrollToTop
+import ScrollToTop from './components/ScrollToTop';
 import BatchImageUploadPage from './pages/BatchImageUploadPage';
 import AdminPage from './pages/AdminPage';
 import AboutPage from './pages/AboutPage';
@@ -42,21 +43,24 @@ function App() {
               <Route path="/auth" element={<UnifiedAuthPage />} />
               <Route path="/login" element={<UnifiedAuthPage />} />
               <Route path="/signup" element={<UnifiedAuthPage />} />
+              <Route path="/category" element={<CategoryPage />} />
+              
+              {/* NEW: Category Landing Pages */}
+              <Route path="/category/:categoryType/:categoryValue" element={<CategoryLandingPage />} />
+              
+              <Route path="/maker" element={<MakerPage />} />
+              <Route path="/add-chocolate" element={<AddChocolatePage />} />
+              <Route path="/batch-upload" element={<BatchImageUploadPage />} />
+              <Route path="/admin" element={<AdminPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-              <Route path="/terms-of-service" element={<TermsOfServicePage />} />
-              <Route path="/admin" element={<AdminPage />} />
-              <Route path="/admin/batch-upload" element={<BatchImageUploadPage />} />
-              <Route path="/category/:categorySlug" element={<CategoryPage />} />
-              <Route path="/maker" element={<MakerPage />} />
-              <Route path="/maker/:makerName" element={<MakerPage />} />
-              <Route path="/add-chocolate" element={<AddChocolatePage />} />
-              {/* Fallback route for any unmatched paths */}
-              <Route path="*" element={<HomePage />} />
+              <Route path="/privacy" element={<PrivacyPolicyPage />} />
+              <Route path="/terms" element={<TermsOfServicePage />} />
+              <Route path="*" element={<div>Page not found</div>} />
             </Routes>
           </main>
           <Footer />
+          <ScrollToTop />
         </div>
       </AuthProvider>
     </BrowserRouter>
