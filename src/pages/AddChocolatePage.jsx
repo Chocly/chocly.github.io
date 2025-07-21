@@ -7,9 +7,9 @@ import { addReview } from '../services/reviewService';
 import ImageUploader from '../components/ImageUploader';
 import './AddChocolatePage.css';
 
-// Predefined chocolate types for easy selection
+// Updated chocolate types - removed Single Origin, clarified options
 const CHOCOLATE_TYPES = [
-  'Dark', 'Milk', 'White', 'Ruby', 'Dark Milk', 'Single Origin', 'Flavored'
+  'Dark', 'Milk', 'White', 'Ruby', 'Dark Milk', 'Flavored/Infused', 'Blonde'
 ];
 
 // Common flavor tags
@@ -38,7 +38,7 @@ function AddChocolatePage() {
   const [formData, setFormData] = useState({
     name: '',
     maker: '',
-    type: '',
+    types: [], // Changed to array for multiple selection
     origin: '',
     cacaoPercentage: '',
     flavorTags: [],
@@ -58,6 +58,12 @@ function AddChocolatePage() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [success, setSuccess] = useState(false);
   
+  // State for mobile tag sections
+  const [expandedSections, setExpandedSections] = useState({
+    flavors: false,
+    attributes: false
+  });
+  
   // Duplicate checking
   const [duplicateWarning, setDuplicateWarning] = useState(null);
   const [isDuplicateCheckLoading, setIsDuplicateCheckLoading] = useState(false);
@@ -66,57 +72,46 @@ function AddChocolatePage() {
   // Load existing tags
   useEffect(() => {
     const loadTags = async () => {
-      try {
-        const tags = await getAllTags();
-        // You can use these tags if you want to show existing tags
-        console.log('Available tags:', tags);
-      } catch (error) {
-        console.error('Error loading tags:', error);
-      }
+      const tags = await getAllTags();
+      // You could use these to supplement the predefined tags if needed
     };
     loadTags();
   }, []);
 
-  // Duplicate checking function
-  const findSimilarChocolates = async (name, maker, type) => {
-    try {
-      // Search by name + maker combination
-      const nameSearchResults = await searchChocolates(`${name} ${maker}`);
-      
-      // Filter for potential duplicates
-      const potentialDuplicates = nameSearchResults.filter(choc => {
-        const nameSimilarity = choc.name.toLowerCase().includes(name.toLowerCase()) ||
-                              name.toLowerCase().includes(choc.name.toLowerCase());
-        const makerMatch = choc.maker.toLowerCase() === maker.toLowerCase();
-        const typeMatch = choc.type === type;
-        
-        // Consider it a potential duplicate if:
-        // 1. Same maker + similar name, OR
-        // 2. Similar name + same type (different maker might be typo)
-        return (nameSimilarity && makerMatch) || (nameSimilarity && typeMatch);
-      });
-      
-      return potentialDuplicates;
-    } catch (error) {
-      console.error('Error checking for duplicates:', error);
-      return [];
-    }
-  };
-
+  // Function to check for duplicate chocolates
   const checkForDuplicates = async () => {
-    if (!formData.name.trim() || !formData.maker.trim()) return;
-    
+    if (!formData.name || !formData.maker) {
+      setDuplicateWarning(null);
+      setFoundSimilarChocolates([]);
+      return;
+    }
+
     setIsDuplicateCheckLoading(true);
+    
     try {
-      const potentialDuplicates = await findSimilarChocolates(
-        formData.name.trim(),
-        formData.maker.trim(), 
-        formData.type
+      const searchQuery = `${formData.name} ${formData.maker}`.toLowerCase();
+      const results = await searchChocolates(searchQuery);
+      
+      const exactMatch = results.find(choc => 
+        choc.name.toLowerCase() === formData.name.toLowerCase() &&
+        choc.maker.toLowerCase() === formData.maker.toLowerCase()
       );
       
-      if (potentialDuplicates.length > 0) {
-        setFoundSimilarChocolates(potentialDuplicates);
-        setDuplicateWarning(`Found ${potentialDuplicates.length} similar chocolate(s). Please review before continuing.`);
+      const similarChocolates = results.filter(choc => 
+        choc.maker.toLowerCase() === formData.maker.toLowerCase() &&
+        (choc.name.toLowerCase().includes(formData.name.toLowerCase()) ||
+         formData.name.toLowerCase().includes(choc.name.toLowerCase()))
+      );
+      
+      setFoundSimilarChocolates(similarChocolates);
+      
+      if (exactMatch) {
+        setDuplicateWarning(`⚠️ This chocolate already exists! 
+Found: "${exactMatch.name}" by ${exactMatch.maker}
+Please review before continuing.`);
+      } else if (similarChocolates.length > 0) {
+        setDuplicateWarning(`⚠️ Found ${similarChocolates.length} similar chocolate(s) from ${formData.maker}. 
+Please review before continuing.`);
       } else {
         setDuplicateWarning(null);
         setFoundSimilarChocolates([]);
@@ -135,7 +130,7 @@ function AddChocolatePage() {
     }, 1000);
     
     return () => clearTimeout(debounceTimer);
-  }, [formData.name, formData.maker, formData.type]);
+  }, [formData.name, formData.maker, formData.types]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -162,6 +157,15 @@ function AddChocolatePage() {
 
   const handleImageSelected = (file) => {
     setSelectedImage(file);
+  };
+
+  const handleTypeToggle = (type) => {
+    setFormData(prev => ({
+      ...prev,
+      types: prev.types.includes(type)
+        ? prev.types.filter(t => t !== type)
+        : [...prev.types, type]
+    }));
   };
 
   const handleTagToggle = (tagType, tag) => {
@@ -192,8 +196,8 @@ function AddChocolatePage() {
       return;
     }
 
-    if (!formData.type) {
-      alert('Please select a chocolate type');
+    if (formData.types.length === 0) {
+      alert('Please select at least one chocolate type');
       return;
     }
 
@@ -231,344 +235,413 @@ function AddChocolatePage() {
       const chocolateData = {
         name: formData.name.trim(),
         maker: formData.maker.trim(),
-        type: formData.type,
-        origin: formData.origin.trim() || 'Unknown',
-        cacaoPercentage: formData.cacaoPercentage ? parseInt(formData.cacaoPercentage) : 0,
-        description: '', // Empty - reviews will provide content
+        type: formData.types.join(', '), // Join multiple types
+        origin: formData.origin.trim() || null, // Optional - null if empty
+        cacaoPercentage: formData.cacaoPercentage ? parseInt(formData.cacaoPercentage) : null,
         tags: allTags,
-        createdBy: currentUser.uid,
-        createdByName: currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User'
+        // Let reviews tell the story - no description field
       };
 
-      console.log('📦 Prepared chocolate data:', chocolateData);
-      console.log('🖼️ Selected image:', selectedImage ? {
-        name: selectedImage.name,
-        size: `${(selectedImage.size / 1024 / 1024).toFixed(2)}MB`,
-        type: selectedImage.type
-      } : 'No image selected');
+      // Add the chocolate (with image if provided)
+      const chocolateId = await addUserChocolate(chocolateData, selectedImage);
+      console.log('✅ Chocolate added successfully:', chocolateId);
 
-      // Add the chocolate using your existing service
-      console.log('📤 Calling addUserChocolate...');
-      const result = await addUserChocolate(chocolateData, selectedImage);
-      
-      console.log('✅ Upload completed successfully:', result);
-
-      // Add the user's initial review for this chocolate
-      const reviewPayload = {
-        chocolateId: result.id,
+      // Add the first review
+      const reviewToAdd = {
+        ...reviewData,
+        chocolateId,
         userId: currentUser.uid,
-        user: currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User', // Match field name used in ChocolateDetailPage
-        userName: currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User',
+        userName: currentUser.displayName || 'Chocolate Lover',
         userPhotoURL: currentUser.photoURL || null,
-        rating: reviewData.rating,
-        text: reviewData.text.trim(),
-        title: reviewData.title.trim() || undefined,
-        isFirstReview: true, // Flag to indicate this is the contributor's initial review
-        helpful: 0,
-        chocolate: {
-          id: result.id,
-          name: result.name,
-          maker: result.maker,
-          imageUrl: result.imageUrl || 'https://placehold.co/300x300?text=Chocolate'
-        }
+        helpfulVotes: 0,
+        createdAt: new Date()
       };
 
-      console.log('📝 Adding initial review:', reviewPayload);
-      
-      // Debug the current user information
-      console.log('🔍 Debug Current User Info:');
-      console.log('- UID:', currentUser.uid);
-      console.log('- Display Name:', currentUser.displayName);
-      console.log('- Email:', currentUser.email);
-      console.log('- Photo URL:', currentUser.photoURL);
-      
-      await addReview(reviewPayload);
-      
+      await addReview(reviewToAdd);
+      console.log('✅ Review added successfully');
+
+      // Show success modal
+      setShowSuccessModal(true);
       setSuccess(true);
       
-      // Show success for 3 seconds, then redirect
+      // Navigate after delay
       setTimeout(() => {
-        console.log('🔄 Redirecting to chocolate page:', `/chocolate/${result.id}`);
-        navigate(`/chocolate/${result.id}`);
-      }, 3000);
-      
+        navigate(`/chocolate/${chocolateId}`);
+      }, 2000);
+
     } catch (error) {
-      console.error('💥 Submit error:', error);
-      
-      // Provide specific error messages based on your existing error handling
-      let errorMessage = 'Failed to add chocolate. ';
-      
-      if (error.code === 'storage/unauthorized') {
-        errorMessage += 'Storage permission denied. Please try signing out and back in.';
-      } else if (error.code === 'storage/canceled') {
-        errorMessage += 'Upload was canceled.';
-      } else if (error.code === 'storage/retry-limit-exceeded') {
-        errorMessage += 'Upload failed due to network issues. Please try again.';
-      } else if (error.message?.includes('CORS')) {
-        errorMessage += 'Network configuration issue. Please try again in a few minutes.';
-      } else if (error.message?.includes('storage')) {
-        errorMessage += 'Image upload failed. The chocolate data was saved but without the image.';
-      } else if (error.code === 'permission-denied') {
-        errorMessage += 'Permission denied. Please make sure you are signed in.';
-      } else {
-        errorMessage += error.message || 'Unknown error occurred.';
-      }
-      
-      errorMessage += '\n\nPlease try again or contact support if the problem persists.';
-      alert(errorMessage);
+      console.error('❌ Error adding chocolate:', error);
+      alert(`Error adding chocolate: ${error.message}`);
     } finally {
       setLoading(false);
     }
   };
 
-  // Don't render if not logged in
-  if (!currentUser) {
-    return null;
-  }
-
-  // Success screen (using your existing pattern)
-  if (success) {
-    return (
-      <div className="add-chocolate-success">
-        <div className="container">
-          <div className="success-animation">
-            <div className="success-icon">🍫</div>
-            <h1>Chocolate Added Successfully!</h1>
-            <p>Thank you for contributing to our chocolate database!</p>
-            <div className="success-details">
-              <p>Your chocolate "<strong>{formData.name}</strong>" has been added and is now available for everyone to discover and review.</p>
-              <p>Your review is now the first one for this chocolate!</p>
-            </div>
-            <div className="loading-redirect">
-              <div className="loading-dots">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <p>Redirecting to your chocolate...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const isFormValid = formData.name.trim() && formData.maker.trim() && formData.type && 
-                     reviewData.rating > 0 && reviewData.text.trim();
-
-// REPLACE the existing page header JSX with this simplified version:
-return (
-  <div className="add-chocolate-page">
-    <div className="container">
-      {/* Simplified Header - NO Progress Bar */}
-      <div className="page-header">
-        <h1>Add Your Chocolate Discovery</h1>
-        <p>Share a new chocolate and write the first review!</p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="add-chocolate-form">
-        {/* Rest of your form remains exactly the same */}
-        
-        {/* Essential Info Section */}
-        <div className="form-section">
-          <div className="section-header">
-            <span className="section-icon">✨</span>
-            <h2>Chocolate Details</h2>
-          </div>
-          
-          <div className="form-grid">
-            <div className="form-group">
-              <label htmlFor="name">Chocolate Name *</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder="e.g., Madagascar Dark 70%"
-                required
-              />
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="maker">Maker/Brand *</label>
-              <input
-                type="text"
-                id="maker"
-                name="maker"
-                value={formData.maker}
-                onChange={handleInputChange}
-                placeholder="e.g., Valrhona, Lindt"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="form-grid-three">
-            <div className="form-group">
-              <label htmlFor="origin">Origin</label>
-              <input
-                type="text"
-                id="origin"
-                name="origin"
-                value={formData.origin}
-                onChange={handleInputChange}
-                placeholder="e.g., Ecuador"
-              />
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="cacaoPercentage">Cacao %</label>
-              <input
-                type="number"
-                id="cacaoPercentage"
-                name="cacaoPercentage"
-                value={formData.cacaoPercentage}
-                onChange={handleInputChange}
-                placeholder="70"
-                min="1"
-                max="100"
-              />
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="type">Type *</label>
-              <div className="type-selector">
-                {CHOCOLATE_TYPES.map(type => (
-                  <button
-                    key={type}
-                    type="button"
-                    onClick={() => setFormData(prev => ({ ...prev, type }))}
-                    className={`type-button ${formData.type === type ? 'selected' : ''}`}
-                  >
-                    {type}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
+  return (
+    <div className="add-chocolate-page">
+      <div className="container">
+        {/* Simplified Header - NO Progress Bar */}
+        <div className="page-header">
+          <h1>Create a New Chocolate Page</h1>
+          <p>Add a chocolate to our database and be the first to review it!</p>
         </div>
 
-        {/* Review Section - FIXED star rating */}
-        <div className="form-section review-section">
-          <div className="section-header">
-            <span className="section-icon">⭐</span>
-            <h3>Write the First Review *</h3>
-          </div>
-          <p className="review-intro">As the contributor, your review will be the first one for this chocolate!</p>
+        <form onSubmit={handleSubmit} className="add-chocolate-form">
+          {/* Rest of your form remains exactly the same */}
           
-          <div className="form-group rating-group">
-            <label>Your Rating *</label>
-            <div className="rating-input-container">
-              <div className="rating-input" role="radiogroup" aria-label="Rate this chocolate from 1 to 5 stars">
-                {[1, 2, 3, 4, 5].map(star => (
-                  <button
-                    key={star}
-                    type="button"
-                    onClick={() => handleRatingChange(star)}
-                    className={`star-button ${star <= reviewData.rating ? 'filled' : ''}`}
-                    aria-label={`${star} star${star !== 1 ? 's' : ''}`}
-                    aria-pressed={star <= reviewData.rating}
-                    title={`Rate ${star} star${star !== 1 ? 's' : ''}`}
-                  >
-                    ★
-                  </button>
-                ))}
+          {/* Essential Info Section */}
+          <div className="form-section">
+            <div className="section-header">
+              <span className="section-icon">✨</span>
+              <h2>Chocolate Details</h2>
+            </div>
+            
+            <div className="form-grid">
+              <div className="form-group">
+                <label htmlFor="name">Chocolate Name / Flavor *</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  placeholder="e.g., Madagascar Dark 70% or Raspberry Truffle"
+                  required
+                />
               </div>
-              {reviewData.rating > 0 && (
-                <div className="rating-feedback">
-                  <span className="rating-text">
-                    {reviewData.rating === 1 && "Poor"}
-                    {reviewData.rating === 2 && "Fair"}
-                    {reviewData.rating === 3 && "Good"}
-                    {reviewData.rating === 4 && "Very Good"}
-                    {reviewData.rating === 5 && "Excellent"}
-                  </span>
-                  <span className="rating-description">
-                    ({reviewData.rating} star{reviewData.rating !== 1 ? 's' : ''})
-                  </span>
+              
+              <div className="form-group">
+                <label htmlFor="maker">Maker/Brand *</label>
+                <input
+                  type="text"
+                  id="maker"
+                  name="maker"
+                  value={formData.maker}
+                  onChange={handleInputChange}
+                  placeholder="e.g., Valrhona, Lindt"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="form-grid-three">
+              <div className="form-group">
+                <label htmlFor="origin">Origin</label>
+                <input
+                  type="text"
+                  id="origin"
+                  name="origin"
+                  value={formData.origin}
+                  onChange={handleInputChange}
+                  placeholder="e.g., Ecuador"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="cacaoPercentage">Cacao %</label>
+                <input
+                  type="number"
+                  id="cacaoPercentage"
+                  name="cacaoPercentage"
+                  value={formData.cacaoPercentage}
+                  onChange={handleInputChange}
+                  placeholder="70"
+                  min="1"
+                  max="100"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="type">Type * (Select all that apply)</label>
+                <div className="type-selector">
+                  {CHOCOLATE_TYPES.map(type => (
+                    <button
+                      key={type}
+                      type="button"
+                      onClick={() => handleTypeToggle(type)}
+                      className={`type-button ${formData.types.includes(type) ? 'selected' : ''}`}
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Duplicate Warning */}
+            {duplicateWarning && (
+              <div className="duplicate-warning">
+                <p>{duplicateWarning}</p>
+                {foundSimilarChocolates.length > 0 && (
+                  <div className="similar-chocolates">
+                    <p>Similar chocolates found:</p>
+                    <ul>
+                      {foundSimilarChocolates.map(choc => (
+                        <li key={choc.id}>
+                          <a href={`/chocolate/${choc.id}`} target="_blank" rel="noopener noreferrer">
+                            {choc.name} by {choc.maker}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Flavor Profile Section */}
+          <div className="form-section">
+            <div className="section-header">
+              <span className="section-icon">🍫</span>
+              <h2>Flavor Profile</h2>
+            </div>
+            
+            <div className="tag-selection">
+              <p className="tag-helper">Select all flavors you taste:</p>
+              
+              {/* Mobile-only selected summary */}
+              {formData.flavorTags.length > 0 && (
+                <div className="selected-tags-summary">
+                  <strong>{formData.flavorTags.length} selected:</strong> {formData.flavorTags.join(', ')}
                 </div>
               )}
+              
+              <div className={`tag-section-wrapper ${expandedSections.flavors ? 'expanded' : ''}`}>
+                <div className="tag-scroll-container">
+                  <div className="tag-grid">
+                    {COMMON_FLAVORS.map(flavor => (
+                      <button
+                        key={flavor}
+                        type="button"
+                        onClick={() => handleTagToggle('flavorTags', flavor)}
+                        className={`tag-button ${formData.flavorTags.includes(flavor) ? 'selected' : ''}`}
+                      >
+                        {flavor}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Mobile expand/collapse button */}
+                <button
+                  type="button"
+                  className={`tag-expand-toggle ${expandedSections.flavors ? 'expanded' : ''}`}
+                  onClick={() => setExpandedSections(prev => ({ ...prev, flavors: !prev.flavors }))}
+                >
+                  {expandedSections.flavors ? 'Show Less' : 'Show All Flavors'}
+                </button>
+              </div>
             </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="reviewTitle">Review Title (Optional)</label>
-            <input
-              type="text"
-              id="reviewTitle"
-              name="title"
-              value={reviewData.title}
-              onChange={handleReviewChange}
-              placeholder="e.g., Rich and complex with berry notes"
-              maxLength={100}
-            />
-            <small>Give your review a catchy title</small>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="reviewText">Your Review *</label>
-            <textarea
-              id="reviewText"
-              name="text"
-              value={reviewData.text}
-              onChange={handleReviewChange}
-              placeholder="Share your experience with this chocolate. What did you taste? How was the texture? Would you recommend it?"
-              rows="4"
-              required
-              maxLength={1000}
-            />
-            <div className="textarea-footer">
-              <small className="character-count">
-                {reviewData.text.length}/1000 characters
-              </small>
-              <small className="helper-text">
-                This will become the first review for this chocolate and help others decide if they want to try it.
-              </small>
+          {/* Attributes Section */}
+          <div className="form-section">
+            <div className="section-header">
+              <span className="section-icon">🏆</span>
+              <h2>Special Attributes</h2>
+            </div>
+            
+            <div className="tag-selection">
+              <p className="tag-helper">Check all that apply:</p>
+              
+              {/* Mobile-only selected summary */}
+              {formData.attributeTags.length > 0 && (
+                <div className="selected-tags-summary">
+                  <strong>{formData.attributeTags.length} selected:</strong> {formData.attributeTags.join(', ')}
+                </div>
+              )}
+              
+              <div className={`tag-section-wrapper ${expandedSections.attributes ? 'expanded' : ''}`}>
+                <div className="tag-scroll-container">
+                  <div className="tag-grid">
+                    {ATTRIBUTE_TAGS.map(attribute => (
+                      <button
+                        key={attribute}
+                        type="button"
+                        onClick={() => handleTagToggle('attributeTags', attribute)}
+                        className={`tag-button ${formData.attributeTags.includes(attribute) ? 'selected' : ''}`}
+                      >
+                        {attribute}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Mobile expand/collapse button */}
+                <button
+                  type="button"
+                  className={`tag-expand-toggle ${expandedSections.attributes ? 'expanded' : ''}`}
+                  onClick={() => setExpandedSections(prev => ({ ...prev, attributes: !prev.attributes }))}
+                >
+                  {expandedSections.attributes ? 'Show Less' : 'Show All Attributes'}
+                </button>
+              </div>
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="customTags">Additional Tags</label>
+              <input
+                type="text"
+                id="customTags"
+                name="customTags"
+                value={formData.customTags}
+                onChange={handleInputChange}
+                placeholder="Add custom tags separated by commas"
+              />
             </div>
           </div>
-        </div>
 
-        {/* Image Upload Section */}
-        <div className="form-section">
-          <div className="section-header">
-            <span className="section-icon">📸</span>
-            <h3>Add a Photo</h3>
-          </div>
-          <p>Help others see what this chocolate looks like!</p>
-          
-          <ImageUploader
-            onImageSelect={setSelectedImage}
-            currentImage={selectedImage}
-            accept="image/*"
-            maxSizeMB={5}
-          />
-        </div>
-
-        {/* Submit Button */}
-        <div className="form-navigation">
-          <button 
-            type="submit" 
-            className={`submit-button ${isFormValid && !loading ? 'ready' : ''}`}
-            disabled={!isFormValid || loading}
-          >
-            {loading ? (
-              <>
-                <div className="button-spinner"></div>
-                Adding Chocolate...
-              </>
-            ) : (
-              'Add Chocolate & Review'
+          {/* Image Upload Section */}
+          <div className="form-section">
+            <div className="section-header">
+              <span className="section-icon">📷</span>
+              <h2>Add a Photo</h2>
+            </div>
+            
+            <ImageUploader
+              onImageSelected={handleImageSelected}
+              existingImageUrl={null}
+              maxSizeInMB={5}
+            />
+            {selectedImage && (
+              <p className="image-selected">✓ Image selected: {selectedImage.name}</p>
             )}
-          </button>
-        </div>
-      </form>
+          </div>
+
+          {/* Review Section - Enhanced styling */}
+          <div className="form-section review-section-enhanced">
+            <div className="section-header">
+              <span className="section-icon">⭐</span>
+              <h2>Write the First Review!</h2>
+            </div>
+            
+            <div className="review-intro-enhanced">
+              <p>Be the first to share your thoughts about this chocolate! Your review helps others discover great chocolate.</p>
+            </div>
+            
+            {/* Rating Group */}
+            <div className="rating-group">
+              <label>Your Rating *</label>
+              <div className="rating-input-container">
+                <div className="rating-input">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => handleRatingChange(star)}
+                      className={`star-button ${reviewData.rating >= star ? 'filled' : ''}`}
+                      aria-label={`Rate ${star} star${star !== 1 ? 's' : ''}`}
+                    >
+                      ★
+                    </button>
+                  ))}
+                </div>
+                {reviewData.rating > 0 && (
+                  <div className="rating-feedback" data-rating={reviewData.rating}>
+                    <span className="rating-text">
+                      {reviewData.rating === 1 && 'Not for me'}
+                      {reviewData.rating === 2 && 'It was okay'}
+                      {reviewData.rating === 3 && 'Good chocolate'}
+                      {reviewData.rating === 4 && 'Really enjoyed it!'}
+                      {reviewData.rating === 5 && 'Outstanding!'}
+                    </span>
+                    <span className="rating-description">
+                      {reviewData.rating === 1 && 'This chocolate didn\'t meet my expectations'}
+                      {reviewData.rating === 2 && 'Average, but I\'ve had better'}
+                      {reviewData.rating === 3 && 'A solid chocolate worth trying'}
+                      {reviewData.rating === 4 && 'Definitely would buy again'}
+                      {reviewData.rating === 5 && 'One of the best I\'ve ever had!'}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            {/* Review Title */}
+            <div className="form-group">
+              <label htmlFor="reviewTitle">Review Title *</label>
+              <input
+                type="text"
+                id="reviewTitle"
+                name="title"
+                value={reviewData.title}
+                onChange={handleReviewChange}
+                placeholder="Sum up your experience in a few words"
+                maxLength="100"
+                required
+              />
+            </div>
+            
+            {/* Review Text */}
+            <div className="form-group">
+              <label htmlFor="reviewText">Your Review *</label>
+              <textarea
+                id="reviewText"
+                name="text"
+                value={reviewData.text}
+                onChange={handleReviewChange}
+                placeholder="Share your tasting notes, texture, aroma, and overall experience..."
+                rows="6"
+                required
+                minLength="50"
+                maxLength="2000"
+              />
+              <div className="textarea-footer">
+                <span className={`character-count ${
+                  reviewData.text.length < 50 ? 'text-warning' : 
+                  reviewData.text.length > 1800 ? 'text-danger' : ''
+                }`}>
+                  {reviewData.text.length} / 2000 characters
+                  {reviewData.text.length < 50 && ` (min 50)`}
+                </span>
+                <span className="helper-text">
+                  {reviewData.text.length < 50 ? 
+                    'Add more details about taste, texture, and experience' :
+                    'Great review! Help others discover amazing chocolate'
+                  }
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <div className="form-actions">
+            <button
+              type="button"
+              onClick={() => navigate('/')}
+              className="cancel-button"
+              disabled={loading}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="submit-button"
+              disabled={loading || formData.types.length === 0}
+            >
+              {loading ? 'Adding Chocolate...' : 'Add Chocolate & Review'}
+            </button>
+          </div>
+        </form>
+
+        {/* Success Modal */}
+        {showSuccessModal && (
+          <div className="modal-overlay">
+            <div className="success-modal">
+              <div className="success-icon">🎉</div>
+              <h2>Chocolate Added Successfully!</h2>
+              <p>Thank you for contributing to our chocolate community!</p>
+              <div className="success-animation">
+                <div className="chocolate-icon">🍫</div>
+              </div>
+              <p className="redirect-message">Redirecting to your chocolate page...</p>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
-  </div>
-);
-
-
+  );
 }
 
-// Export the AddChocolatePage component
 export default AddChocolatePage;

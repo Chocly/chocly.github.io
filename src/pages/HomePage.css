@@ -1192,3 +1192,63 @@
     max-width: 300px !important;
   }
 }
+
+/* Add this CSS to your HomePage.css to remove all section title underlines */
+
+/* Remove all underlines from section titles */
+.section-title::after,
+.section-title::before,
+h2.section-title::after,
+h2.section-title::before,
+.home-page .section-title::after,
+.home-page .section-title::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* Remove underlines from CTA title */
+.cta-title::after,
+.cta-title::before,
+.home-page .cta-title::after,
+.home-page .cta-title::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* Remove any border-bottom from section headers */
+.section-header {
+  border-bottom: none !important;
+}
+
+.section-header::after,
+.section-header::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* Clean section titles without decorative elements */
+.section-title {
+  position: relative;
+  padding-bottom: 0;
+  margin-bottom: 1rem;
+}
+
+.cta-title {
+  position: relative;
+  padding-bottom: 0;
+}
+
+/* If you have any other elements with underlines, add them here */
+.how-it-works-content h2::after,
+.reviews-section h2::after {
+  display: none !important;
+}
+
+/* Remove any decorative lines that might be added via other classes */
+.display-2::after,
+.display-2::before,
+h2::after,
+h2::before {
+  display: none !important;
+  content: none !important;
+}
