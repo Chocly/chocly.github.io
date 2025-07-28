@@ -614,7 +614,7 @@ export const addUserChocolate = async (chocolateData, imageFile) => {
       type: chocolateData.type,
       origin: chocolateData.origin,
       cacaoPercentage: chocolateData.cacaoPercentage,
-      description: chocolateData.description,
+      description: chocolateData.description || '', // Ensure it's never undefined
       tags: chocolateData.tags || [],
       
       // Image

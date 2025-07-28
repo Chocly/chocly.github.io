@@ -238,9 +238,12 @@ Please review before continuing.`);
         type: formData.types.join(', '), // Join multiple types
         origin: formData.origin.trim() || null, // Optional - null if empty
         cacaoPercentage: formData.cacaoPercentage ? parseInt(formData.cacaoPercentage) : null,
+        description: '', // ADD THIS LINE to prevent Firebase error
         tags: allTags,
-        // Let reviews tell the story - no description field
+        createdBy: currentUser.uid,
+        createdByName: currentUser.displayName || 'Chocolate Lover'
       };
+      
 
       // Add the chocolate (with image if provided)
       const chocolateId = await addUserChocolate(chocolateData, selectedImage);
