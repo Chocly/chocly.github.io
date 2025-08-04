@@ -14,9 +14,7 @@ import {
   limit 
 } from "firebase/firestore";
 import { db } from "../firebase";
-
-// Enhanced getUserReviews function in reviewService.js
-import { getChocolateById } from './chocolateFirebaseService'; // Import this
+import { getChocolateById } from './chocolateFirebaseService';
 
 // Get all reviews for a chocolate
 export const getChocolateReviews = async (chocolateId) => {
@@ -33,18 +31,14 @@ export const getChocolateReviews = async (chocolateId) => {
       ...doc.data()
     }));
     
-    // If no reviews found in the database, return empty array
-    if (reviews.length === 0) {
-      return [];
-    }
-    
-    return reviews;
+    return reviews.length > 0 ? reviews : [];
   } catch (error) {
     console.error("Error getting chocolate reviews:", error);
-    throw error;
+    return [];
   }
 };
 
+// Get reviews for a specific user
 export const getUserReviews = async (userId) => {
   try {
     console.log('🔍 Getting reviews for user:', userId);
@@ -57,7 +51,6 @@ export const getUserReviews = async (userId) => {
 
     const snapshot = await getDocs(q);
     
-    // If no reviews found, return empty array (remove the sample data)
     if (snapshot.empty) {
       console.log('No reviews found for user');
       return [];
@@ -116,86 +109,88 @@ export const getUserReviews = async (userId) => {
     
   } catch (error) {
     console.error("Error getting user reviews:", error);
-    return []; // Return empty array instead of throwing
+    return [];
   }
 };
 
 // Add a review
 export const addReview = async (reviewData) => {
-try {
-  const newReview = {
-    ...reviewData,
-    createdAt: serverTimestamp()
-  };
+  try {
+    const newReview = {
+      ...reviewData,
+      createdAt: reviewData.createdAt || new Date(),
+      updatedAt: new Date()
+    };
 
-  // Add the review document to Firestore
-  const docRef = await addDoc(collection(db, "reviews"), newReview);
-  
-  // Update chocolate average rating and review count
-  await updateChocolateRating(reviewData.chocolateId);
-  
-  // Update user review count
-  await updateUserReviewCount(reviewData.userId);
-  
-  return {
-    id: docRef.id,
-    ...newReview
-  };
-} catch (error) {
-  console.error("Error adding review:", error);
-  throw error;
-}
+    // Add the review document to Firestore
+    const docRef = await addDoc(collection(db, "reviews"), newReview);
+    
+    // Update chocolate average rating and review count
+    await updateChocolateRating(reviewData.chocolateId);
+    
+    // Update user review count if userId exists
+    if (reviewData.userId) {
+      await updateUserReviewCount(reviewData.userId);
+    }
+    
+    return {
+      id: docRef.id,
+      ...newReview
+    };
+  } catch (error) {
+    console.error("Error adding review:", error);
+    throw error;
+  }
 };
 
 // Helper function to update a chocolate's average rating
 const updateChocolateRating = async (chocolateId) => {
-try {
-  const q = query(
-    collection(db, "reviews"),
-    where("chocolateId", "==", chocolateId)
-  );
-  
-  const snapshot = await getDocs(q);
-  
-  if (!snapshot.empty) {
-    const reviews = snapshot.docs.map(doc => doc.data());
-    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
-    const averageRating = totalRating / reviews.length;
+  try {
+    const q = query(
+      collection(db, "reviews"),
+      where("chocolateId", "==", chocolateId)
+    );
     
-    const chocolateRef = doc(db, "chocolates", chocolateId);
-    await updateDoc(chocolateRef, {
-      averageRating,
-      reviewCount: reviews.length,
-      updatedAt: serverTimestamp()
-    });
+    const snapshot = await getDocs(q);
+    
+    if (!snapshot.empty) {
+      const reviews = snapshot.docs.map(doc => doc.data());
+      const totalRating = reviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+      const averageRating = totalRating / reviews.length;
+      
+      const chocolateRef = doc(db, "chocolates", chocolateId);
+      await updateDoc(chocolateRef, {
+        averageRating,
+        reviewCount: reviews.length,
+        updatedAt: serverTimestamp()
+      });
+    }
+  } catch (error) {
+    console.error("Error updating chocolate rating:", error);
+    // Don't throw - this is non-critical
   }
-} catch (error) {
-  console.error("Error updating chocolate rating:", error);
-  throw error;
-}
 };
 
 // Helper function to update a user's review count
 const updateUserReviewCount = async (userId) => {
-try {
-  const q = query(
-    collection(db, "reviews"),
-    where("userId", "==", userId)
-  );
-  
-  const snapshot = await getDocs(q);
-  const reviewCount = snapshot.size;
-  
-  const userRef = doc(db, "users", userId);
-  await updateDoc(userRef, {
-    reviewCount,
-    updatedAt: serverTimestamp()
-  });
-} catch (error) {
-  console.error("Error updating user review count:", error);
-  // We'll just log this error rather than throwing it to prevent
-  // blocking the review submission if this update fails
-}
+  try {
+    const q = query(
+      collection(db, "reviews"),
+      where("userId", "==", userId)
+    );
+    
+    const snapshot = await getDocs(q);
+    const reviewCount = snapshot.size;
+    
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, {
+      reviewCount,
+      updatedAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error("Error updating user review count:", error);
+    // Don't throw - this is non-critical
+  }
 };  
 
 // Update a review
@@ -210,7 +205,7 @@ export const updateReview = async (reviewId, updatedData) => {
     // Update chocolate average rating
     const reviewDoc = await getDoc(reviewRef);
     if (reviewDoc.exists()) {
-      updateChocolateRating(reviewDoc.data().chocolateId);
+      await updateChocolateRating(reviewDoc.data().chocolateId);
     }
     
     return {
@@ -237,12 +232,12 @@ export const deleteReview = async (reviewId) => {
     
     // Update chocolate average rating if we have the ID
     if (chocolateId) {
-      updateChocolateRating(chocolateId);
+      await updateChocolateRating(chocolateId);
     }
     
     // Update user review count
     if (userId) {
-      updateUserReviewCount(userId);
+      await updateUserReviewCount(userId);
     }
     
     return true;
@@ -251,74 +246,30 @@ export const deleteReview = async (reviewId) => {
     throw error;
   }
 };
-  
 
-// Sample reviews for demo purposes
-const getSampleUserReviews = () => {
-  return [
-    {
-      id: 'sample1',
-      userId: 'currentUser',
-      chocolateId: '1',
-      rating: 4,
-      text: 'This dark chocolate has a wonderful depth of flavor with notes of cherry and a hint of vanilla. The texture is smooth with a clean snap. I particularly enjoyed the long finish that develops additional complexity over time.',
-      createdAt: { toDate: () => new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
-      chocolate: {
-        id: '1',
-        name: 'Valrhona Guanaja 70%',
-        maker: 'Valrhona',
-        imageUrl: 'https://placehold.co/300x300?text=Chocolate'
-      }
-    },
-    {
-      id: 'sample2',
-      userId: 'currentUser',
-      chocolateId: '2',
-      rating: 5,
-      text: 'Absolutely perfect balance of creaminess and cocoa flavor! This milk chocolate has a silky texture that melts beautifully on the tongue. There are subtle caramel notes and a hint of malt that make it incredibly satisfying. Will definitely purchase again.',
-      createdAt: { toDate: () => new Date(Date.now() - 14 * 24 * 60 * 60 * 1000) },
-      chocolate: {
-        id: '2',
-        name: 'Lindt Excellence Milk Chocolate',
-        maker: 'Lindt & Sprüngli',
-        imageUrl: 'https://placehold.co/300x300?text=Chocolate'
-      }
-    },
-    {
-      id: 'sample3',
-      userId: 'currentUser',
-      chocolateId: '3',
-      rating: 3,
-      text: 'An interesting single-origin bar with bright acidity and prominent fruity notes. While the quality is apparent, I found the texture slightly grainy and the finish a bit too acidic for my taste. Still worth trying for chocolate enthusiasts interested in exploring different flavor profiles.',
-      createdAt: { toDate: () => new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) },
-      chocolate: {
-        id: '3',
-        name: 'Dandelion Madagascar',
-        maker: 'Dandelion Chocolate',
-        imageUrl: 'https://placehold.co/300x300?text=Chocolate'
-      }
-    }
-  ];
-};
-
-// FIXED: Enhanced getRecentTopReviews function with proper imports
+// FIXED: Get recent top reviews with proper error handling
 export const getRecentTopReviews = async (limitCount = 3) => {
-try {
-  // Try to get recent high-quality reviews from the database
-  const recentHighRatingQuery = query(
-    collection(db, "reviews"),
-    where("rating", ">=", 4), // Only reviews with 4+ stars
-    orderBy("rating", "desc"), // Highest rated first
-    orderBy("createdAt", "desc"), // Then most recent
-    limit(20) // Get more than we need to allow for filtering
-  );
+  try {
+    console.log('Fetching recent top reviews...');
+    
+    // Try to get recent high-quality reviews from the database
+    const recentHighRatingQuery = query(
+      collection(db, "reviews"),
+      where("rating", ">=", 4),
+      orderBy("rating", "desc"),
+      orderBy("createdAt", "desc"),
+      limit(20)
+    );
 
-  const snapshot = await getDocs(recentHighRatingQuery);
-  
-  if (!snapshot.empty) {
-    // Process the reviews and get chocolate data
+    const snapshot = await getDocs(recentHighRatingQuery);
+    
+    if (snapshot.empty) {
+      console.log('No reviews found in database');
+      return [];
+    }
+    
     const reviews = [];
-    const processedChocolateIds = new Set(); // Avoid duplicate chocolates
+    const processedChocolateIds = new Set();
     
     for (const docSnapshot of snapshot.docs) {
       if (reviews.length >= limitCount) break;
@@ -342,7 +293,6 @@ try {
             ...chocolateDoc.data()
           };
           
-          // Add to our results
           reviews.push(reviewData);
           processedChocolateIds.add(reviewData.chocolateId);
         }
@@ -351,35 +301,34 @@ try {
       }
     }
     
-    // If we got some real reviews, return them
-    if (reviews.length > 0) {
-      return reviews.slice(0, limitCount);
-    }
+    console.log(`Found ${reviews.length} featured reviews`);
+    return reviews;
+    
+  } catch (error) {
+    console.error("Error getting recent top reviews:", error);
+    return [];
   }
-  
-  // If no database reviews, return empty array (no sample data for reviews)
-  return [];
-} catch (error) {
-  console.error("Error getting recent top reviews:", error);
-  // Return empty array instead of sample data
-  return [];
-}
 };
 
-// FIXED: Alternative function to get featured reviews with broader criteria
+// FIXED: Get featured reviews with proper error handling
 export const getFeaturedReviews = async (limitCount = 3) => {
-try {
-  // First try to get recent reviews (any rating)
-  const recentReviewsQuery = query(
-    collection(db, "reviews"),
-    orderBy("createdAt", "desc"),
-    limit(10)
-  );
+  try {
+    console.log('Fetching featured reviews...');
+    
+    // First try to get recent reviews (any rating)
+    const recentReviewsQuery = query(
+      collection(db, "reviews"),
+      orderBy("createdAt", "desc"),
+      limit(10)
+    );
 
-  const recentSnapshot = await getDocs(recentReviewsQuery);
-  
-  if (!recentSnapshot.empty) {
-    // Get all recent reviews
+    const recentSnapshot = await getDocs(recentReviewsQuery);
+    
+    if (recentSnapshot.empty) {
+      console.log('No reviews found');
+      return [];
+    }
+    
     const allRecentReviews = [];
     
     for (const docSnapshot of recentSnapshot.docs) {
@@ -406,9 +355,19 @@ try {
     // Score reviews based on rating, recency, and review length
     const scoredReviews = allRecentReviews.map(review => {
       const rating = review.rating || 0;
-      const textLength = review.text ? review.text.length : 0;
-      const daysSinceReview = review.createdAt ? 
-        (Date.now() - review.createdAt.toDate().getTime()) / (1000 * 60 * 60 * 24) : 999;
+      const textLength = (review.text && typeof review.text === 'string') ? review.text.length : 0;
+      
+      // Safely handle date conversion
+      let daysSinceReview = 999;
+      if (review.createdAt) {
+        try {
+          // Handle Firestore timestamp
+          const reviewDate = review.createdAt.toDate ? review.createdAt.toDate() : new Date(review.createdAt);
+          daysSinceReview = (Date.now() - reviewDate.getTime()) / (1000 * 60 * 60 * 24);
+        } catch (e) {
+          console.warn('Could not parse review date:', e);
+        }
+      }
       
       // Scoring: higher rating + longer text + more recent = higher score
       const score = (rating * 0.4) + 
@@ -434,13 +393,11 @@ try {
         }
       });
     
+    console.log(`Returning ${uniqueReviews.length} featured reviews`);
     return uniqueReviews;
+    
+  } catch (error) {
+    console.error("Error getting featured reviews:", error);
+    return [];
   }
-  
-  // If no reviews in database, return empty array
-  return [];
-} catch (error) {
-  console.error("Error getting featured reviews:", error);
-  return [];
-}
 };

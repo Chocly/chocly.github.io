@@ -11,7 +11,7 @@ import {
   query, 
   where,
   orderBy,
-  limit,  // <-- FIXED: Added missing import
+  limit,
   increment, 
   serverTimestamp,
   setDoc
@@ -854,5 +854,55 @@ export const getRecentContributions = async (limitCount = 10) => {
   } catch (error) {
     console.error('Error getting recent contributions:', error);
     return [];
+  }
+};
+
+// Delete a chocolate and its associated reviews
+export const deleteChocolate = async (chocolateId) => {
+  try {
+    console.log('🗑️ Starting deletion process for chocolate:', chocolateId);
+    
+    // First, delete all reviews associated with this chocolate
+    const reviewsQuery = query(
+      collection(db, 'reviews'),
+      where('chocolateId', '==', chocolateId)
+    );
+    
+    const reviewsSnapshot = await getDocs(reviewsQuery);
+    const deletePromises = [];
+    
+    // Delete each review
+    reviewsSnapshot.forEach((reviewDoc) => {
+      console.log('Deleting review:', reviewDoc.id);
+      deletePromises.push(deleteDoc(doc(db, 'reviews', reviewDoc.id)));
+    });
+    
+    // Wait for all reviews to be deleted
+    if (deletePromises.length > 0) {
+      await Promise.all(deletePromises);
+      console.log(`✅ Deleted ${deletePromises.length} reviews`);
+    }
+    
+    // Now delete the chocolate document itself
+    const chocolateRef = doc(db, 'chocolates', chocolateId);
+    await deleteDoc(chocolateRef);
+    console.log('✅ Chocolate document deleted');
+    
+    // TODO: If you want to also delete the image from Storage, uncomment this:
+    // const chocolate = await getChocolateById(chocolateId);
+    // if (chocolate.imageUrl && !chocolate.imageUrl.includes('placehold')) {
+    //   try {
+    //     const imageRef = ref(storage, chocolate.imageUrl);
+    //     await deleteObject(imageRef);
+    //     console.log('✅ Image deleted from storage');
+    //   } catch (error) {
+    //     console.warn('Could not delete image:', error);
+    //   }
+    // }
+    
+    return { success: true, message: 'Chocolate and associated data deleted successfully' };
+  } catch (error) {
+    console.error('❌ Error deleting chocolate:', error);
+    throw new Error(`Failed to delete chocolate: ${error.message}`);
   }
 };

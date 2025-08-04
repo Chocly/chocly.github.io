@@ -1,3 +1,32 @@
+/* =====================================================
+   CHOCOLATE DETAIL PAGE - COLOR PALETTE UPDATE
+   ===================================================== */
+
+/* Color Variables - Add these at the top of your file */
+:root {
+  /* Your Designer's Palette */
+  --copper: #A73A04;
+  --sage: #6C6C4E;
+  --cream: #DFD3C0;
+  --dusty-blue: #788390;
+  --caramel: #B0916C;
+  
+  /* Map to existing variable names for compatibility */
+  --primary: var(--copper);
+  --primary-dark: #8B3104;
+  --primary-light: var(--caramel);
+  --accent: var(--caramel);
+  --brand-copper: var(--copper);
+  
+  /* Keep existing background */
+  --background: #f8f9fa;
+  
+  /* Text colors */
+  --text-primary: #2D1810;
+  --text-secondary: #5C4A3F;
+  --text-dark: #1F2937;
+}
+
 .chocolate-detail-page {
   min-height: 100vh;
   background-color: var(--background);
@@ -541,22 +570,22 @@ h2::after {
   font-size: 1rem;
 }
 
-/* Special styling for detail page heart button */
+/* Special styling for detail page heart button - UPDATED COLORS */
 .favorite-section .favorite-button {
   background-color: white;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--cream);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .favorite-section .favorite-button:hover {
-  border-color: #ef4444;
-  background-color: rgba(239, 68, 68, 0.05);
+  border-color: var(--copper);
+  background-color: rgba(167, 58, 4, 0.05);
   transform: scale(1.1);
 }
 
 .favorite-section .favorite-button.favorited {
-  border-color: #ef4444;
-  background-color: rgba(239, 68, 68, 0.1);
+  border-color: var(--copper);
+  background-color: rgba(167, 58, 4, 0.1);
 }
 
 /* Mobile responsive */
@@ -633,7 +662,7 @@ h2::after {
   align-items: center;
 }
 
-/* Detail page specific button styles */
+/* Detail page specific button styles - UPDATED WITH NEW PALETTE */
 .detail-page-favorite,
 .detail-page-want-to-try {
   position: relative;
@@ -651,50 +680,51 @@ h2::after {
   justify-content: center;
 }
 
-/* Override the circular shape for detail page buttons */
+/* UPDATED: Favorite button with copper color */
 .detail-page-favorite {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: #ef4444;
-  color: #ef4444;
+  background: rgba(167, 58, 4, 0.1);
+  border-color: var(--copper);
+  color: var(--copper);
 }
 
 .detail-page-favorite:hover {
-  background: #ef4444;
+  background: var(--copper);
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  box-shadow: 0 4px 12px rgba(167, 58, 4, 0.3);
 }
 
 .detail-page-favorite.favorited {
-  background: #ef4444;
+  background: var(--copper);
   color: white;
 }
 
 .detail-page-favorite.favorited:hover {
-  background: #dc2626;
+  background: var(--primary-dark);
 }
 
+/* UPDATED: Want to Try button with sage color */
 .detail-page-want-to-try {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: #3b82f6;
-  color: #3b82f6;
+  background: rgba(108, 108, 78, 0.1);
+  border-color: var(--sage);
+  color: var(--sage);
 }
 
 .detail-page-want-to-try:hover {
-  background: #3b82f6;
+  background: var(--sage);
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 12px rgba(108, 108, 78, 0.3);
 }
 
 /* When chocolate is in want-to-try list */
 .detail-page-want-to-try.in-want-to-try {
-  background: #3b82f6;
+  background: var(--sage);
   color: white;
 }
 
 .detail-page-want-to-try.in-want-to-try:hover {
-  background: #2563eb;
+  background: #5A5A40;
 }
 
 /* Review success message */
@@ -749,12 +779,13 @@ h2::after {
 .add-review textarea:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(212, 167, 106, 0.1);
+  box-shadow: 0 0 0 3px rgba(176, 145, 108, 0.1);
 }
 
+/* UPDATED: Submit review button with copper color */
 .submit-review {
-  background: linear-gradient(135deg, #F4A261 0%, #F4D03F 100%);
-  color: var(--primary-dark);
+  background: var(--copper);
+  color: white;
   border: none;
   padding: 0.75rem 2rem;
   border-radius: 8px;
@@ -764,8 +795,9 @@ h2::after {
 }
 
 .submit-review:hover {
+  background: var(--primary-dark);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(244, 162, 97, 0.4);
+  box-shadow: 0 4px 12px rgba(167, 58, 4, 0.4);
 }
 
 /* No reviews state */
@@ -916,7 +948,7 @@ h2::after {
 
 /* Add these styles to your ChocolateDetailPage.css file */
 
-/* Chocolate specs section - improved spacing and design */
+/* Chocolate specs section - UPDATED COLORS */
 .chocolate-specs {
   display: flex;
   flex-wrap: wrap;
@@ -940,25 +972,27 @@ h2::after {
   transition: all 0.3s ease;
 }
 
-/* Different background colors for each type */
+/* UPDATED: Origin with sage green */
 .chocolate-specs .origin {
-  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
-  color: #065F46;
-  border-color: #A7F3D0;
+  background: rgba(108, 108, 78, 0.1);
+  color: var(--sage);
+  border-color: rgba(108, 108, 78, 0.3);
 }
 
+/* UPDATED: Percentage with copper (most important) */
 .chocolate-specs .percentage {
-  background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+  background: var(--copper);
   color: #FFFFFF;
   font-weight: 700;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   border: none;
 }
 
+/* UPDATED: Type with dusty blue */
 .chocolate-specs .type {
-  background: linear-gradient(135deg, #FEF3E7 0%, #FDEAA8 100%);
-  color: #92400E;
-  border-color: #FCD34D;
+  background: rgba(120, 131, 144, 0.1);
+  color: var(--dusty-blue);
+  border-color: rgba(120, 131, 144, 0.3);
 }
 
 /* Hover effects */
@@ -1099,5 +1133,202 @@ h2::after {
   .chocolate-specs span {
     padding: 0.3rem 0.6rem;
     font-size: 0.85rem;
+  }
+}
+
+/* =====================================================
+   SEO SECTION - STREAMLINED & PROFESSIONAL
+   Add this to the end of your ChocolateDetailPage.css
+   ===================================================== */
+
+/* Remove old buying-guide-section styles if they exist */
+.buying-guide-section {
+  display: none; /* Hide the old section */
+}
+
+/* New streamlined SEO section */
+.seo-section-collapsed {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  border: 1px solid rgba(223, 211, 192, 0.3);
+  box-shadow: 0 2px 8px rgba(167, 58, 4, 0.05);
+}
+
+.seo-section-collapsed h3 {
+  font-size: 1.1rem;
+  color: var(--text-primary, #2D1810);
+  margin: 0 0 0.75rem 0;
+  font-weight: 600;
+  font-family: inherit;
+}
+
+.seo-summary {
+  color: var(--text-secondary, #5C4A3F);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.seo-summary .highlight {
+  color: var(--copper, #A73A04);
+  font-weight: 500;
+}
+
+/* Expandable details section */
+.seo-expandable {
+  margin-top: 1rem;
+}
+
+.seo-expandable summary {
+  color: var(--sage, #6C6C4E);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.5rem 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.2s ease;
+  user-select: none;
+}
+
+.seo-expandable summary:hover {
+  color: var(--copper, #A73A04);
+}
+
+/* Arrow indicator */
+.seo-expandable summary::before {
+  content: '▶';
+  font-size: 0.7rem;
+  transition: transform 0.2s ease;
+  color: var(--sage, #6C6C4E);
+}
+
+.seo-expandable[open] summary::before {
+  transform: rotate(90deg);
+}
+
+/* Hide default marker */
+.seo-expandable summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Expanded content */
+.seo-expandable-content {
+  padding-top: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary, #5C4A3F);
+  line-height: 1.6;
+  animation: fadeIn 0.3s ease;
+}
+
+.seo-expandable-content p {
+  margin: 0 0 0.75rem 0;
+}
+
+.seo-expandable-content p:last-child {
+  margin-bottom: 0;
+}
+
+.seo-expandable-content strong {
+  color: var(--text-primary, #2D1810);
+  font-weight: 600;
+}
+
+.seo-expandable-content ul {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+  list-style-type: disc;
+}
+
+.seo-expandable-content li {
+  margin: 0.4rem 0;
+  line-height: 1.5;
+}
+
+.seo-expandable-content a {
+  color: var(--copper, #A73A04);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.seo-expandable-content a:hover {
+  color: var(--caramel, #B0916C);
+  text-decoration: underline;
+}
+
+/* Animation for smooth expansion */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .seo-section-collapsed {
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border-radius: 8px;
+  }
+  
+  .seo-section-collapsed h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .seo-summary {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  
+  .seo-expandable summary {
+    font-size: 0.85rem;
+    padding: 0.4rem 0;
+  }
+  
+  .seo-expandable-content {
+    font-size: 0.85rem;
+    padding-top: 0.5rem;
+  }
+  
+  .seo-expandable-content ul {
+    padding-left: 1.25rem;
+  }
+  
+  .seo-expandable-content li {
+    margin: 0.3rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .seo-section-collapsed {
+    padding: 0.875rem;
+    margin: 1rem 0;
+  }
+  
+  .seo-section-collapsed h3 {
+    font-size: 0.95rem;
+  }
+  
+  .seo-summary {
+    font-size: 0.8rem;
+  }
+  
+  .seo-expandable summary {
+    font-size: 0.8rem;
+  }
+  
+  .seo-expandable-content {
+    font-size: 0.8rem;
   }
 }

@@ -21,6 +21,7 @@ import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
+import SuperAdminEditPage from './pages/SuperAdminEditPage';
 import './App.css';
 
 function App() {
@@ -44,7 +45,7 @@ function App() {
               <Route path="/login" element={<UnifiedAuthPage />} />
               <Route path="/signup" element={<UnifiedAuthPage />} />
               <Route path="/category" element={<CategoryPage />} />
-              
+              <Route path="/chocolate/:id/edit" element={<SuperAdminEditPage />} />
               {/* NEW: Category Landing Pages */}
               <Route path="/category/:categoryType/:categoryValue" element={<CategoryLandingPage />} />
               
