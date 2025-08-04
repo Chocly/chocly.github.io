@@ -156,6 +156,7 @@ Please review before continuing.`);
   };
 
   const handleImageSelected = (file) => {
+    console.log('📸 Image selected:', file);
     setSelectedImage(file);
   };
 
@@ -244,6 +245,7 @@ Please review before continuing.`);
         createdByName: currentUser.displayName || 'Chocolate Lover'
       };
       
+      console.log('🖼️ Selected image before submission:', selectedImage);
 
       // Add the chocolate (with image if provided)
       const chocolateId = await addUserChocolate(chocolateData, selectedImage);
@@ -503,7 +505,7 @@ Please review before continuing.`);
             </div>
             
             <ImageUploader
-              onImageSelected={handleImageSelected}
+              onImageSelect={handleImageSelected}
               existingImageUrl={null}
               maxSizeInMB={5}
             />
