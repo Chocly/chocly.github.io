@@ -577,28 +577,46 @@ export const addUserChocolate = async (chocolateData, imageFile) => {
     // Upload image if provided
     if (imageFile) {
       console.log('📤 Starting image upload...');
+      console.log('📊 Image file details:', {
+        name: imageFile.name,
+        size: imageFile.size,
+        type: imageFile.type,
+        lastModified: imageFile.lastModified
+      });
       
       const timestamp = Date.now();
       const cleanFileName = imageFile.name.replace(/[^a-zA-Z0-9.-]/g, '_');
       const fileName = `user-contributions/${chocolateData.createdBy}/${timestamp}_${cleanFileName}`;
       
       console.log('📁 Upload path:', fileName);
+      console.log('👤 User ID:', chocolateData.createdBy);
       
       const storageRef = ref(storage, fileName);
       
       try {
         console.log('⬆️ Uploading to Firebase Storage...');
         const uploadResult = await uploadBytes(storageRef, imageFile);
-        console.log('✅ Upload successful, getting download URL...');
+        console.log('✅ Upload successful:', uploadResult);
+        console.log('📥 Getting download URL...');
         
         imageUrl = await getDownloadURL(storageRef);
         console.log('🔗 Download URL obtained:', imageUrl);
         
+        // Verify the URL is valid
+        if (!imageUrl || !imageUrl.startsWith('http')) {
+          throw new Error(`Invalid image URL received: ${imageUrl}`);
+        }
+        
       } catch (uploadError) {
         console.error('❌ Image upload failed:', uploadError);
+        console.error('Error details:', {
+          code: uploadError.code,
+          message: uploadError.message,
+          serverResponse: uploadError.serverResponse
+        });
         
-        // Don't fail the entire process - just proceed without image
-        console.log('⚠️ Proceeding without image due to upload failure');
+        // Don't fail the entire process - just proceed with placeholder
+        console.log('⚠️ Proceeding with placeholder image due to upload failure');
         imageUrl = `https://placehold.co/300x300?text=${encodeURIComponent(chocolateData.name.substring(0, 20))}`;
       }
     } else {
@@ -644,8 +662,15 @@ export const addUserChocolate = async (chocolateData, imageFile) => {
       maker: newChocolate.maker,
       isUserContributed: newChocolate.isUserContributed,
       name: newChocolate.name,
-      description: newChocolate.description
+      description: newChocolate.description,
+      imageUrl: newChocolate.imageUrl // Add this to verify image URL
     });
+    
+    // Verify imageUrl before saving
+    if (!newChocolate.imageUrl || newChocolate.imageUrl === 'undefined') {
+      console.error('⚠️ Warning: imageUrl is invalid:', newChocolate.imageUrl);
+      newChocolate.imageUrl = `https://placehold.co/300x300?text=${encodeURIComponent(newChocolate.name.substring(0, 20))}`;
+    }
     
     // Save to database
     const docRef = await addDoc(chocolatesCollection, newChocolate);
