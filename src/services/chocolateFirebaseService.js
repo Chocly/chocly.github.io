@@ -350,9 +350,11 @@ export const addReview = async (reviewData) => {
   try {
     console.log('💾 Adding review to Firestore:', reviewData);
     
+    // Use Date() instead of serverTimestamp() for addDoc
     const docRef = await addDoc(reviewsCollection, {
       ...reviewData,
-      createdAt: new Date()
+      createdAt: reviewData.createdAt || new Date(),
+      updatedAt: new Date()
     });
     
     console.log('✅ Review added with ID:', docRef.id);
@@ -362,13 +364,14 @@ export const addReview = async (reviewData) => {
     
     if (chocolateDoc.exists()) {
       const chocolateData = chocolateDoc.data();
-      const currentTotal = chocolateData.averageRating * chocolateData.reviewCount;
-      const newCount = chocolateData.reviewCount + 1;
+      const currentTotal = (chocolateData.averageRating || 0) * (chocolateData.reviewCount || 0);
+      const newCount = (chocolateData.reviewCount || 0) + 1;
       const newAverage = (currentTotal + reviewData.rating) / newCount;
       
       await updateDoc(chocolateRef, {
         averageRating: newAverage,
-        reviewCount: newCount
+        reviewCount: newCount,
+        updatedAt: serverTimestamp() // serverTimestamp() works fine with updateDoc
       });
       
       console.log('✅ Updated chocolate rating:', newAverage);
@@ -380,7 +383,7 @@ export const addReview = async (reviewData) => {
     return {
       id: docRef.id,
       ...reviewData,
-      createdAt: new Date()
+      createdAt: reviewData.createdAt || new Date()
     };
     
   } catch (error) {
@@ -558,10 +561,7 @@ const getSampleCategoryChocolates = (category) => {
   return darkChocolates; // Simplified for brevity
 };
 
-// Add these functions to the END of your existing chocolateFirebaseService.js file
-
-// Replace your addUserChocolate function with this enhanced version
-
+// FIXED addUserChocolate function - returns just ID as expected
 export const addUserChocolate = async (chocolateData, imageFile) => {
   console.log('🍫 Starting addUserChocolate process...');
   console.log('📄 Chocolate data received:', chocolateData);
@@ -606,15 +606,18 @@ export const addUserChocolate = async (chocolateData, imageFile) => {
       imageUrl = `https://placehold.co/300x300?text=${encodeURIComponent(chocolateData.name.substring(0, 20))}`;
     }
     
+    // Use Date() instead of serverTimestamp() for initial creation
+    const now = new Date();
+    
     // Prepare chocolate data with explicit maker field
     const newChocolate = {
       // Core chocolate data
       name: chocolateData.name,
       maker: chocolateData.maker, // 🔑 CRITICAL: Store maker as string
       type: chocolateData.type,
-      origin: chocolateData.origin,
-      cacaoPercentage: chocolateData.cacaoPercentage,
-      description: chocolateData.description || '', // Ensure it's never undefined
+      origin: chocolateData.origin || null,
+      cacaoPercentage: chocolateData.cacaoPercentage || null,
+      description: chocolateData.description || '', // FIX: Ensure description is never undefined
       tags: chocolateData.tags || [],
       
       // Image
@@ -626,10 +629,10 @@ export const addUserChocolate = async (chocolateData, imageFile) => {
       isUserContributed: true,
       status: 'approved',
       
-      // Timestamps
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-      contributionDate: serverTimestamp(),
+      // Use Date objects for timestamps
+      createdAt: now,
+      updatedAt: now,
+      contributionDate: now,
       
       // Rating defaults
       averageRating: 0,
@@ -640,7 +643,8 @@ export const addUserChocolate = async (chocolateData, imageFile) => {
     console.log('💾 Final chocolate object (check maker field):', {
       maker: newChocolate.maker,
       isUserContributed: newChocolate.isUserContributed,
-      name: newChocolate.name
+      name: newChocolate.name,
+      description: newChocolate.description
     });
     
     // Save to database
@@ -657,15 +661,9 @@ export const addUserChocolate = async (chocolateData, imageFile) => {
       console.error('⚠️ Failed to update user stats (non-critical):', statsError);
     }
     
-    const result = {
-      id: docRef.id,
-      ...newChocolate,
-      // Ensure maker is explicitly set in the result
-      maker: chocolateData.maker
-    };
-    
-    console.log('🎉 addUserChocolate completed successfully:', result);
-    return result;
+    // IMPORTANT: Return just the ID as your handleSubmit expects
+    console.log('🎉 addUserChocolate completed successfully, returning ID:', docRef.id);
+    return docRef.id;
     
   } catch (error) {
     console.error('💥 Error in addUserChocolate:', error);
@@ -687,7 +685,7 @@ export const updateUserContributionStats = async (userId, statType, increment_va
     const userDoc = await getDoc(userRef);
     
     if (userDoc.exists()) {
-      // Update existing user
+      // Update existing user - use serverTimestamp with updateDoc
       await updateDoc(userRef, {
         [`stats.${statType}`]: increment(increment_value),
         updatedAt: serverTimestamp()
@@ -698,8 +696,8 @@ export const updateUserContributionStats = async (userId, statType, increment_va
         stats: {
           [statType]: increment_value
         },
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
+        createdAt: new Date(),
+        updatedAt: new Date()
       }, { merge: true });
     }
   } catch (error) {
