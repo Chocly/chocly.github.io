@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Chocly - Redirecting...</title>
+  <script>
+    // GitHub Pages SPA redirect hack for Vite
+    // This handles routes like /auth, /profile, etc.
+    (function() {
+      var pathSegmentsToKeep = 0;
+      var l = window.location;
+      
+      // Convert the current 404 path to a query parameter
+      var redirectPath = l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/');
+      var search = l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '';
+      var hash = l.hash;
+      
+      // Redirect to the root with the path as a query parameter
+      var newUrl = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + 
+                   '/?/' + redirectPath.replace(/&/g, '~and~') + search + hash;
+      
+      console.log('404 redirect from:', l.href, 'to:', newUrl);
+      l.replace(newUrl);
+    })();
+  </script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #FDFCFC 0%, #F8F9FA 100%);
+      color: #2D1810;
+    }
+    .loading {
+      text-align: center;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #F4A261;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="loading">
+    <div class="spinner"></div>
+    <p>Redirecting to Chocly...</p>
+  </div>
+</body>
+</html>
