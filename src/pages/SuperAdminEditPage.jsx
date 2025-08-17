@@ -1,3 +1,4 @@
+
 // src/pages/SuperAdminEditPage.jsx
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -40,6 +41,16 @@ function SuperAdminEditPage() {
       navigate('/');
     }
   }, [currentUser, navigate]);
+
+  useEffect(() => {
+    if (currentUser) {
+      console.log('🔍 Debug Auth Info:');
+      console.log('Current user UID:', currentUser.uid);
+      console.log('Expected Super Admin UID:', 'EZTtNncUcHYc5TikzewnB0tYmz03');
+      console.log('UIDs match:', currentUser.uid === 'EZTtNncUcHYc5TikzewnB0tYmz03');
+      console.log('Is Super Admin:', isSuperAdmin(currentUser));
+    }
+  }, [currentUser]);
 
   // Load chocolate data and reviews
   useEffect(() => {
