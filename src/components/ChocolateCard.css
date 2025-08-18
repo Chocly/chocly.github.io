@@ -543,3 +543,46 @@
     transform: none;
   }
 }
+
+/* Add this to your ChocolateCard.css to remove the brown bar */
+
+/* Remove underline from chocolate name link */
+.chocolate-card-link,
+.chocolate-name-link,
+.chocolate-card h3 a,
+.chocolate-card-title a {
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
+/* Remove any after pseudo-elements */
+.chocolate-card h3::after,
+.chocolate-card-title::after,
+.chocolate-name::after {
+  display: none !important;
+}
+
+/* If the brown bar is a border */
+.chocolate-card h3,
+.chocolate-card-title,
+.chocolate-name {
+  border-bottom: none !important;
+  text-decoration: none !important;
+}
+
+/* Clean link styling for chocolate cards */
+.chocolate-card a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.chocolate-card a:hover {
+  text-decoration: none;
+}
+
+/* If you want to add a subtle hover effect instead */
+.chocolate-card h3:hover,
+.chocolate-card-title:hover {
+  color: #A73A04; /* Your copper color */
+  transition: color 0.2s ease;
+}

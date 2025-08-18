@@ -113,9 +113,6 @@ function Header() {
 
   // Get user avatar or initials
   const getUserAvatar = () => {
-    if (userProfile?.photoURL || currentUser?.photoURL) {
-      return userProfile?.photoURL || currentUser?.photoURL;
-    }
     return null;
   };
 

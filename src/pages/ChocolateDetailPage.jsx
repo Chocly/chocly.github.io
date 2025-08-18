@@ -1,6 +1,6 @@
-// src/pages/ChocolateDetailPage.jsx - SEO OPTIMIZED VERSION
+// src/pages/ChocolateDetailPage.jsx - UPDATED WITH MINIMALIST HEADER
 import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom'; // ADD useNavigate here
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getChocolateById } from '../services/chocolateFirebaseService';
 import { doc, getDoc, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -17,7 +17,7 @@ import { isSuperAdmin } from '../config/adminConfig';
 
 function ChocolateDetailPage() {
   const { id } = useParams();
-  const navigate = useNavigate(); // ADD this line to use navigate
+  const navigate = useNavigate();
   const [chocolate, setChocolate] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [tags, setTags] = useState([]);
@@ -397,135 +397,124 @@ function ChocolateDetailPage() {
             </div>
             
             <div className="detail-info">
-              {/* SEO-OPTIMIZED MAKER LINK */}
-              <Link
-                to={`/maker?maker=${encodeURIComponent(chocolate.maker || 'Unknown Maker')}`}
-                className="maker-link-prominent"
-              >
-                <h2 className="maker-name-prominent">{chocolate.maker || 'Unknown Maker'}</h2>
-              </Link>
+              {/* MINIMALIST HEADER */}
+              <div className="chocolate-header-minimal">
+                {/* Maker Name - subtle and elegant */}
+                <Link
+                  to={`/maker?maker=${encodeURIComponent(chocolate.maker || 'Unknown Maker')}`}
+                  className="maker-link-minimal"
+                >
+                  <span className="maker-name-minimal">{chocolate.maker || 'Unknown Maker'}</span>
+                </Link>
 
-              {/* SEO-OPTIMIZED H1 TITLE */}
-              <h1 className="chocolate-name">
-                {chocolate.name}
-              </h1>
+                {/* Product Name - the hero */}
+                <h1 className="chocolate-name-minimal">{chocolate.name}</h1>
 
-              {/* SEO-RICH SUBTITLE */}
-              <h2 className="chocolate-subtitle">
-                Premium {chocolate.type} Chocolate
-                {chocolate.origin && ` from ${chocolate.origin}`}
-                {chocolate.cacaoPercentage && ` - ${chocolate.cacaoPercentage}% Cacao`}
-              </h2>
+                {/* Single unified characteristics section */}
+                <div className="chocolate-characteristics">
+                  {/* Core specs - non-clickable, just informative */}
+                  <div className="spec-group">
+                    {chocolate.origin && (
+                      <span className="spec-item">
+                        <span className="spec-label">Origin</span>
+                        <span className="spec-value">{chocolate.origin}</span>
+                      </span>
+                    )}
+                    {chocolate.cacaoPercentage && (
+                      <span className="spec-item">
+                        <span className="spec-label">Cacao</span>
+                        <span className="spec-value">{chocolate.cacaoPercentage}%</span>
+                      </span>
+                    )}
+                    {chocolate.type && (
+                      <span className="spec-item">
+                        <span className="spec-label">Type</span>
+                        <span className="spec-value">{chocolate.type}</span>
+                      </span>
+                    )}
+                  </div>
 
-              {/* Origin and Cacao percentage */}
-              <div className="chocolate-specs">
-                <span className="origin">{chocolate.origin || 'Origin Unknown'}</span>
-                <span className="percentage">{chocolate.cacaoPercentage || 0}% Cacao</span>
-                {chocolate.type && <span className="type">{chocolate.type}</span>}
-              </div>
+                  {/* Divider */}
+                  {(chocolate.flavorNotes || tags.length > 0) && (
+                    <div className="characteristics-divider">•</div>
+                  )}
 
-              {/* Additional chocolate details - formatted nicely */}
-              {(chocolate.description || chocolate.details || chocolate.subtitle) && (
-                <div className="chocolate-details">
-                  <span className="details-text">
-                    {chocolate.description || chocolate.details || chocolate.subtitle}
-                  </span>
-                </div>
-              )}
-
-              {/* SEO-ENHANCED RATING SECTION */}
-              <div className="rating-section">
-                <div className="average-rating">
-                  <span className="rating-number">{averageRating.toFixed(1)}</span>
-                  <RatingStars rating={averageRating} />
-                  <span className="rating-count">
-                    ({reviews.length} customer review{reviews.length !== 1 ? 's' : ''})
-                  </span>
-                </div>
-                {/* Add schema-friendly rating text */}
-                <div className="rating-summary-text">
-                  {reviews.length > 0 && (
-                    <p className="rating-description">
-                      Based on {reviews.length} customer review{reviews.length !== 1 ? 's' : ''},
-                      {chocolate.name} receives an average rating of {averageRating.toFixed(1)} out of 5 stars.
-                    </p>
+                  {/* Flavor notes - clickable but subtle */}
+                  {(chocolate.flavorNotes || tags.length > 0) && (
+                    <div className="flavor-group">
+                      {chocolate.flavorNotes && chocolate.flavorNotes.slice(0, 3).map((note, index) => (
+                        <button 
+                          key={`note-${index}`}
+                          className="flavor-note"
+                          onClick={() => navigate(`/browse?flavor=${note}`)}
+                          title={`Find more ${note} chocolates`}
+                        >
+                          {note}
+                        </button>
+                      ))}
+                      {tags.slice(0, 2).map((tag, index) => (
+                        <button 
+                          key={`tag-${index}`}
+                          className="flavor-note secondary"
+                          onClick={() => navigate(`/browse?tag=${tag}`)}
+                          title={`Find more ${tag} chocolates`}
+                        >
+                          {tag}
+                        </button>
+                      ))}
+                    </div>
                   )}
                 </div>
-              </div>
 
-              <QuickReviewCTA
-                chocolateId={chocolate.id}
-                chocolateName={chocolate.name}
-                onQuickReview={handleQuickReview}
-                hasUserReviewed={userHasReviewed}
-                existingReview={userHasReviewed ? reviews.find(review => review.userId === currentUser?.uid) : null} 
-              />
-
-              {/* Action buttons */}
-              <div className="action-buttons">
-                <FavoriteButton
-                  chocolateId={chocolate.id}
-                  size="large"
-                  className="detail-page-favorite"
-                  showText={true} 
-                />
-
-                <WantToTryButton
-                  chocolate={chocolate}
-                  currentUser={currentUser}
-                  className="detail-page-want-to-try"
-                  showText={true}
-                  size="large" 
-                />
-              </div>
-
-              {/* Tags */}
-              {tags.length > 0 && (
-                <div className="tags-section">
-                  <h3>Popular Chocolate Tags</h3>
-                  <div className="tags-list">
-                    {tags.map((tag, index) => (
-                      <span key={index} className="tag">{tag}</span>
-                    ))}
-                  </div>
+                {/* Clean Rating Display */}
+                <div className="rating-minimal">
+                  <span className="rating-value">{averageRating.toFixed(1)}</span>
+                  <RatingStars rating={averageRating} />
+                  <span className="review-count-minimal">
+                    ({reviews.length} {reviews.length === 1 ? 'review' : 'reviews'})
+                  </span>
                 </div>
-              )}
+
+                {/* Description if present */}
+                {(chocolate.description || chocolate.details || chocolate.subtitle) && (
+                  <p className="chocolate-description-minimal">
+                    {chocolate.description || chocolate.details || chocolate.subtitle}
+                  </p>
+                )}
+
+                {/* Quick Review CTA */}
+                <QuickReviewCTA
+                  chocolateId={chocolate.id}
+                  chocolateName={chocolate.name}
+                  onQuickReview={handleQuickReview}
+                  hasUserReviewed={userHasReviewed}
+                  existingReview={userHasReviewed ? reviews.find(review => review.userId === currentUser?.uid) : null} 
+                />
+
+                {/* Action buttons */}
+                <div className="action-buttons-minimal">
+                  <FavoriteButton
+                    chocolateId={chocolate.id}
+                    size="large"
+                    className="detail-page-favorite"
+                    showText={true} 
+                  />
+                  <WantToTryButton
+                    chocolate={chocolate}
+                    currentUser={currentUser}
+                    className="detail-page-want-to-try"
+                    showText={true}
+                    size="large" 
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <div className="container">
-        {/* SEO-ENHANCED DESCRIPTION - Only show if no description in header */}
-        {chocolate.description && !(chocolate.description || chocolate.details || chocolate.subtitle) && (
-          <section className="description-section">
-            <h3>About {chocolate.name} by {chocolate.maker}</h3>
-            <p className="description">
-              {chocolate.description}
-              {chocolate.origin && ` This exceptional ${chocolate.type?.toLowerCase()} chocolate is crafted from ${chocolate.origin} cacao beans.`}
-              {chocolate.cacaoPercentage && ` At ${chocolate.cacaoPercentage}% cacao content, it offers ${
-                chocolate.cacaoPercentage >= 80 ? 'an intense, complex flavor profile' :
-                chocolate.cacaoPercentage >= 70 ? 'a perfect balance of richness and sweetness' :
-                'smooth, approachable flavors'
-              }.`}
-            </p>
-          </section>
-        )}
-
-        {/* SEO-ENHANCED INGREDIENTS SECTION */}
-        <section className="ingredients-section">
-          <h3>Ingredients in {chocolate.name}</h3>
-          {ingredients.length > 0 ? (
-            <ul className="ingredients-list">
-              {ingredients.map((ingredient, index) => (
-                <li key={index}>{ingredient}</li>
-              ))}
-            </ul>
-          ) : (
-            <p>Complete ingredient information for {chocolate.name} by {chocolate.maker} is being updated.
-              Contact us for specific ingredient details.</p>
-          )}
-        </section>
+        {/* REMOVED INGREDIENTS SECTION - As requested */}
 
         {/* Nutritional Information */}
         {chocolate.nutritionalInfo && (
@@ -577,40 +566,40 @@ function ChocolateDetailPage() {
         </section>
 
         <section className="seo-section-collapsed">
-  <h3>Where to Buy {chocolate.name}</h3>
-  <p className="seo-summary">
-    Find <span className="highlight">{chocolate.name}</span> at specialty chocolate shops, 
-    gourmet food stores, and online retailers. 
-    Available directly from {chocolate.maker}'s website or at local artisan markets.
-  </p>
-  <details className="seo-expandable">
-    <summary>Shopping options & availability</summary>
-    <div className="seo-expandable-content">
-      <p><strong>🚀 Price comparison coming soon</strong> – We're building tools to help you find the best prices across retailers.</p>
-      <ul>
-        <li>Specialty chocolate boutiques</li>
-        <li>Online gourmet retailers</li>
-        <li>Direct from {chocolate.maker}</li>
-        <li>Local farmer's markets</li>
-      </ul>
-      <p>
-        Explore more{' '}
-        <Link to={`/browse?cacao=${chocolate.cacaoPercentage}`}>
-          {chocolate.cacaoPercentage}% chocolates
-        </Link>
-        {chocolate.origin && (
-          <>
-            {' '}or{' '}
-            <Link to={`/browse?origin=${chocolate.origin}`}>
-              {chocolate.origin} chocolates
-            </Link>
-          </>
-        )}
-        {' '}in our database.
-      </p>
-    </div>
-  </details>
-</section>
+          <h3>Where to Buy {chocolate.name}</h3>
+          <p className="seo-summary">
+            Find <span className="highlight">{chocolate.name}</span> at specialty chocolate shops, 
+            gourmet food stores, and online retailers. 
+            Available directly from {chocolate.maker}'s website or at local artisan markets.
+          </p>
+          <details className="seo-expandable">
+            <summary>Shopping options & availability</summary>
+            <div className="seo-expandable-content">
+              <p><strong>🚀 Price comparison coming soon</strong> – We're building tools to help you find the best prices across retailers.</p>
+              <ul>
+                <li>Specialty chocolate boutiques</li>
+                <li>Online gourmet retailers</li>
+                <li>Direct from {chocolate.maker}</li>
+                <li>Local farmer's markets</li>
+              </ul>
+              <p>
+                Explore more{' '}
+                <Link to={`/browse?cacao=${chocolate.cacaoPercentage}`}>
+                  {chocolate.cacaoPercentage}% chocolates
+                </Link>
+                {chocolate.origin && (
+                  <>
+                    {' '}or{' '}
+                    <Link to={`/browse?origin=${chocolate.origin}`}>
+                      {chocolate.origin} chocolates
+                    </Link>
+                  </>
+                )}
+                {' '}in our database.
+              </p>
+            </div>
+          </details>
+        </section>
       </div>
     </div>
   );
