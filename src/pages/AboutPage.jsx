@@ -72,24 +72,6 @@ function AboutPage() {
               <h3>Discovery</h3>
               <p>We're committed to helping people break out of their chocolate comfort zones and discover new favorites.</p>
             </div>
-            <div className="value-card">
-              <div className="value-icon education"></div>
-              <h3>Education</h3>
-              <p>We seek to deepen understanding of chocolate—from bean to bar—empowering informed choices.</p>
-            </div>
-          </div>
-        </section>
-
-        <section className="team-section">
-          <h2>Meet Our Team</h2>
-          <p className="team-intro">
-            We're a group of passionate chocolate enthusiasts dedicated to building the best platform for chocolate lovers everywhere.
-          </p>
-          <div className="team-grid">
-            {/* Add team member photos and bios when available */}
-            <div className="team-placeholder">
-              <p>Team photos coming soon!</p>
-            </div>
           </div>
         </section>
 

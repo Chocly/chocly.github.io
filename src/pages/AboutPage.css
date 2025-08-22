@@ -269,14 +269,15 @@
   }
   
   .cta-button.primary {
-    background-color: var(--accent);
-    color: var(--primary-dark);
+    background-color: #8B4513;
+    color: #FFFFFF;
   }
   
   .cta-button.primary:hover {
-    background-color: #e5b77d;
+    background-color: #6B3410;
     transform: translateY(-3px);
   }
+  
   
   .cta-button.secondary {
     background-color: transparent;
