@@ -1,0 +1,712 @@
+/* ChocolateScanner.css - Beautiful, world-class design */
+
+/* =====================================================
+   SCANNER PAGE LAYOUT
+   ===================================================== */
+
+   .scanner-page {
+    min-height: 100vh;
+    background: var(--background-primary);
+    padding: var(--space-lg) 0;
+  }
+  
+  .scanner-page .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+  }
+  
+  /* =====================================================
+     HEADER SECTION
+     ===================================================== */
+  
+  .scanner-header {
+    text-align: center;
+    margin-bottom: var(--space-3xl);
+    padding: var(--space-2xl) 0;
+    background: linear-gradient(135deg, var(--brand-copper) 0%, var(--brand-taupe) 100%);
+    color: var(--text-light);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .scanner-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: var(--space-md);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .scanner-subtitle {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-md);
+    opacity: 0.9;
+  }
+  
+  .scanner-stats {
+    font-size: 0.875rem;
+    opacity: 0.8;
+    background: rgba(255, 255, 255, 0.1);
+    display: inline-block;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--border-radius-md);
+  }
+  
+  /* =====================================================
+     LOADING STATE
+     ===================================================== */
+  
+  .loading-state {
+    text-align: center;
+    padding: var(--space-3xl);
+    background: var(--background-primary);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-md);
+    margin: var(--space-2xl) 0;
+  }
+  
+  .loading-spinner {
+    width: 4rem;
+    height: 4rem;
+    border: 4px solid var(--brand-cream);
+    border-top: 4px solid var(--brand-copper);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto var(--space-lg) auto;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .loading-state h2 {
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+    font-size: 1.5rem;
+  }
+  
+  .loading-state p {
+    color: var(--text-secondary);
+  }
+  
+  /* =====================================================
+     SCANNER CARD
+     ===================================================== */
+  
+  .scanner-card {
+    background: var(--background-primary);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    margin-bottom: var(--space-2xl);
+  }
+  
+  .scanner-section {
+    padding: var(--space-2xl);
+    border-bottom: 1px solid var(--border-light);
+  }
+  
+  .scanner-section:last-child {
+    border-bottom: none;
+  }
+  
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-lg);
+  }
+  
+  .section-icon {
+    font-size: 1.75rem;
+  }
+  
+  /* =====================================================
+     CAMERA SECTION
+     ===================================================== */
+  
+  .camera-placeholder {
+    text-align: center;
+    padding: var(--space-3xl);
+    border: 2px dashed var(--border-medium);
+    border-radius: var(--border-radius-lg);
+    background: var(--background-accent);
+  }
+  
+  .placeholder-icon {
+    font-size: 4rem;
+    margin-bottom: var(--space-lg);
+  }
+  
+  .camera-placeholder p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+    font-size: 1.125rem;
+  }
+  
+  .camera-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+  
+  .camera-viewport {
+    position: relative;
+    background: #000;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  
+  .camera-video {
+    width: 100%;
+    max-height: 24rem;
+    object-fit: contain;
+    display: block;
+  }
+  
+  .camera-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  
+  .scan-frame {
+    border: 4px dashed rgba(255, 255, 255, 0.8);
+    border-radius: var(--border-radius-lg);
+    width: 20rem;
+    height: 12rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(2px);
+  }
+  
+  .scan-content {
+    text-align: center;
+    color: white;
+    background: rgba(0, 0, 0, 0.6);
+    padding: var(--space-md);
+    border-radius: var(--border-radius-md);
+  }
+  
+  .scan-icon {
+    font-size: 2rem;
+    margin-bottom: var(--space-sm);
+  }
+  
+  .scan-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  
+  .camera-controls {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+  }
+  
+  /* =====================================================
+     UPLOAD SECTION
+     ===================================================== */
+  
+  .upload-area {
+    border: 2px dashed var(--border-medium);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-2xl);
+    background: var(--background-accent);
+    transition: all 0.3s ease;
+  }
+  
+  .upload-area:hover {
+    border-color: var(--brand-copper);
+    background: var(--background-secondary);
+  }
+  
+  .upload-content {
+    text-align: center;
+  }
+  
+  .upload-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-md);
+  }
+  
+  .upload-content h3 {
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+    font-size: 1.25rem;
+  }
+  
+  .upload-content p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+  }
+  
+  .file-input {
+    display: none;
+  }
+  
+  /* =====================================================
+     PROGRESS SECTION
+     ===================================================== */
+  
+  .progress-container {
+    text-align: center;
+  }
+  
+  .progress-bar {
+    width: 100%;
+    height: 1.5rem;
+    background: var(--background-secondary);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    margin-bottom: var(--space-md);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, 
+      var(--brand-copper) 0%, 
+      var(--brand-taupe) 50%, 
+      var(--brand-sage) 100%);
+    transition: width 0.3s ease;
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .progress-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    font-size: 1.125rem;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+  
+  .progress-icon {
+    font-size: 1.5rem;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+  }
+  
+  /* =====================================================
+     ERROR SECTION
+     ===================================================== */
+  
+  .error-message {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    background: #FEF2F2;
+    border: 2px solid #FECACA;
+    border-radius: var(--border-radius-lg);
+    color: #B91C1C;
+  }
+  
+  .error-icon {
+    font-size: 1.5rem;
+  }
+  
+  .error-message p {
+    margin: 0;
+    font-weight: 500;
+  }
+  
+  /* =====================================================
+     RESULTS SECTION
+     ===================================================== */
+  
+  .results-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xl);
+  }
+  
+  /* Best Match Card */
+  .best-match-card {
+    background: var(--background-primary);
+    border-radius: var(--border-radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+    border: 3px solid var(--success-color);
+  }
+  
+  .best-match-header {
+    background: linear-gradient(135deg, var(--success-color) 0%, #10B981 100%);
+    color: white;
+    padding: var(--space-xl);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+  
+  .best-match-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 var(--space-sm) 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .best-match-header p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 1.125rem;
+  }
+  
+  .match-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--border-radius-md);
+    font-weight: 700;
+    font-size: 1.25rem;
+  }
+  
+  .best-match-content {
+    padding: var(--space-2xl);
+  }
+  
+  .best-match-actions {
+    margin-top: var(--space-xl);
+    text-align: center;
+  }
+  
+  .match-reasons {
+    margin-top: var(--space-lg);
+    padding: var(--space-md);
+    background: var(--background-accent);
+    border-radius: var(--border-radius-md);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+  
+  /* Other Matches Card */
+  .other-matches-card {
+    background: var(--background-primary);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  
+  .other-matches-header {
+    padding: var(--space-xl);
+    border-bottom: 1px solid var(--border-light);
+    background: var(--background-accent);
+  }
+  
+  .other-matches-header h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+  }
+  
+  .other-matches-card .chocolate-grid {
+    padding: var(--space-xl);
+  }
+  
+  .confidence-badge {
+    background: var(--brand-blue-gray);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-sm);
+  }
+  
+  /* No Matches Card */
+  .no-matches-card {
+    background: var(--background-primary);
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  
+  .no-matches-content {
+    padding: var(--space-3xl);
+    text-align: center;
+  }
+  
+  .no-matches-icon {
+    font-size: 5rem;
+    margin-bottom: var(--space-lg);
+  }
+  
+  .no-matches-content h3 {
+    color: var(--text-primary);
+    font-size: 1.75rem;
+    margin-bottom: var(--space-md);
+  }
+  
+  .no-matches-content p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-md);
+    font-size: 1.125rem;
+  }
+  
+  .no-matches-suggestion {
+    font-size: 1rem !important;
+    color: var(--text-muted) !important;
+    margin-bottom: var(--space-xl) !important;
+  }
+  
+  .debug-toggle {
+    background: none;
+    border: none;
+    color: var(--brand-copper);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.875rem;
+    padding: 0;
+    margin-bottom: var(--space-lg);
+  }
+  
+  .debug-toggle:hover {
+    color: var(--primary-hover);
+  }
+  
+  .debug-text {
+    background: var(--background-accent);
+    padding: var(--space-md);
+    border-radius: var(--border-radius-md);
+    text-align: left;
+    margin-top: var(--space-md);
+  }
+  
+  .debug-text strong {
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    margin-bottom: var(--space-sm);
+    display: block;
+  }
+  
+  .debug-text pre {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    white-space: pre-wrap;
+    max-height: 8rem;
+    overflow-y: auto;
+    margin: 0;
+    padding: var(--space-sm);
+    background: var(--background-primary);
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--border-light);
+  }
+  
+  /* =====================================================
+     BUTTON STYLES
+     ===================================================== */
+  
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-xl);
+    border: none;
+    border-radius: var(--border-radius-md);
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .btn:active {
+    transform: translateY(0);
+  }
+  
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, var(--brand-copper) 0%, var(--primary-light) 100%);
+    color: var(--text-light);
+  }
+  
+  .btn-primary:hover {
+    background: linear-gradient(135deg, var(--primary-hover) 0%, var(--brand-copper) 100%);
+  }
+  
+  .btn-secondary {
+    background: linear-gradient(135deg, var(--brand-sage) 0%, var(--secondary-light) 100%);
+    color: var(--text-light);
+  }
+  
+  .btn-secondary:hover {
+    background: linear-gradient(135deg, var(--secondary-hover) 0%, var(--brand-sage) 100%);
+  }
+  
+  .btn-large {
+    padding: var(--space-lg) var(--space-2xl);
+    font-size: 1.125rem;
+  }
+  
+  /* =====================================================
+     CHOCOLATE CARD ENHANCEMENTS
+     ===================================================== */
+  
+  .chocolate-card.featured {
+    border: 2px solid var(--success-color);
+    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.2);
+  }
+  
+  .chocolate-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background: none;
+    border: 1px solid var(--border-light);
+    text-align: left;
+    width: 100%;
+  }
+  
+  .chocolate-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+  }
+  
+  /* =====================================================
+     RESPONSIVE DESIGN
+     ===================================================== */
+  
+  @media (max-width: 768px) {
+    .scanner-page .container {
+      padding: 0 var(--space-md);
+    }
+    
+    .scanner-header {
+      padding: var(--space-xl) var(--space-md);
+    }
+    
+    .scanner-header h1 {
+      font-size: 2.25rem;
+    }
+    
+    .scanner-subtitle {
+      font-size: 1.125rem;
+    }
+    
+    .scanner-section {
+      padding: var(--space-xl);
+    }
+    
+    .section-title {
+      font-size: 1.25rem;
+    }
+    
+    .camera-placeholder {
+      padding: var(--space-xl);
+    }
+    
+    .placeholder-icon {
+      font-size: 3rem;
+    }
+    
+    .scan-frame {
+      width: 16rem;
+      height: 10rem;
+    }
+    
+    .camera-controls {
+      flex-direction: column;
+    }
+    
+    .upload-area {
+      padding: var(--space-xl);
+    }
+    
+    .upload-icon {
+      font-size: 2.5rem;
+    }
+    
+    .best-match-header {
+      padding: var(--space-lg);
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .best-match-header h2 {
+      font-size: 1.5rem;
+    }
+    
+    .best-match-content {
+      padding: var(--space-lg);
+    }
+    
+    .other-matches-card .chocolate-grid {
+      padding: var(--space-lg);
+    }
+    
+    .no-matches-content {
+      padding: var(--space-xl);
+    }
+    
+    .no-matches-icon {
+      font-size: 4rem;
+    }
+    
+    .no-matches-content h3 {
+      font-size: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .scanner-header h1 {
+      font-size: 2rem;
+    }
+    
+    .scanner-subtitle {
+      font-size: 1rem;
+    }
+    
+    .section-title {
+      font-size: 1.125rem;
+    }
+    
+    .scan-frame {
+      width: 14rem;
+      height: 8rem;
+    }
+    
+    .btn {
+      padding: var(--space-sm) var(--space-lg);
+      font-size: 0.875rem;
+    }
+    
+    .btn-large {
+      padding: var(--space-md) var(--space-xl);
+      font-size: 1rem;
+    }
+  }

@@ -22,6 +22,7 @@ import ContactPage from './pages/ContactPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
 import SuperAdminEditPage from './pages/SuperAdminEditPage';
+import ChocolateScanner from './components/ChocolateScanner';
 import './App.css';
 
 function App() {
@@ -57,6 +58,7 @@ function App() {
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/privacy" element={<PrivacyPolicyPage />} />
               <Route path="/terms" element={<TermsOfServicePage />} />
+              <Route path="/scanner" element={<ChocolateScanner />} />
               <Route path="*" element={<div>Page not found</div>} />
             </Routes>
           </main>

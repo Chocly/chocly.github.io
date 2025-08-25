@@ -267,6 +267,9 @@ function Header() {
     {currentUser && (
       <Link to="/add-chocolate" onClick={() => setMenuOpen(false)}>Add Chocolate</Link>
     )}
+    <Link to="/scanner" className="nav-link">
+  🍫 Scan
+</Link>
     <Link to="/about" onClick={() => setMenuOpen(false)}>About Us</Link>
     <Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
   </div>
