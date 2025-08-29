@@ -20,36 +20,44 @@
      HEADER SECTION
      ===================================================== */
   
-  .scanner-header {
+/* Clean, minimalist header with solid brand color */
+.scanner-header {
+    background: #A73A04; /* Solid copper brown - no gradient */
+    color: #FFFFFF;
     text-align: center;
-    margin-bottom: var(--space-3xl);
-    padding: var(--space-2xl) 0;
-    background: linear-gradient(135deg, var(--brand-copper) 0%, var(--brand-taupe) 100%);
-    color: var(--text-light);
-    border-radius: var(--border-radius-xl);
-    box-shadow: var(--shadow-lg);
+    padding: 3rem 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
   }
   
   .scanner-header h1 {
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: var(--space-md);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 2.5rem;
+    font-weight: 600; /* Not too bold for minimalist look */
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+    color: #FFFFFF;
   }
   
   .scanner-subtitle {
-    font-size: 1.25rem;
-    margin-bottom: var(--space-md);
-    opacity: 0.9;
+    font-size: 1.125rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.95;
+    font-weight: 400;
+    color: #FFFFFF;
+    letter-spacing: 0.2px;
   }
   
   .scanner-stats {
-    font-size: 0.875rem;
-    opacity: 0.8;
-    background: rgba(255, 255, 255, 0.1);
     display: inline-block;
-    padding: var(--space-sm) var(--space-md);
-    border-radius: var(--border-radius-md);
+    background: rgba(255, 255, 255, 0.15); /* Subtle white overlay */
+    padding: 0.5rem 1.5rem;
+    border-radius: 24px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    color: #FFFFFF;
+    backdrop-filter: blur(10px);
   }
   
   /* =====================================================
@@ -709,4 +717,53 @@
       padding: var(--space-md) var(--space-xl);
       font-size: 1rem;
     }
+  }
+
+  /* Update in your ChocolateScanner.css file */
+
+  
+  /* Update confidence badges with brand colors */
+  .confidence-badge {
+    background: #6C6C4E; /* Your olive green */
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  /* High confidence variant */
+  .confidence-badge.high {
+    background: #6C6C4E; /* Green for high matches */
+  }
+  
+  /* Medium confidence variant */
+  .confidence-badge.medium {
+    background: #788990; /* Blue-gray for medium matches */
+  }
+  
+  /* Low confidence variant */
+  .confidence-badge.low {
+    background: #B0916C; /* Taupe for low matches */
+  }
+  
+  /* Update button colors to match brand */
+  .btn-primary {
+    background: #A73A04; /* Copper brown */
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background: #8B2F03; /* Darker copper on hover */
+  }
+  
+  /* Progress bar with brand color */
+  .progress-fill {
+    background: #A73A04; /* Copper brown */
+    /* ... rest of your existing styles ... */
+  }
+  
+  /* Success states */
+  .best-match-card {
+    border-top: 3px solid #6C6C4E; /* Green accent for best match */
   }
