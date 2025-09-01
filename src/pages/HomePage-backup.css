@@ -1,0 +1,1254 @@
+/* ===================================================================
+   HOMEPAGE.CSS - COMPLETE VERSION WITH ALL SECTIONS
+   Replace your entire HomePage.css file with this
+   =================================================================== */
+
+/* ===================================================================
+   1. HERO SECTION - LEFT ALIGNED LAYOUT
+   =================================================================== */
+
+   .hero-section {
+    background-image: url('https://images.unsplash.com/photo-1511381939415-e44015466834?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2072&q=80');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  /* Dark overlay for better text readability */
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+  }
+  
+  /* Hero content container - LEFT ALIGNED */
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    text-align: left;
+    max-width: 600px;
+    margin: 0;
+    padding: 2rem 0;
+    width: 100%;
+  }
+  
+  /* Hero title */
+  .hero-title,
+  .hero-content .hero-title,
+  .hero-section .hero-title,
+  .hero-section .display-1,
+  .hero-content .display-1 {
+    font-family: 'Playfair Display', serif !important;
+    font-size: clamp(2.5rem, 7vw, 4.5rem) !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+    letter-spacing: -0.02em !important;
+    margin: 0 0 1.5rem 0 !important;
+    padding: 0 !important;
+    color: #FFFFFF !important;
+    text-shadow: 0 4px 16px rgba(0,0,0,0.5) !important;
+    text-align: left !important;
+    text-indent: 0 !important;
+  }
+  
+  /* Hero subtitle */
+  .hero-subtitle,
+  .hero-content .hero-subtitle,
+  .hero-section .hero-subtitle {
+    font-family: 'Inter', sans-serif !important;
+    font-size: clamp(1.1rem, 3.5vw, 1.4rem) !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+    margin: 0 0 2.5rem 0 !important;
+    padding: 0 !important;
+    color: #FFFFFF !important;
+    opacity: 0.95 !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
+    text-align: left !important;
+    text-indent: 0 !important;
+    max-width: 500px !important;
+  }
+  
+  /* Search container */
+  .search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 0 0 2rem 0;
+    padding: 0;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  /* Search input */
+  .search-input {
+    width: 100%;
+    padding: 1rem 140px 1rem 1.5rem;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    height: 56px;
+    margin: 0;
+    text-indent: 0;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    background: #FFFFFF;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    transform: translateY(-2px);
+  }
+  
+  .search-input::placeholder {
+    color: #6B7280;
+    font-weight: 400;
+  }
+  
+  /* Search button */
+  .search-button {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--brand-copper);
+    color: white;
+    border: none;
+    padding: 0 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+  }
+  
+  .search-button:hover {
+    background: #8B2F03;
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 4px 16px rgba(167, 58, 4, 0.4);
+  }
+  
+  /* Hero actions */
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* ===================================================================
+     2. BUTTON STYLES
+     =================================================================== */
+  
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.875rem 1.75rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    height: 50px;
+    margin: 0;
+    white-space: nowrap;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+  
+  .btn-primary {
+    background: var(--brand-copper);
+    color: white;
+    border-color: var(--brand-copper);
+  }
+  
+  .btn-primary:hover {
+    background: #8B2F03;
+    border-color: #8B2F03;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(167, 58, 4, 0.3);
+  }
+  
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+  }
+  
+  /* ===================================================================
+     3. FEATURED SECTION WITH CAROUSEL
+     =================================================================== */
+  
+  .featured-section {
+    padding: 4rem 0;
+    background: #FFFFFF !important;
+  }
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 6vw, 3rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+  
+  .section-subtitle {
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .view-all {
+    color: var(--brand-copper);
+    text-decoration: none;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .view-all:hover {
+    color: #8B2F03;
+    transform: translateX(4px);
+  }
+  
+  .view-all::after {
+    content: '→';
+    transition: transform 0.3s ease;
+  }
+  
+  .view-all:hover::after {
+    transform: translateX(4px);
+  }
+  
+  /* Carousel */
+  .featured-container {
+    position: relative;
+  }
+  
+  .chocolate-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .carousel-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .carousel-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid var(--brand-copper);
+    color: var(--brand-copper);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+  
+  .carousel-btn:hover {
+    background: var(--brand-copper);
+    color: white;
+    transform: scale(1.1);
+  }
+  
+  .carousel-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .carousel-indicators {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  .carousel-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #E5E7EB;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    padding: 0;
+  }
+  
+  .carousel-dot.active {
+    background: var(--brand-copper);
+    transform: scale(1.4);
+  }
+  
+  .carousel-dot:hover {
+    background: var(--brand-taupe);
+    transform: scale(1.2);
+  }
+  
+  /* ===================================================================
+     4. HOW IT WORKS SECTION
+     =================================================================== */
+  
+  .how-it-works {
+    padding: 4rem 0;
+    background: #FFFFFF !important;
+  }
+  
+  .how-it-works-content {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .steps-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .step-card {
+    background: linear-gradient(135deg, var(--brand-cream) 0%, #F8F6F3 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-light);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .step-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(167, 58, 4, 0.15);
+  }
+  
+  .step-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(167, 58, 4, 0.05) 0%, rgba(176, 145, 105, 0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .step-card:hover::before {
+    opacity: 1;
+  }
+  
+  .step-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.5rem;
+    background: var(--brand-copper);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .step-icon svg {
+    width: 32px;
+    height: 32px;
+    fill: white;
+  }
+  
+  .step-content h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    position: relative;
+    z-index: 2;
+  }
+  
+  .step-content p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* ===================================================================
+     5. REVIEWS SECTION
+     =================================================================== */
+  
+  .reviews-section {
+    padding: 4rem 0;
+    background: #FFFFFF !important;
+  }
+  
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  
+  .review-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #E5E7EB;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .review-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  }
+  
+  .review-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+  }
+  
+  .review-user .user-name {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  
+  .review-user .review-date {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+  }
+  
+  .review-rating {
+    display: flex;
+    gap: 2px;
+  }
+  
+  .star {
+    color: #FCD34D;
+    font-size: 1.2rem;
+  }
+  
+  .star.filled {
+    color: #F59E0B;
+  }
+  
+  .star.empty {
+    color: #E5E7EB;
+  }
+  
+  .review-chocolate {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .chocolate-image {
+    width: 60px;
+    height: 60px;
+    background: var(--brand-cream);
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  
+  .chocolate-info {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  /* UPDATED CHOCOLATE NAME AND MAKER - WITH STRONGER SELECTORS */
+  .reviews-section .review-card .chocolate-name,
+  .reviews-section .chocolate-name,
+  .review-card .chocolate-name {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: var(--text-primary) !important;
+    margin: 0 0 0.25rem 0 !important;
+    line-height: 1.25 !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    hyphens: auto !important;
+    max-height: calc(1.25em * 3) !important;
+    overflow: hidden !important;
+    word-break: normal !important;
+    white-space: normal !important;
+  }
+  
+  .reviews-section .review-card .chocolate-maker,
+  .reviews-section .chocolate-maker,
+  .review-card .chocolate-maker {
+    font-size: 1rem !important;
+    color: var(--brand-copper) !important;
+    margin: 0 !important;
+    font-weight: 600 !important;
+    line-height: 1.25 !important;
+  }
+  
+  .review-text {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    flex: 1;
+  }
+  
+  .read-more {
+    color: var(--brand-copper);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+  }
+  
+  .read-more:hover {
+    color: #8B2F03;
+    transform: translateX(4px);
+  }
+  
+  .no-reviews-message {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--brand-cream);
+    border-radius: 16px;
+    grid-column: 1 / -1;
+  }
+  
+  .no-reviews-message h3 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+  
+  .no-reviews-message p {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+  }
+  
+/* CTA SECTION - Clean White Background with Proper Layout */
+.cta-section {
+  background: #FFFFFF;
+  padding: 80px 0;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid #E5E7EB;
+}
+
+/* Remove the decorative background that might be interfering */
+.cta-section::before {
+  display: none;
+}
+
+.cta-content {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 0 20px;
+  /* Remove the background gradient and border that might be causing issues */
+  background: none;
+  border: none;
+}
+
+.cta-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #2D1810;
+  line-height: 1.2;
+  /* Remove gradient text effect for simplicity */
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+  background-clip: unset;
+}
+
+.cta-text {
+  font-size: 1.125rem;
+  color: #374151;
+  margin-bottom: 40px;
+  line-height: 1.6;
+  font-weight: 500;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  /* Remove max-width constraint */
+  max-width: none;
+  margin: 0 auto;
+}
+
+/* SIGN IN BUTTON - Dark chocolate with white text */
+.btn-sign-in {
+  background: #2D1810;
+  color: #FFFFFF;
+  border: 2px solid #2D1810;
+  padding: 16px 40px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-sign-in:hover {
+  background: #FFFFFF;
+  color: #2D1810;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(45, 24, 16, 0.15);
+}
+
+/* CREATE ACCOUNT BUTTON - Accent color */
+.btn-create-account {
+  background: #E76F51;
+  color: #FFFFFF;
+  border: 2px solid #E76F51;
+  padding: 16px 40px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-create-account:hover {
+  background: #D64F2F;
+  border-color: #D64F2F;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(231, 111, 81, 0.4);
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .cta-section {
+    padding: 60px 0;
+  }
+  
+  .cta-content {
+    padding: 0 16px;
+  }
+  
+  .cta-title {
+    font-size: 1.75rem;
+    margin-bottom: 16px;
+  }
+  
+  .cta-text {
+    font-size: 1rem;
+    margin-bottom: 32px;
+  }
+  
+  .cta-buttons {
+    flex-direction: column;
+    width: 100%;
+    gap: 16px;
+  }
+  
+  .btn-sign-in,
+  .btn-create-account {
+    width: 100%;
+    text-align: center;
+    padding: 14px 32px;
+  }
+}
+  /* ===================================================================
+     7. LOADING STATES
+     =================================================================== */
+  
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    gap: 1rem;
+  }
+  
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--brand-copper);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* ===================================================================
+     8. RESPONSIVE DESIGN
+     =================================================================== */
+  
+  /* Desktop grid improvements */
+  @media (min-width: 1024px) {
+    .chocolate-cards {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .steps-visual {
+      flex-direction: row;
+      gap: 2rem;
+    }
+    
+    .step-card {
+      flex: 1;
+    }
+    
+    .reviews-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .cta-buttons {
+      flex-direction: row;
+      gap: 1.5rem;
+    }
+    
+    /* Desktop search optimizations */
+    .hero-content {
+      max-width: 650px;
+    }
+    
+    .search-container {
+      max-width: 550px;
+    }
+    
+    .search-input {
+      padding: 1.125rem 150px 1.125rem 1.75rem;
+      height: 60px;
+      font-size: 1.05rem;
+    }
+    
+    .search-button {
+      height: 52px;
+      padding: 0 1.75rem;
+      font-size: 1rem;
+    }
+    
+    .btn {
+      height: 52px;
+      padding: 1rem 2rem;
+      font-size: 1.05rem;
+    }
+  }
+  
+  /* Tablet adjustments */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .chocolate-cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .steps-visual {
+      flex-direction: row;
+      gap: 1.5rem;
+    }
+    
+    .reviews-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .cta-buttons {
+      flex-direction: row;
+      gap: 1rem;
+    }
+  }
+  
+  /* Mobile responsive */
+  @media (max-width: 767px) {
+    .hero-section {
+      min-height: 70vh;
+    }
+    
+    .hero-content {
+      max-width: 100%;
+      padding: 1.5rem 0;
+    }
+    
+    .hero-title,
+    .hero-section .hero-title,
+    .hero-content .hero-title {
+      font-size: clamp(2rem, 8vw, 3rem) !important;
+      margin-bottom: 1rem !important;
+    }
+    
+    .hero-subtitle,
+    .hero-section .hero-subtitle,
+    .hero-content .hero-subtitle {
+      font-size: clamp(1rem, 4vw, 1.2rem) !important;
+      margin-bottom: 2rem !important;
+    }
+    
+    .search-container {
+      max-width: 100%;
+    }
+    
+    .search-input {
+      padding: 0.875rem 110px 0.875rem 1.25rem;
+      height: 50px;
+      font-size: 0.95rem;
+    }
+    
+    .search-button {
+      height: 42px;
+      padding: 0 1.25rem;
+      font-size: 0.9rem;
+    }
+    
+    .hero-actions {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.75rem;
+      width: 100%;
+    }
+    
+    .btn {
+      height: 48px;
+      padding: 0.75rem 1.5rem;
+      width: 100%;
+    }
+    
+    .featured-section,
+    .how-it-works,
+    .reviews-section,
+    .cta-section {
+      padding: 3rem 0;
+    }
+    
+    .chocolate-cards {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    
+    .steps-visual {
+      gap: 1.5rem;
+    }
+    
+    .reviews-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    
+    .cta-buttons {
+      gap: 0.75rem;
+    }
+  }
+  
+  /* Small mobile */
+  @media (max-width: 480px) {
+    .hero-section {
+      min-height: 60vh;
+    }
+    
+    .search-input {
+      padding: 0.75rem 100px 0.75rem 1rem;
+      height: 46px;
+    }
+    
+    .search-button {
+      height: 38px;
+      padding: 0 1rem;
+      font-size: 0.85rem;
+    }
+    
+    .step-card,
+    .review-card {
+      padding: 1.5rem;
+    }
+  }
+  
+  /* ===================================================================
+     9. ACCESSIBILITY & PERFORMANCE
+     =================================================================== */
+  
+  /* Focus styles */
+  .search-input:focus-visible,
+  .btn:focus-visible,
+  .carousel-btn:focus-visible,
+  .carousel-dot:focus-visible {
+    outline: 3px solid var(--brand-copper);
+    outline-offset: 2px;
+  }
+  
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  
+  /* High contrast mode */
+  @media (prefers-contrast: high) {
+    .btn,
+    .carousel-btn {
+      border-width: 3px;
+    }
+    
+    .search-input {
+      border: 2px solid #000;
+    }
+  }
+  
+  /* Safe areas for notched devices */
+  @supports (padding: max(0px)) {
+    .hero-content {
+      padding-left: max(1rem, env(safe-area-inset-left));
+      padding-right: max(1rem, env(safe-area-inset-right));
+    }
+  }
+
+  /* CTA SECTION DESKTOP FIX - Add this to the END of your HomePage.css file */
+/* High specificity to override any conflicts */
+
+/* Reset and fix CTA section layout */
+.home-page .cta-section,
+.cta-section.cta-section {
+  background: #FFFFFF !important;
+  padding: 80px 20px !important;
+  position: relative !important;
+  overflow: visible !important;
+  border-top: 1px solid #E5E7EB !important;
+  z-index: 1 !important;
+}
+
+.home-page .cta-section::before,
+.cta-section.cta-section::before {
+  display: none !important;
+}
+
+.home-page .cta-section .container {
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.home-page .cta-content,
+.cta-section .cta-content {
+  max-width: 700px !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  position: relative !important;
+  z-index: 3 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 0 !important;
+}
+
+.home-page .cta-title,
+.cta-section .cta-title {
+  font-family: 'Playfair Display', serif !important;
+  font-size: 3rem !important;
+  font-weight: 700 !important;
+  margin: 0 0 24px 0 !important;
+  padding: 0 !important;
+  color: #2D1810 !important;
+  line-height: 1.2 !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
+  background-clip: unset !important;
+  text-shadow: none !important;
+  position: relative !important;
+  z-index: 4 !important;
+  display: block !important;
+  width: 100% !important;
+}
+
+.home-page .cta-text,
+.cta-section .cta-text {
+  font-size: 1.25rem !important;
+  color: #374151 !important;
+  margin: 0 0 48px 0 !important;
+  padding: 0 !important;
+  line-height: 1.6 !important;
+  font-weight: 500 !important;
+  max-width: 500px !important;
+  position: relative !important;
+  z-index: 4 !important;
+  display: block !important;
+}
+
+.home-page .cta-buttons,
+.cta-section .cta-buttons {
+  display: flex !important;
+  gap: 24px !important;
+  justify-content: center !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  max-width: none !important;
+  width: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+  z-index: 5 !important;
+  flex-direction: row !important;
+}
+
+/* SIGN IN BUTTON */
+.home-page .btn-sign-in,
+.cta-section .btn-sign-in {
+  background: #2D1810 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #2D1810 !important;
+  padding: 16px 48px !important;
+  border-radius: 50px !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+  transition: all 0.3s ease !important;
+  white-space: nowrap !important;
+  position: relative !important;
+  z-index: 6 !important;
+  margin: 0 !important;
+  min-width: auto !important;
+  width: auto !important;
+  text-align: center !important;
+  line-height: normal !important;
+}
+
+.home-page .btn-sign-in:hover,
+.cta-section .btn-sign-in:hover {
+  background: #FFFFFF !important;
+  color: #2D1810 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(45, 24, 16, 0.15) !important;
+}
+
+/* CREATE ACCOUNT BUTTON */
+.home-page .btn-create-account,
+.cta-section .btn-create-account {
+  background: #E76F51 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #E76F51 !important;
+  padding: 16px 48px !important;
+  border-radius: 50px !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+  transition: all 0.3s ease !important;
+  white-space: nowrap !important;
+  position: relative !important;
+  z-index: 6 !important;
+  margin: 0 !important;
+  min-width: auto !important;
+  width: auto !important;
+  text-align: center !important;
+  line-height: normal !important;
+}
+
+.home-page .btn-create-account:hover,
+.cta-section .btn-create-account:hover {
+  background: #D64F2F !important;
+  border-color: #D64F2F !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 12px 40px rgba(231, 111, 81, 0.4) !important;
+}
+
+/* Desktop specific adjustments */
+@media (min-width: 1024px) {
+  .home-page .cta-section,
+  .cta-section.cta-section {
+    padding: 100px 40px !important;
+  }
+  
+  .home-page .cta-title,
+  .cta-section .cta-title {
+    font-size: 3.5rem !important;
+    margin-bottom: 32px !important;
+  }
+  
+  .home-page .cta-text,
+  .cta-section .cta-text {
+    font-size: 1.375rem !important;
+    margin-bottom: 56px !important;
+  }
+  
+  .home-page .cta-buttons,
+  .cta-section .cta-buttons {
+    gap: 32px !important;
+  }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .home-page .cta-title,
+  .cta-section .cta-title {
+    font-size: 2.5rem !important;
+  }
+  
+  .home-page .cta-text,
+  .cta-section .cta-text {
+    font-size: 1.125rem !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .home-page .cta-section,
+  .cta-section.cta-section {
+    padding: 60px 20px !important;
+  }
+  
+  .home-page .cta-title,
+  .cta-section .cta-title {
+    font-size: 2rem !important;
+    margin-bottom: 20px !important;
+  }
+  
+  .home-page .cta-text,
+  .cta-section .cta-text {
+    font-size: 1rem !important;
+    margin-bottom: 32px !important;
+  }
+  
+  .home-page .cta-buttons,
+  .cta-section .cta-buttons {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 16px !important;
+  }
+  
+  .home-page .btn-sign-in,
+  .home-page .btn-create-account,
+  .cta-section .btn-sign-in,
+  .cta-section .btn-create-account {
+    width: 100% !important;
+    max-width: 300px !important;
+  }
+}
+
+/* Add this CSS to your HomePage.css to remove all section title underlines */
+
+/* Remove all underlines from section titles */
+.section-title::after,
+.section-title::before,
+h2.section-title::after,
+h2.section-title::before,
+.home-page .section-title::after,
+.home-page .section-title::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* Remove underlines from CTA title */
+.cta-title::after,
+.cta-title::before,
+.home-page .cta-title::after,
+.home-page .cta-title::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* Remove any border-bottom from section headers */
+.section-header {
+  border-bottom: none !important;
+}
+
+.section-header::after,
+.section-header::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* Clean section titles without decorative elements */
+.section-title {
+  position: relative;
+  padding-bottom: 0;
+  margin-bottom: 1rem;
+}
+
+.cta-title {
+  position: relative;
+  padding-bottom: 0;
+}
+
+/* If you have any other elements with underlines, add them here */
+.how-it-works-content h2::after,
+.reviews-section h2::after {
+  display: none !important;
+}
+
+/* Remove any decorative lines that might be added via other classes */
+.display-2::after,
+.display-2::before,
+h2::after,
+h2::before {
+  display: none !important;
+  content: none !important;
+}

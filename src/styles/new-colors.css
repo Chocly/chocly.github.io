@@ -1,0 +1,28 @@
+/* Chocly Brand Colors - Official Palette */
+:root {
+    /* Primary Brand Colors */
+    --chocly-cream: #F9EBCC;        /* Light cream background */
+    --chocly-mint: #CAEEED;         /* Mint accent */
+    --chocly-terracotta: #B8693D;   /* Terracotta/burnt orange */
+    --chocly-tan: #B08968;          /* Tan/light brown */
+    --chocly-dark: #231F1F;         /* Almost black */
+    
+    /* Semantic Color Usage */
+    --primary-bg: #F9EBCC;          /* Main background color */
+    --secondary-bg: #CAEEED;         /* Secondary sections */
+    --accent-primary: #B8693D;       /* Primary CTA, buttons */
+    --accent-secondary: #B08968;     /* Secondary elements */
+    --text-dark: #231F1F;            /* Primary text */
+    --text-light: #FFFFFF;           /* Light text on dark backgrounds */
+    
+    /* Component Specific */
+    --hero-overlay: rgba(35, 31, 31, 0.4);  /* Dark overlay for hero */
+    --card-bg: #FFFFFF;              /* Card backgrounds */
+    --border-light: rgba(176, 137, 104, 0.2);  /* Subtle borders */
+    --shadow-soft: rgba(35, 31, 31, 0.1);      /* Soft shadows */
+    
+    /* Interactive States */
+    --hover-primary: #9A5632;        /* Darker terracotta for hover */
+    --hover-secondary: #967660;      /* Darker tan for hover */
+    --focus-ring: #CAEEED;           /* Mint focus states */
+  }
