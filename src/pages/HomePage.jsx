@@ -5,6 +5,7 @@ import { db } from '../firebase';
 import { getFeaturedChocolates } from '../services/chocolateFirebaseService';
 import heroBackground from '../assets/Gemini hero image.png';
 import cacaoFarmer from '../assets/gemini cacao farmer.png';  // Import the new image
+import choclyIcon from '../assets/CHOCLY icon B8693D.png';  // Add this line
 import './HomePage-new.css';
 
 const HomePage = () => {
@@ -222,21 +223,21 @@ const HomePage = () => {
           <div className="steps-grid-new">
             <div className="step-new">
               <div className="step-icon-new">
-                🔍
+              <img src={choclyIcon} alt="Discover" style={{width: '50px', height: '50px'}} />
               </div>
               <h3>Discover</h3>
               <p>Explore our extensive chocolate database and find chocolates based on origin, flavor profile, or maker</p>
             </div>
             <div className="step-new">
               <div className="step-icon-new">
-                ⭐
+              <img src={choclyIcon} alt="Connect" style={{width: '50px', height: '50px'}} />
               </div>
               <h3>Taste & Rate</h3>
               <p>Develop your palate by tasting and rating chocolates, tracking your personal chocolate journey</p>
             </div>
             <div className="step-new">
               <div className="step-icon-new">
-                🤝
+              <img src={choclyIcon} alt="Taste & Rate" style={{width: '50px', height: '50px'}} />
               </div>
               <h3>Connect</h3>
               <p>Share recommendations, follow fellow chocolate lovers, and join tasting events in your area</p>

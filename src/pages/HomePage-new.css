@@ -331,19 +331,26 @@
 
 /* Placeholder icon container */
 .step-icon-new {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 1.5rem;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2.5rem;
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-}
-
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 10px;  /* Add padding for the image */
+  }
+  
+  .step-icon-new img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: brightness(0) invert(1);  /* Makes the icon white */
+  }
+  
 .cocoa-icon-new {
   font-size: 3rem;
   margin-bottom: 1.5rem;
@@ -505,35 +512,44 @@
 }
 
 /* FINAL OVERRIDE - Put this at the END of the file */
-.homepage-new .treats-section-new .treats-grid-new .treat-card-new {
-    background-color: #FFF5E9 !important;
-    border-radius: 24px !important;
-    padding: 2rem !important;
-  }
-  
-  .homepage-new .treats-section-new .treats-grid-new .treat-card-new .treat-image-wrapper-new {
-    background-color: white !important;
-    width: 220px !important;
-    height: 220px !important;
-    border-radius: 50% !important;
-    margin: 0 auto 1.5rem auto !important;
-  }
-  
-  .homepage-new .treats-section-new .treats-grid-new .treat-card-new .treat-image-circle-new img {
-    width: 80% !important;
-    height: 80% !important;
-    object-fit: contain !important;
-  }
 
-  /* FORCE VIEW ALL BUTTON STYLES - Add at very end */
+/* RESTORE THE CREAM CARD BACKGROUNDS */
+.homepage-new .treats-section-new .treats-grid-new .treat-card-new {
+    background-color: #FFF5E9 !important;  /* <- This brings back your cream boxes */
+    border-radius: 24px !important;
+    padding: 2rem !important;  /* <- This gives padding around everything */
+}
+
+/* UPDATED IMAGE DISPLAY FOR CHOCOLATE PACKAGES */
+.homepage-new .treats-section-new .treats-grid-new .treat-card-new .treat-image-wrapper-new {
+    background-color: white !important;
+    width: 100% !important;
+    height: 260px !important;
+    border-radius: 12px !important;  /* <- Rounded rectangle instead of circle */
+    margin: 0 auto 1.5rem auto !important;
+    padding: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* IMAGE SIZING - Only need this once! */
+.homepage-new .treats-section-new .treats-grid-new .treat-card-new .treat-image-circle-new img {
+    width: auto !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    object-fit: contain !important;  /* <- Preserves aspect ratio */
+}
+
+/* FORCE VIEW ALL BUTTON STYLES */
 .homepage-new .view-all-container {
     text-align: right !important;
     padding-right: 0 !important;
     margin: 3rem 0 2rem 0 !important;
-  }
-  
-  .homepage-new a.btn-view-all,
-  .homepage-new .btn-view-all {
+}
+
+.homepage-new a.btn-view-all,
+.homepage-new .btn-view-all {
     background: #B8693D !important;
     color: white !important;
     padding: 12px 35px !important;
@@ -544,10 +560,10 @@
     display: inline-block !important;
     border: none !important;
     box-shadow: 0 4px 12px rgba(184, 105, 61, 0.2) !important;
-  }
-  
-  .homepage-new a.btn-view-all:hover,
-  .homepage-new .btn-view-all:hover {
+}
+
+.homepage-new a.btn-view-all:hover,
+.homepage-new .btn-view-all:hover {
     background: #9A5632 !important;
     transform: translateY(-2px) !important;
-  }
+}
