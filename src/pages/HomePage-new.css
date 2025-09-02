@@ -1,3 +1,85 @@
+/* Add this CSS to your HomePage-new.css file at the TOP of the file */
+/* This will apply Helvetica Neue to all non-header text on the homepage */
+
+/* First, import the font if not already imported */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* Apply Helvetica Neue to all body text on homepage */
+.homepage-new {
+  /* Helvetica Neue with comprehensive fallback stack */
+  font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+}
+
+/* Apply to all text elements except headers */
+.homepage-new p,
+.homepage-new span,
+.homepage-new div,
+.homepage-new li,
+.homepage-new a,
+.homepage-new button,
+.homepage-new input,
+.homepage-new textarea,
+.homepage-new label,
+.homepage-new .hero-subtitle-new,
+.homepage-new .section-subtitle-new,
+.homepage-new .treat-title-new,
+.homepage-new .treat-description-new,
+.homepage-new .step-title-new,
+.homepage-new .step-description-new,
+.homepage-new .join-description-new,
+.homepage-new .signin-link-new,
+.homepage-new .btn-primary-new,
+.homepage-new .btn-secondary-new,
+.homepage-new .btn-view-all,
+.homepage-new .search-input-new,
+.homepage-new .search-button-new {
+  font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+}
+
+/* Keep headers with their existing font (Inter) */
+.homepage-new h1,
+.homepage-new h2,
+.homepage-new h3,
+.homepage-new h4,
+.homepage-new h5,
+.homepage-new h6,
+.homepage-new .hero-title-new,
+.homepage-new .section-title-new,
+.homepage-new .join-title-new {
+  /* Keep the existing Inter font for headers */
+  font-family: 'Inter', -apple-system, sans-serif !important;
+}
+
+/* Specific adjustments for better readability with Helvetica Neue */
+.homepage-new .hero-subtitle-new {
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.homepage-new .treat-description-new,
+.homepage-new .step-description-new {
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.homepage-new .btn-primary-new,
+.homepage-new .btn-secondary-new,
+.homepage-new .btn-view-all {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* Search input with Aktiv Grotesk */
+.homepage-new .search-input-new {
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.homepage-new .search-input-new::placeholder {
+  font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+  font-weight: 400;
+}
+
 /* Import new colors */
 @import '../styles/new-colors.css';
 
@@ -566,4 +648,13 @@
 .homepage-new .btn-view-all:hover {
     background: #9A5632 !important;
     transform: translateY(-2px) !important;
+}
+
+/* Force the terracotta background color for How It Works section */
+.homepage-new .how-it-works-new,
+.how-it-works-new {
+  background: #b08968 !important; /* Solid terracotta */
+  background-color: #b08968 !important;
+  /* Remove any gradients */
+  background-image: none !important;
 }

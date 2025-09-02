@@ -1,4 +1,4 @@
-/* src/components/Header.css - ICON-ONLY MOBILE DESIGN FOR ALL PHONES */
+/* src/components/Header.css - FIXED VERSION WITH NON-STICKY HOMEPAGE */
 
 :root {
   --header-height: 70px;
@@ -12,18 +12,32 @@
   --primary-color: #6B4226;
 }
 
-/* MOBILE-FIRST HEADER - SINGLE LINE ON ALL DEVICES */
+/* MOBILE-FIRST HEADER - DEFAULT STICKY FOR ALL PAGES EXCEPT HOMEPAGE */
 .header {
   background-color: var(--header-bg);
   color: var(--header-text);
   padding: 0;
   width: 100%;
-  position: sticky;
+  position: sticky; /* Default sticky */
   top: 0;
   z-index: 1000;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   border-bottom: 1px solid var(--header-border);
   height: var(--header-height-mobile);
+}
+
+/* HOMEPAGE SPECIFIC - ABSOLUTE POSITIONING */
+.header.homepage-header-transparent {
+  position: absolute !important; /* Override sticky */
+  background: transparent !important;
+  box-shadow: none !important;
+  border-bottom: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  top: 0 !important;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
 
 .header .container {
@@ -34,8 +48,14 @@
   padding: 0 1rem;
   gap: 0.5rem;
   position: relative;
-  /* CRITICAL: Never allow wrapping on mobile */
   flex-wrap: nowrap;
+}
+
+/* Transparent container on homepage */
+.homepage-header-transparent .container {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 /* LOGO - COMPACT ON ALL MOBILE */
@@ -51,12 +71,18 @@
 
 .logo h1 {
   margin: 0;
-  font-size: 1.25rem; /* Consistent small size on all mobile */
+  font-size: 1.25rem;
   font-weight: 800;
   letter-spacing: -0.5px;
   font-family: 'Playfair Display', serif;
   color: var(--primary-color);
   white-space: nowrap;
+}
+
+/* Homepage logo color */
+.homepage-header-transparent .logo h1 {
+  color: #F9EBCC !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* SEARCH SECTION - COMPACT ON ALL MOBILE */
@@ -65,7 +91,7 @@
   align-items: center;
   flex: 1;
   justify-content: center;
-  max-width: 40px; /* Small on all mobile */
+  max-width: 40px;
   margin: 0 0.25rem;
   position: relative;
 }
@@ -179,19 +205,19 @@
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 0.25rem; /* Consistent tight spacing */
+  gap: 0.25rem;
   flex-shrink: 0;
   min-width: 0;
 }
 
-/* ADD CHOCOLATE BUTTON - Updated for better readability and brand alignment */
+/* ADD CHOCOLATE BUTTON */
 .add-chocolate-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: #FFFFFF; /* Clean white background */
-  color: #2D1810; /* Dark chocolate text for excellent readability */
+  background: #FFFFFF;
+  color: #2D1810;
   text-decoration: none;
   padding: 0.5rem 1rem;
   border-radius: 10px;
@@ -200,53 +226,46 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
-  border: 2px solid #F4A261; /* Orange border */
+  border: 2px solid #F4A261;
   box-shadow: 0 2px 8px rgba(244, 162, 97, 0.2);
   white-space: nowrap;
 }
 
-/* Hover state - inverted colors */
 .add-chocolate-btn:hover {
-  background: #F4A261; /* Orange background on hover */
-  color: #FFFFFF; /* White text on hover */
+  background: #F4A261;
+  color: #FFFFFF;
   transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(244, 162, 97, 0.4);
   border-color: #F4A261;
 }
 
-/* Active state */
 .add-chocolate-btn:active {
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(244, 162, 97, 0.3);
 }
 
-/* Focus state for accessibility */
 .add-chocolate-btn:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(244, 162, 97, 0.3), 0 4px 16px rgba(244, 162, 97, 0.4);
 }
 
-/* Icon styling */
 .add-chocolate-btn svg {
   width: 18px;
   height: 18px;
   transition: transform 0.3s ease;
   flex-shrink: 0;
-  stroke-width: 2.5; /* Slightly thicker stroke */
+  stroke-width: 2.5;
 }
 
-/* Rotate icon on hover */
 .add-chocolate-btn:hover svg {
   transform: rotate(90deg);
 }
 
-/* Text styling */
 .add-chocolate-text {
   font-weight: 600;
   letter-spacing: 0.02em;
 }
 
-/* Mobile - icon only with better visibility */
 @media (max-width: 767px) {
   .add-chocolate-btn {
     padding: 0.625rem;
@@ -265,7 +284,6 @@
   }
 }
 
-/* Tablet - show both icon and text */
 @media (min-width: 768px) {
   .add-chocolate-btn {
     padding: 0.625rem 1.25rem;
@@ -289,7 +307,7 @@
   transition: all 0.3s ease;
   color: var(--header-text);
   min-height: 32px;
-  max-width: 32px; /* Very limited width on all mobile */
+  max-width: 32px;
 }
 
 .user-menu-toggle:active {
@@ -326,7 +344,6 @@
   font-family: 'Inter', sans-serif;
 }
 
-/* HIDE USER NAME AND CHEVRON ON ALL MOBILE */
 .user-name {
   display: none;
 }
@@ -335,7 +352,7 @@
   display: none;
 }
 
-/* HAMBURGER MENU - ENSURE PROPER SIZE ON ALL MOBILE */
+/* HAMBURGER MENU */
 .nav-container {
   position: relative;
 }
@@ -385,6 +402,11 @@
   position: absolute;
 }
 
+/* Light menu icons on homepage */
+.homepage-header-transparent .menu-icon span {
+  background-color: #F9EBCC !important;
+}
+
 .menu-icon span:nth-child(1) {
   top: 0;
 }
@@ -397,7 +419,6 @@
   top: 12px;
 }
 
-/* Hamburger animation */
 .menu-icon.open span:nth-child(1) {
   top: 6px;
   transform: rotate(45deg);
@@ -412,7 +433,7 @@
   transform: rotate(-45deg);
 }
 
-/* AUTH BUTTONS - COMPACT ON MOBILE */
+/* AUTH BUTTONS */
 .auth-buttons {
   display: flex;
   align-items: center;
@@ -501,7 +522,7 @@
   color: #B91C1C;
 }
 
-/* NAVIGATION DROPDOWN - PROPERLY FORMATTED */
+/* NAVIGATION DROPDOWN */
 .nav {
   position: absolute;
   top: calc(100% + 8px);
@@ -529,7 +550,6 @@
   display: block;
 }
 
-/* NAVIGATION SECTIONS */
 .nav-section {
   margin-bottom: 1.5rem;
 }
@@ -550,7 +570,6 @@
   font-family: 'Inter', sans-serif;
 }
 
-/* NAVIGATION LINKS */
 .nav-section a {
   color: var(--header-text);
   text-decoration: none;
@@ -577,18 +596,13 @@
   transform: translateX(2px);
 }
 
-/* NAVIGATION LINK ACTIVE STATE */
 .nav-section a.active {
   color: var(--accent-color);
   background-color: rgba(244, 162, 97, 0.12);
   font-weight: 600;
 }
 
-/* ========================================
-   RESPONSIVE BREAKPOINTS - ONLY TABLET+ SHOWS TEXT
-======================================== */
-
-/* TABLETS AND UP - Start showing text elements */
+/* RESPONSIVE BREAKPOINTS */
 @media (min-width: 768px) {
   .header {
     height: var(--header-height);
@@ -607,7 +621,6 @@
     max-width: 150px;
   }
   
-  /* SHOW ADD CHOCOLATE TEXT ON TABLETS+ */
   .add-chocolate-text {
     display: inline;
   }
@@ -618,7 +631,6 @@
     min-width: auto;
   }
   
-  /* SHOW USER NAME ON TABLETS+ */
   .user-name {
     display: block;
     max-width: 100px;
@@ -674,7 +686,6 @@
   }
 }
 
-/* DESKTOP - Full design */
 @media (min-width: 1024px) {
   .header .container {
     gap: 1.5rem;
@@ -718,7 +729,6 @@
   outline-offset: 2px;
 }
 
-/* Safe areas for notched devices */
 @supports (padding: max(0px)) {
   .header .container {
     padding-left: max(1rem, env(safe-area-inset-left));
@@ -726,16 +736,23 @@
   }
 }
 
-/* iOS Safari specific fixes */
+/* iOS Safari specific - EXCLUDE HOMEPAGE */
 @supports (-webkit-touch-callout: none) {
-  .header {
+  .header:not(.homepage-header-transparent) {
     position: -webkit-sticky;
     position: sticky;
+  }
+  
+  /* Force absolute on homepage for iOS */
+  .header.homepage-header-transparent {
+    position: absolute !important;
+    -webkit-position: static !important;
+    -webkit-position: absolute !important;
   }
 }
 
 /* Clean white header overrides */
-.header {
+.header:not(.homepage-header-transparent) {
   background-color: #FFFFFF !important;
   color: #2D1810 !important;
   border-bottom: 1px solid rgba(45, 24, 16, 0.08) !important;
@@ -750,12 +767,10 @@
   font-family: 'Playfair Display', serif !important;
 }
 
-.header .logo:hover h1 {
+.header:not(.homepage-header-transparent) .logo:hover h1 {
   color: #F4A261 !important;
   transition: color 0.3s ease !important;
 }
-
-/* Add this CSS to your Header.css file */
 
 /* Under Construction Badge */
 .under-construction {
@@ -783,7 +798,6 @@
   }
 }
 
-/* Ensure proper spacing in navigation links */
 .nav a {
   display: flex;
   align-items: center;
@@ -804,7 +818,6 @@
   transform: translateX(4px);
 }
 
-/* Mobile specific adjustments for under construction badge */
 @media (max-width: 768px) {
   .under-construction {
     font-size: 0.65rem;
@@ -815,7 +828,7 @@
 
 /* Logo image styles */
 .logo-image {
-  height: 32px; /* Adjust this based on your logo */
+  height: 32px;
   width: auto;
   object-fit: contain;
   transition: opacity 0.3s ease;
@@ -825,7 +838,6 @@
   opacity: 0.8;
 }
 
-/* Responsive logo sizing */
 @media (min-width: 768px) {
   .logo-image {
     height: 40px;
@@ -868,4 +880,82 @@
   color: #F4A261;
   border-left-color: #F4A261;
   background: rgba(244, 162, 97, 0.1);
+}
+
+/* HOMEPAGE SPECIFIC OVERRIDES - MUST BE LAST */
+/* Homepage nav links - centered, desktop only */
+.homepage-nav-links {
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .homepage-nav-links {
+    display: none !important;
+  }
+}
+
+.nav-text-link {
+  color: #F9EBCC !important;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nav-text-link:hover {
+  color: #FFFFFF !important;
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px) scale(1.05);
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+/* Join Us button */
+.homepage-join-btn {
+  background: #CAEEED !important;
+  color: #231F1F !important;
+  padding: 0.75rem 2.5rem !important;
+  border-radius: 50px !important;
+  text-decoration: none !important;
+  font-weight: 700 !important;
+  font-size: 1.05rem !important;
+  transition: all 0.3s ease !important;
+  display: inline-block;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(202, 238, 237, 0.4);
+}
+
+.homepage-join-btn:hover {
+  background: #FFFFFF !important;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+}
+
+/* Adjust hero section for absolute header */
+.homepage-new .hero-section-new {
+  padding-top: 100px !important;
+}
+
+/* MAXIMUM SPECIFICITY OVERRIDE FOR HOMEPAGE */
+html body .header.homepage-header-transparent {
+  position: absolute !important;
+}
+
+/* Force absolute positioning with every possible selector */
+.homepage-header-transparent,
+.header.homepage-header-transparent,
+header.homepage-header-transparent {
+  position: absolute !important;
+  position: static !important;
+  position: absolute !important;
 }

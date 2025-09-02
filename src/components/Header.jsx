@@ -1,4 +1,4 @@
-// src/components/Header.jsx - FIXED: No Menu text, proper expandable search
+// src/components/Header.jsx - Updated with transparent homepage header and new CTAs
 import logo from '../assets/logo.png';
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -11,6 +11,8 @@ function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  // REMOVED: isScrolled state since header won't be sticky
+  
   const menuRef = useRef(null);
   const userMenuRef = useRef(null);
   const searchRef = useRef(null);
@@ -22,34 +24,35 @@ function Header() {
   // Check if we're on the homepage
   const isHomePage = location.pathname === "/";
 
+  // REMOVED: Scroll listener since header won't change on scroll
+
+  // SIMPLIFIED: Header classes for transparent effect only
+  const headerClasses = `header ${isHomePage ? 'homepage-header-transparent' : ''}`;
+
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
       setSearchQuery('');
-      setSearchOpen(false); // Close search after submitting
+      setSearchOpen(false);
     }
   };
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
-    // Close search if menu opens
     if (!menuOpen) setSearchOpen(false);
   };
 
   const toggleUserMenu = () => {
     setUserMenuOpen(!userMenuOpen);
-    // Close search if user menu opens
     if (!userMenuOpen) setSearchOpen(false);
   };
 
   const toggleSearch = () => {
     setSearchOpen(!searchOpen);
-    // Close other menus if search opens
     if (!searchOpen) {
       setMenuOpen(false);
       setUserMenuOpen(false);
-      // Focus the input after a brief delay for animation
       setTimeout(() => {
         if (searchInputRef.current) {
           searchInputRef.current.focus();
@@ -122,16 +125,30 @@ function Header() {
   };
 
   return (
-    <header className="header">
+    <header 
+      className={headerClasses}
+      style={isHomePage ? { position: 'absolute !important' } : {}}
+    >
       <div className="container">
-      <Link to="/" className="logo">
-        <img src={logo} alt="Chocly" className="logo-image" />
+        <Link to="/" className="logo">
+          <img src={logo} alt="Chocly" className="logo-image" />
         </Link>
+        
+        {/* NEW: Text CTAs for Homepage - Add Chocolate & Browse */}
+        {isHomePage && (
+          <div className="homepage-nav-links">
+            <Link to="/add-chocolate" className="nav-text-link">
+              Add Chocolate
+            </Link>
+            <Link to="/browse" className="nav-text-link">
+              Browse
+            </Link>
+          </div>
+        )}
         
         {/* Search Section - Only show on non-home pages */}
         {!isHomePage && (
           <div className="search-section" ref={searchRef}>
-            {/* Search Toggle Button */}
             <button 
               className={`search-toggle ${searchOpen ? 'active' : ''}`}
               onClick={toggleSearch}
@@ -151,7 +168,6 @@ function Header() {
               </svg>
             </button>
             
-            {/* Expandable Search Form */}
             <form 
               className={`search-form-expandable ${searchOpen ? 'open' : ''}`} 
               onSubmit={handleSearch}
@@ -182,8 +198,8 @@ function Header() {
         )}
         
         <div className="header-actions">
-          {/* Add Chocolate Button - Only show if user is logged in */}
-          {currentUser && (
+          {/* Add Chocolate Button - Only show if user is logged in and NOT on homepage */}
+          {currentUser && !isHomePage && (
             <Link to="/add-chocolate" className="add-chocolate-btn">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="12" r="10"></circle>
@@ -238,8 +254,12 @@ function Header() {
               </div>
             </div>
           ) : (
-            /* Auth buttons for logged out users */
-          <Link to="/auth" className="auth-btn primary-btn">Sign In</Link>
+            /* NEW: Homepage shows Join Us button, other pages show Sign In */
+            isHomePage ? (
+              <Link to="/auth" className="homepage-join-btn">Join Us</Link>
+            ) : (
+              <Link to="/auth" className="auth-btn primary-btn">Sign In</Link>
+            )
           )}          
 
           {/* Main Navigation Menu - HAMBURGER ICON ONLY */}
@@ -253,88 +273,83 @@ function Header() {
             </button>
             
             <nav className={`nav ${menuOpen ? 'open' : ''}`}>
-  <div className="nav-section">
-    <h3>Browse</h3>
-    <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
-    <Link to="/browse" onClick={() => setMenuOpen(false)}>All Chocolates</Link>
-    <Link to="/barcode" onClick={() => setMenuOpen(false)}>
-      Barcode Search 
-      <span className="under-construction">Under Construction</span>
-    </Link>
-  </div>
-  <div className="nav-section">
-    <h3>Community</h3>
-    {currentUser && (
-      <Link to="/add-chocolate" onClick={() => setMenuOpen(false)}>Add Chocolate</Link>
-    )}
-    <Link to="/scanner" className="nav-link">
-  🍫 Scan
-</Link>
-    <Link to="/about" onClick={() => setMenuOpen(false)}>About Us</Link>
-    <Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
-  </div>
-  {!currentUser && (
-    <div className="nav-section">
-      <h3>Account</h3>
-      <Link to="/login" onClick={() => setMenuOpen(false)}>Log In</Link>
-      <Link to="/signup" onClick={() => setMenuOpen(false)}>Sign Up</Link>
-    </div>
-  )}
-</nav>
+              <div className="nav-section">
+                <h3>Browse</h3>
+                <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
+                <Link to="/browse" onClick={() => setMenuOpen(false)}>All Chocolates</Link>
+                <Link to="/barcode" onClick={() => setMenuOpen(false)}>
+                  Barcode Search 
+                  <span className="under-construction">Under Construction</span>
+                </Link>
+              </div>
+              <div className="nav-section">
+                <h3>Community</h3>
+                {currentUser && (
+                  <Link to="/add-chocolate" onClick={() => setMenuOpen(false)}>Add Chocolate</Link>
+                )}
+                <Link to="/scanner" className="nav-link">
+                  🍫 Scan
+                </Link>
+                <Link to="/about" onClick={() => setMenuOpen(false)}>About Us</Link>
+                <Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
+              </div>
+              {!currentUser && (
+                <div className="nav-section">
+                  <h3>Account</h3>
+                  <Link to="/login" onClick={() => setMenuOpen(false)}>Log In</Link>
+                  <Link to="/signup" onClick={() => setMenuOpen(false)}>Sign Up</Link>
+                </div>
+              )}
+              
+              {/* Popular Categories Section */}
+              <div className="nav-section">
+                <h3>Popular Categories</h3>
+                
+                <div className="category-group">
+                  <span className="category-label">By Cacao %</span>
+                  <Link to="/category/percentage/70" onClick={() => setMenuOpen(false)}>
+                    70% Dark Chocolate
+                  </Link>
+                  <Link to="/category/percentage/85" onClick={() => setMenuOpen(false)}>
+                    85% Dark Chocolate
+                  </Link>
+                  <Link to="/category/percentage/100" onClick={() => setMenuOpen(false)}>
+                    100% Pure Chocolate
+                  </Link>
+                </div>
+                
+                <div className="category-group">
+                  <span className="category-label">By Origin</span>
+                  <Link to="/category/origin/ecuador" onClick={() => setMenuOpen(false)}>
+                    Ecuador Chocolate
+                  </Link>
+                  <Link to="/category/origin/madagascar" onClick={() => setMenuOpen(false)}>
+                    Madagascar Chocolate
+                  </Link>
+                  <Link to="/category/origin/venezuela" onClick={() => setMenuOpen(false)}>
+                    Venezuela Chocolate
+                  </Link>
+                </div>
+                
+                <div className="category-group">
+                  <span className="category-label">By Type</span>
+                  <Link to="/category/type/dark" onClick={() => setMenuOpen(false)}>
+                    Dark Chocolate
+                  </Link>
+                  <Link to="/category/type/milk" onClick={() => setMenuOpen(false)}>
+                    Milk Chocolate
+                  </Link>
+                  <Link to="/category/type/white" onClick={() => setMenuOpen(false)}>
+                    White Chocolate
+                  </Link>
+                </div>
+              </div>
+            </nav>
           </div>
         </div>
       </div>
     </header>
   );
 }
-
-// In your existing Header component, add this section to the nav:
-
-<div className="nav-section">
-  <h3>Popular Categories</h3>
-  
-  {/* Percentage Categories */}
-  <div className="category-group">
-    <span className="category-label">By Cacao %</span>
-    <Link to="/category/percentage/70" onClick={() => setMenuOpen(false)}>
-      70% Dark Chocolate
-    </Link>
-    <Link to="/category/percentage/85" onClick={() => setMenuOpen(false)}>
-      85% Dark Chocolate
-    </Link>
-    <Link to="/category/percentage/100" onClick={() => setMenuOpen(false)}>
-      100% Pure Chocolate
-    </Link>
-  </div>
-  
-  {/* Origin Categories */}
-  <div className="category-group">
-    <span className="category-label">By Origin</span>
-    <Link to="/category/origin/ecuador" onClick={() => setMenuOpen(false)}>
-      Ecuador Chocolate
-    </Link>
-    <Link to="/category/origin/madagascar" onClick={() => setMenuOpen(false)}>
-      Madagascar Chocolate
-    </Link>
-    <Link to="/category/origin/venezuela" onClick={() => setMenuOpen(false)}>
-      Venezuela Chocolate
-    </Link>
-  </div>
-  
-  {/* Type Categories */}
-  <div className="category-group">
-    <span className="category-label">By Type</span>
-    <Link to="/category/type/dark" onClick={() => setMenuOpen(false)}>
-      Dark Chocolate
-    </Link>
-    <Link to="/category/type/milk" onClick={() => setMenuOpen(false)}>
-      Milk Chocolate
-    </Link>
-    <Link to="/category/type/white" onClick={() => setMenuOpen(false)}>
-      White Chocolate
-    </Link>
-  </div>
-</div>
-
 
 export default Header;

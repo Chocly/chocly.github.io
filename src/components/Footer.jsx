@@ -1,35 +1,46 @@
-// src/components/Footer.jsx - Updated to remove chocolate type links
+// src/components/Footer.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.css';
+
+// Import the logo from assets folder - update the filename if needed
+import logoLight from '../assets/alt logo light.png';
 
 function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
     <footer className="footer">
+      {/* Add the curved SVG wave at the top */}
+      <div className="footer-wave">
+        <svg viewBox="0 0 1440 100" preserveAspectRatio="none">
+          <path d="M0,50 C360,100 1080,0 1440,50 L1440,100 L0,100 Z" fill="currentColor"></path>
+        </svg>
+      </div>
+      
       <div className="container">
         <div className="footer-content">
+          {/* Logo section with new image */}
           <div className="footer-logo">
             <Link to="/" className="logo-link">
-              <h2>Chocly</h2>
+              <img src={logoLight} alt="Chocly" className="footer-logo-img" />
             </Link>
-            <p className="tagline">Discover better chocolate.</p>
           </div>
           
+          {/* Footer links in 3 columns */}
           <div className="footer-links">
             <div className="footer-links-column">
               <h3>Explore</h3>
               <ul>
                 <li><Link to="/browse">All Chocolates</Link></li>
-                <li><Link to="/barcode">Barcode Search <span className="footer-badge">Under Construction</span></Link></li>
+                <li><Link to="/barcode">Barcode Search</Link></li>
                 <li><Link to="/about">About Us</Link></li>
                 <li><Link to="/contact">Contact</Link></li>
               </ul>
             </div>
             
             <div className="footer-links-column">
-              <h3>Account</h3>
+              <h3>My Chocly</h3>
               <ul>
                 <li><Link to="/signup">Sign Up</Link></li>
                 <li><Link to="/login">Log In</Link></li>
@@ -47,19 +58,9 @@ function Footer() {
           </div>
         </div>
         
+        {/* Footer bottom - hidden on mobile to save space */}
         <div className="footer-bottom">
           <p className="copyright">&copy; {currentYear} Chocly. All rights reserved.</p>
-          <div className="social-icons">
-            <a href="#" className="social-icon instagram" aria-label="Instagram">
-              <span className="sr-only">Instagram</span>
-            </a>
-            <a href="#" className="social-icon twitter" aria-label="Twitter">
-              <span className="sr-only">Twitter</span>
-            </a>
-            <a href="#" className="social-icon facebook" aria-label="Facebook">
-              <span className="sr-only">Facebook</span>
-            </a>
-          </div>
         </div>
       </div>
     </footer>
