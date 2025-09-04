@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { getFeaturedChocolates } from '../services/chocolateFirebaseService';
-import heroBackground from '../assets/Gemini hero image.png';
+import heroBackground from '../assets/newheroimage.jpg';
 import cacaoFarmer from '../assets/gemini cacao farmer.png';  // Import the new image
 import choclyIcon from '../assets/CHOCLY icon B8693D.png';  // Add this line
 import './HomePage-new.css';

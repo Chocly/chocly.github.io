@@ -906,3 +906,74 @@ export const deleteChocolate = async (chocolateId) => {
     throw new Error(`Failed to delete chocolate: ${error.message}`);
   }
 };
+
+// Add this function to your chocolateFirebaseService.js file
+
+export const updateAllChocolatesWithReviewCount = async () => {
+  console.log('🔄 Starting review count update for all chocolates...');
+  
+  try {
+    // Get all chocolates
+    const chocolatesSnapshot = await getDocs(collection(db, 'chocolates'));
+    console.log(`📊 Found ${chocolatesSnapshot.size} chocolates to check`);
+    
+    let updatedCount = 0;
+    let skippedCount = 0;
+    
+    // Process each chocolate
+    for (const chocolateDoc of chocolatesSnapshot.docs) {
+      const chocolateData = chocolateDoc.data();
+      const chocolateId = chocolateDoc.id;
+      
+      // Skip if reviewCount already exists and is not undefined
+      if (chocolateData.reviewCount !== undefined && chocolateData.reviewCount !== null) {
+        console.log(`⏭️ Skipping ${chocolateData.name} - already has reviewCount: ${chocolateData.reviewCount}`);
+        skippedCount++;
+        continue;
+      }
+      
+      // Get all reviews for this chocolate
+      const reviewsQuery = query(
+        collection(db, 'reviews'),
+        where('chocolateId', '==', chocolateId)
+      );
+      const reviewsSnapshot = await getDocs(reviewsQuery);
+      const reviewCount = reviewsSnapshot.size;
+      
+      // Calculate average rating if there are reviews
+      let averageRating = 0;
+      if (reviewCount > 0) {
+        let totalRating = 0;
+        reviewsSnapshot.forEach(reviewDoc => {
+          const reviewData = reviewDoc.data();
+          totalRating += reviewData.rating || 0;
+        });
+        averageRating = totalRating / reviewCount;
+      }
+      
+      // Update the chocolate with review count and average rating
+      await updateDoc(doc(db, 'chocolates', chocolateId), {
+        reviewCount: reviewCount,
+        averageRating: averageRating,
+        updatedAt: serverTimestamp()
+      });
+      
+      console.log(`✅ Updated ${chocolateData.name}: ${reviewCount} reviews, ${averageRating.toFixed(1)} avg rating`);
+      updatedCount++;
+    }
+    
+    console.log('🎉 Review count update complete!');
+    console.log(`📊 Results: ${updatedCount} updated, ${skippedCount} skipped (already had reviewCount)`);
+    
+    return {
+      success: true,
+      updated: updatedCount,
+      skipped: skippedCount,
+      total: chocolatesSnapshot.size
+    };
+    
+  } catch (error) {
+    console.error('❌ Error updating review counts:', error);
+    throw error;
+  }
+};

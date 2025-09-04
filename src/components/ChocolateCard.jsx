@@ -1,4 +1,4 @@
-// src/components/ChocolateCard.jsx - FIXED using your existing class names
+// src/components/ChocolateCard.jsx - Updated with your improvements
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -62,33 +62,19 @@ function ChocolateCard({ chocolate, featured = false, className = '' }) {
         </div>
       </Link>
 
-      {/* Action buttons - using existing class name */}
+      {/* Action buttons - improved alignment */}
       <div className="card-actions">
         <FavoriteButton 
           chocolateId={chocolate.id} 
           size="medium" 
           className="card-overlay"
         />
-        <WantToTryButton 
-          chocolate={chocolate} 
-          currentUser={currentUser}
-          className="shadow-sm"
-        />
       </div>
 
-      {/* Card Content - using existing classes */}
+      {/* Card Content - improved hierarchy */}
       <div className="card-content">
         
-        {/* Maker name */}
-        <Link 
-          to={`/maker?maker=${encodeURIComponent(getDisplayMaker())}`} 
-          className="card-maker-link"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <p className="card-maker">{getDisplayMaker()}</p>
-        </Link>
-        
-        {/* Chocolate title */}
+        {/* Chocolate title - NOW FIRST AND PROMINENT */}
         <Link 
           to={`/chocolate/${chocolate.id}`} 
           className="chocolate-title-link"
@@ -97,21 +83,27 @@ function ChocolateCard({ chocolate, featured = false, className = '' }) {
           <h3 className="card-title">{getDisplayTitle()}</h3>
         </Link>
         
-        {/* Origin and Cacao Percentage - using existing classes */}
-        <div className="card-details">
-          <span className="origin">{chocolate.origin || 'Unknown'}</span>
-          <span className="percentage">{chocolate.cacaoPercentage || 0}% Cacao</span>
-        </div>
+        {/* Maker name - NOW SECOND AS SUPPORTING TEXT */}
+        <Link 
+          to={`/maker?maker=${encodeURIComponent(getDisplayMaker())}`} 
+          className="card-maker-link"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <p className="card-maker">{getDisplayMaker()}</p>
+        </Link>
         
-        {/* Rating Section - using existing classes */}
+        {/* REMOVED: Origin and Cacao Percentage section */}
+        {/* The card-details div has been removed as requested */}
+        
+        {/* Rating Section - moved closer to product info with review count */}
         <div className="card-rating">
           <span className="rating-value">{(chocolate.averageRating || 0).toFixed(1)}</span>
           <div className="stars">
             {renderStars(chocolate.averageRating || 0)}
           </div>
-          {/* FIXED: Use both reviewCount and ratings for compatibility */}
+          {/* Show review count if it exists, otherwise show 0 */}
           <span className="rating-count">
-            ({chocolate.reviewCount || chocolate.ratings || 0})
+            ({chocolate.reviewCount || 0} {(chocolate.reviewCount === 1) ? 'review' : 'reviews'})
           </span>
         </div>
         

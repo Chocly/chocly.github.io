@@ -1,8 +1,8 @@
-// src/pages/AdminPage.jsx
+// src/pages/AdminPage.jsx - Updated with Review Count Updater
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ImageUploader from '../components/ImageUploader';
-import { addChocolate } from '../services/chocolateFirebaseService';
+import { addChocolate, updateAllChocolatesWithReviewCount } from '../services/chocolateFirebaseService';
 import './AdminPage.css';
 
 function AdminPage() {
@@ -22,6 +22,10 @@ function AdminPage() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
   const [uploading, setUploading] = useState(false);
+  
+  // Review count update state
+  const [updateLoading, setUpdateLoading] = useState(false);
+  const [updateResult, setUpdateResult] = useState(null);
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -78,6 +82,20 @@ function AdminPage() {
       setUploading(false);
     }
   };
+  
+  // Handle review count update
+  const handleUpdateReviewCounts = async () => {
+    setUpdateLoading(true);
+    setUpdateResult(null);
+    try {
+      const result = await updateAllChocolatesWithReviewCount();
+      setUpdateResult(result);
+    } catch (error) {
+      setUpdateResult({ error: error.message });
+    } finally {
+      setUpdateLoading(false);
+    }
+  };
 
   return (
     <div className="admin-page">
@@ -90,6 +108,47 @@ function AdminPage() {
           </div>
         </div>
         
+        {/* NEW SECTION: Database Maintenance Tools */}
+        <div className="admin-section">
+          <h2>🔧 Database Maintenance</h2>
+          <div className="admin-actions">
+            <div>
+              <h3>Update Review Counts</h3>
+              <p style={{ marginBottom: '1rem', color: '#666' }}>
+                This will update the review count for all chocolates in the database. 
+                Run this if review counts are missing or showing as 0.
+              </p>
+              <button 
+                onClick={handleUpdateReviewCounts} 
+                disabled={updateLoading}
+                className="admin-button primary"
+                style={{ marginBottom: '1rem' }}
+              >
+                {updateLoading ? 'Updating... (this may take a minute)' : 'Update All Review Counts'}
+              </button>
+              
+              {updateResult && (
+                <div className="message" style={{
+                  backgroundColor: updateResult.error ? '#fee' : '#efe',
+                  borderLeftColor: updateResult.error ? '#dc3545' : '#28a745'
+                }}>
+                  {updateResult.error ? (
+                    <p>❌ Error: {updateResult.error}</p>
+                  ) : (
+                    <div>
+                      <p>✅ <strong>Success!</strong></p>
+                      <p>Updated: {updateResult.updated} chocolates</p>
+                      <p>Skipped: {updateResult.skipped} (already had review counts)</p>
+                      <p>Total processed: {updateResult.total}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+        
+        {/* EXISTING SECTION: Admin Tools */}
         <div className="admin-section">
           <h2>Admin Tools</h2>
           <div className="admin-actions">
@@ -97,16 +156,20 @@ function AdminPage() {
               Use the form below to manually add new chocolates to the database. 
               For bulk operations, use the Batch Image Upload tool.
             </p>
-            
-            {message && <div className="message">{message}</div>}
           </div>
         </div>
 
+        {/* EXISTING SECTION: Add New Chocolate Form */}
         <div className="admin-section">
           <h2>Add New Chocolate</h2>
+          
+          {message && (
+            <div className="message">{message}</div>
+          )}
+          
           <form onSubmit={handleSubmit} className="admin-form">
             <div className="form-group">
-              <label htmlFor="name">Chocolate Name</label>
+              <label htmlFor="name">Chocolate Name *</label>
               <input
                 type="text"
                 id="name"
@@ -114,12 +177,11 @@ function AdminPage() {
                 value={chocolate.name}
                 onChange={handleChange}
                 required
-                placeholder="e.g., Madagascar Dark 70%"
               />
             </div>
             
             <div className="form-group">
-              <label htmlFor="makerId">Maker</label>
+              <label htmlFor="makerId">Maker ID *</label>
               <input
                 type="text"
                 id="makerId"
@@ -127,7 +189,6 @@ function AdminPage() {
                 value={chocolate.makerId}
                 onChange={handleChange}
                 required
-                placeholder="e.g., Valrhona, Lindt, etc."
               />
             </div>
             
@@ -138,16 +199,12 @@ function AdminPage() {
                 name="type"
                 value={chocolate.type}
                 onChange={handleChange}
-                required
               >
-                <option value="">Select a type</option>
+                <option value="">Select Type</option>
                 <option value="Dark">Dark</option>
                 <option value="Milk">Milk</option>
                 <option value="White">White</option>
                 <option value="Ruby">Ruby</option>
-                <option value="Dark Milk">Dark Milk</option>
-                <option value="Single Origin">Single Origin</option>
-                <option value="Flavored">Flavored</option>
               </select>
             </div>
             
@@ -159,7 +216,6 @@ function AdminPage() {
                 name="origin"
                 value={chocolate.origin}
                 onChange={handleChange}
-                placeholder="e.g., Madagascar, Ecuador, Venezuela"
               />
             </div>
             
@@ -173,18 +229,7 @@ function AdminPage() {
                 onChange={handleChange}
                 min="0"
                 max="100"
-                placeholder="e.g. 70"
               />
-            </div>
-            
-            {/* Image uploader section */}
-            <div className="form-group full-width">
-              <label>Chocolate Label Image</label>
-              <ImageUploader 
-                onImageSelected={handleImageSelected}
-                currentImageUrl={selectedImageUrl}
-              />
-              <p className="field-helper">Upload a clear image of the chocolate label or packaging</p>
             </div>
             
             <div className="form-group full-width">
@@ -195,36 +240,40 @@ function AdminPage() {
                 value={chocolate.description}
                 onChange={handleChange}
                 rows="4"
-                required
-                placeholder="Describe the chocolate's taste, texture, and characteristics..."
-              ></textarea>
+              />
             </div>
             
             <div className="form-group full-width">
-              <label htmlFor="ingredients">Ingredients</label>
-              <textarea
+              <label htmlFor="ingredients">Ingredients (comma-separated)</label>
+              <input
+                type="text"
                 id="ingredients"
                 name="ingredients"
                 value={chocolate.ingredients}
                 onChange={handleChange}
-                rows="2"
-                placeholder="Comma-separated list: cocoa beans, sugar, cocoa butter, vanilla, etc."
-              ></textarea>
-              <p className="field-helper">Separate each ingredient with a comma</p>
+                placeholder="e.g., Cacao beans, Sugar, Vanilla"
+              />
             </div>
             
-            <button type="submit" className="admin-button" disabled={uploading}>
-              {uploading ? 'Adding Chocolate...' : 'Add Chocolate'}
-            </button>
+            <div className="form-group full-width">
+              <label>Chocolate Image</label>
+              <ImageUploader 
+                onImageSelected={handleImageSelected}
+                currentImage={selectedImageUrl}
+                isUploading={uploading}
+              />
+            </div>
+            
+            <div className="form-group full-width">
+              <button 
+                type="submit" 
+                className="admin-button primary"
+                disabled={uploading}
+              >
+                {uploading ? 'Adding Chocolate...' : 'Add Chocolate'}
+              </button>
+            </div>
           </form>
-        </div>
-        
-        <div className="admin-section">
-          <h2>Database Statistics</h2>
-          <div className="stats-info">
-            <p>Use your Firebase console to view detailed database statistics and manage your chocolate collection.</p>
-            <p>For bulk image uploads, use the Batch Image Upload tool above.</p>
-          </div>
         </div>
       </div>
     </div>

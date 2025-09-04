@@ -1,5 +1,5 @@
 // src/components/Header.jsx - Updated with transparent homepage header and new CTAs
-import logo from '../assets/logo.png';
+import logo from '../assets/logolight.png';
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -125,10 +125,7 @@ function Header() {
   };
 
   return (
-    <header 
-      className={headerClasses}
-      style={isHomePage ? { position: 'absolute !important' } : {}}
-    >
+    <header className={headerClasses}>
       <div className="container">
         <Link to="/" className="logo">
           <img src={logo} alt="Chocly" className="logo-image" />
@@ -300,50 +297,6 @@ function Header() {
                   <Link to="/signup" onClick={() => setMenuOpen(false)}>Sign Up</Link>
                 </div>
               )}
-              
-              {/* Popular Categories Section */}
-              <div className="nav-section">
-                <h3>Popular Categories</h3>
-                
-                <div className="category-group">
-                  <span className="category-label">By Cacao %</span>
-                  <Link to="/category/percentage/70" onClick={() => setMenuOpen(false)}>
-                    70% Dark Chocolate
-                  </Link>
-                  <Link to="/category/percentage/85" onClick={() => setMenuOpen(false)}>
-                    85% Dark Chocolate
-                  </Link>
-                  <Link to="/category/percentage/100" onClick={() => setMenuOpen(false)}>
-                    100% Pure Chocolate
-                  </Link>
-                </div>
-                
-                <div className="category-group">
-                  <span className="category-label">By Origin</span>
-                  <Link to="/category/origin/ecuador" onClick={() => setMenuOpen(false)}>
-                    Ecuador Chocolate
-                  </Link>
-                  <Link to="/category/origin/madagascar" onClick={() => setMenuOpen(false)}>
-                    Madagascar Chocolate
-                  </Link>
-                  <Link to="/category/origin/venezuela" onClick={() => setMenuOpen(false)}>
-                    Venezuela Chocolate
-                  </Link>
-                </div>
-                
-                <div className="category-group">
-                  <span className="category-label">By Type</span>
-                  <Link to="/category/type/dark" onClick={() => setMenuOpen(false)}>
-                    Dark Chocolate
-                  </Link>
-                  <Link to="/category/type/milk" onClick={() => setMenuOpen(false)}>
-                    Milk Chocolate
-                  </Link>
-                  <Link to="/category/type/white" onClick={() => setMenuOpen(false)}>
-                    White Chocolate
-                  </Link>
-                </div>
-              </div>
             </nav>
           </div>
         </div>

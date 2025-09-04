@@ -1,16 +1,30 @@
-/* Add this CSS to your HomePage-new.css file at the TOP of the file */
-/* This will apply Helvetica Neue to all non-header text on the homepage */
-
-/* First, import the font if not already imported */
+/* ===== FONTS IMPORT ===== */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+@import '../styles/new-colors.css';
 
-/* Apply Helvetica Neue to all body text on homepage */
+/* ===== GLOBAL HOMEPAGE SETTINGS ===== */
 .homepage-new {
-  /* Helvetica Neue with comprehensive fallback stack */
   font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: #F9EBCC;
 }
 
-/* Apply to all text elements except headers */
+/* Remove default margins/padding */
+.homepage-new > * {
+  margin: 0;
+  padding: 0;
+}
+
+.homepage-new section {
+  margin: 0;
+  border: none;
+  outline: none;
+}
+
+/* ===== TYPOGRAPHY SETTINGS ===== */
+/* Body text with Helvetica Neue */
 .homepage-new p,
 .homepage-new span,
 .homepage-new div,
@@ -21,86 +35,35 @@
 .homepage-new textarea,
 .homepage-new label,
 .homepage-new .hero-subtitle-new,
-.homepage-new .section-subtitle-new,
-.homepage-new .treat-title-new,
 .homepage-new .treat-description-new,
-.homepage-new .step-title-new,
 .homepage-new .step-description-new,
-.homepage-new .join-description-new,
 .homepage-new .signin-link-new,
 .homepage-new .btn-primary-new,
 .homepage-new .btn-secondary-new,
 .homepage-new .btn-view-all,
-.homepage-new .search-input-new,
-.homepage-new .search-button-new {
+.homepage-new .search-input-new {
   font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
 }
 
-/* Keep headers with their existing font (Inter) */
+/* Headers with Inter */
 .homepage-new h1,
 .homepage-new h2,
-.homepage-new h3,
 .homepage-new h4,
 .homepage-new h5,
 .homepage-new h6,
 .homepage-new .hero-title-new,
-.homepage-new .section-title-new,
 .homepage-new .join-title-new {
-  /* Keep the existing Inter font for headers */
   font-family: 'Inter', -apple-system, sans-serif !important;
 }
 
-/* Specific adjustments for better readability with Helvetica Neue */
-.homepage-new .hero-subtitle-new {
-  font-weight: 400;
+/* Step titles */
+.homepage-new .step-new h3 {
+  font-family: 'Inter', -apple-system, sans-serif !important;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-light);
   letter-spacing: -0.01em;
-}
-
-.homepage-new .treat-description-new,
-.homepage-new .step-description-new {
-  font-weight: 400;
-  line-height: 1.6;
-}
-
-.homepage-new .btn-primary-new,
-.homepage-new .btn-secondary-new,
-.homepage-new .btn-view-all {
-  font-weight: 500;
-  letter-spacing: -0.01em;
-}
-
-/* Search input with Aktiv Grotesk */
-.homepage-new .search-input-new {
-  font-weight: 400;
-  letter-spacing: -0.01em;
-}
-
-.homepage-new .search-input-new::placeholder {
-  font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
-  font-weight: 400;
-}
-
-/* Import new colors */
-@import '../styles/new-colors.css';
-
-/* Global fix to prevent white gaps */
-.homepage-new {
-  width: 100%;
-  overflow-x: hidden;
-  background-color: #F9EBCC; /* Set cream as the base background */
-}
-
-/* Remove any default margins/padding that might cause gaps */
-.homepage-new > * {
-  margin: 0;
-  padding: 0;
-}
-
-/* Ensure sections connect properly */
-.homepage-new section {
-  margin: 0;
-  border: none;
-  outline: none;
 }
 
 /* ===== HERO SECTION ===== */
@@ -114,10 +77,9 @@
   justify-content: center;
   position: relative;
   padding: 2rem;
-  padding-bottom: 0; /* Remove bottom padding to connect with wave */
+  padding-bottom: 0;
 }
 
-/* Add a subtle overlay to ensure text readability */
 .hero-section-new::before {
   content: '';
   position: absolute;
@@ -131,18 +93,39 @@
 
 .hero-content-new {
   text-align: center;
-  color: #F9EBCC;  /* Your brand cream color */
+  color: #F9EBCC;
   max-width: 800px;
   margin: 0 auto;
   position: relative;
   z-index: 2;
-  padding-bottom: 100px; /* Add space for the wave */
+  padding-bottom: 100px;
 }
 
-/* Wave transition styling */
+.hero-title-new {
+  font-size: clamp(4rem, 10vw, 7rem);
+  font-weight: 800;
+  line-height: 0.9;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+  color: #F9EBCC;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-subtitle-new {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-weight: 400;
+  line-height: 1.5;
+  margin-bottom: 3rem;
+  opacity: 0.95;
+  color: #F9EBCC;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  letter-spacing: -0.01em;
+}
+
+/* Wave transition */
 .wave-transition {
   position: absolute;
-  bottom: -1px; /* Prevents gap */
+  bottom: -1px;
   left: 0;
   right: 0;
   z-index: 3;
@@ -155,27 +138,7 @@
   display: block;
 }
 
-.hero-title-new {
-  font-size: clamp(4rem, 10vw, 7rem);
-  font-weight: 800;
-  line-height: 0.9;
-  margin-bottom: 1.5rem;
-  letter-spacing: -0.02em;
-  font-family: 'Inter', -apple-system, sans-serif;
-  color: #F9EBCC;  /* Brand cream color */
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);  /* Subtle shadow for readability */
-}
-
-.hero-subtitle-new {
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
-  font-weight: 400;
-  line-height: 1.5;
-  margin-bottom: 3rem;
-  opacity: 0.95;
-  color: #F9EBCC;  /* Brand cream color */
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);  /* Subtle shadow for readability */
-}
-
+/* Search */
 .hero-search-new {
   position: relative;
   max-width: 500px;
@@ -192,10 +155,13 @@
   color: white;
   font-size: 1rem;
   transition: all 0.3s ease;
+  font-weight: 400;
+  letter-spacing: -0.01em;
 }
 
 .search-input-new::placeholder {
   color: rgba(255,255,255,0.7);
+  font-weight: 400;
 }
 
 .search-input-new:focus {
@@ -221,156 +187,187 @@
 
 /* ===== TODAY'S TREATS SECTION ===== */
 .treats-section-new {
-  background: var(--primary-bg);
+  background: #F9EBCC; /* Main cream background */
   padding: 5rem 0;
-  margin-top: -5px; /* Overlap slightly to prevent any white line */
+  margin-top: -5px;
   position: relative;
 }
 
-.section-title-new {
-  font-size: clamp(2rem, 4vw, 2.5rem);  /* Smaller size */
-  font-weight: 700;
-  color: var(--accent-primary);
-  margin-bottom: 2rem;  /* Reduced from 3rem */
-  margin-top: 0;  /* No extra top margin */
-  font-family: 'Inter', -apple-system, sans-serif;
+/* Add a subtle darker background to make cards pop */
+.treats-section-new::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(176, 137, 104, 0.05) 0%, rgba(176, 137, 104, 0.08) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Container needs relative positioning */
+.treats-section-new .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* TODAY'S TREATS TITLE - Your specific request */
+.treats-section-new .section-title-new {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800 !important; /* Bolder text as requested */
+  color: #B8693D !important; /* Your specific color */
+  margin-bottom: 3rem;
+  margin-top: 0;
+  font-family: 'Inter', -apple-system, sans-serif !important;
   text-align: left;
-  /* Remove any underline */
   text-decoration: none;
   border-bottom: none;
 }
 
-.section-title-new::after {
-  display: none;  /* Remove any pseudo-element lines */
-}
-
-.section-title-new.white {
-  color: var(--text-light);
-}
-
+/* Treats Grid */
 .treats-grid-new {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 3rem;
   margin-top: 3rem;
+  padding: 0 2rem;
 }
 
+/* Card container - no background */
 .treat-card-new {
   text-decoration: none;
   color: inherit;
-  transition: transform 0.3s ease;
   display: block;
+  text-align: center;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
 }
 
-.treat-card-new:hover {
-  transform: translateY(-5px);
-}
-
-/* Rectangular image container - better for package images */
+/* PERFECT CIRCLES FOR CHOCOLATE IMAGES */
 .treat-image-wrapper-new {
-  background: white;
-  border-radius: 24px;
-  padding: 2rem;
-  margin-bottom: 1.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 320px;
-  box-shadow: none;
-  transition: transform 0.3s ease;
+  width: 280px !important;
+  height: 280px !important;
+  border-radius: 50% !important; /* Perfect circle */
+  margin: 0 auto 1.5rem auto !important;
+  padding: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  overflow: hidden !important;
+  background: #F5F5F5 !important; /* Light gray background for the circle */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  border: none !important;
 }
 
-.treat-card-new:hover .treat-image-wrapper-new {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-/* Changed from circle to rounded rectangle */
 .treat-image-circle-new {
-  width: 100%;
-  height: 240px;
-  border-radius: 12px;  /* Rounded corners instead of circle */
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  position: relative;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
+/* Image inside the circle */
 .treat-image-circle-new img {
-  width: auto;
-  height: 100%;
-  max-width: 100%;
-  object-fit: contain;
-  image-rendering: auto;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important; /* This ensures the image fills the circle */
+  display: block !important;
+  border: none !important;
+  background: transparent !important;
 }
 
-.treat-image-circle-new {
-  margin-bottom: 1.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 320px;  /* Slightly taller for better proportions */
-  box-shadow: none;
-  transition: transform 0.3s ease;
-}
-
+/* Hover effect */
 .treat-card-new:hover .treat-image-wrapper-new {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transform: translateY(-8px) !important;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12) !important;
 }
 
-.treat-image-circle-new {
-  width: 220px;  /* Slightly larger circle */
-  height: 220px;
-  border-radius: 50%;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #FAFAFA;  /* Very light gray background for the circle */
-  position: relative;
-}
-
-.treat-image-circle-new img {
-  width: 85%;  /* Slightly smaller image to show more background */
-  height: 85%;
-  object-fit: contain;  /* Changed from cover to contain to show full product */
-  image-rendering: auto;
-}
-
+/* CHOCOLATE TITLES - Poppins Bold as requested */
 .treat-name-new {
-  font-size: 1.4rem;  /* Slightly larger */
-  font-weight: 600;
-  color: #B8693D;  /* Your terracotta color */
-  margin-bottom: 0.75rem;
-  line-height: 1.3;
-  text-align: center;
-  text-decoration: none;
-  border-bottom: none;
-  letter-spacing: -0.02em;  /* Tighter letter spacing for modern look */
+  font-family: 'Poppins', sans-serif !important; /* Poppins font as requested */
+  font-size: 1.25rem !important;
+  font-weight: 700 !important; /* Bold as requested */
+  color: #B8693D !important;
+  margin: 1.5rem 0 0.75rem 0 !important;
+  line-height: 1.4 !important;
+  text-align: center !important;
+  padding: 0 1rem !important;
+  letter-spacing: -0.01em !important;
+  text-decoration: none !important; /* Remove underline */
+  border: none !important; /* Remove any border */
+  border-bottom: none !important; /* Specifically remove bottom border */
 }
 
-.treat-name-new::after {
-  display: none;
+/* Extra insurance to remove any underlines or borders from links */
+.treat-card-new .treat-name-new,
+a .treat-name-new,
+.treat-name-new a {
+  text-decoration: none !important;
+  border: none !important;
+  border-bottom: none !important;
+  outline: none !important;
 }
 
+.treat-name-new::after,
+.treat-name-new::before {
+  display: none !important; /* Remove any pseudo-element lines */
+  content: none !important;
+}
+
+/* Chocolate descriptions */
 .treat-description-new {
-  font-size: 1.05rem;  /* Slightly larger */
-  color: #333;  /* Darker for better readability */
-  line-height: 1.6;
-  text-align: center;
-  font-style: normal;  /* Remove italic */
-  padding: 0 1.5rem;
+  font-size: 1rem !important;
+  color: #444 !important;
+  line-height: 1.6 !important;
+  text-align: center !important;
+  padding: 0 1.5rem !important;
+  margin: 0 auto !important;
+  max-width: 320px !important;
   font-weight: 400;
+}
+
+/* View All Button */
+.view-all-container {
+  text-align: right !important;
+  padding-right: 0 !important;
+  margin: 3rem 0 2rem 0 !important;
+}
+
+.btn-view-all {
+  background: #B8693D !important;
+  color: white !important;
+  padding: 12px 35px !important;
+  border-radius: 50px !important;
+  text-decoration: none !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  display: inline-block !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(184, 105, 61, 0.2) !important;
+  transition: all 0.3s ease;
+  letter-spacing: -0.01em;
+}
+
+.btn-view-all:hover {
+  background: #9A5632 !important;
+  transform: translateY(-2px) !important;
 }
 
 /* ===== HOW IT WORKS SECTION ===== */
 .how-it-works-new {
-  background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent-primary) 100%);
+  background: #b08968 !important;
   padding: 5rem 0;
-  color: var(--text-light);
+  color: #F9EBCC;
 }
 
 .how-it-works-new .container {
@@ -379,24 +376,15 @@
   padding: 0 2rem;
 }
 
-.section-title-new.white {
-  color: var(--text-light);
-  text-align: center;  /* Center the title */
-  font-size: clamp(3rem, 6vw, 5rem);  /* Much bigger, matching hero */
+.how-it-works-new .section-title-new {
+  color: #F9EBCC !important;
+  text-align: center;
+  font-size: clamp(3rem, 6vw, 5rem);
   font-weight: 800;
   font-family: 'Inter', -apple-system, sans-serif;
   letter-spacing: -0.02em;
   margin-bottom: 1.5rem;
-  text-transform: lowercase;  /* Match "indulge better" style */
-}
-
-.section-subtitle-new {
-  text-align: center;
-  font-size: 1.3rem;  /* Bigger subtitle */
-  opacity: 0.9;
-  margin-bottom: 4rem;
-  color: var(--text-light);
-  font-weight: 400;
+  text-transform: lowercase;
 }
 
 .steps-grid-new {
@@ -411,70 +399,39 @@
   padding: 0 1rem;
 }
 
-/* Placeholder icon container */
 .step-icon-new {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 1.5rem;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    padding: 10px;  /* Add padding for the image */
-  }
-  
-  .step-icon-new img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    filter: brightness(0) invert(1);  /* Makes the icon white */
-  }
-  
-.cocoa-icon-new {
-  font-size: 3rem;
-  margin-bottom: 1.5rem;
-  opacity: 0.9;
-  filter: brightness(1.2);
-  display: none;  /* Hide the old emoji icons */
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 10px;
 }
 
-.step-new h3 {
-  font-size: 2rem;  /* Bigger step titles */
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: var(--text-light);
-  font-family: 'Inter', -apple-system, sans-serif;
-  letter-spacing: -0.01em;
+.step-icon-new img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
 }
 
 .step-new p {
-  font-size: 1.15rem;  /* Bigger description text */
+  font-size: 1.15rem;
   line-height: 1.6;
   opacity: 0.95;
-  color: var(--text-light);
+  color: #F9EBCC;
   max-width: 350px;
   margin: 0 auto;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .steps-grid-new {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-  }
-  
-  .step-new {
-    max-width: 400px;
-    margin: 0 auto;
-  }
-}
-
 /* ===== JOIN COMMUNITY SECTION ===== */
 .join-section-new {
-  background: #B8693D;  /* Using the terracotta color directly */
+  background: #B8693D;
   padding: 5rem 0;
 }
 
@@ -510,11 +467,11 @@
 }
 
 .join-title-new {
+  font-family: 'Poppins', sans-serif !important; /* Poppins for title */
   font-size: clamp(3rem, 5vw, 4.5rem);
   font-weight: 800;
   line-height: 1;
   margin: 0 0 2rem 0;
-  font-family: 'Inter', -apple-system, sans-serif;
   color: #F9EBCC;
 }
 
@@ -528,6 +485,7 @@
   font-size: 1.1rem;
   font-weight: 600;
   transition: all 0.3s ease;
+  letter-spacing: -0.01em;
 }
 
 .btn-join-new:hover {
@@ -546,7 +504,40 @@
   text-decoration: underline;
 }
 
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 968px) {
+  .treats-grid-new {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 3rem 2rem !important;
+  }
+  
+  .treat-image-wrapper-new {
+    width: 240px !important;
+    height: 240px !important;
+  }
+}
+
 @media (max-width: 768px) {
+  .treats-grid-new {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+  
+  .treat-image-wrapper-new {
+    width: 260px !important;
+    height: 260px !important;
+  }
+  
+  .steps-grid-new {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  
+  .step-new {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
   .join-content-new {
     grid-template-columns: 1fr;
     text-align: center;
@@ -554,23 +545,6 @@
   
   .join-text-new {
     text-align: center;
-  }
-}
-
-/* ===== RESPONSIVE DESIGN ===== */
-@media (max-width: 768px) {
-  .treats-grid-new {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  
-  .steps-grid-new {
-    grid-template-columns: 1fr;
-    text-align: left;
-  }
-  
-  .join-content-new {
-    grid-template-columns: 1fr;
   }
   
   .join-image-new {
@@ -593,68 +567,62 @@
   padding: 0 2rem;
 }
 
-/* FINAL OVERRIDE - Put this at the END of the file */
-
-/* RESTORE THE CREAM CARD BACKGROUNDS */
-.homepage-new .treats-section-new .treats-grid-new .treat-card-new {
-    background-color: #FFF5E9 !important;  /* <- This brings back your cream boxes */
-    border-radius: 24px !important;
-    padding: 2rem !important;  /* <- This gives padding around everything */
-}
-
-/* UPDATED IMAGE DISPLAY FOR CHOCOLATE PACKAGES */
-.homepage-new .treats-section-new .treats-grid-new .treat-card-new .treat-image-wrapper-new {
-    background-color: white !important;
-    width: 100% !important;
-    height: 260px !important;
-    border-radius: 12px !important;  /* <- Rounded rectangle instead of circle */
-    margin: 0 auto 1.5rem auto !important;
-    padding: 20px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-/* IMAGE SIZING - Only need this once! */
-.homepage-new .treats-section-new .treats-grid-new .treat-card-new .treat-image-circle-new img {
-    width: auto !important;
-    height: 100% !important;
-    max-width: 100% !important;
-    object-fit: contain !important;  /* <- Preserves aspect ratio */
-}
-
-/* FORCE VIEW ALL BUTTON STYLES */
-.homepage-new .view-all-container {
-    text-align: right !important;
-    padding-right: 0 !important;
-    margin: 3rem 0 2rem 0 !important;
-}
-
-.homepage-new a.btn-view-all,
-.homepage-new .btn-view-all {
-    background: #B8693D !important;
-    color: white !important;
-    padding: 12px 35px !important;
-    border-radius: 50px !important;
+/* NUCLEAR OPTION V2 - Target everything */
+.homepage-new * {
     text-decoration: none !important;
-    font-size: 1.1rem !important;
-    font-weight: 600 !important;
-    display: inline-block !important;
+  }
+  
+  .homepage-new *::after,
+  .homepage-new *::before {
     border: none !important;
-    box-shadow: 0 4px 12px rgba(184, 105, 61, 0.2) !important;
-}
+    background: none !important;
+    text-decoration: none !important;
+  }
+  
+  /* Target all possible title elements and their children */
+  .section-title-new,
+  .section-title-new *,
+  .step-new h3,
+  .step-new h3 *,
+  h1, h2, h3, h4, h5, h6,
+  h1 *, h2 *, h3 *, h4 *, h5 *, h6 * {
+    text-decoration: none !important;
+    border: none !important;
+    border-bottom: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  
+  /* If titles are links */
+  a.section-title-new,
+  a .section-title-new,
+  .section-title-new a,
+  a h1, a h2, a h3,
+  h1 a, h2 a, h3 a {
+    text-decoration: none !important;
+    border: none !important;
+    border-bottom: none !important;
+  }
+  
+  /* Remove from specific sections */
+  .treats-section-new h2::after,
+  .how-it-works-new h2::after,
+  .step-new h3::after {
+    display: none !important;
+    content: none !important;
+    border: none !important;
+    height: 0 !important;
+    width: 0 !important;
+  }
 
-.homepage-new a.btn-view-all:hover,
-.homepage-new .btn-view-all:hover {
-    background: #9A5632 !important;
-    transform: translateY(-2px) !important;
-}
-
-/* Force the terracotta background color for How It Works section */
-.homepage-new .how-it-works-new,
-.how-it-works-new {
-  background: #b08968 !important; /* Solid terracotta */
-  background-color: #b08968 !important;
-  /* Remove any gradients */
-  background-image: none !important;
-}
+  /* ABSOLUTE FORCE CREAM BOXES - Add this at the VERY END of HomePage-new.css */
+.homepage-new .treats-section-new .treats-grid-new .treat-card-new {
+    background-color: #FFF9EB !important;
+    border: 3px solid #FFF9EB !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+    padding: 2.5rem !important;
+    border-radius: 24px !important;
+    display: block !important;
+    position: relative !important;
+    z-index: 10 !important;
+  }

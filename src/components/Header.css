@@ -959,3 +959,179 @@ header.homepage-header-transparent {
   position: static !important;
   position: absolute !important;
 }
+
+/* ADD THIS TO THE END OF YOUR Header.css FILE */
+/* CONSISTENT HEADER WITH WHITE TEXT, BLACK DROPDOWN */
+
+/* Force terracotta background on ALL pages */
+.header,
+.header.homepage-header-transparent {
+  background-color: #B08968 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  position: sticky !important;
+  top: 0 !important;
+}
+
+/* WHITE text for main header elements */
+.header,
+.header .logo h1,
+.header .add-chocolate-btn,
+.header .add-chocolate-text,
+.header .auth-btn,
+.header .user-name,
+.header .user-initials,
+.header button,
+.header a:not(.nav-section a):not(.user-dropdown-item) {
+  color: #F9EBCC !important;
+}
+
+/* WHITE hamburger menu lines */
+.menu-icon span,
+.header .menu-icon span {
+  background-color: #F9EBCC !important;
+}
+
+/* BLACK text for dropdown menus */
+.nav,
+.nav *,
+.nav-section,
+.nav-section *,
+.nav-section a,
+.nav-section h3,
+.user-dropdown,
+.user-dropdown *,
+.user-dropdown-item,
+.user-dropdown-item * {
+  color: #000000 !important;
+  background-color: #FFFFFF !important; /* White background for dropdowns */
+}
+
+/* Ensure dropdown containers have white background */
+.nav.open,
+.user-dropdown.open {
+  background: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+/* Style dropdown hover states */
+.nav-section a:hover,
+.user-dropdown-item:hover {
+  background-color: rgba(176, 137, 104, 0.1) !important;
+  color: #B08968 !important;
+}
+
+/* WHITE search icon */
+.search-toggle {
+  color: #F9EBCC !important;
+}
+
+/* Search dropdown has white background with black text */
+.search-form-expandable,
+.search-form-expandable.open {
+  background: #FFFFFF !important;
+}
+
+.search-input-expandable {
+  color: #000000 !important;
+}
+
+/* Button styling adjustments */
+.add-chocolate-btn {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 2px solid #F9EBCC !important;
+  color: #F9EBCC !important;
+}
+
+.add-chocolate-btn:hover {
+  background: #FFFFFF !important;
+  color: #F9EBCC !important;
+}
+
+/* Font family for all text */
+.header *:not(h1) {
+  font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+}
+
+/* Normal capitalization and sizing */
+.add-chocolate-btn,
+.header .auth-btn,
+.nav-section a {
+  text-transform: none !important;
+  font-weight: 300 !important;
+  font-size: 0.5rem !important;
+  letter-spacing: 0 !important;
+}
+
+/* NUCLEAR FORCE - TERRACOTTA HEADER ON ALL PAGES */
+/* Add this at the VERY END of your Header.css file */
+
+/* Force terracotta on every possible selector */
+.header,
+.header.homepage-header-transparent,
+header,
+nav.header,
+div.header,
+#header,
+[class*="header"],
+body .header,
+html body .header,
+html body div.header,
+html body header,
+* .header {
+  background-color: #B08968 !important;
+  background: #B08968 !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Override any inline styles or JavaScript changes */
+.header[style] {
+  background-color: #B08968 !important;
+  background: #B08968 !important;
+}
+
+/* Remove ALL possible variations */
+.header.transparent,
+.header.white,
+.header.clear,
+.header.homepage-header-transparent,
+.header:not(.homepage-header-transparent),
+body.homepage .header,
+body.browse-page .header,
+body.chocolate-page .header,
+body.profile-page .header,
+body.signin-page .header,
+body.signup-page .header,
+body .header,
+main + .header,
+#root .header {
+  background-color: #B08968 !important;
+  background: #B08968 !important;
+  position: sticky !important;
+  top: 0 !important;
+}
+
+/* In case it's using CSS variables */
+.header {
+  --header-bg: #B08968 !important;
+  --header-background: #B08968 !important;
+  --background: #B08968 !important;
+}
+
+/* For absolute maximum specificity */
+html body div#root header.header,
+html body div#root div.header {
+  background-color: #B08968 !important;
+}
+
+/* Remove any pseudo-elements that might create overlays */
+.header::before,
+.header::after {
+  background: transparent !important;
+  background-color: transparent !important;
+  display: none !important;
+}
