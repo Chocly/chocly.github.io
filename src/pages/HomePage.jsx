@@ -139,7 +139,7 @@ const HomePage = () => {
       <section className="hero-section-new" style={{ backgroundImage: `url(${heroBackground})` }}>
         <div className="hero-content-new">
           <h1 className="hero-title-new">
-            indulge<br />
+            Indulge<br />
             better.
           </h1>
           <p className="hero-subtitle-new">

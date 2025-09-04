@@ -1060,78 +1060,55 @@ header.homepage-header-transparent {
 .header .auth-btn,
 .nav-section a {
   text-transform: none !important;
-  font-weight: 300 !important;
-  font-size: 0.5rem !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
   letter-spacing: 0 !important;
 }
 
-/* NUCLEAR FORCE - TERRACOTTA HEADER ON ALL PAGES */
-/* Add this at the VERY END of your Header.css file */
+/* FORCE TERRACOTTA HEADER ON ALL PAGES - Add to END of Header.css */
 
-/* Force terracotta on every possible selector */
+/* Target header with multiple selectors for higher specificity */
 .header,
-.header.homepage-header-transparent,
-header,
-nav.header,
-div.header,
-#header,
-[class*="header"],
 body .header,
-html body .header,
-html body div.header,
-html body header,
-* .header {
-  background-color: #B08968 !important;
-  background: #B08968 !important;
-  background-image: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
-
-/* Override any inline styles or JavaScript changes */
-.header[style] {
-  background-color: #B08968 !important;
-  background: #B08968 !important;
-}
-
-/* Remove ALL possible variations */
-.header.transparent,
-.header.white,
-.header.clear,
-.header.homepage-header-transparent,
-.header:not(.homepage-header-transparent),
-body.homepage .header,
-body.browse-page .header,
-body.chocolate-page .header,
-body.profile-page .header,
-body.signin-page .header,
-body.signup-page .header,
-body .header,
+#root .header,
 main + .header,
-#root .header {
+.header.homepage-header-transparent,
+.header:not(.homepage-header-transparent) {
   background-color: #B08968 !important;
   background: #B08968 !important;
-  position: sticky !important;
-  top: 0 !important;
 }
 
-/* In case it's using CSS variables */
+/* Remove any transparent or white header styles */
+.header.transparent,
+.header.white {
+  background-color: #B08968 !important;
+  background: #B08968 !important;
+}
+
+/* White text in header */
+.header .logo h1,
+.header .add-chocolate-btn,
+.header .auth-btn,
+.header button {
+  color: #FFFFFF !important;
+}
+
+/* White hamburger lines */
+.header .menu-icon span {
+  background-color: #FFFFFF !important;
+}
+
+/* Black text in dropdown menus */
+.nav,
+.nav a,
+.user-dropdown,
+.user-dropdown a {
+  color: #000000 !important;
+  background-color: #FFFFFF !important;
+}
+
+/* If header uses CSS variables */
 .header {
   --header-bg: #B08968 !important;
   --header-background: #B08968 !important;
-  --background: #B08968 !important;
-}
-
-/* For absolute maximum specificity */
-html body div#root header.header,
-html body div#root div.header {
-  background-color: #B08968 !important;
-}
-
-/* Remove any pseudo-elements that might create overlays */
-.header::before,
-.header::after {
-  background: transparent !important;
-  background-color: transparent !important;
-  display: none !important;
 }
