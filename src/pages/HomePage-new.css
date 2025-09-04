@@ -505,10 +505,16 @@ a .treat-name-new,
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
+/* Tablet view */
 @media (max-width: 968px) {
   .treats-grid-new {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 3rem 2rem !important;
+    gap: 2rem !important;
+    padding: 0 1rem !important; /* Add some padding on smaller screens */
+  }
+  
+  .treat-card-new {
+    max-width: 320px !important; /* Smaller cards on tablet */
   }
   
   .treat-image-wrapper-new {
@@ -517,10 +523,26 @@ a .treat-name-new,
   }
 }
 
+/* Mobile view */
 @media (max-width: 768px) {
+  /* TODAY'S TREATS title on mobile */
+  .treats-section-new .section-title-new {
+    text-align: center !important; /* Center title on mobile */
+    font-size: clamp(2rem, 6vw, 2.5rem) !important; /* Responsive size */
+    padding: 0 1rem !important;
+  }
+  
   .treats-grid-new {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr !important; /* Single column on mobile */
     gap: 2rem !important;
+    padding: 0 1rem !important;
+    justify-items: center !important;
+  }
+  
+  .treat-card-new {
+    max-width: 350px !important; /* Good size for mobile */
+    min-height: 400px !important; /* Less height needed on mobile */
+    margin: 0 auto !important; /* Center cards */
   }
   
   .treat-image-wrapper-new {
@@ -528,6 +550,15 @@ a .treat-name-new,
     height: 260px !important;
   }
   
+  .treat-name-new {
+    font-size: 1.1rem !important; /* Slightly smaller on mobile */
+  }
+  
+  .treat-description-new {
+    font-size: 0.95rem !important; /* Slightly smaller on mobile */
+  }
+  
+  /* Other sections on mobile */
   .steps-grid-new {
     grid-template-columns: 1fr;
     gap: 2.5rem;

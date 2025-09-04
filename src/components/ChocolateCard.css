@@ -394,3 +394,82 @@
     transform: none;
   }
 }
+
+/* BROWSE PAGE - CHOCOLATE CARD TYPOGRAPHY FIXES */
+/* Add this to the END of ChocolateCard.css */
+
+/* Ensure all card text uses Helvetica Neue */
+.chocolate-card,
+.chocolate-card * {
+  font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+}
+
+/* Chocolate name (card-title) - BLACK with NO LINES */
+.chocolate-card .card-title {
+  color: #000000 !important;
+  font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  text-decoration: none !important;
+  border: none !important;
+  border-bottom: none !important;
+}
+
+/* Remove underlines from title link */
+.chocolate-card .chocolate-title-link {
+  text-decoration: none !important;
+  border: none !important;
+  border-bottom: none !important;
+}
+
+/* Maker/Brand name (card-maker) - TERRACOTTA with NO LINES */
+.chocolate-card .card-maker {
+  color: #B8693D !important;
+  font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 0.8rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-decoration: none !important;
+  border: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+/* Remove underlines from maker link */
+.chocolate-card .card-maker-link {
+  text-decoration: none !important;
+  border: none !important;
+}
+
+/* Remove any pseudo-element lines */
+.chocolate-card .card-title::after,
+.chocolate-card .card-title::before,
+.chocolate-card .card-maker::after,
+.chocolate-card .card-maker::before,
+.chocolate-card .chocolate-title-link::after,
+.chocolate-card .chocolate-title-link::before,
+.chocolate-card .card-maker-link::after,
+.chocolate-card .card-maker-link::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* Keep hover effects but maintain colors and no lines */
+.chocolate-card .card-maker-link:hover .card-maker {
+  color: #8A5A3A !important;
+  text-decoration: none !important;
+}
+
+.chocolate-card .chocolate-title-link:hover .card-title {
+  color: #333333 !important;
+  text-decoration: none !important;
+}
+
+/* Other text elements */
+.chocolate-card .card-details .origin,
+.chocolate-card .card-details .percentage,
+.chocolate-card .rating-value,
+.chocolate-card .rating-count {
+  font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+}

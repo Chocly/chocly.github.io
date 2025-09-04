@@ -980,12 +980,23 @@ header.homepage-header-transparent {
 .header .logo h1,
 .header .add-chocolate-btn,
 .header .add-chocolate-text,
-.header .auth-btn,
 .header .user-name,
 .header .user-initials,
-.header button,
-.header a:not(.nav-section a):not(.user-dropdown-item) {
+.header button:not(.auth-btn),
+.header a:not(.nav-section a):not(.user-dropdown-item):not(.homepage-join-btn) { /* <- Added :not(.homepage-join-btn) */
   color: #F9EBCC !important;
+}
+
+/* JOIN US BUTTON - BLACK TEXT (using correct class) */
+.header .homepage-join-btn,
+.header a.homepage-join-btn {
+  color: #000000 !important;
+  background: #CAEEED !important;
+}
+
+.header .homepage-join-btn:hover {
+  color: #000000 !important;
+  background: #FFFFFF !important;
 }
 
 /* WHITE hamburger menu lines */
@@ -1111,4 +1122,28 @@ main + .header,
 .header {
   --header-bg: #B08968 !important;
   --header-background: #B08968 !important;
+}
+
+/* ABSOLUTE FINAL OVERRIDE - JOIN US BUTTON BLACK TEXT */
+/* This MUST be the last thing in your CSS file */
+
+.header .auth-buttons .auth-btn.primary-btn,
+.header .header-actions .auth-btn.primary-btn,
+.header-actions .auth-buttons .auth-btn.primary-btn,
+body .header .auth-btn.primary-btn,
+.auth-btn.primary-btn {
+  color: #000000 !important;
+  background: #CAEEED !important; /* Keep the light blue background */
+}
+
+/* Override the white text rule specifically for primary button */
+.header .auth-btn.primary-btn {
+  color: #000000 !important;
+}
+
+/* Hover state */
+.header .auth-btn.primary-btn:hover,
+.auth-btn.primary-btn:hover {
+  color: #000000 !important;
+  background: #FFFFFF !important;
 }
