@@ -85,128 +85,181 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-/* SEARCH SECTION - COMPACT ON ALL MOBILE */
-.search-section {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  justify-content: center;
-  max-width: 40px;
-  margin: 0 0.25rem;
-  position: relative;
+/* MOBILE SEARCH - Better implementation */
+@media (max-width: 767px) {
+  /* Search toggle button remains the same */
+  .search-toggle {
+    display: flex !important;
+    background: none;
+    border: none;
+    padding: 0.375rem;
+    border-radius: 50%;
+    color: #F9EBCC !important; /* White on terracotta header */
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+  }
+
+  /* Mobile expandable search - slides down below header */
+  .search-form-expandable {
+    position: fixed !important; /* Fixed to viewport */
+    top: 60px !important; /* Below header */
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    background: #FFFFFF !important;
+    border-bottom: 2px solid #E5E7EB;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 0 !important;
+    height: 0 !important;
+    opacity: 0 !important;
+    overflow: hidden !important;
+    transition: all 0.3s ease !important;
+    z-index: 999 !important;
+    transform: none !important; /* Remove transform */
+  }
+
+  .search-form-expandable.open {
+    height: 60px !important; /* Fixed height when open */
+    opacity: 1 !important;
+    padding: 0.75rem 1rem !important;
+  }
+
+  /* Search input styling for mobile */
+  .search-input-expandable {
+    width: 100%;
+    padding: 0.625rem 3rem 0.625rem 1rem !important;
+    border: 2px solid #E5E7EB !important;
+    border-radius: 25px !important;
+    background: #F8F9FA !important;
+    font-size: 0.95rem !important;
+    color: #2D1810 !important;
+    outline: none !important;
+  }
+
+  .search-input-expandable:focus {
+    border-color: #F4A261 !important;
+    background: #FFFFFF !important;
+  }
+
+  /* Submit button positioning */
+  .search-submit-btn {
+    position: absolute !important;
+    right: 1.5rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    background: #F4A261 !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
 }
 
-.search-toggle {
-  background: none;
-  border: none;
-  padding: 0.375rem;
-  border-radius: 50%;
-  color: var(--header-text);
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  position: relative;
-  z-index: 10;
+/* DESKTOP SEARCH - Beautiful inline search bar */
+@media (min-width: 768px) {
+  /* Make the search form look good on desktop */
+  .search-form-expandable {
+    position: relative !important;
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    top: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    max-width: 400px;
+    height: 40px !important;
+    margin: 0 1rem;
+    padding: 0 !important;
+    background: white !important;
+    border: 2px solid #E5E7EB !important;
+    border-radius: 25px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    overflow: visible !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  /* Focus state */
+  .search-form-expandable:focus-within {
+    border-color: #F4A261 !important;
+    box-shadow: 0 0 0 3px rgba(244, 162, 97, 0.15) !important;
+  }
+  
+  /* Style the input */
+  .search-input-expandable {
+    width: 100% !important;
+    padding: 0 3rem 0 1.25rem !important;
+    border: none !important;
+    background: transparent !important;
+    font-size: 0.9rem !important;
+    color: #2D1810 !important;
+    outline: none !important;
+    font-weight: 500 !important;
+    height: 36px !important;
+    border-radius: 25px !important;
+  }
+  
+  .search-input-expandable::placeholder {
+    color: #9CA3AF !important;
+    font-weight: 400 !important;
+  }
+  
+  /* Style the submit button */
+  .search-submit-btn {
+    position: absolute !important;
+    right: 4px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    background: #F4A261 !important;
+    color: white !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+  }
+  
+  .search-submit-btn:hover {
+    background: #E89548 !important;
+    transform: translateY(-50%) scale(1.05) !important;
+  }
+  
+  .search-submit-btn svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+  
+  /* Hide the search toggle icon on desktop */
+  .search-toggle {
+    display: none !important;
+  }
+  
+  /* Make search section a proper flex container */
+  .search-section {
+    flex: 1;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    max-width: 450px;
+    position: relative;
+  }
 }
 
-.search-toggle:hover {
-  background: rgba(244, 162, 97, 0.1);
-  color: var(--accent-color);
-  transform: scale(1.05);
+/* Tablet adjustments */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .search-form-expandable {
+    max-width: 300px !important;
+  }
 }
 
-.search-toggle:active {
-  transform: scale(0.95);
-  background: rgba(244, 162, 97, 0.2);
-}
-
-.search-toggle.active {
-  background: var(--accent-color);
-  color: #FFFFFF;
-  transform: scale(1);
-  box-shadow: 0 4px 16px rgba(244, 162, 97, 0.3);
-}
-
-.search-icon {
-  transition: all 0.3s ease;
-  width: 16px;
-  height: 16px;
-}
-
-/* FIX EXPANDABLE SEARCH FORM - Better colors and sizing */
-.search-form-expandable {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%);
-  width: 320px; /* Increased width */
-  background: #FFFFFF !important;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  border: 2px solid #F4A261; /* Better border */
-  display: none;
-  align-items: center;
-  overflow: hidden;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateX(-50%) translateY(-4px) scale(0.98);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1001;
-  padding: 0.5rem; /* Add padding */
-}
-
-.search-form-expandable.open {
-  display: flex;
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(0) scale(1);
-}
-
-.search-input-expandable {
-  flex: 1;
-  padding: 0.875rem 1rem;
-  padding-right: 50px;
-  border: none;
-  background: transparent;
-  font-size: 0.95rem;
-  color: #2D1810 !important; /* Dark text color - FIXED */
-  outline: none;
-  font-weight: 500;
-}
-
-.search-input-expandable::placeholder {
-  color: #9CA3AF;
-  font-weight: 400;
-}
-
-/* Better submit button */
-.search-submit-btn {
-  position: absolute;
-  right: 12px; /* Adjusted position */
-  top: 50%;
-  transform: translateY(-50%);
-  background: #F4A261;
-  color: #FFFFFF;
-  border: none;
-  padding: 0.5rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-}
-
-.search-submit-btn:hover {
-  background: #E89548;
-  transform: translateY(-50%) scale(1.05);
-}
 
 /* HEADER ACTIONS - ULTRA COMPACT FOR ALL MOBILE */
 .header-actions {
@@ -1377,3 +1430,4 @@ body .header .auth-btn.primary-btn,
       }
     }
   }
+

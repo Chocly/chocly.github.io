@@ -68,7 +68,7 @@
 
 /* ===== HERO SECTION ===== */
 .hero-section-new {
-  min-height: 100vh;
+  min-height: auto;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -76,7 +76,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 2rem;
+  padding: 6rem 1rem 4rem 1rem;
   padding-bottom: 0;
 }
 
@@ -97,6 +97,7 @@
   max-width: 800px;
   margin: 0 auto;
   position: relative;
+  transform: none; /* Remove any centering transforms */
   z-index: 2;
   padding-bottom: 100px;
 }
