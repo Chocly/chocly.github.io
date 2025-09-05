@@ -137,17 +137,17 @@
   height: 16px;
 }
 
-/* EXPANDABLE SEARCH FORM */
+/* FIX EXPANDABLE SEARCH FORM - Better colors and sizing */
 .search-form-expandable {
   position: absolute;
   top: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
-  width: 280px;
-  background: #FFFFFF;
+  width: 320px; /* Increased width */
+  background: #FFFFFF !important;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  border: 1px solid var(--accent-color);
+  border: 2px solid #F4A261; /* Better border */
   display: none;
   align-items: center;
   overflow: hidden;
@@ -156,6 +156,7 @@
   transform: translateX(-50%) translateY(-4px) scale(0.98);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1001;
+  padding: 0.5rem; /* Add padding */
 }
 
 .search-form-expandable.open {
@@ -172,7 +173,7 @@
   border: none;
   background: transparent;
   font-size: 0.95rem;
-  color: var(--header-text);
+  color: #2D1810 !important; /* Dark text color - FIXED */
   outline: none;
   font-weight: 500;
 }
@@ -182,12 +183,13 @@
   font-weight: 400;
 }
 
+/* Better submit button */
 .search-submit-btn {
   position: absolute;
-  right: 6px;
+  right: 12px; /* Adjusted position */
   top: 50%;
   transform: translateY(-50%);
-  background: var(--accent-color);
+  background: #F4A261;
   color: #FFFFFF;
   border: none;
   padding: 0.5rem;
@@ -197,8 +199,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
+}
+
+.search-submit-btn:hover {
+  background: #E89548;
+  transform: translateY(-50%) scale(1.05);
 }
 
 /* HEADER ACTIONS - ULTRA COMPACT FOR ALL MOBILE */
@@ -208,6 +215,24 @@
   gap: 0.25rem;
   flex-shrink: 0;
   min-width: 0;
+}
+
+/* Make search section wider on desktop for better positioning */
+@media (min-width: 768px) {
+  .search-section {
+    max-width: 60px;
+  }
+  
+  .search-form-expandable {
+    width: 400px; /* Wider on desktop */
+    left: auto;
+    right: 0;
+    transform: translateX(0) translateY(-4px) scale(0.98);
+  }
+  
+  .search-form-expandable.open {
+    transform: translateX(0) translateY(0) scale(1);
+  }
 }
 
 /* ADD CHOCOLATE BUTTON */

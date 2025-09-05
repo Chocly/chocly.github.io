@@ -38,15 +38,20 @@ function Header() {
     }
   };
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-    if (!menuOpen) setSearchOpen(false);
-  };
+// Toggle functions
+const toggleMenu = (e) => {
+  e.stopPropagation(); // Prevent event bubbling
+  setMenuOpen(!menuOpen);
+  setUserMenuOpen(false); // Close user menu when opening nav menu
+  setSearchOpen(false); // Close search if it exists
+};
 
-  const toggleUserMenu = () => {
-    setUserMenuOpen(!userMenuOpen);
-    if (!userMenuOpen) setSearchOpen(false);
-  };
+const toggleUserMenu = (e) => {
+  e.stopPropagation(); // Prevent event bubbling  
+  setUserMenuOpen(!userMenuOpen);
+  setMenuOpen(false); // Close nav menu when opening user menu
+  setSearchOpen(false); // Close search if it exists
+};
 
   const toggleSearch = () => {
     setSearchOpen(!searchOpen);
