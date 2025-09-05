@@ -28,10 +28,11 @@
   background: var(--background-white);
   border: 1px solid var(--border-light);
   border-radius: var(--card-radius);
-  overflow: hidden;
+  overflow: visible !important; /* CHANGED: from hidden to visible */
   box-shadow: var(--shadow-md);
   transition: var(--transition);
-  height: 360px; /* Reduced height for better balance */
+  height: auto !important; /* CHANGED: from 360px to auto */
+  min-height: 360px; /* ADDED: minimum height */
   width: 100%;
   position: relative;
   cursor: pointer;
@@ -61,12 +62,14 @@
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid var(--border-subtle);
+  padding: 20px; /* ADDED: padding for spacing */
 }
 
 .image-container img,
 .card-image {
-  width: 85%;
-  height: 85%;
+  width: auto; /* CHANGED: from 85% to auto */
+  height: 70%; /* CHANGED: from 85% to 70% */
+  max-width: 80%; /* ADDED: max-width constraint */
   object-fit: contain;
   transition: transform 0.5s ease;
 }
@@ -152,11 +155,13 @@
 /* CARD CONTENT - Improved spacing and hierarchy */
 .card-content {
   padding: 20px;
+  padding-bottom: 24px !important; /* CHANGED: increased bottom padding */
   display: flex;
   flex-direction: column;
   flex: 1; /* Takes remaining space */
   gap: 10px;
   background: var(--background-white);
+  min-height: fit-content; /* ADDED: ensure content fits */
 }
 
 /* CHOCOLATE TITLE - Now more prominent */
@@ -216,7 +221,10 @@
   gap: 8px;
   margin-top: auto; /* Pushes to bottom of card */
   padding-top: 12px;
+  padding-bottom: 4px; /* ADDED: bottom padding for stars */
   border-top: 1px solid var(--border-subtle);
+  min-height: 36px; /* ADDED: minimum height */
+  overflow: visible !important; /* ADDED: ensure stars visible */
 }
 
 .rating-value {
@@ -230,6 +238,9 @@
 .stars {
   display: flex;
   gap: 1px;
+  height: 20px; /* ADDED: fixed height */
+  align-items: center; /* ADDED: center alignment */
+  overflow: visible !important; /* ADDED: ensure visible */
 }
 
 /* Star styling */
@@ -307,15 +318,24 @@
 
 @media (max-width: 768px) {
   .chocolate-card {
-    height: 340px;
+    height: auto !important; /* CHANGED: from 340px to auto */
+    min-height: 340px; /* ADDED: minimum height */
   }
   
   .image-container {
     height: 180px;
+    padding: 15px; /* ADDED: padding for mobile */
+  }
+  
+  .image-container img,
+  .card-image {
+    height: 65%; /* CHANGED: reduced for mobile */
+    max-width: 75%; /* CHANGED: reduced for mobile */
   }
   
   .card-content {
     padding: 16px;
+    padding-bottom: 20px !important; /* CHANGED: ensure bottom padding */
   }
   
   .card-title {
@@ -340,15 +360,24 @@
 
 @media (max-width: 480px) {
   .chocolate-card {
-    height: 320px;
+    height: auto !important; /* CHANGED: from 320px to auto */
+    min-height: 320px; /* ADDED: minimum height */
   }
   
   .image-container {
     height: 160px;
+    padding: 12px; /* ADDED: padding for small screens */
+  }
+  
+  .image-container img,
+  .card-image {
+    height: 70%; /* CHANGED: increased for small screens */
+    max-width: 80%; /* CHANGED: increased for small screens */
   }
   
   .card-content {
     padding: 14px;
+    padding-bottom: 18px !important; /* CHANGED: ensure bottom padding */
     gap: 8px;
   }
   
@@ -472,4 +501,402 @@
 .chocolate-card .rating-value,
 .chocolate-card .rating-count {
   font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+}
+
+/* =====================================================
+   FINAL FIX FOR CHOCOLATE CARD MOBILE
+   Add to ChocolateCard.css
+   ===================================================== */
+
+/* Remove scroll from chocolate cards - UPDATED */
+.chocolate-card {
+  overflow: visible !important; /* CHANGED: No scrolling, allow content to be visible */
+  padding: 0 !important; /* CHANGED: removed extra padding that was added */
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Image should be contained */
+.chocolate-card .card-image,
+.chocolate-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Fix rating line layout */
+.chocolate-card .rating,
+.chocolate-card .card-rating,
+.chocolate-card .rating-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+  flex-wrap: nowrap; /* Keep on one line */
+  overflow: visible !important; /* ADDED: ensure visible */
+}
+
+/* Rating number */
+.chocolate-card .rating-value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1A1A1A;
+  flex-shrink: 0;
+}
+
+/* Star container */
+.chocolate-card .rating-stars,
+.chocolate-card .stars {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  overflow: visible !important; /* ADDED: ensure visible */
+}
+
+/* Fix star display - use star symbols */
+.chocolate-card .star {
+  font-size: 1.125rem;
+  line-height: 1;
+  display: inline-block;
+}
+
+/* Star colors */
+.chocolate-card .star.filled,
+.chocolate-card .star:not(.empty) {
+  color: #FFD700 !important; /* Gold stars */
+}
+
+.chocolate-card .star.empty {
+  color: #E0E0E0 !important; /* Gray empty stars */
+}
+
+/* Review count */
+.chocolate-card .review-count {
+  font-size: 0.875rem;
+  color: #666;
+  white-space: nowrap;
+}
+
+/* Mobile specific adjustments - UPDATED */
+@media (max-width: 768px) {
+  .chocolate-card {
+    width: 100%;
+    max-width: 100%;
+    margin: 0.5rem 0;
+    overflow: visible !important; /* CHANGED: Ensure no scroll */
+    height: auto !important; /* CHANGED: flexible height */
+    min-height: 340px; /* ADDED: minimum height */
+  }
+  
+  /* Slightly smaller stars on mobile */
+  .chocolate-card .star {
+    font-size: 1rem;
+  }
+  
+  .chocolate-card .rating-value {
+    font-size: 1rem;
+  }
+  
+  /* Ensure title doesn't cause overflow */
+  .chocolate-card h3,
+  .chocolate-card .card-title {
+    font-size: 1.125rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* If using Font Awesome or icon fonts for stars */
+.chocolate-card .fa-star,
+.chocolate-card .fas.fa-star {
+  color: #FFD700 !important;
+}
+
+.chocolate-card .far.fa-star {
+  color: #E0E0E0 !important;
+}
+
+/* Ensure no horizontal scroll either */
+.chocolate-card * {
+  max-width: 100%;
+}
+
+/* =====================================================
+   EMERGENCY FIX - REMOVE GRAY LINES FROM STARS
+   Add this to the VERY END of ChocolateCard.css
+   ===================================================== */
+
+/* First, fix the card structure - UPDATED */
+.chocolate-card {
+  overflow: visible !important; /* CHANGED: allow content to be visible */
+  height: auto !important;
+  min-height: 360px !important; /* CHANGED: from 340px for consistency */
+  max-height: none !important; /* CHANGED: removed max-height constraint */
+}
+
+.chocolate-card .card-content {
+  padding: 16px !important;
+  padding-bottom: 24px !important; /* CHANGED: increased bottom padding */
+  overflow: visible !important; /* CHANGED: ensure content visible */
+}
+
+/* AGGRESSIVE FIX FOR STAR LINES */
+.chocolate-card a,
+.chocolate-card a *,
+.chocolate-card a .stars,
+.chocolate-card a .star,
+.chocolate-card .stars,
+.chocolate-card .star {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+  text-decoration-style: initial !important;
+  text-decoration-color: initial !important;
+  border: 0 !important;
+  border-bottom: 0 !important;
+  outline: none !important;
+}
+
+/* Override any link styles that might affect stars */
+.chocolate-card a:link,
+.chocolate-card a:visited,
+.chocolate-card a:hover,
+.chocolate-card a:active {
+  text-decoration: none !important;
+}
+
+/* Fix the rating section specifically */
+.chocolate-card .card-rating {
+  text-decoration: none !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 12px 0 8px 0 !important;
+  margin-top: auto !important;
+  overflow: visible !important;
+  height: auto !important;
+  min-height: 36px !important; /* CHANGED: increased from 32px */
+}
+
+/* Fix the stars container */
+.chocolate-card .stars {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 1px !important;
+  text-decoration: none !important;
+  border: none !important;
+  height: 20px !important; /* Fixed height */
+  line-height: 20px !important; /* Match line height */
+  position: relative !important;
+  top: 0 !important;
+  overflow: visible !important; /* ADDED: ensure visible */
+}
+
+/* Fix individual stars */
+.chocolate-card .star {
+  display: inline-block !important;
+  width: 16px !important;
+  height: 20px !important;
+  line-height: 20px !important;
+  font-size: 16px !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+  top: 0 !important;
+  vertical-align: middle !important;
+  overflow: visible !important;
+}
+
+/* Clean star colors */
+.chocolate-card .star.filled {
+  color: #FFD700 !important;
+}
+
+.chocolate-card .star.empty {
+  color: #E5E7EB !important;
+}
+
+/* If stars are inside a link, reset the link */
+.chocolate-link .stars,
+.chocolate-link .star,
+a .stars,
+a .star {
+  text-decoration: none !important;
+  display: inline-block !important;
+  position: relative !important;
+}
+
+/* Mobile specific - UPDATED */
+@media (max-width: 768px) {
+  .chocolate-card {
+    height: auto !important; /* CHANGED: flexible height */
+    min-height: 340px !important; /* ADDED: minimum height */
+    max-height: none !important; /* CHANGED: removed constraint */
+  }
+  
+  .chocolate-card .card-content {
+    padding-bottom: 20px !important; /* CHANGED: ensure adequate padding */
+  }
+  
+  .chocolate-card .card-rating {
+    padding-bottom: 6px !important;
+  }
+}
+
+/* =====================================================
+   OPTIMIZE CHOCOLATE CARD SPACE USAGE - UPDATED
+   Add to ChocolateCard.css
+   ===================================================== */
+
+/* Adjust card height to accommodate larger images - UPDATED */
+.chocolate-card {
+  height: auto !important; /* CHANGED: flexible height */
+  min-height: 380px !important; /* Slightly taller minimum */
+  overflow: visible !important; /* CHANGED: ensure content visible */
+}
+
+/* Make image container larger - UPDATED */
+.chocolate-card .image-container {
+  height: 220px !important; /* Increased from 200px */
+  width: 100%;
+  background: #FAFAFA;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px !important; /* ADDED: padding for image spacing */
+}
+
+/* UPDATED: Better image sizing */
+.chocolate-card .image-container img,
+.chocolate-card .card-image {
+  width: auto !important; /* Let width adjust naturally */
+  height: 85% !important; /* Reduced from 85% */
+  max-width: 85% !important; /* Prevent too wide images */
+  object-fit: contain !important;
+}
+
+/* Optimize content spacing - UPDATED */
+.chocolate-card .card-content {
+  padding: 16px !important;
+  padding-bottom: 20px !important; /* CHANGED: increased for stars */
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 0 !important; /* Remove default gap */
+  overflow: visible !important; /* ADDED: ensure visible */
+}
+
+/* Tighten title spacing */
+.chocolate-card .chocolate-title-link {
+  margin-bottom: 2px !important; /* Reduced from 4px */
+}
+
+.chocolate-card .card-title {
+  font-size: 1.05rem !important;
+  font-weight: 700;
+  line-height: 1.2 !important;
+  margin: 0 0 6px 0 !important; /* Reduced bottom margin */
+}
+
+/* Reduce maker spacing */
+.chocolate-card .card-maker-link {
+  margin-bottom: 4px !important; /* Reduced from 8px */
+}
+
+.chocolate-card .card-maker {
+  font-size: 0.8rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 !important;
+  line-height: 1.1 !important; /* Tighter line height */
+}
+
+/* Optimize rating section - UPDATED */
+.chocolate-card .card-rating {
+  margin-top: auto !important; /* Push to bottom */
+  padding-top: 8px !important; /* Reduced from 12px */
+  padding-bottom: 6px !important; /* ADDED: space for stars */
+  border-top: 1px solid #F1F5F9;
+  display: flex;
+  align-items: center;
+  gap: 6px !important;
+  min-height: 32px !important; /* CHANGED: increased from 30px */
+  overflow: visible !important; /* ADDED: ensure stars visible */
+}
+
+/* Ensure stars are visible */
+.chocolate-card .stars {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  height: 18px !important;
+  line-height: 18px !important;
+  overflow: visible !important; /* ADDED: ensure visible */
+}
+
+.chocolate-card .star {
+  font-size: 0.95rem !important;
+  line-height: 1 !important;
+  display: inline-block;
+}
+
+/* Mobile adjustments - UPDATED */
+@media (max-width: 768px) {
+  .chocolate-card {
+    height: auto !important; /* CHANGED: flexible height */
+    min-height: 360px !important;
+  }
+  
+  .chocolate-card .image-container {
+    height: 180px !important;
+    padding: 15px !important; /* Slightly less padding on mobile */
+  }
+  
+  .chocolate-card .image-container img,
+  .chocolate-card .card-image {
+    height: 75% !important; /* Smaller on mobile */
+    max-width: 75% !important;
+  }
+  
+  .chocolate-card .card-content {
+    padding: 14px !important;
+    padding-bottom: 18px !important; /* Adequate bottom padding */
+  }
+  
+  .chocolate-card .card-title {
+    font-size: 1rem !important;
+    margin-bottom: 4px !important;
+  }
+  
+  .chocolate-card .card-maker {
+    font-size: 0.75rem !important;
+  }
+  
+  .chocolate-card .card-rating {
+    padding-top: 6px !important;
+    padding-bottom: 4px !important;
+  }
+}
+
+/* Small screens - UPDATED */
+@media (max-width: 480px) {
+  .chocolate-card {
+    height: auto !important; /* CHANGED: flexible height */
+    min-height: 340px !important;
+  }
+  
+  .chocolate-card .image-container {
+    height: 240px !important;
+    padding: 12px !important; /* Less padding on small screens */
+  }
+  
+  .chocolate-card .image-container img,
+  .chocolate-card .card-image {
+    height: 90% !important; /* Even smaller on small screens */
+    max-width: 90% !important;
+  }
 }

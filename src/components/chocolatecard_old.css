@@ -1,0 +1,392 @@
+/* ChocolateCard.css - Clean, Consolidated Version */
+
+/* =====================================================
+   CSS VARIABLES
+   ===================================================== */
+   :root {
+    --card-radius: 16px;
+    --primary-chocolate: #2D1810;
+    --maker-color: #B8693D;
+    --accent-gold: #F4A261;
+    --accent-warm: #F59E0B;
+    --text-dark: #000000;
+    --text-medium: #6B7280;
+    --text-light: #9CA3AF;
+    --background-white: #FFFFFF;
+    --background-light: #F8FAFC;
+    --border-light: #E5E7EB;
+    --border-subtle: #F1F5F9;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --shadow-xl: 0 16px 40px rgba(0, 0, 0, 0.15);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* =====================================================
+     MAIN CARD STRUCTURE
+     ===================================================== */
+  .chocolate-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--background-white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    height: 360px;
+    width: 100%;
+    position: relative;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .chocolate-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--accent-gold);
+  }
+  
+  .chocolate-card.featured {
+    border: 2px solid var(--accent-gold);
+    box-shadow: 0 6px 20px rgba(244, 162, 97, 0.15);
+  }
+  
+  /* =====================================================
+     IMAGE SECTION
+     ===================================================== */
+  .image-container {
+    height: 200px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #FEFEFE 0%, var(--background-light) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  
+  .image-container img,
+  .card-image {
+    width: 85%;
+    height: 85%;
+    object-fit: contain;
+    transition: transform 0.5s ease;
+  }
+  
+  .chocolate-card:hover .image-container img {
+    transform: scale(1.05);
+  }
+  
+  /* =====================================================
+     ACTION BUTTONS (Favorite & Want to Try)
+     ===================================================== */
+  .card-actions {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 10;
+    align-items: center;
+  }
+  
+  .card-actions > * {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 0 !important;
+  }
+  
+  .card-actions > *:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .card-actions svg {
+    width: 18px !important;
+    height: 18px !important;
+    margin: 0 !important;
+  }
+  
+  /* =====================================================
+     CONTENT SECTION
+     ===================================================== */
+  .card-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 10px;
+    background: var(--background-white);
+  }
+  
+  /* Chocolate Title */
+  .chocolate-title-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    margin-bottom: 4px;
+  }
+  
+  .card-title {
+    font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+    font-size: 1.1rem;
+    color: var(--text-dark) !important;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: color 0.2s ease;
+    text-decoration: none !important;
+  }
+  
+  .chocolate-title-link:hover .card-title {
+    color: var(--accent-gold) !important;
+  }
+  
+  /* Maker Name */
+  .card-maker-link {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.2s ease;
+    margin-bottom: 8px;
+  }
+  
+  .card-maker {
+    font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+    font-size: 0.85rem;
+    color: #B8693D !important;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-decoration: none !important;
+  }
+  
+  .card-maker-link:hover .card-maker {
+    color: var(--accent-gold) !important;
+  }
+  
+  /* =====================================================
+     RATING SECTION
+     ===================================================== */
+  .card-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-subtle);
+  }
+  
+  .rating-value {
+    font-weight: 800;
+    color: var(--text-dark);
+    font-size: 1rem;
+    min-width: 32px;
+    font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  
+  .stars {
+    display: flex;
+    gap: 1px;
+  }
+  
+  .stars .star {
+    font-size: 0.9rem;
+    line-height: 1;
+    transition: transform 0.2s ease;
+    display: inline-block;
+  }
+  
+  .stars .star.filled {
+    color: #FFD700 !important;
+    text-shadow: 0 1px 3px rgba(245, 158, 11, 0.3);
+  }
+  
+  .stars .star.half {
+    color: #FFD700 !important;
+    opacity: 0.5;
+  }
+  
+  .stars .star.empty {
+    color: #E5E7EB !important;
+  }
+  
+  .rating-count {
+    font-size: 0.75rem;
+    color: var(--text-medium);
+    font-weight: 500;
+    margin-left: 4px;
+    white-space: nowrap;
+  }
+  
+  /* =====================================================
+     GRID LAYOUTS
+     ===================================================== */
+  .chocolate-grid,
+  .chocolate-cards,
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    padding: 0 20px;
+    margin: 20px auto 40px auto;
+    max-width: 1400px;
+  }
+  
+  /* =====================================================
+     MOBILE RESPONSIVE
+     ===================================================== */
+  @media (max-width: 768px) {
+    .chocolate-card {
+      height: auto;
+      min-height: 340px;
+      max-height: 380px;
+      overflow: hidden; /* Prevent scrolling */
+    }
+    
+    .image-container {
+      height: 180px;
+      flex-shrink: 0;
+    }
+    
+    .card-content {
+      padding: 16px;
+      flex: 1;
+      min-height: 0; /* Allow shrinking */
+    }
+    
+    .card-title {
+      font-size: 1rem;
+      -webkit-line-clamp: 2;
+    }
+    
+    .card-maker {
+      font-size: 0.8rem;
+    }
+    
+    .card-actions {
+      top: 10px;
+      right: 10px;
+    }
+    
+    .card-actions > * {
+      width: 32px !important;
+      height: 32px !important;
+    }
+    
+    .card-actions svg {
+      width: 16px !important;
+      height: 16px !important;
+    }
+    
+    /* Rating section adjustments */
+    .card-rating {
+      padding-top: 8px;
+      gap: 6px;
+    }
+    
+    .rating-value {
+      font-size: 0.95rem;
+    }
+    
+    .stars .star {
+      font-size: 0.85rem;
+    }
+    
+    .rating-count {
+      font-size: 0.7rem;
+    }
+    
+    /* Grid adjustments */
+    .chocolate-grid,
+    .chocolate-cards,
+    .featured-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      padding: 0 16px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .chocolate-card {
+      min-height: 320px;
+      max-height: 360px;
+    }
+    
+    .image-container {
+      height: 160px;
+    }
+    
+    .card-content {
+      padding: 14px;
+      gap: 8px;
+    }
+    
+    .card-title {
+      font-size: 0.95rem;
+    }
+    
+    .card-maker {
+      font-size: 0.75rem;
+    }
+  }
+  
+  /* =====================================================
+     ACCESSIBILITY
+     ===================================================== */
+  .chocolate-card:focus-visible,
+  .card-maker-link:focus-visible,
+  .chocolate-title-link:focus-visible {
+    outline: 2px solid var(--accent-gold);
+    outline-offset: 2px;
+    border-radius: var(--card-radius);
+  }
+  
+  /* =====================================================
+     LOADING STATE
+     ===================================================== */
+  .chocolate-card.loading .image-container {
+    background: linear-gradient(90deg, #F1F5F9 25%, #E2E8F0 50%, #F1F5F9 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  
+  /* =====================================================
+     REDUCED MOTION
+     ===================================================== */
+  @media (prefers-reduced-motion: reduce) {
+    .chocolate-card,
+    .image-container img,
+    .stars .star,
+    .card-actions > * {
+      transition: none;
+    }
+  }
