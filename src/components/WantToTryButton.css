@@ -55,24 +55,24 @@
     font-weight: 600;
     gap: 0.75rem;
     font-size: 1rem;
-    border: 2px solid #3b82f6;
-    background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
-    color: #3b82f6;
-    flex: 1; /* Takes equal width in action button container */
+    border: 2px solid #6C6C4E;  /* Sage border */
+    background: white;  /* Solid white, no gradient */
+    color: #6C6C4E;  /* Sage text */
+    flex: 1;
   }
-  
-  .want-to-try-button.with-text:hover:not(:disabled) {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-  }
-  
-  .want-to-try-button.with-text.in-want-to-try {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-  }
+
+.want-to-try-button.with-text:hover:not(:disabled) {
+  background: #6C6C4E;  /* Solid sage */
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(108, 108, 78, 0.4);
+}
+
+.want-to-try-button.with-text.in-want-to-try {
+  background: #6C6C4E;  /* Solid sage when selected */
+  color: white;
+  box-shadow: 0 4px 15px rgba(108, 108, 78, 0.3);
+}
   
   .want-to-try-button.with-text.in-want-to-try:hover:not(:disabled) {
     background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);

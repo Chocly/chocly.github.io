@@ -1,695 +1,1319 @@
 /* =====================================================
-   CHOCOLATE DETAIL PAGE - CLEANED & ORGANIZED
+   QUICK REVIEW CTA - UPDATED STYLES
    ===================================================== */
 
-/* Color Variables */
-:root {
-  /* Your Designer's Palette */
-  --copper: #A73A04;
-  --sage: #6C6C4E;
-  --cream: #DFD3C0;
-  --dusty-blue: #788390;
-  --caramel: #B0916C;
-  
-  /* Map to existing variable names for compatibility */
-  --primary: var(--copper);
-  --primary-dark: #8B3104;
-  --primary-light: var(--caramel);
-  --accent: var(--caramel);
-  --brand-copper: var(--copper);
-  
-  /* Keep existing background */
-  --background: #f8f9fa;
-  
-  /* Text colors */
-  --text-primary: #2D1810;
-  --text-secondary: #5C4A3F;
-  --text-dark: #1F2937;
+/* Import Google Fonts for Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* Main review card container */
+.review-cta-banner {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
-/* =====================================================
-   BASE STYLES
-   ===================================================== */
-
-.chocolate-detail-page {
-  min-height: 100vh;
-  background-color: var(--background);
-}
-
-.detail-header {
-  background-color: white;
-  padding: 2rem 0;
-  margin-bottom: 2rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.detail-header-content {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 2rem;
-}
-
-.detail-image img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-/* =====================================================
-   MINIMALIST HEADER STYLES (DESKTOP & TABLET)
-   ===================================================== */
-
-/* Hide old/unused elements */
-.chocolate-specs,
-.chocolate-subtitle,
-.maker-link-prominent,
-.maker-name-prominent,
-.tags-section,
-.rating-summary-text,
-.rating-description,
-.chocolate-info-bar,
-.flavor-profile-section,
-.rating-count {
+/* REMOVE THE BROWN LINE COMPLETELY */
+.review-cta-banner::before {
   display: none !important;
 }
 
-/* Minimalist Header Container */
-.chocolate-header-minimal {
-  padding: 1rem 0;
-  max-width: 100%;
+.review-cta-banner:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: #D1D5DB;
 }
 
-/* Maker - Subtle and refined */
-.maker-link-minimal {
-  text-decoration: none;
-  display: inline-block;
-  margin-bottom: 0.25rem;
-}
-
-.maker-name-minimal {
-  font-size: 0.8rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--sage);
-  transition: color 0.3s ease;
-}
-
-.maker-link-minimal:hover .maker-name-minimal {
-  color: var(--copper);
-}
-
-/* Product Name - Clean and prominent */
-.chocolate-name-minimal {
-  font-size: 1.75rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0.25rem 0 1rem 0;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-}
-
-/* Unified Characteristics Section */
-.chocolate-characteristics {
+/* Content layout */
+.cta-content {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  padding: 0.75rem 0;
-  border-top: 1px solid rgba(223, 211, 192, 0.3);
-  border-bottom: 1px solid rgba(223, 211, 192, 0.3);
-}
-
-/* Specs Group */
-.spec-group {
-  display: flex;
+  flex-direction: column;
   gap: 1.25rem;
 }
 
-.spec-item {
+/* Text styling - Helvetica Neue */
+.cta-text h3 {
+  font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+  margin: 0 0 0.375rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  letter-spacing: -0.025em;
+}
+
+.cta-text p {
+  font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+  margin: 0;
+  font-size: 0.875rem;
+  color: #6B7280;
+  line-height: 1.4;
+}
+
+/* Star rating container */
+.rating-stars {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.125rem;
+  gap: 0.375rem;
+  padding: 0.5rem;
+  background: #F9FAFB;
+  border-radius: 12px;
+  position: relative;
 }
 
-.spec-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--caramel);
-  font-weight: 500;
-}
-
-.spec-value {
-  font-size: 0.95rem;
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
-/* Divider between specs and flavors */
-.characteristics-divider {
-  color: var(--cream);
-  font-size: 1rem;
-  user-select: none;
-}
-
-/* Flavor Notes */
-.flavor-group {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.flavor-note {
-  padding: 0.35rem 0.75rem;
-  background: transparent;
-  border: 1px solid var(--cream);
-  border-radius: 16px;
-  font-size: 0.85rem;
-  color: var(--sage);
+/* Individual star buttons - CARAMEL COLOR */
+.star-button {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #E5E7EB;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: inherit;
-  font-weight: 400;
+  padding: 0.125rem 0.25rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  line-height: 1;
+  position: relative;
 }
 
-.flavor-note:hover {
-  background: var(--cream);
-  border-color: var(--caramel);
-  color: var(--text-primary);
-  transform: translateY(-1px);
+.star-button:hover {
+  transform: scale(1.15);
+  color: #B0916C !important; /* Caramel on hover */
 }
 
-.flavor-note.secondary {
-  border-style: dashed;
-  opacity: 0.8;
+/* FILLED STARS IN CARAMEL COLOR */
+.star-button.filled {
+  color: #B0916C !important; /* Caramel color */
+  text-shadow: 0 1px 3px rgba(176, 145, 108, 0.3);
+  animation: starPop 0.3s ease-out;
 }
 
-/* Minimal Rating */
-.rating-minimal {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 1rem 0;
+.star-button.empty:hover {
+  color: #D4B896 !important; /* Lighter caramel on hover */
+}
+
+/* Rating text */
+.rating-preview,
+.rating-feedback {
+  font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+}
+
+.rating-text {
+  font-weight: 600;
+  color: #92400E;
+  font-size: 0.875rem;
 }
 
 .rating-value {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--copper);
-}
-
-.review-count-minimal {
-  font-size: 0.85rem;
-  color: var(--sage);
-  margin-left: 0.25rem;
-}
-
-/* Description */
-.chocolate-description-minimal {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: #4A4A4A;
-  margin: 1rem 0 1.5rem 0;
-  max-width: 600px;
-}
-
-/* Action Buttons */
-.action-buttons-minimal {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: 1.25rem;
+  font-size: 0.75rem;
+  color: #B45309;
 }
 
 /* =====================================================
-   ACTION BUTTONS & INTERACTIONS
+   ACTION BUTTONS - BRAND COLORS
    ===================================================== */
 
-.detail-page-favorite,
-.detail-page-want-to-try {
-  position: relative;
+/* Favorite button - Copper color scheme */
+.detail-page-favorite {
+  font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+  background: white !important;
+  border: 2px solid #A73A04 !important; /* Copper border */
+  color: #A73A04 !important; /* Copper text */
   border-radius: 12px;
   padding: 0.75rem 1.5rem;
   font-weight: 600;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  border: 2px solid;
   transition: all 0.3s ease;
   font-size: 0.95rem;
-  text-transform: none;
   min-width: 140px;
   justify-content: center;
 }
 
-.detail-page-favorite {
-  background: rgba(167, 58, 4, 0.1);
-  border-color: var(--copper);
-  color: var(--copper);
-}
-
 .detail-page-favorite:hover {
-  background: var(--copper);
-  color: white;
+  background: #A73A04 !important; /* Copper background on hover */
+  color: white !important;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(167, 58, 4, 0.3);
 }
 
 .detail-page-favorite.favorited {
-  background: var(--copper);
-  color: white;
+  background: #A73A04 !important;
+  color: white !important;
 }
 
+/* Want to Try button - Sage color scheme */
 .detail-page-want-to-try {
-  background: rgba(108, 108, 78, 0.1);
-  border-color: var(--sage);
-  color: var(--sage);
+  font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+  background: white !important;
+  border: 2px solid #6C6C4E !important; /* Sage border */
+  color: #6C6C4E !important; /* Sage text */
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  min-width: 140px;
+  justify-content: center;
 }
 
 .detail-page-want-to-try:hover {
-  background: var(--sage);
-  color: white;
+  background: #6C6C4E !important; /* Sage background on hover */
+  color: white !important;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(108, 108, 78, 0.3);
 }
 
 .detail-page-want-to-try.in-want-to-try {
-  background: var(--sage);
-  color: white;
+  background: #6C6C4E !important;
+  color: white !important;
 }
 
 /* =====================================================
-   SECTIONS
+   SUBMIT/CANCEL BUTTONS
    ===================================================== */
 
-section {
-  background-color: white;
-  padding: 2rem;
-  margin-bottom: 2rem;
+.btn-submit {
+  background: #A73A04 !important; /* Copper */
+  color: #FFFFFF !important;
+  padding: 0.625rem 1.25rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  font-weight: 500;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
 }
 
-h2, h3 {
+.btn-submit:hover:not(:disabled) {
+  background: #8B3104 !important; /* Darker copper */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(167, 58, 4, 0.25);
+}
+
+.btn-cancel {
+  background: #FFFFFF !important;
+  color: #6B7280 !important;
+  padding: 0.625rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  border: 1px solid #E5E7EB;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+}
+
+.btn-cancel:hover:not(:disabled) {
+  background: #F9FAFB !important;
+  border-color: #D1D5DB;
+}
+
+/* =====================================================
+   CHOCOLATE NAME - POPPINS BOLD
+   ===================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+
+.chocolate-name-minimal {
+  font-family: 'Poppins', sans-serif;  /* ADD THIS */
+  font-size: 1.75rem;  /* CHANGE TO: 2.5rem */
+  font-weight: 600;  /* CHANGE TO: 700 */
+  color: var(--text-primary);
+  margin: 0.25rem 0 1rem 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+/* =====================================================
+   FULL WIDTH LAYOUT IMPROVEMENTS
+   ===================================================== */
+
+/* Wider containers for better desktop usage */
+.chocolate-detail-page .container {
+  max-width: 1200px !important; /* Increased width */
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Larger header content grid */
+.detail-header-content {
+  display: grid;
+  grid-template-columns: 400px 1fr !important; /* Larger image */
+  gap: 3rem !important; /* More space between image and content */
+}
+
+/* Full width sections */
+.chocolate-detail-page section {
+  background-color: white;
+  padding: 2.5rem !important; /* More generous padding */
+  margin-bottom: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  max-width: 1400px !important; /* Match container width */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Remove width restriction on description */
+.chocolate-description-minimal {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #4A4A4A;
+  margin: 1rem 0 1.5rem 0;
+  max-width: 100%;  /* CHANGE from 600px to 100% */
+}
+/* =====================================================
+   ALL TEXT IN HELVETICA NEUE (except title)
+   ===================================================== */
+
+.maker-name-minimal,
+.spec-label,
+.spec-value,
+.flavor-note,
+.rating-value,
+.review-count-minimal,
+.chocolate-description-minimal,
+.nutrition-label,
+.nutrition-value,
+.seo-summary,
+section p,
+section span,
+section label,
+.review-text,
+.review-item,
+.form-text textarea,
+.form-rating label,
+.form-text label {
+  font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+}
+
+/* Section headers in Poppins but not as bold */
+section h2,
+section h3 {
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 600 !important; /* Semi-bold instead of bold */
   font-size: 1.5rem;
-  color: var(--primary-dark);
+  color: #8B3104;
   margin-bottom: 1.5rem;
   position: relative;
   padding-bottom: 0.75rem;
 }
 
-h2::after, h3::after {
+/* Accent line under headers in copper */
+section h2::after,
+section h3::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   width: 50px;
   height: 2px;
-  background-color: var(--accent);
-}
-
-/* Reviews Section */
-.reviews-list {
-  margin-bottom: 2.5rem;
-}
-
-.review-success-message {
-  background: #10b981;
-  color: white;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  font-weight: 600;
-  text-align: center;
-}
-
-.no-reviews {
-  text-align: center;
-  padding: 2rem;
-  background: #f8f9fa;
-  border-radius: 8px;
-  color: #6b7280;
-}
-
-.no-reviews a {
-  color: var(--accent);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-/* Nutrition Section */
-.nutrition-info {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 1.5rem;
-}
-
-.nutrition-item {
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
-  background-color: #f8f8f8;
-  border-radius: 8px;
-}
-
-.nutrition-label {
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 0.3rem;
-}
-
-.nutrition-value {
-  font-size: 1.2rem;
-  font-weight: 500;
-}
-
-/* SEO Section */
-.seo-section-collapsed {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin: 2rem 0;
-  border: 1px solid rgba(223, 211, 192, 0.3);
-  box-shadow: 0 2px 8px rgba(167, 58, 4, 0.05);
-}
-
-.seo-section-collapsed h3 {
-  font-size: 1.1rem;
-  color: var(--text-primary);
-  margin: 0 0 0.75rem 0;
-  font-weight: 600;
-}
-
-.seo-summary {
-  color: var(--text-secondary);
-  line-height: 1.6;
-  font-size: 0.95rem;
-  margin: 0;
-}
-
-.seo-summary .highlight {
-  color: var(--copper);
-  font-weight: 500;
-}
-
-.seo-expandable {
-  margin-top: 1rem;
-}
-
-.seo-expandable summary {
-  color: var(--sage);
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 500;
-  padding: 0.5rem 0;
-  list-style: none;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: color 0.2s ease;
-  user-select: none;
-}
-
-.seo-expandable summary:hover {
-  color: var(--copper);
-}
-
-.seo-expandable summary::before {
-  content: '▶';
-  font-size: 0.7rem;
-  transition: transform 0.2s ease;
-  color: var(--sage);
-}
-
-.seo-expandable[open] summary::before {
-  transform: rotate(90deg);
-}
-
-.seo-expandable summary::-webkit-details-marker {
-  display: none;
-}
-
-.seo-expandable-content {
-  padding-top: 0.75rem;
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  animation: fadeIn 0.3s ease;
-}
-
-/* Loading State */
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
-}
-
-.loading-animation {
-  display: flex;
-  margin-bottom: 1rem;
-}
-
-.loading-animation span {
-  width: 12px;
-  height: 12px;
-  margin: 0 5px;
-  background-color: var(--primary);
-  border-radius: 50%;
-  animation: pulse 1.5s infinite ease-in-out;
-}
-
-.loading-animation span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.loading-animation span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(0.8);
-    opacity: 0.5;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 1;
-  }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  background-color: #B0916C !important; /* Caramel accent */
 }
 
 /* =====================================================
-   MOBILE STYLES - ULTRA-CLEAN
+   ANIMATIONS
    ===================================================== */
 
+@keyframes starPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* =====================================================
+   MOBILE RESPONSIVE FIXES
+   Add these to your ChocolateDetailPage.css file
+   ===================================================== */
+
+/* Mobile styles - Fix layout issues */
 @media (max-width: 768px) {
-  /* Layout adjustments */
+  
+  /* Fix container padding and width */
+  .chocolate-detail-page {
+    padding: 0;
+    overflow-x: hidden;
+  }
+  
+  .container {
+    max-width: 100%;
+    padding: 0 1rem;
+    margin: 0;
+  }
+  
+  /* Fix header layout */
+  .detail-header {
+    padding: 1rem 0;
+    margin-bottom: 1rem;
+  }
+  
   .detail-header-content {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0;
   }
   
+  /* Fix image container */
   .detail-image {
-    max-width: 250px;
+    width: 100%;
+    max-width: 300px;
     margin: 0 auto;
+    padding: 0 1rem;
   }
   
-  /* ULTRA-CLEAN MOBILE HEADER */
-  .maker-link-minimal {
-    display: block;
-    text-align: center;
+  .detail-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
   }
   
-  .maker-name-minimal {
-    font-size: 0.7rem;
-    margin-bottom: 0.5rem;
-    opacity: 0.8;
+  /* Fix chocolate info section */
+  .chocolate-info {
+    padding: 0 1rem;
+    width: 100%;
   }
   
+  /* Fix chocolate name for mobile */
   .chocolate-name-minimal {
-    font-size: 1.75rem;
+    font-size: 1.5rem !important; /* Smaller on mobile */
+    font-weight: 700;
     text-align: center;
-    margin: 0.25rem 0 1rem 0;
-    line-height: 1.15;
-    font-weight: 600;
-    letter-spacing: -0.03em;
+    margin: 0.5rem 0;
+    padding: 0 0.5rem;
+    line-height: 1.3;
   }
   
-  /* Ultra-clean inline characteristics */
-  .chocolate-characteristics {
-    border-top: none;
-    border-bottom: 1px solid rgba(223, 211, 192, 0.15);
-    padding: 0.75rem 0 1rem 0;
-    margin-bottom: 0;
+  /* Fix maker name */
+  .maker-name-minimal {
     text-align: center;
+    font-size: 0.75rem;
     display: block;
+    margin-bottom: 0.5rem;
   }
   
-  /* Hide labels on mobile for ultra-clean look */
+  /* Fix characteristics section */
+  .chocolate-characteristics {
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  /* Fix spec items for mobile */
+  .spec-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+  }
+  
+  .spec-item {
+    text-align: center;
+    min-width: auto;
+  }
+  
+  /* Hide labels on mobile for cleaner look */
   .spec-label {
     display: none;
   }
   
-  /* Inline spec group */
-  .spec-group {
-    display: inline;
-    width: auto;
-    margin: 0;
-  }
-  
-  /* Inline spec items with bullet separators */
-  .spec-item {
-    display: inline;
-    border: none;
-    padding: 0;
-  }
-  
-  .spec-item:not(:last-child)::after {
-    content: " • ";
-    color: var(--caramel);
-    opacity: 0.6;
-    margin: 0 0.6rem;
-    font-weight: 400;
-  }
-  
-  .spec-value {
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-  
-  /* Hide divider on mobile */
-  .characteristics-divider {
-    display: none;
-  }
-  
-  /* Flavor tags centered */
+  /* Fix flavor tags */
   .flavor-group {
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-top: 0.75rem;
+    justify-content: center;
+    gap: 0.3rem;
     width: 100%;
   }
   
   .flavor-note {
-    padding: 0.35rem 0.85rem;
-    font-size: 0.825rem;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
   }
   
-  /* Centered rating */
+  /* Fix rating display */
   .rating-minimal {
     justify-content: center;
+    padding: 0.5rem 0;
+    width: 100%;
+  }
+  
+  /* Fix description */
+  .chocolate-description-minimal {
+    padding: 0 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+    margin: 0.75rem 0;
+  }
+  
+  /* Fix action buttons */
+  .action-buttons-minimal {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0 1rem;
+    width: 100%;
     margin: 1rem 0;
-    padding: 0.75rem 0;
+  }
+  
+  .detail-page-favorite,
+  .detail-page-want-to-try {
+    width: 100%;
+    padding: 0.875rem;
+    font-size: 1rem;
+    justify-content: center;
+  }
+  
+  /* Fix review CTA banner */
+  .review-cta-banner {
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 12px;
+  }
+  
+  .cta-text h3 {
+    font-size: 1.1rem;
+  }
+  
+  .cta-text p {
+    font-size: 0.85rem;
+  }
+  
+  /* Fix rating stars */
+  .rating-stars {
+    gap: 0.25rem;
+    padding: 0.375rem;
+  }
+  
+  .star-button {
+    font-size: 1.75rem;
+    padding: 0.1rem;
+  }
+  
+  /* Fix sections */
+  section {
+    margin: 1rem;
+    padding: 1.5rem;
+    border-radius: 8px;
+    max-width: calc(100% - 2rem);
+  }
+  
+  section h2,
+  section h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Fix nutrition grid */
+  .nutrition-info {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  
+  .nutrition-item {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  /* Fix review items */
+  .review-item {
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Fix SEO section */
+  .seo-section-collapsed {
+    margin: 1rem;
+    padding: 1rem;
+  }
+  
+  /* Fix form elements */
+  .review-form {
+    padding: 1rem;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .btn-submit,
+  .btn-cancel {
+    width: 100%;
+    padding: 0.75rem;
+  }
+  
+  /* Ensure no horizontal scroll */
+  * {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  
+  /* Fix any floating elements */
+  .chocolate-detail-page * {
+    float: none !important;
+  }
+}
+
+/* Extra small phones */
+@media (max-width: 375px) {
+  .chocolate-name-minimal {
+    font-size: 1.25rem !important;
+  }
+  
+  .detail-page-favorite,
+  .detail-page-want-to-try {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .star-button {
+    font-size: 1.5rem;
+  }
+  
+  section {
+    padding: 1rem;
+  }
+  
+  .flavor-note {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+  }
+}
+
+/* Fix for sign in button specifically */
+.cta-button.primary {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background: #A73A04;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  text-align: center;
+  width: auto;
+  max-width: 250px;
+  margin: 0 auto;
+}
+
+.cta-actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 1rem 0;
+}
+
+/* Ensure text doesn't overflow */
+@media (max-width: 768px) {
+  p, span, div {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  /* Prevent long chocolate names from breaking layout */
+  .chocolate-name-minimal {
+    word-break: break-word;
+    hyphens: auto;
+  }
+}
+
+/* =====================================================
+   CHOCOLATE DETAIL HEADER - MINIMAL CLEAN DESIGN
+   Add/Update these styles in ChocolateDetailPage.css
+   ===================================================== */
+
+/* Import Poppins for the chocolate name */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap');
+
+/* Header section - clean white background */
+.detail-header {
+  background-color: white;
+  padding: 2rem 0;
+  margin-bottom: 1.5rem;
+  box-shadow: none; /* Remove shadow for cleaner look */
+  border-bottom: 1px solid #f0f0f0; /* Subtle separator */
+}
+
+/* Minimalist header layout */
+.chocolate-header-minimal {
+  padding: 0;
+  max-width: 100%;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* MAKER NAME - Small, uppercase, subtle */
+.maker-link-minimal {
+  text-decoration: none;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.maker-name-minimal {
+  font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #8B8B8B; /* Gray color like in your image */
+  transition: color 0.3s ease;
+}
+
+.maker-link-minimal:hover .maker-name-minimal {
+  color: var(--copper, #A73A04);
+}
+
+/* CHOCOLATE NAME - Bold and prominent */
+.chocolate-name-minimal {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1A1A1A; /* Very dark gray/black */
+  margin: 0 0 1.5rem 0;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+/* CHARACTERISTICS ROW - Clean horizontal layout */
+.chocolate-characteristics {
+  display: flex;
+  align-items: center;
+  gap: 3rem; /* Space between items */
+  margin: 0 0 1.5rem 0;
+  padding: 0;
+  border: none; /* Remove any borders */
+  flex-wrap: nowrap; /* Keep on one line on desktop */
+}
+
+/* Specs group - Origin, Cacao, Type */
+.spec-group {
+  display: flex;
+  gap: 3rem; /* Space between spec items */
+  align-items: flex-start;
+}
+
+.spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.spec-label {
+  font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #B8B8B8; /* Light gray */
+  margin: 0;
+}
+
+.spec-value {
+  font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 400;
+  color: #1A1A1A;
+  margin: 0;
+}
+
+/* Hide the divider - not needed in minimal design */
+.characteristics-divider {
+  display: none;
+}
+
+/* Flavor tags - Clean pills on the right */
+.flavor-group {
+  display: flex;
+  gap: 0.75rem;
+  margin-left: auto; /* Push to the right */
+}
+
+.flavor-note {
+  font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1.5px solid #E0E0E0;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: #5A5A5A;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.flavor-note:hover {
+  background: #F5F5F5;
+  border-color: #C0C0C0;
+  color: #1A1A1A;
+}
+
+/* RATING SECTION - Clean and simple */
+.rating-minimal {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.rating-value {
+  font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1A1A1A;
+  margin: 0;
+}
+
+/* Rating stars */
+.rating-stars {
+  display: flex;
+  gap: 0.125rem;
+}
+
+.rating-stars .star {
+  color: #FFD700; /* Gold stars */
+  font-size: 1.25rem;
+}
+
+.rating-stars .star.empty {
+  color: #E0E0E0;
+}
+
+.review-count-minimal {
+  font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 0.95rem;
+  color: #8B8B8B;
+  margin-left: 0.5rem;
+}
+
+/* Hide description if you want ultra-minimal */
+.chocolate-description-minimal {
+  display: none; /* Remove if you want to show description */
+}
+
+/* Action buttons - Clean and aligned */
+.action-buttons-minimal {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* =====================================================
+   MOBILE RESPONSIVE - STACK VERTICALLY
+   ===================================================== */
+
+@media (max-width: 768px) {
+  .chocolate-name-minimal {
+    font-size: 1.75rem;
+    margin: 0 0 1rem 0;
+  }
+  
+  .chocolate-characteristics {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+  
+  .spec-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .flavor-group {
+    margin-left: 0;
+    width: 100%;
+  }
+  
+  .rating-minimal {
+    margin: 1rem 0;
   }
   
   .rating-value {
-    font-size: 1.3rem;
-    margin-right: 0.5rem;
+    font-size: 1.25rem;
   }
   
-  .review-count-minimal {
-    font-size: 0.825rem;
-    opacity: 0.8;
-  }
-  
-  /* Description */
-  .chocolate-description-minimal {
-    text-align: left;
-    font-size: 0.925rem;
-    line-height: 1.6;
-    padding: 0 0.25rem;
-    color: #5A5A5A;
-    margin: 1rem auto 1.25rem auto;
-    max-width: 90%;
-  }
-  
-  /* Full-width action buttons */
   .action-buttons-minimal {
     flex-direction: column;
-    gap: 0.6rem;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  
+  .action-buttons-minimal button {
     width: 100%;
-    margin-top: 1.25rem;
-  }
-  
-  .action-buttons-minimal > * {
-    width: 100%;
-  }
-  
-  /* Sections */
-  section {
-    padding: 1.5rem;
-  }
-  
-  h2, h3 {
-    font-size: 1.2rem;
-  }
-  
-  .nutrition-info {
-    grid-template-columns: 1fr;
-  }
-  
-  /* SEO Section Mobile */
-  .seo-section-collapsed {
-    padding: 1rem;
-    margin: 1.5rem 0;
-  }
-  
-  .seo-section-collapsed h3 {
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .seo-summary {
-    font-size: 0.85rem;
   }
 }
 
 /* Extra small devices */
+@media (max-width: 480px) {
+  .chocolate-name-minimal {
+    font-size: 1.5rem;
+  }
+  
+  .spec-group {
+    gap: 2rem;
+  }
+  
+  .spec-label {
+    font-size: 0.65rem;
+  }
+  
+  .spec-value {
+    font-size: 1rem;
+  }
+  
+  .flavor-note {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+/* =====================================================
+   IMPROVED MOBILE LAYOUT FOR CHOCOLATE DETAIL
+   Add/Update these styles in ChocolateDetailPage.css
+   ===================================================== */
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  
+  /* Container adjustments */
+  .detail-header {
+    padding: 1.5rem 0;
+    margin-bottom: 1rem;
+    background: white;
+  }
+  
+  .container {
+    padding: 0 1.25rem;
+  }
+  
+  /* Header layout for mobile */
+  .chocolate-header-minimal {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center everything */
+    text-align: center;
+  }
+  
+  /* MAKER NAME - Centered and subtle */
+  .maker-link-minimal {
+    display: inline-block;
+    margin-bottom: 0.75rem;
+  }
+  
+  .maker-name-minimal {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #999;
+  }
+  
+  /* CHOCOLATE NAME - Properly sized for mobile */
+  .chocolate-name-minimal {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.75rem; /* Smaller but still prominent */
+    font-weight: 700;
+    color: #1A1A1A;
+    margin: 0 0 1.25rem 0;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    text-align: center;
+    padding: 0 0.5rem; /* Prevent edge touching */
+  }
+  
+  /* CHARACTERISTICS - Better mobile layout */
+  .chocolate-characteristics {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    margin: 0 0 1.5rem 0;
+    width: 100%;
+    padding: 1rem 0;
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  /* Specs group - Horizontal layout */
+  .spec-group {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem; /* Good spacing between items */
+    width: 100%;
+  }
+  
+  .spec-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    flex: 0 0 auto; /* Prevent squishing */
+  }
+  
+  .spec-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #999;
+    margin: 0;
+  }
+  
+  .spec-value {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #1A1A1A;
+    margin: 0;
+  }
+  
+  /* Flavor tags - Centered row */
+  .flavor-group {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 0;
+    width: 100%;
+  }
+  
+  .flavor-note {
+    padding: 0.4rem 1rem;
+    background: white;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    color: #666;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+  
+  .flavor-note:active {
+    background: #f5f5f5;
+    transform: scale(0.98);
+  }
+  
+  /* RATING - Centered and prominent */
+  .rating-minimal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 1.5rem 0;
+    padding: 0;
+  }
+  
+  .rating-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1A1A1A;
+  }
+  
+  .rating-stars {
+    display: flex;
+    gap: 0.05rem; /* Tighter star spacing */
+  }
+  
+  .rating-stars .star,
+  .rating-stars svg {
+    font-size: 1.125rem;
+    color: #FFD700;
+  }
+  
+  .review-count-minimal {
+    font-size: 0.875rem;
+    color: #999;
+    font-weight: 500;
+  }
+  
+  /* Quick Review CTA - Full width */
+  .review-cta-banner {
+    margin: 0 0 1rem 0;
+    width: 100%;
+    border-radius: 12px;
+    padding: 1rem;
+  }
+  
+  /* Action buttons - Full width */
+  .action-buttons-minimal {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    margin: 1rem 0;
+  }
+  
+  .detail-page-favorite,
+  .detail-page-want-to-try,
+  .favorite-button.detail-page-favorite,
+  .want-to-try-button.detail-page-want-to-try {
+    width: 100%;
+    padding: 0.875rem;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    font-weight: 600;
+    justify-content: center;
+  }
+  
+  /* Hide characteristics divider on mobile */
+  .characteristics-divider {
+    display: none;
+  }
+  
+  /* Description if shown */
+  .chocolate-description-minimal {
+    text-align: center;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #666;
+    padding: 0 0.5rem;
+    margin: 1rem 0;
+  }
+}
+
+/* Small phones (iPhone SE, etc.) */
 @media (max-width: 375px) {
   .chocolate-name-minimal {
     font-size: 1.5rem;
   }
   
-  .spec-value {
-    font-size: 0.875rem;
+  .spec-group {
+    gap: 1.75rem; /* Tighter spacing on very small screens */
   }
   
-  .spec-item:not(:last-child)::after {
-    margin: 0 0.4rem;
-  }
-  
-  .flavor-note {
-    padding: 0.3rem 0.7rem;
-    font-size: 0.775rem;
-  }
-  
-  section {
-    padding: 1rem;
-  }
-  
-  .seo-section-collapsed {
-    padding: 0.875rem;
-  }
-}
-
-/* Large phones / small tablets in portrait */
-@media (min-width: 376px) and (max-width: 768px) {
-  .chocolate-name-minimal {
-    font-size: 1.875rem;
+  .spec-label {
+    font-size: 0.6rem;
   }
   
   .spec-value {
     font-size: 1rem;
+  }
+  
+  .flavor-note {
+    font-size: 0.8rem;
+    padding: 0.35rem 0.75rem;
+  }
+  
+  .rating-value {
+    font-size: 1.25rem;
+  }
+  
+  .rating-stars .star,
+  .rating-stars svg {
+    font-size: 1rem;
+  }
+}
+
+/* Landscape phones - keep things compact */
+@media (max-width: 768px) and (orientation: landscape) {
+  .chocolate-header-minimal {
+    padding: 0.5rem 0;
+  }
+  
+  .chocolate-name-minimal {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .chocolate-characteristics {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    gap: 1rem;
+  }
+  
+  .spec-group {
+    gap: 1.5rem;
+  }
+  
+  .flavor-group {
+    flex: 0 0 auto;
+  }
+  
+  .rating-minimal {
+    margin: 0.75rem 0;
+  }
+}
+
+/* Ensure image section is separate and properly sized */
+@media (max-width: 768px) {
+  .detail-header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .detail-image {
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto 1.5rem auto;
+    padding: 0 1rem;
+  }
+  
+  .detail-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+}
+
+/* =====================================================
+   FIX MOBILE IMAGE SIZE AND REMOVE GRAY BAR
+   Add/Update these styles in ChocolateDetailPage.css
+   ===================================================== */
+
+/* Remove the gray bar/divider completely */
+.characteristics-divider {
+  display: none !important;
+}
+
+/* Hide any potential divider elements */
+.chocolate-header-minimal .divider,
+.chocolate-header-minimal .separator,
+.chocolate-header-minimal .vertical-divider,
+.chocolate-header-minimal .pipe,
+.chocolate-header-minimal > span:empty {
+  display: none !important;
+}
+
+/* Remove any pseudo-elements that might create lines */
+.chocolate-name-minimal::after,
+.chocolate-name-minimal::before {
+  display: none !important;
+}
+
+/* If there's a pipe character or bullet being added */
+.chocolate-characteristics > *:not(.spec-group):not(.flavor-group):not(.spec-item):not(.flavor-note) {
+  display: none !important;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  
+  /* Make the chocolate image smaller on mobile */
+  .detail-image {
+    width: 100%;
+    max-width: 250px; /* Much smaller - was 350px */
+    margin: 0 auto 1.5rem auto;
+    padding: 0;
+  }
+  
+  .detail-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  /* Ensure proper header layout without gray bar */
+  .chocolate-header-minimal {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  /* Clean chocolate name - no decorations */
+  .chocolate-name-minimal {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1A1A1A;
+    margin: 0 0 1.25rem 0;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    text-align: center;
+    padding: 0 0.5rem;
+    position: relative;
+    /* Remove any potential borders or decorations */
+    border: none !important;
+    background: none !important;
+  }
+  
+  /* Clean characteristics section */
+  .chocolate-characteristics {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    margin: 0 0 1.5rem 0;
+    width: 100%;
+    padding: 1rem 0;
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+    /* Ensure no extra elements */
+    position: relative;
+  }
+  
+  /* Specs group - clean horizontal layout */
+  .spec-group {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    width: 100%;
+  }
+  
+  .spec-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  
+  /* Clean up any stray elements */
+  .chocolate-characteristics::before,
+  .chocolate-characteristics::after {
+    display: none !important;
+  }
+}
+
+/* Extra small phones - even smaller image */
+@media (max-width: 375px) {
+  .detail-image {
+    max-width: 180px; /* Even smaller for tiny screens */
+  }
+}
+
+/* Landscape mode - smaller image */
+@media (max-width: 768px) and (orientation: landscape) {
+  .detail-image {
+    max-width: 150px; /* Smaller in landscape */
+    margin-bottom: 1rem;
+  }
+}
+
+/* Desktop - also control image size */
+@media (min-width: 769px) {
+  .detail-image {
+    max-width: 400px; /* Reasonable size on desktop */
+  }
+  
+  .detail-image img {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: contain;
+  }
+  
+  /* Remove gray bar on desktop too */
+  .characteristics-divider,
+  .chocolate-characteristics .divider {
+    display: none !important;
   }
 }

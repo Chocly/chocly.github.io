@@ -657,3 +657,312 @@ a .treat-name-new,
     position: relative !important;
     z-index: 10 !important;
   }
+
+  /* =====================================================
+   HOMEPAGE MOBILE VIEWPORT AND SCALING FIXES
+   Add these to your App.css or HomePage.css
+   ===================================================== */
+
+/* Reset and viewport fixes */
+html {
+    width: 100%;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape */
+    -ms-text-size-adjust: 100%;
+  }
+  
+  body {
+    width: 100%;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+  }
+  
+  #root {
+    width: 100%;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  
+  /* Hero section fixes */
+  .hero-section {
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+    min-height: 500px; /* Minimum height */
+    max-height: 800px; /* Maximum height to prevent too tall on tablets */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    padding: 2rem;
+    box-sizing: border-box;
+  }
+  
+  /* Hero content container */
+  .hero-content {
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    z-index: 2;
+    padding: 0 1rem;
+  }
+  
+  /* Hero title - "Indulge better." */
+  .hero-content h1,
+  .hero-title {
+    font-size: clamp(2.5rem, 10vw, 4.5rem); /* Responsive font size */
+    font-weight: 700;
+    color: white;
+    margin: 0 0 1rem 0;
+    line-height: 1.1;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  }
+  
+  /* Hero subtitle */
+  .hero-content p,
+  .hero-subtitle {
+    font-size: clamp(1rem, 3vw, 1.5rem); /* Responsive font size */
+    color: white;
+    margin: 0 0 2rem 0;
+    line-height: 1.4;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    opacity: 0.95;
+  }
+  
+  /* Search bar container */
+  .search-container,
+  .hero-search {
+    width: 100%;
+    max-width: 500px;
+    margin: 2rem auto 0 auto;
+    padding: 0 1rem;
+  }
+  
+  /* Search input */
+  .search-input,
+  .hero-search input {
+    width: 100%;
+    padding: 1rem 3rem 1rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    outline: none;
+    transition: all 0.3s ease;
+  }
+  
+  /* Search button */
+  .search-button,
+  .hero-search button {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    padding: 0.75rem;
+    cursor: pointer;
+    color: #666;
+  }
+  
+  /* How it works section */
+  .how-it-works {
+    width: 100%;
+    padding: 4rem 1rem;
+    background: #B8997A; /* Your brown color */
+    box-sizing: border-box;
+  }
+  
+  .how-it-works-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  .how-it-works h2 {
+    font-size: clamp(2rem, 6vw, 3rem);
+    color: white;
+    text-align: center;
+    margin: 0 0 3rem 0;
+    font-weight: 600;
+  }
+  
+  /* Step cards */
+  .steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .step-card {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+  }
+  
+  .step-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem auto;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .step-title {
+    font-size: 1.5rem;
+    color: white;
+    margin: 0 0 1rem 0;
+    font-weight: 600;
+  }
+  
+  .step-description {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.5;
+  }
+  
+  /* Mobile specific adjustments */
+  @media (max-width: 768px) {
+    /* Prevent horizontal scroll */
+    * {
+      max-width: 100vw !important;
+    }
+    
+    .hero-section {
+      height: calc(100vh - 60px); /* Account for mobile browser chrome */
+      min-height: 450px;
+      padding: 1.5rem;
+    }
+    
+    .hero-content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .hero-content p {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .search-container {
+      padding: 0;
+    }
+    
+    .search-input {
+      font-size: 16px; /* Prevents zoom on iOS */
+      padding: 0.875rem 3rem 0.875rem 1.25rem;
+    }
+    
+    .how-it-works {
+      padding: 3rem 1rem;
+    }
+    
+    .how-it-works h2 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .step-card {
+      padding: 1.5rem;
+    }
+    
+    .step-icon {
+      width: 60px;
+      height: 60px;
+    }
+    
+    .step-title {
+      font-size: 1.25rem;
+    }
+    
+    .step-description {
+      font-size: 0.95rem;
+    }
+  }
+  
+  /* Small phones */
+  @media (max-width: 375px) {
+    .hero-content h1 {
+      font-size: 2rem;
+    }
+    
+    .hero-content p {
+      font-size: 1rem;
+    }
+    
+    .how-it-works h2 {
+      font-size: 1.75rem;
+    }
+  }
+  
+  /* Landscape orientation */
+  @media (max-height: 500px) and (orientation: landscape) {
+    .hero-section {
+      min-height: 100vh;
+      padding: 1rem;
+    }
+    
+    .hero-content h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .hero-content p {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .search-container {
+      margin-top: 1rem;
+    }
+  }
+  
+  /* Desktop view */
+  @media (min-width: 769px) {
+    .steps-container {
+      flex-direction: row;
+      justify-content: center;
+      gap: 2rem;
+    }
+    
+    .step-card {
+      flex: 1;
+      max-width: 350px;
+    }
+  }
+  
+  /* Fix for iOS Safari */
+  @supports (-webkit-touch-callout: none) {
+    .hero-section {
+      height: -webkit-fill-available;
+    }
+  }
+  
+  /* Ensure images don't cause overflow */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Fix navigation bar on mobile */
+  .navbar,
+  .header {
+    width: 100%;
+    position: relative;
+    z-index: 1000;
+  }

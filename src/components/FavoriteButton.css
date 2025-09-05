@@ -116,25 +116,21 @@
 
 /* ===== DETAIL PAGE STYLES (RED GRADIENT BG) ===== */
 /* Keep original styles for detail pages */
-.favorite-button.detail-page-favorite.favorited {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  border-color: #dc2626;
-  color: white;
-  box-shadow: 
-    0 4px 14px rgba(239, 68, 68, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+.favorite-button.detail-page-favorite {
+  background: white;
+  border: 2px solid #A73A04;  /* Copper border */
+  color: #A73A04;  /* Copper text */
 }
 
-.favorite-button.detail-page-favorite.favorited::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%, rgba(255, 255, 255, 0.1) 100%);
-  border-radius: inherit;
-  pointer-events: none;
+.favorite-button.detail-page-favorite:hover {
+  background: #A73A04;  /* Solid copper background */
+  color: white;
+}
+
+.favorite-button.detail-page-favorite.favorited {
+  background: #A73A04;  /* Solid copper when favorited */
+  color: white;
+  border-color: #A73A04;
 }
 
 .favorite-button.detail-page-favorite.favorited .heart-icon {

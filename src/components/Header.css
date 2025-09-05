@@ -1124,26 +1124,62 @@ main + .header,
   --header-background: #B08968 !important;
 }
 
-/* ABSOLUTE FINAL OVERRIDE - JOIN US BUTTON BLACK TEXT */
-/* This MUST be the last thing in your CSS file */
 
+/* =====================================================
+   FIX SIGN IN BUTTON - BLACK TEXT ON ALL PAGES
+   Add this to the END of Header.css
+   ===================================================== */
+
+/* Target ALL auth buttons with maximum specificity */
+.header .auth-btn,
+.header .auth-btn.primary-btn,
+.header .auth-buttons .auth-btn,
 .header .auth-buttons .auth-btn.primary-btn,
+.header .header-actions .auth-btn,
 .header .header-actions .auth-btn.primary-btn,
-.header-actions .auth-buttons .auth-btn.primary-btn,
 body .header .auth-btn.primary-btn,
-.auth-btn.primary-btn {
-  color: #000000 !important;
-  background: #CAEEED !important; /* Keep the light blue background */
+#root .header .auth-btn.primary-btn,
+.auth-btn.primary-btn,
+.auth-buttons .primary-btn {
+  color: #000000 !important; /* Black text */
+  background: #CAEEED !important; /* Light blue background */
 }
 
-/* Override the white text rule specifically for primary button */
-.header .auth-btn.primary-btn {
+/* Also target by partial class matching */
+.header [class*="auth-btn"],
+.header [class*="primary-btn"] {
   color: #000000 !important;
 }
 
-/* Hover state */
+/* Ensure it works on non-homepage too */
+.header:not(.homepage-header-transparent) .auth-btn.primary-btn,
+.header:not(.homepage-header-transparent) .auth-buttons .auth-btn {
+  color: #000000 !important;
+  background: #CAEEED !important;
+}
+
+/* Hover states */
+.header .auth-btn:hover,
 .header .auth-btn.primary-btn:hover,
 .auth-btn.primary-btn:hover {
-  color: #000000 !important;
+  color: #000000 !important; /* Keep black on hover */
   background: #FFFFFF !important;
+  transform: translateY(-1px);
 }
+
+/* If the button is a link */
+.header a.auth-btn,
+.header a.auth-btn.primary-btn,
+.header .auth-buttons a,
+.header .auth-buttons a.primary-btn {
+  color: #000000 !important;
+  background: #CAEEED !important;
+  text-decoration: none !important;
+}
+
+/* Override ANY white text rule for auth buttons */
+.header .auth-btn,
+.header .auth-btn * {
+  color: #000000 !important;
+}
+
