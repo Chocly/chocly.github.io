@@ -286,8 +286,9 @@ function Header() {
               type="button"
               className="menu-toggle" 
               onClick={toggleMenu}
-              onTouchEnd={toggleMenu}
+              onTouchStart={(e) => e.stopPropagation()}
               aria-label="Menu"
+              aria-expanded={menuOpen}
             >
               <span className={`menu-icon ${menuOpen ? 'open' : ''}`}>
                 <span></span>

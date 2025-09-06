@@ -1447,3 +1447,115 @@ button {
   -moz-appearance: none !important;
   appearance: none !important;
 }
+
+/* ===== PRODUCTION CLICK HANDLER FIX ===== */
+/* Add this to the VERY END of your Header.css file */
+
+/* Force all buttons to be clickable */
+.menu-toggle,
+.user-menu-toggle,
+.search-toggle,
+.nav-container button,
+.user-menu-container button,
+.header button {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  position: relative !important;
+  z-index: 10001 !important;
+  isolation: isolate !important;
+}
+
+/* Ensure nothing is blocking the buttons */
+.header {
+  z-index: 9999 !important;
+  isolation: isolate !important;
+}
+
+.header .container {
+  z-index: 10000 !important;
+  position: relative !important;
+}
+
+.header-actions {
+  z-index: 10001 !important;
+  position: relative !important;
+}
+
+/* Remove any invisible overlays */
+.header::before,
+.header::after,
+.header .container::before,
+.header .container::after {
+  pointer-events: none !important;
+}
+
+/* Fix iOS Safari button issues */
+@supports (-webkit-touch-callout: none) {
+  .menu-toggle,
+  .user-menu-toggle,
+  .search-toggle {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    touch-action: manipulation !important;
+    position: relative !important;
+    z-index: 10002 !important;
+  }
+}
+
+/* Ensure dropdowns work */
+.nav,
+.user-dropdown {
+  pointer-events: auto !important;
+  z-index: 10003 !important;
+}
+
+.nav.open,
+.user-dropdown.open {
+  pointer-events: auto !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
+}
+
+/* Mobile specific fixes */
+@media (max-width: 768px) {
+  /* Make touch targets bigger */
+  .menu-toggle,
+  .user-menu-toggle,
+  .search-toggle {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  /* Ensure hamburger is clickable */
+  .menu-toggle {
+    position: relative !important;
+    z-index: 10004 !important;
+    background: transparent !important;
+    border: none !important;
+  }
+  
+  /* Ensure user menu is clickable */
+  .user-menu-toggle {
+    position: relative !important;
+    z-index: 10004 !important;
+    background: transparent !important;
+    border: none !important;
+  }
+}
+
+/* Debug - Add temporary visible feedback (remove after testing) */
+.menu-toggle:active,
+.user-menu-toggle:active,
+.search-toggle:active {
+  background-color: rgba(255, 0, 0, 0.2) !important;
+}
