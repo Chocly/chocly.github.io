@@ -1431,3 +1431,19 @@ body .header .auth-btn.primary-btn,
     }
   }
 
+/* Force pointer events to work */
+.menu-toggle,
+.user-menu-toggle,
+.search-toggle {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  -webkit-tap-highlight-color: transparent !important;
+  user-select: none !important;
+}
+
+/* Ensure clickable area */
+button {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}

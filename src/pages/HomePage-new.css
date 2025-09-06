@@ -66,9 +66,10 @@
   letter-spacing: -0.01em;
 }
 
-/* ===== HERO SECTION ===== */
+/* ===== HERO SECTION - FIXED NO STICKY SCROLLING ===== */
 .hero-section-new {
   min-height: auto;
+  height: auto;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -76,7 +77,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 6rem 1rem 4rem 1rem;
+  padding: 8rem 1rem 4rem 1rem;
   padding-bottom: 0;
 }
 
@@ -97,7 +98,7 @@
   max-width: 800px;
   margin: 0 auto;
   position: relative;
-  transform: none; /* Remove any centering transforms */
+  transform: none;
   z-index: 2;
   padding-bottom: 100px;
 }
@@ -188,13 +189,12 @@
 
 /* ===== TODAY'S TREATS SECTION ===== */
 .treats-section-new {
-  background: #F9EBCC; /* Main cream background */
+  background: #F9EBCC;
   padding: 5rem 0;
   margin-top: -5px;
   position: relative;
 }
 
-/* Add a subtle darker background to make cards pop */
 .treats-section-new::before {
   content: '';
   position: absolute;
@@ -207,17 +207,15 @@
   z-index: 0;
 }
 
-/* Container needs relative positioning */
 .treats-section-new .container {
   position: relative;
   z-index: 1;
 }
 
-/* TODAY'S TREATS TITLE - Your specific request */
 .treats-section-new .section-title-new {
   font-size: clamp(2.5rem, 5vw, 3.5rem);
-  font-weight: 800 !important; /* Bolder text as requested */
-  color: #B8693D !important; /* Your specific color */
+  font-weight: 800 !important;
+  color: #B8693D !important;
   margin-bottom: 3rem;
   margin-top: 0;
   font-family: 'Inter', -apple-system, sans-serif !important;
@@ -235,7 +233,6 @@
   padding: 0 2rem;
 }
 
-/* Card container - no background */
 .treat-card-new {
   text-decoration: none;
   color: inherit;
@@ -247,18 +244,17 @@
   padding: 0 !important;
 }
 
-/* PERFECT CIRCLES FOR CHOCOLATE IMAGES */
 .treat-image-wrapper-new {
   width: 280px !important;
   height: 280px !important;
-  border-radius: 50% !important; /* Perfect circle */
+  border-radius: 50% !important;
   margin: 0 auto 1.5rem auto !important;
   padding: 0 !important;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
   overflow: hidden !important;
-  background: #F5F5F5 !important; /* Light gray background for the circle */
+  background: #F5F5F5 !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
   transition: transform 0.3s ease, box-shadow 0.3s ease !important;
   border: none !important;
@@ -277,39 +273,35 @@
   box-shadow: none !important;
 }
 
-/* Image inside the circle */
 .treat-image-circle-new img {
   width: 100% !important;
   height: 100% !important;
-  object-fit: cover !important; /* This ensures the image fills the circle */
+  object-fit: cover !important;
   display: block !important;
   border: none !important;
   background: transparent !important;
 }
 
-/* Hover effect */
 .treat-card-new:hover .treat-image-wrapper-new {
   transform: translateY(-8px) !important;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12) !important;
 }
 
-/* CHOCOLATE TITLES - Poppins Bold as requested */
 .treat-name-new {
-  font-family: 'Poppins', sans-serif !important; /* Poppins font as requested */
+  font-family: 'Poppins', sans-serif !important;
   font-size: 1.25rem !important;
-  font-weight: 700 !important; /* Bold as requested */
+  font-weight: 700 !important;
   color: #B8693D !important;
   margin: 1.5rem 0 0.75rem 0 !important;
   line-height: 1.4 !important;
   text-align: center !important;
   padding: 0 1rem !important;
   letter-spacing: -0.01em !important;
-  text-decoration: none !important; /* Remove underline */
-  border: none !important; /* Remove any border */
-  border-bottom: none !important; /* Specifically remove bottom border */
+  text-decoration: none !important;
+  border: none !important;
+  border-bottom: none !important;
 }
 
-/* Extra insurance to remove any underlines or borders from links */
 .treat-card-new .treat-name-new,
 a .treat-name-new,
 .treat-name-new a {
@@ -321,11 +313,10 @@ a .treat-name-new,
 
 .treat-name-new::after,
 .treat-name-new::before {
-  display: none !important; /* Remove any pseudo-element lines */
+  display: none !important;
   content: none !important;
 }
 
-/* Chocolate descriptions */
 .treat-description-new {
   font-size: 1rem !important;
   color: #444 !important;
@@ -468,7 +459,7 @@ a .treat-name-new,
 }
 
 .join-title-new {
-  font-family: 'Poppins', sans-serif !important; /* Poppins for title */
+  font-family: 'Poppins', sans-serif !important;
   font-size: clamp(3rem, 5vw, 4.5rem);
   font-weight: 800;
   line-height: 1;
@@ -511,11 +502,11 @@ a .treat-name-new,
   .treats-grid-new {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 2rem !important;
-    padding: 0 1rem !important; /* Add some padding on smaller screens */
+    padding: 0 1rem !important;
   }
   
   .treat-card-new {
-    max-width: 320px !important; /* Smaller cards on tablet */
+    max-width: 320px !important;
   }
   
   .treat-image-wrapper-new {
@@ -526,24 +517,30 @@ a .treat-name-new,
 
 /* Mobile view */
 @media (max-width: 768px) {
-  /* TODAY'S TREATS title on mobile */
+  .hero-section-new {
+    padding: 6rem 1rem 4rem 1rem;
+    padding-bottom: 0;
+    min-height: auto;
+    height: auto;
+  }
+  
   .treats-section-new .section-title-new {
-    text-align: center !important; /* Center title on mobile */
-    font-size: clamp(2rem, 6vw, 2.5rem) !important; /* Responsive size */
+    text-align: center !important;
+    font-size: clamp(2rem, 6vw, 2.5rem) !important;
     padding: 0 1rem !important;
   }
   
   .treats-grid-new {
-    grid-template-columns: 1fr !important; /* Single column on mobile */
+    grid-template-columns: 1fr !important;
     gap: 2rem !important;
     padding: 0 1rem !important;
     justify-items: center !important;
   }
   
   .treat-card-new {
-    max-width: 350px !important; /* Good size for mobile */
-    min-height: 400px !important; /* Less height needed on mobile */
-    margin: 0 auto !important; /* Center cards */
+    max-width: 350px !important;
+    min-height: 400px !important;
+    margin: 0 auto !important;
   }
   
   .treat-image-wrapper-new {
@@ -552,14 +549,13 @@ a .treat-name-new,
   }
   
   .treat-name-new {
-    font-size: 1.1rem !important; /* Slightly smaller on mobile */
+    font-size: 1.1rem !important;
   }
   
   .treat-description-new {
-    font-size: 0.95rem !important; /* Slightly smaller on mobile */
+    font-size: 0.95rem !important;
   }
   
-  /* Other sections on mobile */
   .steps-grid-new {
     grid-template-columns: 1fr;
     gap: 2.5rem;
@@ -592,6 +588,63 @@ a .treat-name-new,
   }
 }
 
+/* Small phones */
+@media (max-width: 375px) {
+  .hero-section-new {
+    padding: 5rem 1rem 3rem 1rem;
+    padding-bottom: 0;
+  }
+  
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+  
+  .hero-content p {
+    font-size: 1rem;
+  }
+  
+  .how-it-works h2 {
+    font-size: 1.75rem;
+  }
+}
+
+/* Landscape orientation */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero-section-new {
+    padding: 4rem 1rem 3rem 1rem;
+    padding-bottom: 0;
+    min-height: auto;
+  }
+  
+  .hero-content h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .hero-content p {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .search-container {
+    margin-top: 1rem;
+  }
+}
+
+/* Desktop view */
+@media (min-width: 769px) {
+  .steps-container {
+    flex-direction: row;
+    justify-content: center;
+    gap: 2rem;
+  }
+  
+  .step-card {
+    flex: 1;
+    max-width: 350px;
+  }
+}
+
 /* Container utility */
 .container {
   max-width: 1200px;
@@ -601,369 +654,209 @@ a .treat-name-new,
 
 /* NUCLEAR OPTION V2 - Target everything */
 .homepage-new * {
-    text-decoration: none !important;
-  }
-  
-  .homepage-new *::after,
-  .homepage-new *::before {
-    border: none !important;
-    background: none !important;
-    text-decoration: none !important;
-  }
-  
-  /* Target all possible title elements and their children */
-  .section-title-new,
-  .section-title-new *,
-  .step-new h3,
-  .step-new h3 *,
-  h1, h2, h3, h4, h5, h6,
-  h1 *, h2 *, h3 *, h4 *, h5 *, h6 * {
-    text-decoration: none !important;
-    border: none !important;
-    border-bottom: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-  }
-  
-  /* If titles are links */
-  a.section-title-new,
-  a .section-title-new,
-  .section-title-new a,
-  a h1, a h2, a h3,
-  h1 a, h2 a, h3 a {
-    text-decoration: none !important;
-    border: none !important;
-    border-bottom: none !important;
-  }
-  
-  /* Remove from specific sections */
-  .treats-section-new h2::after,
-  .how-it-works-new h2::after,
-  .step-new h3::after {
-    display: none !important;
-    content: none !important;
-    border: none !important;
-    height: 0 !important;
-    width: 0 !important;
-  }
+  text-decoration: none !important;
+}
 
-  /* ABSOLUTE FORCE CREAM BOXES - Add this at the VERY END of HomePage-new.css */
+.homepage-new *::after,
+.homepage-new *::before {
+  border: none !important;
+  background: none !important;
+  text-decoration: none !important;
+}
+
+.section-title-new,
+.section-title-new *,
+.step-new h3,
+.step-new h3 *,
+h1, h2, h3, h4, h5, h6,
+h1 *, h2 *, h3 *, h4 *, h5 *, h6 * {
+  text-decoration: none !important;
+  border: none !important;
+  border-bottom: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+a.section-title-new,
+a .section-title-new,
+.section-title-new a,
+a h1, a h2, a h3,
+h1 a, h2 a, h3 a {
+  text-decoration: none !important;
+  border: none !important;
+  border-bottom: none !important;
+}
+
+.treats-section-new h2::after,
+.how-it-works-new h2::after,
+.step-new h3::after {
+  display: none !important;
+  content: none !important;
+  border: none !important;
+  height: 0 !important;
+  width: 0 !important;
+}
+
+/* Cream boxes for treat cards */
 .homepage-new .treats-section-new .treats-grid-new .treat-card-new {
-    background-color: #FFF9EB !important;
-    border: 3px solid #FFF9EB !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
-    padding: 2.5rem !important;
-    border-radius: 24px !important;
-    display: block !important;
-    position: relative !important;
-    z-index: 10 !important;
-  }
-
-  /* =====================================================
-   HOMEPAGE MOBILE VIEWPORT AND SCALING FIXES
-   Add these to your App.css or HomePage.css
-   ===================================================== */
+  background-color: #FFF9EB !important;
+  border: 3px solid #FFF9EB !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+  padding: 2.5rem !important;
+  border-radius: 24px !important;
+  display: block !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
 
 /* Reset and viewport fixes */
 html {
-    width: 100%;
-    overflow-x: hidden;
-    -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape */
-    -ms-text-size-adjust: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+body {
+  width: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  width: 100%;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Prevent horizontal scroll on mobile */
+@media (max-width: 768px) {
+  * {
+    max-width: 100vw !important;
   }
-  
-  body {
-    width: 100%;
-    overflow-x: hidden;
-    margin: 0;
-    padding: 0;
+}
+
+/* Ensure images don't cause overflow */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Fix navigation bar on mobile */
+.navbar,
+.header {
+  width: 100%;
+  position: relative;
+  z-index: 1000;
+}
+
+/* Override any viewport-based heights to fix sticky scrolling */
+.hero-section-new,
+.hero-section {
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+}
+
+/* iOS Safari specific fix */
+@supports (-webkit-touch-callout: none) {
+  .hero-section-new {
+    height: auto !important;
   }
-  
-  #root {
-    width: 100%;
-    overflow-x: hidden;
-    min-height: 100vh;
-  }
-  
-  /* Hero section fixes */
+}
+
+/* ===== ABSOLUTE FIX FOR HERO SCROLLING ISSUE ===== */
+/* Add this to the very END of your HomePage-new.css file */
+
+/* Remove ALL scrolling from hero section */
+.hero-section-new,
+.hero-section,
+.homepage-new .hero-section-new,
+.homepage-new .hero-section {
+  overflow: visible !important; /* No internal scrolling */
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+  height: auto !important; /* Content-based height */
+  min-height: auto !important;
+  max-height: none !important;
+  position: relative !important; /* Not fixed or absolute */
+}
+
+/* Ensure hero content doesn't create scroll */
+.hero-content-new,
+.hero-content,
+.homepage-new .hero-content-new,
+.homepage-new .hero-content {
+  overflow: visible !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+  position: relative !important;
+  transform: none !important;
+}
+
+/* Remove any scroll-snap behavior */
+.hero-section-new,
+.hero-section,
+.hero-content-new,
+.hero-content {
+  scroll-snap-type: none !important;
+  scroll-snap-align: none !important;
+  scroll-behavior: auto !important;
+}
+
+/* Ensure the homepage container allows normal flow */
+.homepage-new {
+  overflow-x: hidden !important; /* Prevent horizontal scroll */
+  overflow-y: visible !important; /* Allow vertical scroll */
+  height: auto !important;
+  min-height: 100vh !important;
+}
+
+/* Mobile specific overrides */
+@media (max-width: 768px) {
+  .hero-section-new,
   .hero-section {
-    width: 100%;
-    height: 100vh; /* Full viewport height */
-    min-height: 500px; /* Minimum height */
-    max-height: 800px; /* Maximum height to prevent too tall on tablets */
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-size: cover;
-    background-position: center;
-    overflow: hidden;
-    padding: 2rem;
-    box-sizing: border-box;
+    padding: 5rem 1rem 3rem 1rem !important;
+    padding-bottom: 0 !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
   }
   
-  /* Hero content container */
+  .hero-content-new,
   .hero-content {
-    width: 100%;
-    max-width: 600px;
-    text-align: center;
-    z-index: 2;
-    padding: 0 1rem;
+    padding-bottom: 60px !important; /* Space for wave */
   }
-  
-  /* Hero title - "Indulge better." */
-  .hero-content h1,
-  .hero-title {
-    font-size: clamp(2.5rem, 10vw, 4.5rem); /* Responsive font size */
-    font-weight: 700;
-    color: white;
-    margin: 0 0 1rem 0;
-    line-height: 1.1;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Small phones */
+@media (max-width: 375px) {
+  .hero-section-new,
+  .hero-section {
+    padding: 4rem 1rem 2rem 1rem !important;
+    padding-bottom: 0 !important;
   }
-  
-  /* Hero subtitle */
-  .hero-content p,
-  .hero-subtitle {
-    font-size: clamp(1rem, 3vw, 1.5rem); /* Responsive font size */
-    color: white;
-    margin: 0 0 2rem 0;
-    line-height: 1.4;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-    opacity: 0.95;
-  }
-  
-  /* Search bar container */
-  .search-container,
-  .hero-search {
-    width: 100%;
-    max-width: 500px;
-    margin: 2rem auto 0 auto;
-    padding: 0 1rem;
-  }
-  
-  /* Search input */
-  .search-input,
-  .hero-search input {
-    width: 100%;
-    padding: 1rem 3rem 1rem 1.5rem;
-    font-size: 1rem;
-    border: none;
-    border-radius: 50px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    outline: none;
-    transition: all 0.3s ease;
-  }
-  
-  /* Search button */
-  .search-button,
-  .hero-search button {
-    position: absolute;
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    padding: 0.75rem;
-    cursor: pointer;
-    color: #666;
-  }
-  
-  /* How it works section */
-  .how-it-works {
-    width: 100%;
-    padding: 4rem 1rem;
-    background: #B8997A; /* Your brown color */
-    box-sizing: border-box;
-  }
-  
-  .how-it-works-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-  }
-  
-  .how-it-works h2 {
-    font-size: clamp(2rem, 6vw, 3rem);
-    color: white;
-    text-align: center;
-    margin: 0 0 3rem 0;
-    font-weight: 600;
-  }
-  
-  /* Step cards */
-  .steps-container {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    align-items: center;
-    width: 100%;
-  }
-  
-  .step-card {
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    backdrop-filter: blur(10px);
-  }
-  
-  .step-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 1.5rem auto;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .step-title {
-    font-size: 1.5rem;
-    color: white;
-    margin: 0 0 1rem 0;
-    font-weight: 600;
-  }
-  
-  .step-description {
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 1.5;
-  }
-  
-  /* Mobile specific adjustments */
-  @media (max-width: 768px) {
-    /* Prevent horizontal scroll */
-    * {
-      max-width: 100vw !important;
-    }
-    
-    .hero-section {
-      height: calc(100vh - 60px); /* Account for mobile browser chrome */
-      min-height: 450px;
-      padding: 1.5rem;
-    }
-    
-    .hero-content h1 {
-      font-size: 2.5rem;
-      margin-bottom: 0.75rem;
-    }
-    
-    .hero-content p {
-      font-size: 1.1rem;
-      margin-bottom: 1.5rem;
-    }
-    
-    .search-container {
-      padding: 0;
-    }
-    
-    .search-input {
-      font-size: 16px; /* Prevents zoom on iOS */
-      padding: 0.875rem 3rem 0.875rem 1.25rem;
-    }
-    
-    .how-it-works {
-      padding: 3rem 1rem;
-    }
-    
-    .how-it-works h2 {
-      font-size: 2rem;
-      margin-bottom: 2rem;
-    }
-    
-    .step-card {
-      padding: 1.5rem;
-    }
-    
-    .step-icon {
-      width: 60px;
-      height: 60px;
-    }
-    
-    .step-title {
-      font-size: 1.25rem;
-    }
-    
-    .step-description {
-      font-size: 0.95rem;
-    }
-  }
-  
-  /* Small phones */
-  @media (max-width: 375px) {
-    .hero-content h1 {
-      font-size: 2rem;
-    }
-    
-    .hero-content p {
-      font-size: 1rem;
-    }
-    
-    .how-it-works h2 {
-      font-size: 1.75rem;
-    }
-  }
-  
-  /* Landscape orientation */
-  @media (max-height: 500px) and (orientation: landscape) {
-    .hero-section {
-      min-height: 100vh;
-      padding: 1rem;
-    }
-    
-    .hero-content h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-    
-    .hero-content p {
-      font-size: 1rem;
-      margin-bottom: 1rem;
-    }
-    
-    .search-container {
-      margin-top: 1rem;
-    }
-  }
-  
-  /* Desktop view */
-  @media (min-width: 769px) {
-    .steps-container {
-      flex-direction: row;
-      justify-content: center;
-      gap: 2rem;
-    }
-    
-    .step-card {
-      flex: 1;
-      max-width: 350px;
-    }
-  }
-  
-  /* Fix for iOS Safari */
-  @supports (-webkit-touch-callout: none) {
-    .hero-section {
-      height: -webkit-fill-available;
-    }
-  }
-  
-  /* Ensure images don't cause overflow */
-  img {
-    max-width: 100%;
-    height: auto;
-  }
-  
-  /* Fix navigation bar on mobile */
-  .navbar,
-  .header {
-    width: 100%;
-    position: relative;
-    z-index: 1000;
-  }
+}
+
+/* Remove any touch-action that might cause issues */
+.hero-section-new,
+.hero-content-new {
+  touch-action: auto !important;
+  -webkit-overflow-scrolling: auto !important;
+}
+
+/* Ensure body and html don't interfere */
+html, body {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  overflow-y: auto !important;
+}
+
+/* Nuclear option - remove ANY element trying to create viewport height */
+.hero-section-new *,
+.hero-content-new * {
+  max-height: none !important;
+  overflow: visible !important;
+}

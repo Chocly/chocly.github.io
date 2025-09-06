@@ -1,6 +1,6 @@
-// src/components/Header.jsx - Updated with transparent homepage header and new CTAs
+// src/components/Header.jsx - Fixed version with proper event handlers
 import logo from '../assets/logolight.png';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { logout } from '../services/authService';
@@ -11,7 +11,6 @@ function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  // REMOVED: isScrolled state since header won't be sticky
   
   const menuRef = useRef(null);
   const userMenuRef = useRef(null);
@@ -24,9 +23,7 @@ function Header() {
   // Check if we're on the homepage
   const isHomePage = location.pathname === "/";
 
-  // REMOVED: Scroll listener since header won't change on scroll
-
-  // SIMPLIFIED: Header classes for transparent effect only
+  // Header classes for transparent effect only
   const headerClasses = `header ${isHomePage ? 'homepage-header-transparent' : ''}`;
 
   const handleSearch = (e) => {
@@ -38,33 +35,45 @@ function Header() {
     }
   };
 
-// Toggle functions
-const toggleMenu = (e) => {
-  e.stopPropagation(); // Prevent event bubbling
-  setMenuOpen(!menuOpen);
-  setUserMenuOpen(false); // Close user menu when opening nav menu
-  setSearchOpen(false); // Close search if it exists
-};
-
-const toggleUserMenu = (e) => {
-  e.stopPropagation(); // Prevent event bubbling  
-  setUserMenuOpen(!userMenuOpen);
-  setMenuOpen(false); // Close nav menu when opening user menu
-  setSearchOpen(false); // Close search if it exists
-};
-
-  const toggleSearch = () => {
-    setSearchOpen(!searchOpen);
-    if (!searchOpen) {
-      setMenuOpen(false);
-      setUserMenuOpen(false);
-      setTimeout(() => {
-        if (searchInputRef.current) {
-          searchInputRef.current.focus();
-        }
-      }, 150);
+  // Fixed toggle functions using useCallback and proper state updates
+  const toggleMenu = useCallback((e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
     }
-  };
+    setMenuOpen(prev => !prev);
+    setUserMenuOpen(false);
+    setSearchOpen(false);
+  }, []);
+
+  const toggleUserMenu = useCallback((e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setUserMenuOpen(prev => !prev);
+    setMenuOpen(false);
+    setSearchOpen(false);
+  }, []);
+
+  const toggleSearch = useCallback((e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setSearchOpen(prev => {
+      if (!prev) {
+        setMenuOpen(false);
+        setUserMenuOpen(false);
+        setTimeout(() => {
+          if (searchInputRef.current) {
+            searchInputRef.current.focus();
+          }
+        }, 150);
+      }
+      return !prev;
+    });
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -136,7 +145,7 @@ const toggleUserMenu = (e) => {
           <img src={logo} alt="Chocly" className="logo-image" />
         </Link>
         
-        {/* NEW: Text CTAs for Homepage - Add Chocolate & Browse */}
+        {/* Text CTAs for Homepage - Add Chocolate & Browse */}
         {isHomePage && (
           <div className="homepage-nav-links">
             <Link to="/add-chocolate" className="nav-text-link">
@@ -152,8 +161,10 @@ const toggleUserMenu = (e) => {
         {!isHomePage && (
           <div className="search-section" ref={searchRef}>
             <button 
+              type="button"
               className={`search-toggle ${searchOpen ? 'active' : ''}`}
               onClick={toggleSearch}
+              onTouchEnd={toggleSearch}
               aria-label={searchOpen ? 'Close search' : 'Open search'}
             >
               <svg 
@@ -215,7 +226,12 @@ const toggleUserMenu = (e) => {
           {/* User Menu for Logged In Users */}
           {currentUser ? (
             <div className="user-menu-container" ref={userMenuRef}>
-              <button className="user-menu-toggle" onClick={toggleUserMenu}>
+              <button 
+                type="button"
+                className="user-menu-toggle" 
+                onClick={toggleUserMenu}
+                onTouchEnd={toggleUserMenu}
+              >
                 <div className="user-avatar">
                   {getUserAvatar() ? (
                     <img src={getUserAvatar()} alt={getUserDisplayName()} />
@@ -245,7 +261,7 @@ const toggleUserMenu = (e) => {
                   </svg>
                   Add Chocolate
                 </Link>
-                <button onClick={handleLogout} className="user-dropdown-item logout">
+                <button type="button" onClick={handleLogout} className="user-dropdown-item logout">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                     <polyline points="16,17 21,12 16,7"></polyline>
@@ -256,7 +272,7 @@ const toggleUserMenu = (e) => {
               </div>
             </div>
           ) : (
-            /* NEW: Homepage shows Join Us button, other pages show Sign In */
+            /* Homepage shows Join Us button, other pages show Sign In */
             isHomePage ? (
               <Link to="/auth" className="homepage-join-btn">Join Us</Link>
             ) : (
@@ -266,7 +282,13 @@ const toggleUserMenu = (e) => {
 
           {/* Main Navigation Menu - HAMBURGER ICON ONLY */}
           <div className="nav-container" ref={menuRef}>
-            <button className="menu-toggle" onClick={toggleMenu} aria-label="Menu">
+            <button 
+              type="button"
+              className="menu-toggle" 
+              onClick={toggleMenu}
+              onTouchEnd={toggleMenu}
+              aria-label="Menu"
+            >
               <span className={`menu-icon ${menuOpen ? 'open' : ''}`}>
                 <span></span>
                 <span></span>
