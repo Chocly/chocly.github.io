@@ -1,38 +1,103 @@
+/* src/components/RatingStars.css */
 .rating-stars {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  gap: 2px;
 }
 
+/* Base star styles */
 .star {
-  color: #D4D4D4;
-  margin-right: 2px;
+  font-size: 1.125rem;
+  line-height: 1;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  transition: transform 0.2s ease;
 }
 
+/* Filled stars - Gold/Yellow */
 .star.filled {
-  color: var(--accent);
+  color: #FFD700;
 }
 
-.star.half-filled {
-  position: relative;
+/* Empty stars - Grey */
+.star.empty {
   color: #D4D4D4;
 }
 
-.star.half-filled::before {
-  content: '★';
+/* Container for partial stars */
+.star-container {
+  position: relative;
+  display: inline-block;
+  font-size: 1.125rem;
+  line-height: 1;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin: 0;
+  padding: 0;
+}
+
+/* Partial star implementation */
+.star-container .star {
   position: absolute;
-  color: var(--accent);
-  width: 50%;
+  top: 0;
+  left: 0;
+  margin: 0;
+}
+
+.star-container .star.empty {
+  color: #D4D4D4;
+  z-index: 1;
+}
+
+.star-container .star.partial {
+  color: #FFD700;
+  z-index: 2;
   overflow: hidden;
+  white-space: nowrap;
 }
 
-.star-large {
+/* Size variations */
+.star-large,
+.star-large.star,
+.star-container.star-large {
   font-size: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
-.star.interactive {
+/* Interactive stars */
+.star.interactive,
+.star-container.interactive {
   cursor: pointer;
 }
 
-.star.interactive:hover {
-  color: var(--accent);
+.star.interactive:hover,
+.star-container.interactive:hover .star {
+  transform: scale(1.1);
+}
+
+/* Ensure no unwanted decorations */
+.rating-stars,
+.rating-stars *,
+.star,
+.star-container {
+  text-decoration: none !important;
+  border: none !important;
+  outline: none !important;
+  vertical-align: middle;
+}
+
+/* Fix alignment in different contexts */
+.rating-minimal .rating-stars,
+.chocolate-card .rating-stars,
+.review-card .rating-stars {
+  vertical-align: middle;
+}
+
+/* Ensure consistent rendering */
+.rating-stars .star,
+.rating-stars .star-container {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
