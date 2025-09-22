@@ -1,32 +1,55 @@
+// src/components/ReviewItem.jsx
+import React from 'react';
 import RatingStars from './RatingStars';
+import { formatReviewerName } from '../utils/nameFormatter';
 import './ReviewItem.css';
 
 function ReviewItem({ review }) {
-  // Format date if available
-  const formattedDate = review.createdAt 
-    ? (typeof review.createdAt.toDate === 'function' 
-        ? review.createdAt.toDate().toLocaleDateString('en-US', { 
-            year: 'numeric', 
-            month: 'short', 
-            day: 'numeric' 
-          }) 
-        : new Date(review.createdAt).toLocaleDateString('en-US', {
-            year: 'numeric', 
-            month: 'short', 
-            day: 'numeric'
-          }))
-    : '';
+  // Format the reviewer's name for privacy
+  const displayName = formatReviewerName(review.userName || review.user || 'Anonymous');
+  
+  // Format the date
+  const formatDate = (date) => {
+    if (!date) return '';
     
+    try {
+      // Handle Firebase timestamp
+      const dateObj = date.toDate ? date.toDate() : new Date(date);
+      return dateObj.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch (error) {
+      return '';
+    }
+  };
+  
   return (
     <div className="review-item">
       <div className="review-header">
-        <span className="username">{review.user || 'Anonymous User'}</span>
-        <div className="review-rating-stars">
-          <RatingStars rating={review.rating} />
+        <div className="reviewer-info">
+          <span className="reviewer-name">{displayName}</span>
+          <span className="review-date">{formatDate(review.createdAt)}</span>
         </div>
-        {formattedDate && <span className="review-date">{formattedDate}</span>}
+        <div className="review-rating">
+          <RatingStars rating={review.rating} size="small" />
+        </div>
       </div>
+      
+      {review.title && (
+        <h4 className="review-title">{review.title}</h4>
+      )}
+      
       <p className="review-text">{review.text}</p>
+      
+      {review.helpful > 0 && (
+        <div className="review-helpful">
+          <span className="helpful-count">
+            {review.helpful} {review.helpful === 1 ? 'person' : 'people'} found this helpful
+          </span>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 // src/components/ReviewPreview.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { formatReviewerName } from '../utils/nameFormatter';
 import './ReviewPreview.css';
 
 function ReviewPreview({ review }) {
@@ -9,6 +10,7 @@ function ReviewPreview({ review }) {
     const stars = [];
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
+    const displayName = formatReviewerName(review.userName || review.user);
     
     for (let i = 1; i <= 5; i++) {
       if (i <= fullStars) {
@@ -27,8 +29,8 @@ function ReviewPreview({ review }) {
     <div className="review-card">
       <div className="review-header">
         <div className="reviewer-info">
-          <span className="reviewer-name">{review.user}</span>
-          <div className="review-rating">
+        <span className="reviewer-name">{displayName}</span>
+        <div className="review-rating">
             {renderStars(review.rating)}
           </div>
         </div>

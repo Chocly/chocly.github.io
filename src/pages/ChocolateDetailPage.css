@@ -1317,3 +1317,244 @@ section h3::after {
     display: none !important;
   }
 }
+
+/* Add these mobile review fixes to your ChocolateDetailPage.css */
+
+/* =====================================================
+   MOBILE REVIEW FIXES
+   ===================================================== */
+
+   @media (max-width: 768px) {
+    /* Fix review section container */
+    .reviews-section,
+    section.reviews {
+      padding: 1rem !important;
+      margin: 0.5rem !important;
+      overflow: visible !important;
+      height: auto !important;
+      max-height: none !important;
+    }
+  
+    /* Fix individual review items */
+    .review-item,
+    .review-card {
+      padding: 1rem !important;
+      margin-bottom: 1rem !important;
+      border: 1px solid #E5E7EB;
+      border-radius: 12px;
+      background: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      overflow: visible !important;
+      height: auto !important;
+      max-height: none !important;
+      display: block !important;
+      width: 100% !important;
+    }
+  
+    /* Review header with user info and rating */
+    .review-header,
+    .review-user-info {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      margin-bottom: 0.75rem !important;
+      padding-bottom: 0.75rem !important;
+      border-bottom: 1px solid #F3F4F6 !important;
+      overflow: visible !important;
+      height: auto !important;
+    }
+  
+    /* User name styling */
+    .reviewer-name,
+    .review-author,
+    .user-name {
+      font-family: 'Helvetica Neue', -apple-system, sans-serif !important;
+      font-size: 0.9375rem !important;
+      font-weight: 600 !important;
+      color: #231F1F !important;
+      margin: 0 !important;
+      display: block !important;
+    }
+  
+    /* Rating display in reviews */
+    .review-rating,
+    .review-stars {
+      display: flex !important;
+      gap: 2px !important;
+      align-items: center !important;
+      height: auto !important;
+      overflow: visible !important;
+    }
+  
+    .review-rating .star,
+    .review-stars .star {
+      font-size: 0.875rem !important;
+      color: #FFD700 !important;
+    }
+  
+    /* Review title if present */
+    .review-title {
+      font-family: 'Helvetica Neue', -apple-system, sans-serif !important;
+      font-size: 1rem !important;
+      font-weight: 600 !important;
+      color: #231F1F !important;
+      margin: 0.5rem 0 !important;
+      display: block !important;
+      overflow: visible !important;
+      height: auto !important;
+    }
+  
+    /* Review text content */
+    .review-text,
+    .review-content,
+    .review-body {
+      font-family: 'Helvetica Neue', -apple-system, sans-serif !important;
+      font-size: 0.875rem !important;
+      line-height: 1.5 !important;
+      color: #4B5563 !important;
+      margin: 0.75rem 0 !important;
+      overflow: visible !important;
+      height: auto !important;
+      max-height: none !important;
+      display: block !important;
+      word-wrap: break-word !important;
+      white-space: normal !important;
+    }
+  
+    /* Review date */
+    .review-date,
+    .review-timestamp {
+      font-family: 'Helvetica Neue', -apple-system, sans-serif !important;
+      font-size: 0.75rem !important;
+      color: #9CA3AF !important;
+      margin-top: 0.5rem !important;
+      display: block !important;
+    }
+  
+    /* Helpful votes if present */
+    .review-helpful,
+    .review-votes {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+      margin-top: 0.75rem !important;
+      padding-top: 0.75rem !important;
+      border-top: 1px solid #F3F4F6 !important;
+      font-size: 0.8125rem !important;
+      color: #6B7280 !important;
+      overflow: visible !important;
+      height: auto !important;
+    }
+  
+    /* Remove any scrolling within reviews */
+    .review-item *,
+    .review-card * {
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+  
+    /* Ensure review container doesn't scroll */
+    .reviews-list,
+    .review-container {
+      overflow: visible !important;
+      height: auto !important;
+      max-height: none !important;
+      display: block !important;
+    }
+  
+    /* Fix any nested containers */
+    .review-inner,
+    .review-wrapper {
+      overflow: visible !important;
+      height: auto !important;
+      max-height: none !important;
+      width: 100% !important;
+    }
+  
+    /* Ensure text is readable */
+    .review-item p,
+    .review-card p {
+      margin: 0.5rem 0 !important;
+      line-height: 1.5 !important;
+      overflow: visible !important;
+      height: auto !important;
+    }
+  
+    /* Fix review section title */
+    .reviews-section h2,
+    .reviews-section h3,
+    section.reviews h2 {
+      font-family: 'Poppins', sans-serif !important;
+      font-size: 1.25rem !important;
+      font-weight: 600 !important;
+      color: #231F1F !important;
+      margin-bottom: 1rem !important;
+      padding-bottom: 0.5rem !important;
+      border-bottom: 2px solid #F9EBCC !important;
+    }
+  
+    /* Add Review button if present */
+    .add-review-button,
+    .write-review-btn {
+      width: 100% !important;
+      padding: 0.875rem !important;
+      margin-bottom: 1rem !important;
+      background: #B8693D !important;
+      color: white !important;
+      border: none !important;
+      border-radius: 10px !important;
+      font-family: 'Helvetica Neue', -apple-system, sans-serif !important;
+      font-size: 0.9375rem !important;
+      font-weight: 500 !important;
+    }
+  
+    /* No reviews state */
+    .no-reviews,
+    .empty-reviews {
+      text-align: center !important;
+      padding: 2rem 1rem !important;
+      color: #6B7280 !important;
+      font-size: 0.9375rem !important;
+      background: #F9FAFB !important;
+      border-radius: 12px !important;
+      margin: 1rem 0 !important;
+    }
+  }
+  
+  /* Extra small phones - even more compact */
+  @media (max-width: 380px) {
+    .review-item,
+    .review-card {
+      padding: 0.75rem !important;
+      margin-bottom: 0.75rem !important;
+    }
+  
+    .reviewer-name {
+      font-size: 0.875rem !important;
+    }
+  
+    .review-text {
+      font-size: 0.8125rem !important;
+    }
+  
+    .review-date {
+      font-size: 0.6875rem !important;
+    }
+  }
+  
+  /* Ensure no horizontal scrolling */
+  @media (max-width: 768px) {
+    .chocolate-detail-page,
+    .chocolate-detail-page * {
+      max-width: 100vw !important;
+      overflow-x: hidden !important;
+    }
+    
+    .review-item,
+    .review-card,
+    .reviews-section {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+  }

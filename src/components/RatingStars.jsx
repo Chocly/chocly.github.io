@@ -26,11 +26,13 @@ function RatingStars({ rating, size = 'small', interactive = false, onRatingChan
           className={`star filled ${size === 'large' ? 'star-large' : ''} ${interactive ? 'interactive' : ''}`}
           onClick={() => handleStarClick(i)}
         >
-          ★
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
         </span>
       );
     } else if (i === fullStars + 1 && decimalPart > 0) {
-      // Partial star - use a container with two overlapping stars
+      // Partial star - use a container with two overlapping SVG stars
       const fillPercentage = Math.round(decimalPart * 100);
       starElement = (
         <span 
@@ -38,13 +40,19 @@ function RatingStars({ rating, size = 'small', interactive = false, onRatingChan
           className={`star-container ${size === 'large' ? 'star-large' : ''} ${interactive ? 'interactive' : ''}`}
           onClick={() => handleStarClick(i)}
         >
-          <span className="star empty">☆</span>
-          <span 
-            className="star partial" 
-            style={{ width: `${fillPercentage}%` }}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="star empty">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+          <svg 
+            width="16" 
+            height="16" 
+            viewBox="0 0 24 24" 
+            fill="currentColor" 
+            className="star partial"
+            style={{ clipPath: `inset(0 ${100 - fillPercentage}% 0 0)` }}
           >
-            ★
-          </span>
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
         </span>
       );
     } else {
@@ -55,7 +63,9 @@ function RatingStars({ rating, size = 'small', interactive = false, onRatingChan
           className={`star empty ${size === 'large' ? 'star-large' : ''} ${interactive ? 'interactive' : ''}`}
           onClick={() => handleStarClick(i)}
         >
-          ☆
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
         </span>
       );
     }

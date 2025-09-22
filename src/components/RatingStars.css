@@ -7,63 +7,78 @@
 
 /* Base star styles */
 .star {
-  font-size: 1.125rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   line-height: 1;
-  display: inline-block;
   margin: 0;
   padding: 0;
   transition: transform 0.2s ease;
 }
 
+/* SVG star styling */
+.star svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
 /* Filled stars - Gold/Yellow */
-.star.filled {
+.star.filled svg {
   color: #FFD700;
 }
 
 /* Empty stars - Grey */
-.star.empty {
+.star.empty svg {
   color: #D4D4D4;
+  fill: none;
+  stroke: #D4D4D4;
+  stroke-width: 2;
 }
 
 /* Container for partial stars */
 .star-container {
   position: relative;
-  display: inline-block;
-  font-size: 1.125rem;
-  line-height: 1;
-  width: 1.125rem;
-  height: 1.125rem;
+  display: inline-flex;
+  align-items: center;
+  width: 16px;
+  height: 16px;
   margin: 0;
   padding: 0;
 }
 
-/* Partial star implementation */
-.star-container .star {
+/* Partial star implementation with SVGs */
+.star-container svg {
   position: absolute;
   top: 0;
   left: 0;
-  margin: 0;
+  width: 16px;
+  height: 16px;
 }
 
-.star-container .star.empty {
+.star-container svg.empty {
   color: #D4D4D4;
+  fill: none;
+  stroke: #D4D4D4;
+  stroke-width: 2;
   z-index: 1;
 }
 
-.star-container .star.partial {
+.star-container svg.partial {
   color: #FFD700;
   z-index: 2;
-  overflow: hidden;
-  white-space: nowrap;
 }
 
 /* Size variations */
-.star-large,
-.star-large.star,
+.star-large svg,
+.star-container.star-large svg {
+  width: 24px;
+  height: 24px;
+}
+
 .star-container.star-large {
-  font-size: 1.5rem;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 24px;
+  height: 24px;
 }
 
 /* Interactive stars */
@@ -72,8 +87,8 @@
   cursor: pointer;
 }
 
-.star.interactive:hover,
-.star-container.interactive:hover .star {
+.star.interactive:hover svg,
+.star-container.interactive:hover svg {
   transform: scale(1.1);
 }
 
@@ -88,16 +103,16 @@
   vertical-align: middle;
 }
 
-/* Fix alignment in different contexts */
-.rating-minimal .rating-stars,
-.chocolate-card .rating-stars,
-.review-card .rating-stars {
-  vertical-align: middle;
-}
-
-/* Ensure consistent rendering */
-.rating-stars .star,
-.rating-stars .star-container {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Mobile specific fixes */
+@media (max-width: 768px) {
+  .star svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .star-container,
+  .star-container svg {
+    width: 18px;
+    height: 18px;
+  }
 }

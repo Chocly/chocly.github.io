@@ -13,6 +13,7 @@ import './ChocolateDetailPage.css';
 import { useAuth } from '../contexts/AuthContext';
 import { addReview } from '../services/reviewService';
 import QuickReviewCTA from '../components/QuickReviewCTA';
+import { formatReviewerName } from '../utils/nameFormatter';
 import { isSuperAdmin } from '../config/adminConfig';
 
 function ChocolateDetailPage() {
@@ -222,11 +223,15 @@ function ChocolateDetailPage() {
     }
     
     try {
+      // Store the full name but display only first name + last initial
+      const fullName = currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User';
+      
       const reviewData = {
         chocolateId: id,
         userId: currentUser.uid,
-        user: currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User',
-        userName: currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User',
+        user: fullName, // Keep full name in database for record
+        userName: fullName, // Keep full name in database
+        displayName: formatReviewerName(fullName), // Add formatted name for display
         userPhotoURL: currentUser.photoURL || null,
         rating: userRating,
         text: reviewText.trim(),
@@ -256,13 +261,16 @@ function ChocolateDetailPage() {
 
   const handleQuickReview = async (reviewData) => {
     try {
+      const fullName = currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User';
+      
       const reviewToSubmit = {
         chocolateId: reviewData.chocolateId,
         userId: currentUser.uid,
         rating: reviewData.rating,
         text: reviewData.text || '',
-        user: currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User',
-        userName: currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User',
+        user: fullName, // Keep full name in database
+        userName: fullName, // Keep full name in database  
+        displayName: formatReviewerName(fullName), // Add formatted name for display
         userPhotoURL: currentUser.photoURL || null,
         helpful: 0,
         createdAt: new Date(),
@@ -273,7 +281,7 @@ function ChocolateDetailPage() {
           imageUrl: chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate'
         }
       };
-
+  
       await addReview(reviewToSubmit);
       
       setReviewSuccess(true);
