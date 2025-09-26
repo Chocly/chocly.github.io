@@ -1,78 +1,152 @@
-// src/components/QuickReviewCTA.jsx - WITH THANK YOU MODAL
-import React, { useState } from 'react';
+// Updated QuickReviewCTA.jsx with proper edit functionality
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import ReviewThankYouModal from './ReviewThankYouModal';
+import { addReview, updateReview } from '../services/reviewService';
 import './QuickReviewCTA.css';
 
-function QuickReviewCTA({ chocolateId, chocolateName, onQuickReview, hasUserReviewed, existingReview }) {
+function QuickReviewCTA({ 
+  chocolateId, 
+  chocolateName, 
+  onQuickReview, 
+  hasUserReviewed, 
+  existingReview 
+}) {
   const { currentUser } = useAuth();
+  const [rating, setRating] = useState(0);
+  const [hoveredRating, setHoveredRating] = useState(0);
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false);
-  const [selectedRating, setSelectedRating] = useState(existingReview?.rating || 0);
-  const [hoverRating, setHoverRating] = useState(0);
-  const [reviewText, setReviewText] = useState(existingReview?.text || '');
+  const [reviewText, setReviewText] = useState('');
+  const [reviewTitle, setReviewTitle] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showThankYouModal, setShowThankYouModal] = useState(false);
-
-  // Debug logs - inside the component where variables exist
-  console.log('QuickReviewCTA - currentUser:', currentUser);
-  console.log('QuickReviewCTA - hasUserReviewed:', hasUserReviewed);
-  console.log('QuickReviewCTA - existingReview:', existingReview);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (selectedRating === 0) {
-      alert('Please select a rating');
-      return;
+  
+  // If editing, populate with existing review data
+  useEffect(() => {
+    if (existingReview) {
+      setRating(existingReview.rating || 0);
+      setReviewText(existingReview.text || '');
+      setReviewTitle(existingReview.title || '');
     }
+  }, [existingReview]);
+
+  const handleStarClick = (value) => {
+    setRating(value);
+    
+    // If this is an edit and they're just updating the rating
+    if (existingReview && !isReviewFormOpen) {
+      handleQuickRatingUpdate(value);
+    }
+  };
+
+  const handleStarHover = (value) => {
+    setHoveredRating(value);
+  };
+
+  const handleStarLeave = () => {
+    setHoveredRating(0);
+  };
+
+  // Quick rating update for existing reviews
+  const handleQuickRatingUpdate = async (newRating) => {
+    if (!existingReview?.id) return;
     
     setIsSubmitting(true);
     try {
-      await onQuickReview({
-        rating: selectedRating,
-        text: reviewText.trim(),
-        chocolateId,
-        isUpdate: hasUserReviewed
+      await updateReview(existingReview.id, {
+        rating: newRating,
+        text: existingReview.text || '',
+        title: existingReview.title || ''
       });
       
-      // Show thank you modal
-      setShowThankYouModal(true);
-      
-      // Reset form
-      setIsReviewFormOpen(false);
-      setSelectedRating(0);
-      setReviewText('');
-      
+      if (onQuickReview) {
+        onQuickReview({ 
+          ...existingReview, 
+          rating: newRating 
+        });
+      }
     } catch (error) {
-      console.error('Error submitting review:', error);
-      alert('Error submitting review. Please try again.');
+      console.error('Error updating rating:', error);
+      alert('Failed to update rating. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleStarClick = (rating) => {
-    setSelectedRating(rating);
-    if (!isReviewFormOpen) {
-      setIsReviewFormOpen(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!rating) {
+      alert('Please select a rating');
+      return;
+    }
+
+    if (!reviewText.trim() && !existingReview) {
+      alert('Please write a review');
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const reviewData = {
+        rating,
+        text: reviewText.trim(),
+        title: reviewTitle.trim()
+      };
+
+      if (existingReview?.id) {
+        // UPDATE existing review
+        console.log('Updating existing review:', existingReview.id);
+        await updateReview(existingReview.id, reviewData);
+        
+        alert('Review updated successfully!');
+      } else {
+        // ADD new review
+        console.log('Adding new review');
+        const fullReviewData = {
+          ...reviewData,
+          chocolateId,
+          userId: currentUser.uid,
+          userName: currentUser.displayName || 'Anonymous',
+          userPhotoURL: currentUser.photoURL || null,
+          helpful: 0,
+          createdAt: new Date()
+        };
+        
+        await addReview(fullReviewData);
+        alert('Review added successfully!');
+      }
+
+      // Call the parent callback
+      if (onQuickReview) {
+        onQuickReview({
+          ...reviewData,
+          chocolateId,
+          userId: currentUser.uid
+        });
+      }
+
+      // Reset form
+      if (!existingReview) {
+        setRating(0);
+        setReviewText('');
+        setReviewTitle('');
+      }
+      setIsReviewFormOpen(false);
+      
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      alert(`Failed to ${existingReview ? 'update' : 'add'} review. Please try again.`);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleStarHover = (rating) => {
-    setHoverRating(rating);
-  };
-
-  const handleStarLeave = () => {
-    setHoverRating(0);
-  };
-
-  const renderStar = (index) => {
-    const starValue = index + 1;
-    const displayRating = hoverRating || selectedRating;
-    const isFilled = starValue <= displayRating;
+  const renderStar = (starValue) => {
+    const isFilled = (hoveredRating || rating) >= starValue;
     
     return (
       <button
-        key={index}
+        key={starValue}
         type="button"
         className={`star-button ${isFilled ? 'filled' : 'empty'}`}
         onClick={() => handleStarClick(starValue)}
@@ -97,17 +171,82 @@ function QuickReviewCTA({ chocolateId, chocolateName, onQuickReview, hasUserRevi
     return texts[rating] || '';
   };
 
-  // Don't show if user already reviewed (unless we're showing their existing review for editing)
-  if (hasUserReviewed && !existingReview) {
+  // Show appropriate UI based on review state
+  if (hasUserReviewed && existingReview) {
     return (
-      <div className="review-cta-completed">
-        <span>Thanks for your review!</span>
-        <button 
-          className="edit-review-btn"
-          onClick={() => setIsReviewFormOpen(true)}
-        >
-          Edit Review
-        </button>
+      <div className="review-cta-banner">
+        <div className="cta-content">
+          <div className="cta-text">
+            <h3>Your Review</h3>
+            <p>Update your rating or edit your review</p>
+          </div>
+          
+          <div className="quick-rating-only">
+            <div className="rating-stars">
+              {[1, 2, 3, 4, 5].map(renderStar)}
+            </div>
+            {rating > 0 && (
+              <div className="rating-preview">
+                <span className="rating-text">{getRatingText(rating)}</span>
+                <span className="rating-value">({rating}/5)</span>
+              </div>
+            )}
+          </div>
+
+          <div className="cta-actions">
+            <button 
+              className="cta-button secondary"
+              onClick={() => setIsReviewFormOpen(!isReviewFormOpen)}
+            >
+              {isReviewFormOpen ? 'Cancel Edit' : 'Edit Full Review'}
+            </button>
+          </div>
+
+          {isReviewFormOpen && (
+            <form className="review-form-expanded" onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="review-title">Review Title (Optional)</label>
+                <input
+                  id="review-title"
+                  type="text"
+                  value={reviewTitle}
+                  onChange={(e) => setReviewTitle(e.target.value)}
+                  placeholder="Summarize your experience"
+                  maxLength="100"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="review-text">Your Review</label>
+                <textarea
+                  id="review-text"
+                  value={reviewText}
+                  onChange={(e) => setReviewText(e.target.value)}
+                  placeholder="Share your thoughts about this chocolate..."
+                  rows="4"
+                  required={!existingReview}
+                />
+              </div>
+              
+              <div className="form-actions">
+                <button 
+                  type="button" 
+                  className="btn-cancel"
+                  onClick={() => setIsReviewFormOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  className="btn-submit"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Updating...' : 'Update Review'}
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
       </div>
     );
   }
@@ -131,90 +270,84 @@ function QuickReviewCTA({ chocolateId, chocolateName, onQuickReview, hasUserRevi
     );
   }
 
-  // Main review interface
+  // New review state
   return (
-    <>
-      <div className="review-cta-banner">
-        <div className="cta-content">
-          <div className="cta-text">
-            <h3>{hasUserReviewed ? 'Update Your Review' : 'Rate This Chocolate'}</h3>
-            <p>Click stars to rate, then optionally add your thoughts</p>
+    <div className="review-cta-banner">
+      <div className="cta-content">
+        <div className="cta-text">
+          <h3>Rate This Chocolate</h3>
+          <p>Click stars to rate, then optionally add your thoughts</p>
+        </div>
+        
+        <div className="quick-rating-only">
+          <div className="rating-stars">
+            {[1, 2, 3, 4, 5].map(renderStar)}
           </div>
-          
-          {!isReviewFormOpen ? (
-            <div className="quick-rating-only">
-              <div className="rating-stars">
-                {[0, 1, 2, 3, 4].map(renderStar)}
-              </div>
-              {selectedRating > 0 && (
-                <div className="rating-preview">
-                  <span className="rating-text">{getRatingText(selectedRating)}</span>
-                  <span className="rating-value">({selectedRating}/5)</span>
-                </div>
-              )}
+          {rating > 0 && (
+            <div className="rating-preview">
+              <span className="rating-text">{getRatingText(rating)}</span>
+              <span className="rating-value">({rating}/5)</span>
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="review-form">
-              <div className="form-rating">
-                <label htmlFor="rating-stars">Your Rating *</label>
-                <div id="rating-stars" className="rating-stars">
-                  {[0, 1, 2, 3, 4].map(renderStar)}
-                </div>
-                {selectedRating > 0 && (
-                  <div className="rating-feedback">
-                    <span className="rating-text">{getRatingText(selectedRating)}</span>
-                    <span className="rating-value">({selectedRating}/5)</span>
-                  </div>
-                )}
-              </div>
-              
-              <div className="form-text">
-                <label htmlFor="review-text">Your Thoughts (Optional)</label>
-                <textarea
-                  id="review-text"
-                  value={reviewText}
-                  onChange={(e) => setReviewText(e.target.value)}
-                  placeholder="What did you think of this chocolate? How did it taste?"
-                  rows={3}
-                  maxLength={500}
-                  disabled={isSubmitting}
-                />
-                <div className="char-count">{reviewText.length}/500</div>
-              </div>
-              
-              <div className="form-actions">
-                <button 
-                  type="button" 
-                  onClick={() => {
-                    setIsReviewFormOpen(false);
-                    setSelectedRating(existingReview?.rating || 0);
-                    setReviewText(existingReview?.text || '');
-                  }}
-                  className="btn-cancel"
-                  disabled={isSubmitting}
-                >
-                  Cancel
-                </button>
-                <button 
-                  type="submit" 
-                  disabled={selectedRating === 0 || isSubmitting}
-                  className="btn-submit"
-                >
-                  {isSubmitting ? 'Submitting...' : hasUserReviewed ? 'Update Review' : 'Submit Review'}
-                </button>
-              </div>
-            </form>
           )}
         </div>
+
+        {rating > 0 && (
+          <div className="cta-actions">
+            <button 
+              className="cta-button secondary"
+              onClick={() => setIsReviewFormOpen(!isReviewFormOpen)}
+            >
+              {isReviewFormOpen ? 'Just Save Rating' : 'Add Written Review'}
+            </button>
+          </div>
+        )}
+
+        {isReviewFormOpen && (
+          <form className="review-form-expanded" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="review-title">Review Title (Optional)</label>
+              <input
+                id="review-title"
+                type="text"
+                value={reviewTitle}
+                onChange={(e) => setReviewTitle(e.target.value)}
+                placeholder="Summarize your experience"
+                maxLength="100"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="review-text">Your Review</label>
+              <textarea
+                id="review-text"
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
+                placeholder="Share your thoughts about this chocolate..."
+                rows="4"
+                required
+              />
+            </div>
+            
+            <div className="form-actions">
+              <button 
+                type="button" 
+                className="btn-cancel"
+                onClick={() => setIsReviewFormOpen(false)}
+              >
+                Cancel
+              </button>
+              <button 
+                type="submit" 
+                className="btn-submit"
+                disabled={isSubmitting || !rating}
+              >
+                {isSubmitting ? 'Submitting...' : 'Submit Review'}
+              </button>
+            </div>
+          </form>
+        )}
       </div>
-      
-      {/* Thank You Modal */}
-      <ReviewThankYouModal 
-        isOpen={showThankYouModal}
-        onClose={() => setShowThankYouModal(false)}
-        reviewerName={currentUser?.displayName}
-      />
-    </>
+    </div>
   );
 }
 

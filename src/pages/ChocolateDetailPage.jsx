@@ -29,6 +29,7 @@ function ChocolateDetailPage() {
   const [reviewSuccess, setReviewSuccess] = useState(false);
   const { currentUser } = useAuth();
 
+
   // SEO HELPER FUNCTIONS
   const generateSEOData = () => {
     if (!chocolate) return {};
@@ -56,6 +57,7 @@ function ChocolateDetailPage() {
     };
   };
 
+  
   const generateMetaDescription = (avgRating) => {
     if (!chocolate) return '';
 
@@ -524,24 +526,6 @@ function ChocolateDetailPage() {
       <div className="container">
         {/* REMOVED INGREDIENTS SECTION - As requested */}
 
-        {/* Nutritional Information */}
-        {chocolate.nutritionalInfo && (
-          <section className="nutrition-section">
-            <h3>Nutritional Information for {chocolate.name}</h3>
-            <div className="nutrition-info">
-              {Object.entries(chocolate.nutritionalInfo).map(([key, value]) => (
-                <div className="nutrition-item" key={key}>
-                  <span className="nutrition-label">
-                    {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}
-                  </span>
-                  <span className="nutrition-value">
-                    {typeof value === 'number' ? value + (key.includes('calories') ? '' : 'g') : value}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
 
         {/* SEO-ENHANCED REVIEWS SECTION */}
         <section className="reviews-section">
