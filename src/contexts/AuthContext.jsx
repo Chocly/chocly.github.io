@@ -1,6 +1,6 @@
 // src/contexts/AuthContext.jsx - IMPROVED: Better profile creation handling
 import { createContext, useContext, useState, useEffect } from 'react';
-import { onAuthChange, getUserProfile, createUserProfile } from '../services/authService';
+import { onAuthChange, getUserProfile, createUserProfile, handleRedirectResult } from '../services/authService';
 
 const AuthContext = createContext();
 
@@ -16,10 +16,23 @@ export function AuthProvider({ children }) {
   const [profileCreating, setProfileCreating] = useState(false);
 
   useEffect(() => {
+    // Check for redirect result first (for mobile authentication)
+    const checkRedirectResult = async () => {
+      try {
+        await handleRedirectResult();
+      } catch (error) {
+        console.error("Error handling redirect result:", error);
+        setError("Authentication redirect failed");
+      }
+    };
+
+    // Run redirect check immediately
+    checkRedirectResult();
+
     const unsubscribe = onAuthChange(async (user) => {
       setLoading(true);
       setError(null);
-      
+
       try {
         if (user) {
           console.log("User authenticated:", user.uid);

@@ -1,8 +1,10 @@
 // src/services/authService.js - ENHANCED: Profile update support
-import { 
-  createUserWithEmailAndPassword, 
+import {
+  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut,
   sendPasswordResetEmail,
   updateProfile,
@@ -12,6 +14,20 @@ import {
 import { doc, setDoc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { auth, db, storage } from "../firebase";
+
+// Utility function to detect mobile devices
+const isMobileDevice = () => {
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+  // Check for common mobile indicators
+  const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+
+  // Additional check for touch capability and screen size
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  const isSmallScreen = window.innerWidth <= 768;
+
+  return isMobile || (isTouchDevice && isSmallScreen);
+};
 
 // Create a new user with email and password
 export const registerWithEmailPassword = async (email, password, displayName) => {
@@ -47,45 +63,90 @@ export const loginWithEmailPassword = async (email, password) => {
   }
 };
 
-// Sign in with Google - Updated with immediate profile creation
+// Sign in with Google - Mobile-friendly with redirect/popup detection
 export const signInWithGoogle = async () => {
   try {
     console.log("Starting Google sign-in process");
-    
+
     const googleProvider = new GoogleAuthProvider();
     googleProvider.setCustomParameters({
       prompt: 'select_account'
     });
-    
+
     console.log("Initialized Google provider");
-    
-    const result = await signInWithPopup(auth, googleProvider);
-    console.log("Google sign-in successful", result.user.uid);
-    
-    // Check if it's a new user and create profile if needed
-    console.log("Checking if user profile exists");
-    const userDoc = await getDoc(doc(db, "users", result.user.uid));
-    
-    if (!userDoc.exists()) {
-      console.log("Creating new user profile for Google user");
-      await createUserProfile(result.user);
+
+    const mobile = isMobileDevice();
+    console.log("Device type:", mobile ? "mobile" : "desktop");
+
+    let result;
+
+    if (mobile) {
+      // Use redirect for mobile devices
+      console.log("Using redirect method for mobile device");
+      await signInWithRedirect(auth, googleProvider);
+      // signInWithRedirect doesn't return immediately, the page will redirect
+      // The result will be handled by getRedirectResult in a separate function
+      return null; // Indicates redirect in progress
     } else {
-      console.log("User profile already exists");
+      // Use popup for desktop devices
+      console.log("Using popup method for desktop device");
+      result = await signInWithPopup(auth, googleProvider);
+      console.log("Google sign-in successful", result.user.uid);
+
+      // Check if it's a new user and create profile if needed
+      await handleUserProfileCreation(result.user);
+
+      return result.user;
     }
-    
-    return result.user;
   } catch (error) {
     console.error("Google sign-in error:", error);
     // Better error handling with specific error messages
     if (error.code === 'auth/popup-closed-by-user') {
       throw new Error('Sign-in cancelled. You closed the login popup.');
     } else if (error.code === 'auth/popup-blocked') {
-      throw new Error('Login popup was blocked. Please enable popups for this site.');
+      throw new Error('Login popup was blocked. Please enable popups for this site or try refreshing the page.');
     } else if (error.code === 'auth/cancelled-popup-request') {
       throw new Error('Sign-in cancelled.');
+    } else if (error.code === 'auth/network-request-failed') {
+      throw new Error('Network error. Please check your internet connection and try again.');
     } else {
       throw error;
     }
+  }
+};
+
+// Handle redirect result for mobile authentication
+export const handleRedirectResult = async () => {
+  try {
+    console.log("Checking for redirect result");
+    const result = await getRedirectResult(auth);
+
+    if (result && result.user) {
+      console.log("Redirect sign-in successful", result.user.uid);
+
+      // Check if it's a new user and create profile if needed
+      await handleUserProfileCreation(result.user);
+
+      return result.user;
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Redirect result error:", error);
+    throw error;
+  }
+};
+
+// Helper function to handle user profile creation
+const handleUserProfileCreation = async (user) => {
+  console.log("Checking if user profile exists");
+  const userDoc = await getDoc(doc(db, "users", user.uid));
+
+  if (!userDoc.exists()) {
+    console.log("Creating new user profile for Google user");
+    await createUserProfile(user);
+  } else {
+    console.log("User profile already exists");
   }
 };
 

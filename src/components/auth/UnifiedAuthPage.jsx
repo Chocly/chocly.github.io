@@ -41,17 +41,24 @@ function UnifiedAuthPage() {
     console.log(`🔑 Starting ${provider} authentication`);
     setLoading(true);
     setError('');
-    
+
     try {
       let user;
       if (provider === 'Google') {
         user = await signInWithGoogle();
       }
       // REMOVED: Facebook authentication
-      
+
+      // Handle mobile redirect case (user will be null)
+      if (user === null) {
+        console.log('🔄 Redirecting for mobile authentication...');
+        // Don't set loading to false or show error - redirect is in progress
+        return;
+      }
+
       console.log(`✅ ${provider} auth successful:`, user.uid);
       setShowSuccess(true);
-      
+
       // FIXED: Better redirect with error handling
       setTimeout(() => {
         console.log('🚀 Redirecting to profile after successful auth');
@@ -63,7 +70,7 @@ function UnifiedAuthPage() {
           window.location.href = '/profile';
         }
       }, 1500);
-      
+
     } catch (error) {
       console.error(`❌ ${provider} auth error:`, error);
       setError(error.message || `Failed to sign in with ${provider}`);
