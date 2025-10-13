@@ -116,6 +116,23 @@ export const getUserReviews = async (userId) => {
 // Add a review
 export const addReview = async (reviewData) => {
   try {
+    // SAFETY CHECK: Prevent duplicate reviews for the same user and chocolate
+    if (reviewData.userId && reviewData.chocolateId) {
+      const existingReviewQuery = query(
+        collection(db, "reviews"),
+        where("userId", "==", reviewData.userId),
+        where("chocolateId", "==", reviewData.chocolateId),
+        limit(1)
+      );
+
+      const existingSnapshot = await getDocs(existingReviewQuery);
+
+      if (!existingSnapshot.empty) {
+        console.warn('⚠️ User already has a review for this chocolate. Use updateReview instead.');
+        throw new Error('You have already reviewed this chocolate. Please edit your existing review instead.');
+      }
+    }
+
     const newReview = {
       ...reviewData,
       createdAt: reviewData.createdAt || new Date(),
@@ -124,15 +141,15 @@ export const addReview = async (reviewData) => {
 
     // Add the review document to Firestore
     const docRef = await addDoc(collection(db, "reviews"), newReview);
-    
+
     // Update chocolate average rating and review count
     await updateChocolateRating(reviewData.chocolateId);
-    
+
     // Update user review count if userId exists
     if (reviewData.userId) {
       await updateUserReviewCount(reviewData.userId);
     }
-    
+
     return {
       id: docRef.id,
       ...newReview

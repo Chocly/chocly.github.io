@@ -152,7 +152,7 @@ function ChocolateDetailPage() {
     return Array.from(keywords).join(', ');
   };
   
-  // Function to fetch reviews
+  // Function to fetch reviews with deduplication
   const fetchReviews = async () => {
     try {
       const reviewsQuery = query(
@@ -166,8 +166,23 @@ function ChocolateDetailPage() {
         id: doc.id,
         ...doc.data()
       }));
-      
-      setReviews(reviewsData);
+
+      // Deduplicate reviews by userId - keep only the most recent review per user
+      const uniqueReviews = [];
+      const seenUserIds = new Set();
+
+      for (const review of reviewsData) {
+        if (review.userId && !seenUserIds.has(review.userId)) {
+          uniqueReviews.push(review);
+          seenUserIds.add(review.userId);
+        } else if (!review.userId) {
+          // Keep reviews without userId (anonymous or old reviews)
+          uniqueReviews.push(review);
+        }
+      }
+
+      console.log(`Fetched ${reviewsData.length} reviews, displaying ${uniqueReviews.length} unique reviews`);
+      setReviews(uniqueReviews);
     } catch (error) {
       console.error('Error fetching reviews:', error);
     }
@@ -263,15 +278,29 @@ function ChocolateDetailPage() {
 
   const handleQuickReview = async (reviewData) => {
     try {
+      // Check if user already has a review - if so, just refresh the list
+      // The QuickReviewCTA component handles the actual update
+      const existingUserReview = reviews.find(review => review.userId === currentUser?.uid);
+
+      if (existingUserReview) {
+        // Review was already updated by QuickReviewCTA, just refresh
+        console.log('Review updated, refreshing list');
+        await fetchReviews();
+        setReviewSuccess(true);
+        setTimeout(() => setReviewSuccess(false), 3000);
+        return;
+      }
+
+      // Only create a new review if one doesn't exist
       const fullName = currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User';
-      
+
       const reviewToSubmit = {
-        chocolateId: reviewData.chocolateId,
+        chocolateId: reviewData.chocolateId || id,
         userId: currentUser.uid,
         rating: reviewData.rating,
         text: reviewData.text || '',
         user: fullName, // Keep full name in database
-        userName: fullName, // Keep full name in database  
+        userName: fullName, // Keep full name in database
         displayName: formatReviewerName(fullName), // Add formatted name for display
         userPhotoURL: currentUser.photoURL || null,
         helpful: 0,
@@ -283,14 +312,14 @@ function ChocolateDetailPage() {
           imageUrl: chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate'
         }
       };
-  
+
       await addReview(reviewToSubmit);
-      
+
       setReviewSuccess(true);
       await fetchReviews();
-      
+
       setTimeout(() => setReviewSuccess(false), 3000);
-      
+
     } catch (error) {
       console.error('Error submitting review:', error);
       alert('Error submitting review. Please try again.');
