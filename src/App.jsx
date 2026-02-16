@@ -1,11 +1,10 @@
 // src/App.jsx - Updated with category routes
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import ChocolateDetailPage from './pages/ChocolateDetailPage';
 import SearchResultsPage from './pages/SearchResultsPage';
 import ProfilePage from './pages/ProfilePage';
 import BrowseAllPage from './pages/BrowseAllPage';
-import BarcodeSearchPage from './pages/BarcodeSearchPage';
 import CategoryPage from './pages/CategoryPage';
 import CategoryLandingPage from './pages/CategoryLandingPage'; // NEW
 import MakerPage from './pages/MakerPage';
@@ -41,7 +40,7 @@ function App() {
               <Route path="/chocolate/:id" element={<ChocolateDetailPage />} />
               <Route path="/search" element={<SearchResultsPage />} />
               <Route path="/browse" element={<BrowseAllPage />} />
-              <Route path="/barcode" element={<BarcodeSearchPage />} />
+              <Route path="/barcode" element={<Navigate to="/scanner" replace />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/auth" element={<UnifiedAuthPage />} />
               <Route path="/login" element={<UnifiedAuthPage />} />

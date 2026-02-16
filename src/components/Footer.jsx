@@ -33,7 +33,7 @@ function Footer() {
               <h3>Explore</h3>
               <ul>
                 <li><Link to="/browse">All Chocolates</Link></li>
-                <li><Link to="/barcode">Barcode Search</Link></li>
+                <li><Link to="/scanner">Identify Chocolate</Link></li>
                 <li><Link to="/about">About Us</Link></li>
                 <li><Link to="/contact">Contact</Link></li>
               </ul>

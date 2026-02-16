@@ -767,3 +767,124 @@
   .best-match-card {
     border-top: 3px solid #6C6C4E; /* Green accent for best match */
   }
+
+/* =====================================================
+   IMAGE PREVIEW
+   ===================================================== */
+
+.image-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+}
+
+.image-preview-header .section-title {
+  margin-bottom: 0;
+}
+
+.btn-small {
+  padding: var(--space-xs) var(--space-md);
+  font-size: 0.875rem;
+}
+
+.image-preview-container {
+  text-align: center;
+}
+
+.image-preview {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  object-fit: contain;
+}
+
+/* =====================================================
+   DETECTION RESULT
+   ===================================================== */
+
+.detection-result {
+  background: var(--background-primary);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-xl);
+}
+
+.detection-result h3 {
+  margin: 0 0 var(--space-md) 0;
+  color: var(--text-primary);
+  font-size: 1.125rem;
+}
+
+.detection-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.detection-tag {
+  background: var(--background-accent);
+  border: 1px solid var(--border-light);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 20px;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.detection-tag strong {
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-right: 4px;
+}
+
+/* =====================================================
+   FALLBACK ACTIONS
+   ===================================================== */
+
+.fallback-actions {
+  text-align: center;
+  padding: var(--space-xl);
+  background: var(--background-primary);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+.fallback-actions p {
+  color: var(--text-secondary);
+  margin-bottom: var(--space-md);
+}
+
+.fallback-buttons {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .image-preview {
+    max-height: 220px;
+  }
+
+  .detection-details {
+    gap: var(--space-xs);
+  }
+
+  .detection-tag {
+    font-size: 0.8125rem;
+    padding: 4px 10px;
+  }
+
+  .fallback-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .image-preview-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+}

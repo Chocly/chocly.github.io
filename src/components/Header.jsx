@@ -282,17 +282,13 @@ function Header() {
             <h3>Browse</h3>
             <Link to="/" onClick={toggleMenu}>Home</Link>
             <Link to="/browse" onClick={toggleMenu}>All Chocolates</Link>
-            <Link to="/barcode" onClick={toggleMenu}>
-              Barcode Search 
-              <span className="badge-wip">WIP</span>
-            </Link>
+            <Link to="/scanner" onClick={toggleMenu}>Identify Chocolate</Link>
           </div>
           <div className="nav-section">
             <h3>Community</h3>
             {currentUser && (
               <Link to="/add-chocolate" onClick={toggleMenu}>Add Chocolate</Link>
             )}
-            <Link to="/scanner" onClick={toggleMenu}>🍫 Scan</Link>
             <Link to="/about" onClick={toggleMenu}>About Us</Link>
             <Link to="/contact" onClick={toggleMenu}>Contact</Link>
           </div>
