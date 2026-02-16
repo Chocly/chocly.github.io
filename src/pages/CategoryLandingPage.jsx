@@ -5,6 +5,7 @@ import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import ChocolateCard from '../components/ChocolateCard';
 import SEO from '../components/SEO';
+import Breadcrumb from '../components/Breadcrumb';
 import './CategoryLandingPage.css';
 
 function CategoryLandingPage() {
@@ -205,13 +206,11 @@ function CategoryLandingPage() {
       <section className="category-hero">
         <div className="container">
           <div className="category-header">
-            <nav className="breadcrumb">
-              <Link to="/">Home</Link>
-              <span>›</span>
-              <Link to="/browse">Browse</Link>
-              <span>›</span>
-              <span>{categoryValue} Chocolate</span>
-            </nav>
+            <Breadcrumb items={[
+              { label: 'Home', path: '/' },
+              { label: 'Browse', path: '/browse' },
+              { label: `${categoryValue} Chocolate` }
+            ]} />
 
             <h1>{config.title.split(' - ')[0]}</h1>
             <p className="category-description">{config.description}</p>

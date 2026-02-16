@@ -1,14 +1,10 @@
-/* ===== FONTS IMPORT ===== */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
-@import '../styles/new-colors.css';
+/* ===== HOMEPAGE NEW STYLES ===== */
 
 /* ===== GLOBAL HOMEPAGE SETTINGS ===== */
 .homepage-new {
-  font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
   width: 100%;
   overflow-x: hidden;
-  background-color: #F9EBCC;
+  background-color: var(--background-secondary);
 }
 
 /* Remove default margins/padding */
@@ -23,42 +19,8 @@
   outline: none;
 }
 
-/* ===== TYPOGRAPHY SETTINGS ===== */
-/* Body text with Helvetica Neue */
-.homepage-new p,
-.homepage-new span,
-.homepage-new div,
-.homepage-new li,
-.homepage-new a,
-.homepage-new button,
-.homepage-new input,
-.homepage-new textarea,
-.homepage-new label,
-.homepage-new .hero-subtitle-new,
-.homepage-new .treat-description-new,
-.homepage-new .step-description-new,
-.homepage-new .signin-link-new,
-.homepage-new .btn-primary-new,
-.homepage-new .btn-secondary-new,
-.homepage-new .btn-view-all,
-.homepage-new .search-input-new {
-  font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
-}
-
-/* Headers with Inter */
-.homepage-new h1,
-.homepage-new h2,
-.homepage-new h4,
-.homepage-new h5,
-.homepage-new h6,
-.homepage-new .hero-title-new,
-.homepage-new .join-title-new {
-  font-family: 'Inter', -apple-system, sans-serif !important;
-}
-
 /* Step titles */
 .homepage-new .step-new h3 {
-  font-family: 'Inter', -apple-system, sans-serif !important;
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 1rem;
@@ -94,7 +56,7 @@
 
 .hero-content-new {
   text-align: center;
-  color: #F9EBCC;
+  color: var(--background-secondary);
   max-width: 800px;
   margin: 0 auto;
   position: relative;
@@ -109,7 +71,7 @@
   line-height: 0.9;
   margin-bottom: 1.5rem;
   letter-spacing: -0.02em;
-  color: #F9EBCC;
+  color: var(--background-secondary);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -119,7 +81,7 @@
   line-height: 1.5;
   margin-bottom: 3rem;
   opacity: 0.95;
-  color: #F9EBCC;
+  color: var(--background-secondary);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
   letter-spacing: -0.01em;
 }
@@ -190,7 +152,7 @@
 
 /* ===== TODAY'S TREATS SECTION ===== */
 .treats-section-new {
-  background: #F9EBCC;
+  background: var(--background-secondary);
   padding: 5rem 0;
   margin-top: -5px;
   position: relative;
@@ -216,10 +178,9 @@
 .treats-section-new .section-title-new {
   font-size: clamp(2.5rem, 5vw, 3.5rem);
   font-weight: 800 !important;
-  color: #B8693D !important;
+  color: var(--maker-color) !important;
   margin-bottom: 3rem;
   margin-top: 0;
-  font-family: 'Inter', -apple-system, sans-serif !important;
   text-align: left;
   text-decoration: none;
   border-bottom: none;
@@ -289,10 +250,9 @@
 }
 
 .treat-name-new {
-  font-family: 'Poppins', sans-serif !important;
   font-size: 1.25rem !important;
   font-weight: 700 !important;
-  color: #B8693D !important;
+  color: var(--maker-color) !important;
   margin: 1.5rem 0 0.75rem 0 !important;
   line-height: 1.4 !important;
   text-align: center !important;
@@ -337,7 +297,7 @@ a .treat-name-new,
 }
 
 .btn-view-all {
-  background: #B8693D !important;
+  background: var(--maker-color) !important;
   color: white !important;
   padding: 12px 35px !important;
   border-radius: 50px !important;
@@ -360,7 +320,7 @@ a .treat-name-new,
 .how-it-works-new {
   background: #b08968 !important;
   padding: 5rem 0;
-  color: #F9EBCC;
+  color: var(--background-secondary);
 }
 
 .how-it-works-new .container {
@@ -370,11 +330,10 @@ a .treat-name-new,
 }
 
 .how-it-works-new .section-title-new {
-  color: #F9EBCC !important;
+  color: var(--background-secondary) !important;
   text-align: center;
   font-size: clamp(3rem, 6vw, 5rem);
   font-weight: 800;
-  font-family: 'Inter', -apple-system, sans-serif;
   letter-spacing: -0.02em;
   margin-bottom: 1.5rem;
   text-transform: lowercase;
@@ -417,14 +376,14 @@ a .treat-name-new,
   font-size: 1.15rem;
   line-height: 1.6;
   opacity: 0.95;
-  color: #F9EBCC;
+  color: var(--background-secondary);
   max-width: 350px;
   margin: 0 auto;
 }
 
 /* ===== JOIN COMMUNITY SECTION ===== */
 .join-section-new {
-  background: #B8693D;
+  background: var(--maker-color);
   padding: 5rem 0;
 }
 
@@ -456,22 +415,21 @@ a .treat-name-new,
 }
 
 .join-text-new {
-  color: #F9EBCC;
+  color: var(--background-secondary);
 }
 
 .join-title-new {
-  font-family: 'Poppins', sans-serif !important;
   font-size: clamp(3rem, 5vw, 4.5rem);
   font-weight: 800;
   line-height: 1;
   margin: 0 0 2rem 0;
-  color: #F9EBCC;
+  color: var(--background-secondary);
 }
 
 .btn-join-new {
   display: inline-block;
   background: #CAEEED;
-  color: #231F1F;
+  color: var(--text-primary);
   padding: 1rem 3rem;
   border-radius: 50px;
   text-decoration: none;
@@ -489,11 +447,11 @@ a .treat-name-new,
 .signin-link-new {
   margin-top: 1.5rem;
   font-size: 1rem;
-  color: #F9EBCC;
+  color: var(--background-secondary);
 }
 
 .signin-link-new a {
-  color: #F9EBCC;
+  color: var(--background-secondary);
   text-decoration: underline;
 }
 

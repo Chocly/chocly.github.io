@@ -95,13 +95,11 @@ function QuickReviewCTA({
 
       if (existingReview?.id) {
         // UPDATE existing review
-        console.log('Updating existing review:', existingReview.id);
         await updateReview(existingReview.id, reviewData);
         
         alert('Review updated successfully!');
       } else {
         // ADD new review
-        console.log('Adding new review');
         const fullReviewData = {
           ...reviewData,
           chocolateId,

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
 import { getFeaturedChocolates } from '../services/chocolateFirebaseService';
 import heroBackground from '../assets/newheroimage.jpg';
 import cacaoFarmer from '../assets/gemini cacao farmer.png';  // Import the new image
@@ -13,49 +11,14 @@ const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
-  // TEST: Check Firebase connection
-  useEffect(() => {
-    const testFirebase = async () => {
-      console.log('🔥 Testing Firebase connection...');
-      try {
-        // Direct Firebase query
-        const testQuery = query(
-          collection(db, 'chocolates'),
-          limit(3)
-        );
-        const snapshot = await getDocs(testQuery);
-        console.log('📊 Firebase test results:');
-        console.log('- Documents found:', snapshot.size);
-        snapshot.docs.forEach((doc, index) => {
-          const data = doc.data();
-          console.log(`- Chocolate ${index + 1}:`, {
-            id: doc.id,
-            name: data.name,
-            imageUrl: data.imageUrl,
-            hasImage: !!data.imageUrl,
-            imageType: typeof data.imageUrl
-          });
-        });
-      } catch (error) {
-        console.error('🚨 Firebase test failed:', error);
-      }
-    };
-    
-    testFirebase();
-  }, []);
-
   useEffect(() => {
     fetchFeaturedChocolates();
   }, []);
 
   const fetchFeaturedChocolates = async () => {
     try {
-      console.log('🍫 Starting to fetch chocolates...');
-      
       // Try using getFeaturedChocolates from your service
       const allChocolates = await getFeaturedChocolates(20);
-      console.log('📦 Raw chocolates from Firebase:', allChocolates);
-      
       if (allChocolates && allChocolates.length > 0) {
         // Filter for chocolates with Firebase Storage images (these work reliably)
         const chocolatesWithGoodImages = allChocolates.filter(choc => 
@@ -63,8 +26,6 @@ const HomePage = () => {
           (choc.imageUrl.includes('firebasestorage.googleapis.com') || 
            choc.imageUrl.includes('firebase'))
         );
-        
-        console.log(`Found ${chocolatesWithGoodImages.length} chocolates with Firebase images`);
         
         // If we have enough with good images, use those
         let finalChocolates;
@@ -86,14 +47,12 @@ const HomePage = () => {
             `"Experience the unique taste of ${choc.name} from ${choc.maker}."`
         }));
         
-        console.log('✅ Final chocolates to display:', finalChocolates);
         setFeaturedChocolates(finalChocolates);
       } else {
-        console.log('⚠️ No chocolates found in database');
         setFeaturedChocolates(getFallbackChocolates());
       }
     } catch (error) {
-      console.error('❌ Error fetching chocolates:', error);
+      console.error('Error fetching chocolates:', error);
       setFeaturedChocolates(getFallbackChocolates());
     }
   };
@@ -189,14 +148,7 @@ const HomePage = () => {
                       alt={chocolate.name}
                       loading="lazy"
                       onError={(e) => {
-                        console.error(`❌ Failed to load image for ${chocolate.name}:`, {
-                          url: chocolate.imageUrl,
-                          isFirebase: chocolate.imageUrl?.includes('firebasestorage'),
-                          isOpenFood: chocolate.imageUrl?.includes('openfoodfacts')
-                        });
-                      }}
-                      onLoad={(e) => {
-                        console.log(`✅ Successfully loaded image for ${chocolate.name}`);
+                        // Image failed to load
                       }}
                     />
                   </div>

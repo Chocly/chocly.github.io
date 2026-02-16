@@ -42,16 +42,6 @@ function SuperAdminEditPage() {
     }
   }, [currentUser, navigate]);
 
-  useEffect(() => {
-    if (currentUser) {
-      console.log('🔍 Debug Auth Info:');
-      console.log('Current user UID:', currentUser.uid);
-      console.log('Expected Super Admin UID:', 'EZTtNncUcHYc5TikzewnB0tYmz03');
-      console.log('UIDs match:', currentUser.uid === 'EZTtNncUcHYc5TikzewnB0tYmz03');
-      console.log('Is Super Admin:', isSuperAdmin(currentUser));
-    }
-  }, [currentUser]);
-
   // Load chocolate data and reviews
   useEffect(() => {
     loadChocolateAndReviews();
@@ -120,19 +110,15 @@ function SuperAdminEditPage() {
       };
 
       await updateDoc(chocolateRef, updateData);
-      console.log('✅ Chocolate details updated');
-
       // Update image if selected
       if (selectedImage) {
-        console.log('📤 Updating image...');
         await updateChocolateImage(id, selectedImage);
-        console.log('✅ Image updated');
       }
 
       alert('Chocolate updated successfully!');
       navigate(`/chocolate/${id}`);
     } catch (error) {
-      console.error('❌ Error updating chocolate:', error);
+      console.error('Error updating chocolate:', error);
       alert(`Failed to update: ${error.message}`);
     } finally {
       setSaving(false);
@@ -154,17 +140,15 @@ function SuperAdminEditPage() {
     setDeletingReviewId(reviewId);
     
     try {
-      console.log('🗑️ Deleting review:', reviewId);
       await deleteReview(reviewId);
-      console.log('✅ Review deleted successfully');
-      
+
       // Reload reviews
       const updatedReviews = await getChocolateReviews(id);
       setReviews(updatedReviews);
       
       alert('Review deleted successfully');
     } catch (error) {
-      console.error('❌ Error deleting review:', error);
+      console.error('Error deleting review:', error);
       alert(`Failed to delete review: ${error.message}`);
     } finally {
       setDeletingReviewId(null);
@@ -199,14 +183,12 @@ function SuperAdminEditPage() {
     setSaving(true);
     
     try {
-      console.log('🗑️ Deleting chocolate:', id);
       await deleteChocolate(id);
-      console.log('✅ Chocolate deleted successfully');
-      
+
       alert('Chocolate deleted successfully');
       navigate('/browse'); // Redirect to browse page after deletion
     } catch (error) {
-      console.error('❌ Error deleting chocolate:', error);
+      console.error('Error deleting chocolate:', error);
       alert(`Failed to delete: ${error.message}`);
     } finally {
       setSaving(false);

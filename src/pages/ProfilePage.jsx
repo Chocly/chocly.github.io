@@ -396,7 +396,6 @@ const handleRemoveFromWantToTry = async (chocolate) => {
   const savePreferences = async () => {
     try {
       // In a real app, you would save preferences to Firestore
-      console.log('Saving preferences:', preferences);
       alert('Preferences saved successfully!');
     } catch (error) {
       console.error('Error saving preferences:', error);

@@ -49,7 +49,6 @@
   .hero-section .hero-title,
   .hero-section .display-1,
   .hero-content .display-1 {
-    font-family: 'Playfair Display', serif !important;
     font-size: clamp(2.5rem, 7vw, 4.5rem) !important;
     font-weight: 700 !important;
     line-height: 1.1 !important;
@@ -66,7 +65,6 @@
   .hero-subtitle,
   .hero-content .hero-subtitle,
   .hero-section .hero-subtitle {
-    font-family: 'Inter', sans-serif !important;
     font-size: clamp(1.1rem, 3.5vw, 1.4rem) !important;
     font-weight: 400 !important;
     line-height: 1.5 !important;
@@ -221,7 +219,6 @@
   }
   
   .section-title {
-    font-family: 'Playfair Display', serif;
     font-size: clamp(2rem, 6vw, 3rem);
     font-weight: 700;
     margin-bottom: 1rem;
@@ -602,7 +599,6 @@
 }
 
 .cta-title {
-  font-family: 'Playfair Display', serif;
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 700;
   margin-bottom: 20px;
@@ -1010,7 +1006,6 @@
 
 .home-page .cta-title,
 .cta-section .cta-title {
-  font-family: 'Playfair Display', serif !important;
   font-size: 3rem !important;
   font-weight: 700 !important;
   margin: 0 0 24px 0 !important;

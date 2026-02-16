@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom'; // ADD THIS IMPORT
 import { getAllChocolates, getAllTags } from '../services/chocolateFirebaseService';
 import ChocolateCard from '../components/ChocolateCard';
+import Breadcrumb from '../components/Breadcrumb';
 import './BrowseAllPage.css';
 
 function BrowseAllPage() {
@@ -329,8 +330,12 @@ function BrowseAllPage() {
   
   return (
     <div className="browse-page">
+      <Breadcrumb items={[
+        { label: 'Home', path: '/' },
+        { label: 'Browse' }
+      ]} />
       <div className="container">
-        
+
         {/* Show active filters from URL as pills */}
         {activeFilterSummary.length > 0 && (
           <div className="active-filters-display">

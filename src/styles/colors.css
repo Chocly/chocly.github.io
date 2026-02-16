@@ -39,6 +39,9 @@
     --accent-color: var(--brand-copper);            /* Primary accent */
     --accent-warm: var(--brand-taupe);              /* Warm accent */
     --accent-cool: var(--brand-blue-gray);          /* Cool accent */
+    --maker-color: #B8693D;                         /* Terracotta for maker names */
+    --star-color: #F59E0B;                          /* Gold for star ratings */
+    --star-empty: #E5E7EB;                          /* Empty star gray */
     
     /* Borders & Lines */
     --border-light: #E5E1DC;                        /* Light borders */

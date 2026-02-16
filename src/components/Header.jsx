@@ -110,7 +110,7 @@ function Header() {
           
           {/* Desktop Nav (Homepage only) */}
           {isHomePage && !isMobile && (
-            <nav className="desktop-nav">
+            <nav className="desktop-nav" aria-label="Main navigation">
               <Link to="/add-chocolate" className="desktop-nav-link">
                 Add Chocolate
               </Link>
@@ -130,8 +130,9 @@ function Header() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="search-input"
+                  aria-label="Search chocolates"
                 />
-                <button type="submit" className="search-submit">
+                <button type="submit" className="search-submit" aria-label="Submit search">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <circle cx="11" cy="11" r="8"/>
                     <path d="M21 21l-4.35-4.35"/>
@@ -145,10 +146,12 @@ function Header() {
           <div className="header-actions">
             {/* Mobile Search Button */}
             {!isHomePage && isMobile && (
-              <button 
+              <button
                 className="header-btn search-btn"
                 onClick={toggleSearch}
                 type="button"
+                aria-label="Toggle search"
+                aria-expanded={searchOpen}
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <circle cx="11" cy="11" r="8"/>
@@ -171,10 +174,12 @@ function Header() {
             
             {/* User/Auth */}
             {currentUser ? (
-              <button 
+              <button
                 className="header-btn user-btn"
                 onClick={toggleUserMenu}
                 type="button"
+                aria-expanded={userMenuOpen}
+                aria-label="User menu"
               >
                 <div className="user-avatar">
                   <span className="user-initials">{getUserInitials()}</span>
@@ -198,10 +203,12 @@ function Header() {
             )}
             
             {/* Hamburger */}
-            <button 
+            <button
               className="header-btn menu-btn"
               onClick={toggleMenu}
               type="button"
+              aria-expanded={menuOpen}
+              aria-label="Toggle navigation menu"
             >
               <span className={`hamburger ${menuOpen ? 'open' : ''}`}>
                 <span/>
@@ -270,7 +277,7 @@ function Header() {
       
       {/* Mobile Nav */}
       {menuOpen && (
-        <nav className="mobile-nav">
+        <nav className="mobile-nav" aria-label="Mobile navigation">
           <div className="nav-section">
             <h3>Browse</h3>
             <Link to="/" onClick={toggleMenu}>Home</Link>

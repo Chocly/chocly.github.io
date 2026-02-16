@@ -35,23 +35,19 @@ export function AuthProvider({ children }) {
 
       try {
         if (user) {
-          console.log("User authenticated:", user.uid);
           setCurrentUser(user);
           
           // Try to load the user's profile from Firestore
           try {
-            console.log("Loading user profile...");
             let profile = await getUserProfile(user.uid);
             
             // If no profile exists, create it immediately
             if (!profile) {
-              console.log("No profile found, creating new profile...");
               setProfileCreating(true);
               
               try {
                 // Create the profile synchronously
                 profile = await createUserProfile(user);
-                console.log("Profile created successfully:", profile?.id);
               } catch (createError) {
                 console.error("Error creating profile:", createError);
                 
@@ -59,7 +55,6 @@ export function AuthProvider({ children }) {
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 try {
                   profile = await createUserProfile(user);
-                  console.log("Profile created on retry:", profile?.id);
                 } catch (retryError) {
                   console.error("Profile creation failed on retry:", retryError);
                   
@@ -80,14 +75,12 @@ export function AuthProvider({ children }) {
                     },
                     wantToTry: []
                   };
-                  console.log("Using minimal profile as fallback");
                 }
               } finally {
                 setProfileCreating(false);
               }
             }
             
-            console.log("User profile loaded:", profile ? "success" : "failed");
             setUserProfile(profile);
             
           } catch (profileError) {
@@ -114,7 +107,6 @@ export function AuthProvider({ children }) {
             });
           }
         } else {
-          console.log("No user authenticated");
           setCurrentUser(null);
           setUserProfile(null);
           setProfileCreating(false);

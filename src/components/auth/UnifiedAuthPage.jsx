@@ -19,7 +19,6 @@ function UnifiedAuthPage() {
   // FIXED: More reliable redirect logic
   useEffect(() => {
     if (!authLoading && currentUser) {
-      console.log('✅ User already logged in, redirecting to profile');
       // Use replace to avoid back button issues
       setTimeout(() => {
         navigate('/profile', { replace: true });
@@ -38,7 +37,6 @@ function UnifiedAuthPage() {
   const [showSuccess, setShowSuccess] = useState(false);
 
   const handleSocialAuth = async (provider) => {
-    console.log(`🔑 Starting ${provider} authentication`);
     setLoading(true);
     setError('');
 
@@ -51,17 +49,14 @@ function UnifiedAuthPage() {
 
       // Handle mobile redirect case (user will be null)
       if (user === null) {
-        console.log('🔄 Redirecting for mobile authentication...');
         // Don't set loading to false or show error - redirect is in progress
         return;
       }
 
-      console.log(`✅ ${provider} auth successful:`, user.uid);
       setShowSuccess(true);
 
       // FIXED: Better redirect with error handling
       setTimeout(() => {
-        console.log('🚀 Redirecting to profile after successful auth');
         try {
           navigate('/profile', { replace: true });
         } catch (navError) {
@@ -72,7 +67,7 @@ function UnifiedAuthPage() {
       }, 1500);
 
     } catch (error) {
-      console.error(`❌ ${provider} auth error:`, error);
+      console.error(`${provider} auth error:`, error);
       setError(error.message || `Failed to sign in with ${provider}`);
       setShowSuccess(false); // Make sure success screen is hidden on error
     } finally {
@@ -82,8 +77,6 @@ function UnifiedAuthPage() {
 
   const handleEmailAuth = async (e) => {
     e.preventDefault();
-    console.log(`🔑 Starting ${isSignUp ? 'signup' : 'login'} with email`);
-    
     if (isSignUp && password !== confirmPassword) {
       setError('Passwords do not match');
       return;
@@ -100,11 +93,9 @@ function UnifiedAuthPage() {
         user = await loginWithEmailPassword(email, password);
       }
       
-      console.log(`✅ Email auth successful:`, user.uid);
       setShowSuccess(true);
       
       setTimeout(() => {
-        console.log('🚀 Redirecting to profile after successful auth');
         try {
           navigate('/profile', { replace: true });
         } catch (navError) {
@@ -114,7 +105,7 @@ function UnifiedAuthPage() {
       }, 1500);
       
     } catch (error) {
-      console.error(`❌ Email auth error:`, error);
+      console.error('Email auth error:', error);
       setError(error.message);
       setShowSuccess(false);
     } finally {
@@ -299,26 +290,33 @@ function UnifiedAuthPage() {
         {/* Email/Password Form */}
         <form onSubmit={handleEmailAuth}>
           {isSignUp && (
-            <input
-              type="text"
-              placeholder="Full Name"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '0.875rem',
-                border: '2px solid #E5E7EB',
-                borderRadius: '12px',
-                fontSize: '1rem',
-                marginBottom: '0.75rem',
-                transition: 'border-color 0.3s',
-                outline: 'none'
-              }}
-              required
-            />
+            <div>
+              <label htmlFor="auth-name" style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', border: 0 }}>Full Name</label>
+              <input
+                id="auth-name"
+                type="text"
+                placeholder="Full Name"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '0.875rem',
+                  border: '2px solid #E5E7EB',
+                  borderRadius: '12px',
+                  fontSize: '1rem',
+                  marginBottom: '0.75rem',
+                  transition: 'border-color 0.3s',
+                  outline: 'none'
+                }}
+                autoComplete="name"
+                required
+              />
+            </div>
           )}
-          
+
+          <label htmlFor="auth-email" style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', border: 0 }}>Email address</label>
           <input
+            id="auth-email"
             type="email"
             placeholder="Email address"
             value={email}
@@ -333,10 +331,13 @@ function UnifiedAuthPage() {
               transition: 'border-color 0.3s',
               outline: 'none'
             }}
+            autoComplete="email"
             required
           />
-          
+
+          <label htmlFor="auth-password" style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', border: 0 }}>Password</label>
           <input
+            id="auth-password"
             type="password"
             placeholder="Password"
             value={password}
@@ -351,27 +352,33 @@ function UnifiedAuthPage() {
               transition: 'border-color 0.3s',
               outline: 'none'
             }}
+            autoComplete={isSignUp ? 'new-password' : 'current-password'}
             required
           />
-          
+
           {isSignUp && (
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '0.875rem',
-                border: '2px solid #E5E7EB',
-                borderRadius: '12px',
-                fontSize: '1rem',
-                marginBottom: '0.75rem',
-                transition: 'border-color 0.3s',
-                outline: 'none'
-              }}
-              required
-            />
+            <div>
+              <label htmlFor="auth-confirm-password" style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', border: 0 }}>Confirm Password</label>
+              <input
+                id="auth-confirm-password"
+                type="password"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '0.875rem',
+                  border: '2px solid #E5E7EB',
+                  borderRadius: '12px',
+                  fontSize: '1rem',
+                  marginBottom: '0.75rem',
+                  transition: 'border-color 0.3s',
+                  outline: 'none'
+                }}
+                autoComplete="new-password"
+                required
+              />
+            </div>
           )}
           
           <button

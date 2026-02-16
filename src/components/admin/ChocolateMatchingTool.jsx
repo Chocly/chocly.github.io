@@ -47,8 +47,6 @@ function ChocolateMatchingTool() {
   const handleMatchAccept = (ourChocolate, offProduct) => {
     // Here you would update your database with the merged data
     const mergedData = mergeChocolateData(ourChocolate, offProduct);
-    console.log('Accepted match:', mergedData);
-    
     // In a real implementation, you would save this to your database
     // updateChocolateInDatabase(ourChocolate.id, mergedData);
     

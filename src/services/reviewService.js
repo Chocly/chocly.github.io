@@ -41,8 +41,6 @@ export const getChocolateReviews = async (chocolateId) => {
 // Get reviews for a specific user
 export const getUserReviews = async (userId) => {
   try {
-    console.log('🔍 Getting reviews for user:', userId);
-    
     const q = query(
       collection(db, "reviews"),
       where("userId", "==", userId),
@@ -52,7 +50,6 @@ export const getUserReviews = async (userId) => {
     const snapshot = await getDocs(q);
     
     if (snapshot.empty) {
-      console.log('No reviews found for user');
       return [];
     }
     
@@ -65,16 +62,12 @@ export const getUserReviews = async (userId) => {
         ...docSnapshot.data()
       };
       
-      console.log('📝 Processing review:', reviewData.id);
-      
       // If the review already has chocolate data, use it
       if (reviewData.chocolate && reviewData.chocolate.name) {
-        console.log('✅ Review already has chocolate data');
         reviews.push(reviewData);
       } else {
         // Fetch chocolate data using the chocolateId
         try {
-          console.log('🔍 Fetching chocolate data for ID:', reviewData.chocolateId);
           const chocolateData = await getChocolateById(reviewData.chocolateId);
           
           // Add chocolate info to the review
@@ -85,11 +78,10 @@ export const getUserReviews = async (userId) => {
             imageUrl: chocolateData.imageUrl || 'https://placehold.co/300x300?text=Chocolate'
           };
           
-          console.log('✅ Added chocolate data:', reviewData.chocolate.name);
           reviews.push(reviewData);
           
         } catch (chocolateError) {
-          console.error('❌ Failed to fetch chocolate for review:', reviewData.id, chocolateError);
+          console.error('Failed to fetch chocolate for review:', reviewData.id, chocolateError);
           
           // Add review with fallback chocolate info
           reviewData.chocolate = {
@@ -104,7 +96,6 @@ export const getUserReviews = async (userId) => {
       }
     }
     
-    console.log('✅ Processed', reviews.length, 'reviews with chocolate data');
     return reviews;
     
   } catch (error) {
@@ -128,8 +119,7 @@ export const addReview = async (reviewData) => {
       const existingSnapshot = await getDocs(existingReviewQuery);
 
       if (!existingSnapshot.empty) {
-        console.warn('⚠️ User already has a review for this chocolate. Use updateReview instead.');
-        throw new Error('You have already reviewed this chocolate. Please edit your existing review instead.');
+          throw new Error('You have already reviewed this chocolate. Please edit your existing review instead.');
       }
     }
 
@@ -267,8 +257,6 @@ export const deleteReview = async (reviewId) => {
 // FIXED: Get recent top reviews with proper error handling
 export const getRecentTopReviews = async (limitCount = 3) => {
   try {
-    console.log('Fetching recent top reviews...');
-    
     // Try to get recent high-quality reviews from the database
     const recentHighRatingQuery = query(
       collection(db, "reviews"),
@@ -281,7 +269,6 @@ export const getRecentTopReviews = async (limitCount = 3) => {
     const snapshot = await getDocs(recentHighRatingQuery);
     
     if (snapshot.empty) {
-      console.log('No reviews found in database');
       return [];
     }
     
@@ -318,7 +305,6 @@ export const getRecentTopReviews = async (limitCount = 3) => {
       }
     }
     
-    console.log(`Found ${reviews.length} featured reviews`);
     return reviews;
     
   } catch (error) {
@@ -330,8 +316,6 @@ export const getRecentTopReviews = async (limitCount = 3) => {
 // FIXED: Get featured reviews with proper error handling
 export const getFeaturedReviews = async (limitCount = 3) => {
   try {
-    console.log('Fetching featured reviews...');
-    
     // First try to get recent reviews (any rating)
     const recentReviewsQuery = query(
       collection(db, "reviews"),
@@ -342,7 +326,6 @@ export const getFeaturedReviews = async (limitCount = 3) => {
     const recentSnapshot = await getDocs(recentReviewsQuery);
     
     if (recentSnapshot.empty) {
-      console.log('No reviews found');
       return [];
     }
     
@@ -382,7 +365,7 @@ export const getFeaturedReviews = async (limitCount = 3) => {
           const reviewDate = review.createdAt.toDate ? review.createdAt.toDate() : new Date(review.createdAt);
           daysSinceReview = (Date.now() - reviewDate.getTime()) / (1000 * 60 * 60 * 24);
         } catch (e) {
-          console.warn('Could not parse review date:', e);
+          // Could not parse review date
         }
       }
       
@@ -410,7 +393,6 @@ export const getFeaturedReviews = async (limitCount = 3) => {
         }
       });
     
-    console.log(`Returning ${uniqueReviews.length} featured reviews`);
     return uniqueReviews;
     
   } catch (error) {

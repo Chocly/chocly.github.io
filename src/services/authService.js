@@ -32,20 +32,16 @@ const isMobileDevice = () => {
 // Create a new user with email and password
 export const registerWithEmailPassword = async (email, password, displayName) => {
   try {
-    console.log("Creating user account...");
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     
     // Update profile
-    console.log("Updating user profile...");
     await updateProfile(userCredential.user, {
       displayName: displayName
     });
     
     // Create user document in Firestore immediately
-    console.log("Creating user profile in Firestore...");
     const profile = await createUserProfile(userCredential.user, { displayName });
     
-    console.log("User registration complete");
     return userCredential.user;
   } catch (error) {
     console.error("Registration error:", error);
@@ -66,32 +62,24 @@ export const loginWithEmailPassword = async (email, password) => {
 // Sign in with Google - Mobile-friendly with redirect/popup detection
 export const signInWithGoogle = async () => {
   try {
-    console.log("Starting Google sign-in process");
-
     const googleProvider = new GoogleAuthProvider();
     googleProvider.setCustomParameters({
       prompt: 'select_account'
     });
 
-    console.log("Initialized Google provider");
-
     const mobile = isMobileDevice();
-    console.log("Device type:", mobile ? "mobile" : "desktop");
 
     let result;
 
     if (mobile) {
       // Use redirect for mobile devices
-      console.log("Using redirect method for mobile device");
       await signInWithRedirect(auth, googleProvider);
       // signInWithRedirect doesn't return immediately, the page will redirect
       // The result will be handled by getRedirectResult in a separate function
       return null; // Indicates redirect in progress
     } else {
       // Use popup for desktop devices
-      console.log("Using popup method for desktop device");
       result = await signInWithPopup(auth, googleProvider);
-      console.log("Google sign-in successful", result.user.uid);
 
       // Check if it's a new user and create profile if needed
       await handleUserProfileCreation(result.user);
@@ -118,12 +106,9 @@ export const signInWithGoogle = async () => {
 // Handle redirect result for mobile authentication
 export const handleRedirectResult = async () => {
   try {
-    console.log("Checking for redirect result");
     const result = await getRedirectResult(auth);
 
     if (result && result.user) {
-      console.log("Redirect sign-in successful", result.user.uid);
-
       // Check if it's a new user and create profile if needed
       await handleUserProfileCreation(result.user);
 
@@ -139,14 +124,10 @@ export const handleRedirectResult = async () => {
 
 // Helper function to handle user profile creation
 const handleUserProfileCreation = async (user) => {
-  console.log("Checking if user profile exists");
   const userDoc = await getDoc(doc(db, "users", user.uid));
 
   if (!userDoc.exists()) {
-    console.log("Creating new user profile for Google user");
     await createUserProfile(user);
-  } else {
-    console.log("User profile already exists");
   }
 };
 
@@ -163,7 +144,6 @@ export const createUserProfile = async (user, additionalData = {}) => {
     const snapshot = await getDoc(userRef);
     
     if (snapshot.exists()) {
-      console.log("Profile already exists, returning existing profile");
       return getUserProfile(user.uid);
     }
     
@@ -191,12 +171,8 @@ export const createUserProfile = async (user, additionalData = {}) => {
       ...additionalData
     };
     
-    console.log("Creating profile with data:", profileData);
-    
     // Use setDoc to ensure the document is created
     await setDoc(userRef, profileData);
-    
-    console.log("Profile created successfully");
     
     // Return the created profile
     return getUserProfile(user.uid);
@@ -221,7 +197,6 @@ export const getUserProfile = async (userId) => {
         ...userDoc.data() 
       };
     } else {
-      console.log("User profile not found for:", userId);
       return null;
     }
   } catch (error) {
@@ -238,13 +213,10 @@ export const uploadProfilePicture = async (userId, file) => {
     const imageRef = ref(storage, fileName);
     
     // Upload the file
-    console.log("Uploading profile picture...");
     const snapshot = await uploadBytes(imageRef, file);
     
     // Get the download URL
     const downloadURL = await getDownloadURL(snapshot.ref);
-    console.log("Profile picture uploaded successfully:", downloadURL);
-    
     return downloadURL;
   } catch (error) {
     console.error("Error uploading profile picture:", error);
@@ -259,8 +231,6 @@ export const updateUserProfile = async (userId, updates) => {
     
     // Handle profile picture upload if provided
     if (updates.profilePicture) {
-      console.log("Uploading new profile picture...");
-      
       // Get current profile to potentially delete old picture
       const currentProfile = await getUserProfile(userId);
       
@@ -295,7 +265,6 @@ export const updateUserProfile = async (userId, updates) => {
       // TODO: Delete old profile picture from storage if it exists and is different
       // This would require storing the old image path and comparing
       
-      console.log("Profile updated with new picture");
       return await getUserProfile(userId);
     } else {
       // Update without profile picture
@@ -313,7 +282,6 @@ export const updateUserProfile = async (userId, updates) => {
       
       await updateDoc(userRef, profileUpdates);
       
-      console.log("Profile updated successfully");
       return await getUserProfile(userId);
     }
   } catch (error) {

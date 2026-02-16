@@ -65,7 +65,6 @@
   font-weight: 700;
   color: var(--primary-color);
   margin: 0 0 0.5rem 0;
-  font-family: 'Playfair Display', serif;
   letter-spacing: -0.02em;
 }
 
@@ -107,7 +106,6 @@
   font-weight: 800;
   color: var(--accent-color);
   margin-bottom: 0.25rem;
-  font-family: 'Inter', sans-serif;
 }
 
 .stat-label {

@@ -46,13 +46,11 @@ const getMakerName = async (makerId) => {
 const enrichChocolateWithMaker = async (chocolate) => {
   // Check if maker is already a string (user-contributed chocolates)
   if (chocolate.maker && typeof chocolate.maker === 'string' && chocolate.maker !== 'Unknown Maker') {
-    console.log('✅ Chocolate already has direct maker name:', chocolate.maker);
     return chocolate; // Return as-is
   }
   
   // Check if it's a legacy chocolate with maker ID
   if (chocolate.makerId || chocolate.MakerID) {
-    console.log('🔄 Looking up maker by ID for legacy chocolate');
     const makerName = await getMakerName(chocolate.makerId || chocolate.MakerID);
     return {
       ...chocolate,
@@ -69,13 +67,10 @@ const enrichChocolateWithMaker = async (chocolate) => {
 
 // 🔧 Fix 2: Updated enrichChocolatesWithMakers function
 const enrichChocolatesWithMakers = async (chocolates) => {
-  console.log('🔄 Enriching', chocolates.length, 'chocolates with maker names...');
-  
   const enrichedChocolates = await Promise.all(
     chocolates.map(chocolate => enrichChocolateWithMaker(chocolate))
   );
   
-  console.log('✅ Enrichment complete');
   return enrichedChocolates;
 };
 
@@ -83,22 +78,17 @@ const enrichChocolatesWithMakers = async (chocolates) => {
 // 🔧 Fix 4: Updated getAllChocolates function
 export const getAllChocolates = async () => {
   try {
-    console.log('📥 Fetching all chocolates...');
     const snapshot = await getDocs(chocolatesCollection);
     const chocolates = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
     
-    console.log('📊 Raw chocolates fetched:', chocolates.length);
-    
     // Enrich with maker names
     const enrichedChocolates = await enrichChocolatesWithMakers(chocolates);
-    console.log('✅ All chocolates enriched with maker names');
-    
     return enrichedChocolates;
   } catch (error) {
-    console.error('💥 Error fetching chocolates:', error);
+    console.error('Error fetching chocolates:', error);
     throw error;
   }
 };
@@ -106,7 +96,6 @@ export const getAllChocolates = async () => {
 // Replace your getChocolateById function in chocolateFirebaseService.js
 
 export const getChocolateById = async (id) => {
-  console.log('🔍 getChocolateById called with ID:', id);
   try {
     const docRef = doc(db, 'chocolates', id);
     const snapshot = await getDoc(docRef);
@@ -117,52 +106,39 @@ export const getChocolateById = async (id) => {
         ...snapshot.data()
       };
       
-      console.log('📄 Raw chocolate data from database:', {
-        maker: chocolateData.maker,
-        makerId: chocolateData.makerId,
-        MakerID: chocolateData.MakerID,
-        isUserContributed: chocolateData.isUserContributed
-      });
-      
-      // 🔑 KEY FIX: Check the storage method in the right order
+      // Check the storage method in the right order
       
       // FIRST: Check if it's a user-contributed chocolate with direct maker name
       if (chocolateData.isUserContributed && chocolateData.maker && typeof chocolateData.maker === 'string') {
-        console.log('✅ User-contributed chocolate with direct maker name:', chocolateData.maker);
         return chocolateData; // Return as-is, maker is already correct
       }
       
       // SECOND: Check if ANY chocolate has a direct maker string (not just user-contributed)
       if (chocolateData.maker && typeof chocolateData.maker === 'string' && chocolateData.maker !== 'Unknown Maker') {
-        console.log('✅ Chocolate with direct maker name:', chocolateData.maker);
         return chocolateData; // Return as-is, maker is already correct
       }
       
       // THIRD: Legacy chocolates with maker IDs - look up the maker name
       if (chocolateData.makerId || chocolateData.MakerID) {
-        console.log('🔄 Legacy chocolate, looking up maker by ID:', chocolateData.makerId || chocolateData.MakerID);
         const makerName = await getMakerName(chocolateData.makerId || chocolateData.MakerID);
         const enrichedData = {
           ...chocolateData,
           maker: makerName || 'Unknown Maker'
         };
-        console.log('✅ Enriched legacy chocolate data with maker:', enrichedData.maker);
         return enrichedData;
       }
       
       // FOURTH: No maker info at all - fallback
-      console.log('❌ No maker information found, using Unknown Maker');
       return {
         ...chocolateData,
         maker: 'Unknown Maker'
       };
       
     } else {
-      console.log('❌ Chocolate not found in database');
       throw new Error('Chocolate not found');
     }
   } catch (error) {
-    console.error('💥 Error in getChocolateById:', error);
+    console.error('Error in getChocolateById:', error);
     throw error;
   }
 };
@@ -170,8 +146,6 @@ export const getChocolateById = async (id) => {
 // 🔧 Fix 3: Updated searchChocolates function
 export const searchChocolates = async (searchTerm) => {
   try {
-    console.log('🔍 Searching for:', searchTerm);
-    
     // First, check if we are searching for a tag
     const tagsSnapshot = await getDocs(tagsCollection);
     const tags = {};
@@ -187,14 +161,10 @@ export const searchChocolates = async (searchTerm) => {
       ...doc.data()
     }));
     
-    console.log('📊 Total chocolates in database:', chocolates.length);
-    
     // Enrich with maker names FIRST
     const enrichedChocolates = await enrichChocolatesWithMakers(chocolates);
     
     const term = searchTerm.toLowerCase().trim();
-    console.log('🎯 Searching for term:', term);
-    
     // Filter chocolates that match the search term
     const matchedChocolates = enrichedChocolates.filter(chocolate => {
       // Check basic fields
@@ -213,18 +183,13 @@ export const searchChocolates = async (searchTerm) => {
       
       const matches = nameMatch || makerMatch || originMatch || typeMatch || tagMatch;
       
-      if (matches) {
-        console.log('✅ Match found:', chocolate.name, 'by', chocolate.maker);
-      }
-      
       return matches;
     });
     
-    console.log('🎯 Search results:', matchedChocolates.length, 'matches found');
     return matchedChocolates;
     
   } catch (error) {
-    console.error("💥 Error searching chocolates:", error);
+    console.error("Error searching chocolates:", error);
     throw error;
   }
 };
@@ -232,8 +197,6 @@ export const searchChocolates = async (searchTerm) => {
 // 🔧 Fix 5: Updated getFeaturedChocolates function
 export const getFeaturedChocolates = async (limitCount = 10) => {
   try {
-    console.log('⭐ Fetching featured chocolates...');
-    
     const q = query(
       collection(db, 'chocolates'),
       where('averageRating', '>', 0),
@@ -245,7 +208,6 @@ export const getFeaturedChocolates = async (limitCount = 10) => {
     const snapshot = await getDocs(q);
     
     if (snapshot.empty) {
-      console.log('📭 No chocolates found in database, returning sample data');
       return getSampleFeaturedChocolates(limitCount);
     }
     
@@ -254,16 +216,11 @@ export const getFeaturedChocolates = async (limitCount = 10) => {
       ...doc.data()
     }));
     
-    console.log(`📊 Found ${chocolates.length} featured chocolates in database`);
-    
     // Enrich with maker names
     const enrichedChocolates = await enrichChocolatesWithMakers(chocolates);
-    console.log('✅ Featured chocolates enriched with maker names');
-    
     return enrichedChocolates;
   } catch (error) {
-    console.error('💥 Error getting featured chocolates:', error);
-    console.log('🔄 Falling back to sample data due to error');
+    console.error('Error getting featured chocolates:', error);
     return getSampleFeaturedChocolates(limitCount);
   }
 };
@@ -348,16 +305,12 @@ export const getChocolateReviews = async (chocolateId) => {
 
 export const addReview = async (reviewData) => {
   try {
-    console.log('💾 Adding review to Firestore:', reviewData);
-    
     // Use Date() instead of serverTimestamp() for addDoc
     const docRef = await addDoc(reviewsCollection, {
       ...reviewData,
       createdAt: reviewData.createdAt || new Date(),
       updatedAt: new Date()
     });
-    
-    console.log('✅ Review added with ID:', docRef.id);
     
     const chocolateRef = doc(db, 'chocolates', reviewData.chocolateId);
     const chocolateDoc = await getDoc(chocolateRef);
@@ -374,9 +327,6 @@ export const addReview = async (reviewData) => {
         updatedAt: serverTimestamp() // serverTimestamp() works fine with updateDoc
       });
       
-      console.log('✅ Updated chocolate rating:', newAverage);
-    } else {
-      console.warn('⚠️ Chocolate not found for review:', reviewData.chocolateId);
     }
 
     // Return the complete review object including the ID
@@ -387,7 +337,7 @@ export const addReview = async (reviewData) => {
     };
     
   } catch (error) {
-    console.error('💥 Error adding review:', error);
+    console.error('Error adding review:', error);
     throw error;
   }
 };
@@ -563,44 +513,20 @@ const getSampleCategoryChocolates = (category) => {
 
 // FIXED addUserChocolate function - returns just ID as expected
 export const addUserChocolate = async (chocolateData, imageFile) => {
-  console.log('🍫 Starting addUserChocolate process...');
-  console.log('📄 Chocolate data received:', chocolateData);
-  console.log('🖼️ Image file received:', imageFile ? {
-    name: imageFile.name,
-    size: `${(imageFile.size / 1024 / 1024).toFixed(2)}MB`,
-    type: imageFile.type
-  } : 'No image file');
-
   try {
     let imageUrl = null;
     
     // Upload image if provided
     if (imageFile) {
-      console.log('📤 Starting image upload...');
-      console.log('📊 Image file details:', {
-        name: imageFile.name,
-        size: imageFile.size,
-        type: imageFile.type,
-        lastModified: imageFile.lastModified
-      });
-      
       const timestamp = Date.now();
       const cleanFileName = imageFile.name.replace(/[^a-zA-Z0-9.-]/g, '_');
       const fileName = `user-contributions/${chocolateData.createdBy}/${timestamp}_${cleanFileName}`;
       
-      console.log('📁 Upload path:', fileName);
-      console.log('👤 User ID:', chocolateData.createdBy);
-      
       const storageRef = ref(storage, fileName);
       
       try {
-        console.log('⬆️ Uploading to Firebase Storage...');
-        const uploadResult = await uploadBytes(storageRef, imageFile);
-        console.log('✅ Upload successful:', uploadResult);
-        console.log('📥 Getting download URL...');
-        
+        await uploadBytes(storageRef, imageFile);
         imageUrl = await getDownloadURL(storageRef);
-        console.log('🔗 Download URL obtained:', imageUrl);
         
         // Verify the URL is valid
         if (!imageUrl || !imageUrl.startsWith('http')) {
@@ -608,19 +534,11 @@ export const addUserChocolate = async (chocolateData, imageFile) => {
         }
         
       } catch (uploadError) {
-        console.error('❌ Image upload failed:', uploadError);
-        console.error('Error details:', {
-          code: uploadError.code,
-          message: uploadError.message,
-          serverResponse: uploadError.serverResponse
-        });
-        
+        console.error('Image upload failed:', uploadError);
         // Don't fail the entire process - just proceed with placeholder
-        console.log('⚠️ Proceeding with placeholder image due to upload failure');
         imageUrl = `https://placehold.co/300x300?text=${encodeURIComponent(chocolateData.name.substring(0, 20))}`;
       }
     } else {
-      console.log('📷 No image provided, using placeholder');
       imageUrl = `https://placehold.co/300x300?text=${encodeURIComponent(chocolateData.name.substring(0, 20))}`;
     }
     
@@ -658,45 +576,26 @@ export const addUserChocolate = async (chocolateData, imageFile) => {
       ratings: 0 // For compatibility
     };
     
-    console.log('💾 Final chocolate object (check maker field):', {
-      maker: newChocolate.maker,
-      isUserContributed: newChocolate.isUserContributed,
-      name: newChocolate.name,
-      description: newChocolate.description,
-      imageUrl: newChocolate.imageUrl // Add this to verify image URL
-    });
-    
     // Verify imageUrl before saving
     if (!newChocolate.imageUrl || newChocolate.imageUrl === 'undefined') {
-      console.error('⚠️ Warning: imageUrl is invalid:', newChocolate.imageUrl);
       newChocolate.imageUrl = `https://placehold.co/300x300?text=${encodeURIComponent(newChocolate.name.substring(0, 20))}`;
     }
     
     // Save to database
     const docRef = await addDoc(chocolatesCollection, newChocolate);
-    console.log('✅ Chocolate saved with ID:', docRef.id);
-    
     // Update user stats (don't let this fail the main process)
     try {
-      console.log('📊 Updating user contribution stats...');
       await updateUserContributionStats(chocolateData.createdBy, 'chocolatesAdded');
       await checkAndAwardContributionBadges(chocolateData.createdBy);
-      console.log('✅ User stats updated');
     } catch (statsError) {
-      console.error('⚠️ Failed to update user stats (non-critical):', statsError);
+      console.error('Failed to update user stats (non-critical):', statsError);
     }
     
     // IMPORTANT: Return just the ID as your handleSubmit expects
-    console.log('🎉 addUserChocolate completed successfully, returning ID:', docRef.id);
     return docRef.id;
     
   } catch (error) {
-    console.error('💥 Error in addUserChocolate:', error);
-    console.error('📋 Error details:', {
-      code: error.code,
-      message: error.message,
-      stack: error.stack
-    });
+    console.error('Error in addUserChocolate:', error);
     throw error;
   }
 };
@@ -860,8 +759,6 @@ export const getRecentContributions = async (limitCount = 10) => {
 // Delete a chocolate and its associated reviews
 export const deleteChocolate = async (chocolateId) => {
   try {
-    console.log('🗑️ Starting deletion process for chocolate:', chocolateId);
-    
     // First, delete all reviews associated with this chocolate
     const reviewsQuery = query(
       collection(db, 'reviews'),
@@ -873,21 +770,18 @@ export const deleteChocolate = async (chocolateId) => {
     
     // Delete each review
     reviewsSnapshot.forEach((reviewDoc) => {
-      console.log('Deleting review:', reviewDoc.id);
       deletePromises.push(deleteDoc(doc(db, 'reviews', reviewDoc.id)));
     });
     
     // Wait for all reviews to be deleted
     if (deletePromises.length > 0) {
       await Promise.all(deletePromises);
-      console.log(`✅ Deleted ${deletePromises.length} reviews`);
     }
     
     // Now delete the chocolate document itself
     const chocolateRef = doc(db, 'chocolates', chocolateId);
     await deleteDoc(chocolateRef);
-    console.log('✅ Chocolate document deleted');
-    
+
     // TODO: If you want to also delete the image from Storage, uncomment this:
     // const chocolate = await getChocolateById(chocolateId);
     // if (chocolate.imageUrl && !chocolate.imageUrl.includes('placehold')) {
@@ -902,7 +796,7 @@ export const deleteChocolate = async (chocolateId) => {
     
     return { success: true, message: 'Chocolate and associated data deleted successfully' };
   } catch (error) {
-    console.error('❌ Error deleting chocolate:', error);
+    console.error('Error deleting chocolate:', error);
     throw new Error(`Failed to delete chocolate: ${error.message}`);
   }
 };
@@ -910,13 +804,9 @@ export const deleteChocolate = async (chocolateId) => {
 // Add this function to your chocolateFirebaseService.js file
 
 export const updateAllChocolatesWithReviewCount = async () => {
-  console.log('🔄 Starting review count update for all chocolates...');
-  
   try {
     // Get all chocolates
     const chocolatesSnapshot = await getDocs(collection(db, 'chocolates'));
-    console.log(`📊 Found ${chocolatesSnapshot.size} chocolates to check`);
-    
     let updatedCount = 0;
     let skippedCount = 0;
     
@@ -927,7 +817,6 @@ export const updateAllChocolatesWithReviewCount = async () => {
       
       // Skip if reviewCount already exists and is not undefined
       if (chocolateData.reviewCount !== undefined && chocolateData.reviewCount !== null) {
-        console.log(`⏭️ Skipping ${chocolateData.name} - already has reviewCount: ${chocolateData.reviewCount}`);
         skippedCount++;
         continue;
       }
@@ -958,12 +847,8 @@ export const updateAllChocolatesWithReviewCount = async () => {
         updatedAt: serverTimestamp()
       });
       
-      console.log(`✅ Updated ${chocolateData.name}: ${reviewCount} reviews, ${averageRating.toFixed(1)} avg rating`);
       updatedCount++;
     }
-    
-    console.log('🎉 Review count update complete!');
-    console.log(`📊 Results: ${updatedCount} updated, ${skippedCount} skipped (already had reviewCount)`);
     
     return {
       success: true,
@@ -973,7 +858,7 @@ export const updateAllChocolatesWithReviewCount = async () => {
     };
     
   } catch (error) {
-    console.error('❌ Error updating review counts:', error);
+    console.error('Error updating review counts:', error);
     throw error;
   }
 };

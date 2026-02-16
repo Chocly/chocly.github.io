@@ -1,41 +1,23 @@
-/* ChocolateCard.css - Improved Design Based on Your Requirements */
+/* ChocolateCard.css - Clean consolidated styles */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
-
-/* CSS VARIABLES FOR CONSISTENCY */
+/* CSS VARIABLES FOR CARD */
 :root {
   --card-radius: 16px;
-  --primary-chocolate: #2D1810;
-  --maker-color: #B8693D; /* Your requested color */
-  --accent-gold: #F4A261;
-  --accent-warm: #F59E0B;
-  --text-dark: #000000; /* Black for bar name */
-  --text-medium: #6B7280;
-  --text-light: #9CA3AF;
-  --background-white: #FFFFFF;
-  --background-light: #F8FAFC;
-  --border-light: #E5E7EB;
-  --border-subtle: #F1F5F9;
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
-  --shadow-xl: 0 16px 40px rgba(0, 0, 0, 0.15);
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --card-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* MAIN CHOCOLATE CARD - Improved spacing */
+/* MAIN CARD */
 .chocolate-card {
   display: flex;
   flex-direction: column;
-  background: var(--background-white);
+  background: var(--background-primary);
   border: 1px solid var(--border-light);
   border-radius: var(--card-radius);
-  overflow: visible !important; /* CHANGED: from hidden to visible */
+  overflow: visible;
   box-shadow: var(--shadow-md);
-  transition: var(--transition);
-  height: auto !important; /* CHANGED: from 360px to auto */
-  min-height: 360px; /* ADDED: minimum height */
+  transition: var(--card-transition);
+  height: auto;
+  min-height: 380px;
   width: 100%;
   position: relative;
   cursor: pointer;
@@ -46,33 +28,33 @@
 .chocolate-card:hover {
   transform: translateY(-6px);
   box-shadow: var(--shadow-xl);
-  border-color: var(--accent-gold);
+  border-color: var(--star-color);
 }
 
 .chocolate-card.featured {
-  border: 2px solid var(--accent-gold);
-  box-shadow: 0 6px 20px rgba(244, 162, 97, 0.15);
+  border: 2px solid var(--star-color);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.15);
 }
 
-/* IMAGE CONTAINER - Improved proportions */
+/* IMAGE CONTAINER */
 .image-container {
-  height: 200px; /* Slightly smaller for better content balance */
+  height: 220px;
   width: 100%;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #FEFEFE 0%, var(--background-light) 100%);
+  background: linear-gradient(135deg, #FEFEFE 0%, var(--background-accent, #F8FAFC) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid var(--border-subtle);
-  padding: 20px; /* ADDED: padding for spacing */
+  border-bottom: 1px solid var(--border-light);
+  padding: 20px;
 }
 
 .image-container img,
 .card-image {
-  width: auto; /* CHANGED: from 85% to auto */
-  height: 70%; /* CHANGED: from 85% to 70% */
-  max-width: 80%; /* ADDED: max-width constraint */
+  width: auto;
+  height: 85%;
+  max-width: 85%;
   object-fit: contain;
   transition: transform 0.5s ease;
 }
@@ -81,7 +63,7 @@
   transform: scale(1.05);
 }
 
-/* ACTION BUTTONS - Properly aligned */
+/* ACTION BUTTONS (favorite, want-to-try) */
 .card-actions {
   position: absolute;
   top: 12px;
@@ -90,7 +72,7 @@
   flex-direction: column;
   gap: 8px;
   z-index: 10;
-  align-items: center; /* Centers buttons horizontally */
+  align-items: center;
 }
 
 .card-actions > * {
@@ -106,7 +88,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 0 !important; /* Ensures no padding throws off alignment */
+  padding: 0 !important;
 }
 
 .card-actions > *:hover {
@@ -117,7 +99,7 @@
 .card-actions svg {
   width: 18px !important;
   height: 18px !important;
-  margin: 0 !important; /* Ensures SVG is centered */
+  margin: 0 !important;
 }
 
 /* Heart button states */
@@ -145,42 +127,43 @@
 }
 
 .want-to-try-button:hover svg {
-  stroke: #F59E0B;
+  stroke: var(--star-color);
   fill: rgba(245, 158, 11, 0.1);
 }
 
 .want-to-try-button.active svg,
 .want-to-try-button.added svg {
-  fill: #F59E0B;
-  stroke: #F59E0B;
+  fill: var(--star-color);
+  stroke: var(--star-color);
 }
 
-/* CARD CONTENT - Improved spacing and hierarchy */
+/* CARD CONTENT */
 .card-content {
-  padding: 20px;
-  padding-bottom: 24px !important; /* CHANGED: increased bottom padding */
+  padding: 16px;
+  padding-bottom: 20px;
   display: flex;
   flex-direction: column;
-  flex: 1; /* Takes remaining space */
-  gap: 10px;
-  background: var(--background-white);
-  min-height: fit-content; /* ADDED: ensure content fits */
+  flex: 1;
+  gap: 0;
+  background: var(--background-primary);
+  min-height: fit-content;
+  overflow: visible;
 }
 
-/* CHOCOLATE TITLE - Now more prominent */
+/* TITLE */
 .chocolate-title-link {
   text-decoration: none;
   color: inherit;
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .card-title {
-  font-size: 1.1rem; /* Larger than before */
-  color: var(--text-dark); /* Pure black as requested */
+  font-size: 1.05rem;
+  color: var(--text-primary);
   font-weight: 700;
-  line-height: 1.3;
-  margin: 0;
+  line-height: 1.2;
+  margin: 0 0 6px 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -189,23 +172,23 @@
 }
 
 .chocolate-title-link:hover .card-title {
-  color: var(--accent-gold);
+  color: var(--star-color);
 }
 
-/* MAKER NAME - Supporting text with your color */
+/* MAKER NAME */
 .card-maker-link {
   text-decoration: none;
   color: inherit;
   transition: color 0.2s ease;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .card-maker {
-  font-size: 0.85rem; /* Slightly larger for better readability */
-  color: #B8693D !important; /* Direct color value with !important to override */
+  font-size: 0.8rem;
+  color: var(--maker-color) !important;
   font-weight: 600;
   margin: 0;
-  line-height: 1.2;
+  line-height: 1.1;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   overflow: hidden;
@@ -214,57 +197,59 @@
 }
 
 .card-maker-link:hover .card-maker {
-  color: var(--accent-gold) !important;
+  color: var(--primary-hover) !important;
 }
 
-/* RATING SECTION - Closer to product info with review count */
+/* RATING SECTION */
 .card-rating {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: auto; /* Pushes to bottom of card */
-  padding-top: 12px;
-  padding-bottom: 4px; /* ADDED: bottom padding for stars */
-  border-top: 1px solid var(--border-subtle);
-  min-height: 36px; /* ADDED: minimum height */
-  overflow: visible !important; /* ADDED: ensure stars visible */
+  gap: 6px;
+  margin-top: auto;
+  padding: 8px 0 6px 0;
+  border-top: 1px solid var(--border-light);
+  min-height: 32px;
+  overflow: visible;
 }
 
 .rating-value {
   font-weight: 800;
-  color: var(--text-dark);
+  color: var(--text-primary);
   font-size: 1rem;
   min-width: 32px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 .stars {
-  display: flex;
+  display: inline-flex;
+  align-items: center;
   gap: 1px;
-  height: 20px; /* ADDED: fixed height */
-  align-items: center; /* ADDED: center alignment */
-  overflow: visible !important; /* ADDED: ensure visible */
+  height: 20px;
+  line-height: 20px;
+  overflow: visible;
 }
 
-/* Star styling */
 .stars .star {
-  font-size: 0.9rem;
-  line-height: 1;
+  display: inline-block;
+  width: 16px;
+  height: 20px;
+  line-height: 20px;
+  font-size: 16px;
+  text-align: center;
   transition: transform 0.2s ease;
 }
 
 .stars .star.filled {
-  color: var(--accent-warm);
+  color: var(--star-color);
   text-shadow: 0 1px 3px rgba(245, 158, 11, 0.3);
 }
 
 .stars .star.half {
-  color: var(--accent-warm);
+  color: var(--star-color);
   opacity: 0.5;
 }
 
 .stars .star.empty {
-  color: #E5E7EB;
+  color: var(--star-empty);
 }
 
 .chocolate-card:hover .stars .star.filled {
@@ -273,16 +258,34 @@
 
 .rating-count {
   font-size: 0.75rem;
-  color: var(--text-medium);
+  color: var(--text-secondary);
   font-weight: 500;
-  margin-left: 4px; /* Small gap from stars */
+  margin-left: 4px;
   white-space: nowrap;
 }
 
-/* Remove underlines from all links */
-.chocolate-card a {
+/* Remove underlines from all card links */
+.chocolate-card a,
+.chocolate-card a *,
+.chocolate-card a:link,
+.chocolate-card a:visited,
+.chocolate-card a:hover,
+.chocolate-card a:active {
   text-decoration: none;
   color: inherit;
+}
+
+/* Pseudo-element line prevention */
+.chocolate-card .card-title::after,
+.chocolate-card .card-title::before,
+.chocolate-card .card-maker::after,
+.chocolate-card .card-maker::before,
+.chocolate-card .chocolate-title-link::after,
+.chocolate-card .chocolate-title-link::before,
+.chocolate-card .card-maker-link::after,
+.chocolate-card .card-maker-link::before {
+  display: none;
+  content: none;
 }
 
 /* GRID LAYOUTS */
@@ -309,7 +312,7 @@
   100% { background-position: 200% 0; }
 }
 
-/* RESPONSIVE DESIGN */
+/* RESPONSIVE - Desktop */
 @media (min-width: 1200px) {
   .chocolate-grid,
   .chocolate-cards,
@@ -319,79 +322,89 @@
   }
 }
 
+/* RESPONSIVE - Tablet */
 @media (max-width: 768px) {
   .chocolate-card {
-    height: auto !important; /* CHANGED: from 340px to auto */
-    min-height: 340px; /* ADDED: minimum height */
+    min-height: 340px;
   }
-  
+
   .image-container {
     height: 180px;
-    padding: 15px; /* ADDED: padding for mobile */
+    padding: 15px;
   }
-  
+
   .image-container img,
   .card-image {
-    height: 65%; /* CHANGED: reduced for mobile */
-    max-width: 75%; /* CHANGED: reduced for mobile */
+    height: 75%;
+    max-width: 75%;
   }
-  
+
   .card-content {
-    padding: 16px;
-    padding-bottom: 20px !important; /* CHANGED: ensure bottom padding */
+    padding: 14px;
+    padding-bottom: 18px;
   }
-  
+
   .card-title {
     font-size: 1rem;
+    margin-bottom: 4px;
   }
-  
+
+  .card-maker {
+    font-size: 0.75rem;
+  }
+
   .card-actions {
     top: 10px;
     right: 10px;
   }
-  
+
   .card-actions > * {
     width: 32px !important;
     height: 32px !important;
   }
-  
+
   .card-actions svg {
     width: 16px !important;
     height: 16px !important;
   }
+
+  .card-rating {
+    padding-top: 6px;
+    padding-bottom: 4px;
+  }
 }
 
+/* RESPONSIVE - Mobile */
 @media (max-width: 480px) {
   .chocolate-card {
-    height: auto !important; /* CHANGED: from 320px to auto */
-    min-height: 320px; /* ADDED: minimum height */
+    min-height: 320px;
   }
-  
+
   .image-container {
-    height: 160px;
-    padding: 12px; /* ADDED: padding for small screens */
+    height: 240px;
+    padding: 12px;
   }
-  
+
   .image-container img,
   .card-image {
-    height: 70%; /* CHANGED: increased for small screens */
-    max-width: 80%; /* CHANGED: increased for small screens */
+    height: 90%;
+    max-width: 90%;
   }
-  
+
   .card-content {
     padding: 14px;
-    padding-bottom: 18px !important; /* CHANGED: ensure bottom padding */
+    padding-bottom: 18px;
     gap: 8px;
   }
-  
+
   .card-title {
     font-size: 0.95rem;
   }
-  
+
   .card-maker {
     font-size: 0.8rem;
   }
-  
+
   .chocolate-grid {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -403,13 +416,13 @@
 .chocolate-card:focus-visible,
 .card-maker-link:focus-visible,
 .chocolate-title-link:focus-visible {
-  outline: 2px solid var(--accent-gold);
+  outline: 2px solid var(--star-color);
   outline-offset: 2px;
   border-radius: var(--card-radius);
 }
 
 .card-actions > *:focus-visible {
-  outline: 2px solid var(--accent-gold);
+  outline: 2px solid var(--star-color);
   outline-offset: 2px;
 }
 
@@ -421,485 +434,8 @@
   .card-actions > * {
     transition: none;
   }
-  
+
   .chocolate-card:hover .stars .star.filled {
     transform: none;
-  }
-}
-
-/* BROWSE PAGE - CHOCOLATE CARD TYPOGRAPHY FIXES */
-/* Add this to the END of ChocolateCard.css */
-
-/* Ensure all card text uses Helvetica Neue */
-.chocolate-card,
-.chocolate-card * {
-  font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
-}
-
-/* Chocolate name (card-title) - BLACK with NO LINES */
-.chocolate-card .card-title {
-  color: #000000 !important;
-  font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
-  font-weight: 600 !important;
-  font-size: 1rem !important;
-  text-decoration: none !important;
-  border: none !important;
-  border-bottom: none !important;
-}
-
-/* Remove underlines from title link */
-.chocolate-card .chocolate-title-link {
-  text-decoration: none !important;
-  border: none !important;
-  border-bottom: none !important;
-}
-
-/* Maker/Brand name (card-maker) - TERRACOTTA with NO LINES */
-.chocolate-card .card-maker {
-  color: #B8693D !important;
-  font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
-  font-weight: 500 !important;
-  font-size: 0.8rem !important;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  text-decoration: none !important;
-  border: none !important;
-  border-top: none !important;
-  border-bottom: none !important;
-}
-
-/* Remove underlines from maker link */
-.chocolate-card .card-maker-link {
-  text-decoration: none !important;
-  border: none !important;
-}
-
-/* Remove any pseudo-element lines */
-.chocolate-card .card-title::after,
-.chocolate-card .card-title::before,
-.chocolate-card .card-maker::after,
-.chocolate-card .card-maker::before,
-.chocolate-card .chocolate-title-link::after,
-.chocolate-card .chocolate-title-link::before,
-.chocolate-card .card-maker-link::after,
-.chocolate-card .card-maker-link::before {
-  display: none !important;
-  content: none !important;
-}
-
-/* Keep hover effects but maintain colors and no lines */
-.chocolate-card .card-maker-link:hover .card-maker {
-  color: #8A5A3A !important;
-  text-decoration: none !important;
-}
-
-.chocolate-card .chocolate-title-link:hover .card-title {
-  color: #333333 !important;
-  text-decoration: none !important;
-}
-
-/* Other text elements */
-.chocolate-card .card-details .origin,
-.chocolate-card .card-details .percentage,
-.chocolate-card .rating-value,
-.chocolate-card .rating-count {
-  font-family: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
-}
-
-/* =====================================================
-   FINAL FIX FOR CHOCOLATE CARD MOBILE
-   Add to ChocolateCard.css
-   ===================================================== */
-
-/* Remove scroll from chocolate cards - UPDATED */
-.chocolate-card {
-  overflow: visible !important; /* CHANGED: No scrolling, allow content to be visible */
-  padding: 0 !important; /* CHANGED: removed extra padding that was added */
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Image should be contained */
-.chocolate-card .card-image,
-.chocolate-card img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-
-/* Fix rating line layout */
-.chocolate-card .rating,
-.chocolate-card .card-rating,
-.chocolate-card .rating-section {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0.75rem 0;
-  flex-wrap: nowrap; /* Keep on one line */
-  overflow: visible !important; /* ADDED: ensure visible */
-}
-
-/* Rating number */
-.chocolate-card .rating-value {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #1A1A1A;
-  flex-shrink: 0;
-}
-
-/* Star container */
-.chocolate-card .rating-stars,
-.chocolate-card .stars {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  flex-shrink: 0;
-  overflow: visible !important; /* ADDED: ensure visible */
-}
-
-/* Fix star display - use star symbols */
-.chocolate-card .star {
-  font-size: 1.125rem;
-  line-height: 1;
-  display: inline-block;
-}
-
-/* Star colors */
-.chocolate-card .star.filled,
-.chocolate-card .star:not(.empty) {
-  color: #FFD700 !important; /* Gold stars */
-}
-
-.chocolate-card .star.empty {
-  color: #E0E0E0 !important; /* Gray empty stars */
-}
-
-/* Review count */
-.chocolate-card .review-count {
-  font-size: 0.875rem;
-  color: #666;
-  white-space: nowrap;
-}
-
-/* Mobile specific adjustments - UPDATED */
-@media (max-width: 768px) {
-  .chocolate-card {
-    width: 100%;
-    max-width: 100%;
-    margin: 0.5rem 0;
-    overflow: visible !important; /* CHANGED: Ensure no scroll */
-    height: auto !important; /* CHANGED: flexible height */
-    min-height: 340px; /* ADDED: minimum height */
-  }
-  
-  /* Slightly smaller stars on mobile */
-  .chocolate-card .star {
-    font-size: 1rem;
-  }
-  
-  .chocolate-card .rating-value {
-    font-size: 1rem;
-  }
-  
-  /* Ensure title doesn't cause overflow */
-  .chocolate-card h3,
-  .chocolate-card .card-title {
-    font-size: 1.125rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-}
-
-/* If using Font Awesome or icon fonts for stars */
-.chocolate-card .fa-star,
-.chocolate-card .fas.fa-star {
-  color: #FFD700 !important;
-}
-
-.chocolate-card .far.fa-star {
-  color: #E0E0E0 !important;
-}
-
-/* Ensure no horizontal scroll either */
-.chocolate-card * {
-  max-width: 100%;
-}
-
-/* =====================================================
-   EMERGENCY FIX - REMOVE GRAY LINES FROM STARS
-   Add this to the VERY END of ChocolateCard.css
-   ===================================================== */
-
-/* First, fix the card structure - UPDATED */
-.chocolate-card {
-  overflow: visible !important; /* CHANGED: allow content to be visible */
-  height: auto !important;
-  min-height: 360px !important; /* CHANGED: from 340px for consistency */
-  max-height: none !important; /* CHANGED: removed max-height constraint */
-}
-
-.chocolate-card .card-content {
-  padding: 16px !important;
-  padding-bottom: 24px !important; /* CHANGED: increased bottom padding */
-  overflow: visible !important; /* CHANGED: ensure content visible */
-}
-
-/* AGGRESSIVE FIX FOR STAR LINES */
-.chocolate-card a,
-.chocolate-card a *,
-.chocolate-card a .stars,
-.chocolate-card a .star,
-.chocolate-card .stars,
-.chocolate-card .star {
-  text-decoration: none !important;
-  text-decoration-line: none !important;
-  text-decoration-style: initial !important;
-  text-decoration-color: initial !important;
-  border: 0 !important;
-  border-bottom: 0 !important;
-  outline: none !important;
-}
-
-/* Override any link styles that might affect stars */
-.chocolate-card a:link,
-.chocolate-card a:visited,
-.chocolate-card a:hover,
-.chocolate-card a:active {
-  text-decoration: none !important;
-}
-
-/* Fix the rating section specifically */
-.chocolate-card .card-rating {
-  text-decoration: none !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  padding: 12px 0 8px 0 !important;
-  margin-top: auto !important;
-  overflow: visible !important;
-  height: auto !important;
-  min-height: 36px !important; /* CHANGED: increased from 32px */
-}
-
-/* Fix the stars container */
-.chocolate-card .stars {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 1px !important;
-  text-decoration: none !important;
-  border: none !important;
-  height: 20px !important; /* Fixed height */
-  line-height: 20px !important; /* Match line height */
-  position: relative !important;
-  top: 0 !important;
-  overflow: visible !important; /* ADDED: ensure visible */
-}
-
-/* Fix individual stars */
-.chocolate-card .star {
-  display: inline-block !important;
-  width: 16px !important;
-  height: 20px !important;
-  line-height: 20px !important;
-  font-size: 16px !important;
-  text-align: center !important;
-  text-decoration: none !important;
-  border: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  position: relative !important;
-  top: 0 !important;
-  vertical-align: middle !important;
-  overflow: visible !important;
-}
-
-/* Clean star colors */
-.chocolate-card .star.filled {
-  color: #FFD700 !important;
-}
-
-.chocolate-card .star.empty {
-  color: #E5E7EB !important;
-}
-
-/* If stars are inside a link, reset the link */
-.chocolate-link .stars,
-.chocolate-link .star,
-a .stars,
-a .star {
-  text-decoration: none !important;
-  display: inline-block !important;
-  position: relative !important;
-}
-
-/* Mobile specific - UPDATED */
-@media (max-width: 768px) {
-  .chocolate-card {
-    height: auto !important; /* CHANGED: flexible height */
-    min-height: 340px !important; /* ADDED: minimum height */
-    max-height: none !important; /* CHANGED: removed constraint */
-  }
-  
-  .chocolate-card .card-content {
-    padding-bottom: 20px !important; /* CHANGED: ensure adequate padding */
-  }
-  
-  .chocolate-card .card-rating {
-    padding-bottom: 6px !important;
-  }
-}
-
-/* =====================================================
-   OPTIMIZE CHOCOLATE CARD SPACE USAGE - UPDATED
-   Add to ChocolateCard.css
-   ===================================================== */
-
-/* Adjust card height to accommodate larger images - UPDATED */
-.chocolate-card {
-  height: auto !important; /* CHANGED: flexible height */
-  min-height: 380px !important; /* Slightly taller minimum */
-  overflow: visible !important; /* CHANGED: ensure content visible */
-}
-
-/* Make image container larger - UPDATED */
-.chocolate-card .image-container {
-  height: 220px !important; /* Increased from 200px */
-  width: 100%;
-  background: #FAFAFA;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px !important; /* ADDED: padding for image spacing */
-}
-
-/* UPDATED: Better image sizing */
-.chocolate-card .image-container img,
-.chocolate-card .card-image {
-  width: auto !important; /* Let width adjust naturally */
-  height: 85% !important; /* Reduced from 85% */
-  max-width: 85% !important; /* Prevent too wide images */
-  object-fit: contain !important;
-}
-
-/* Optimize content spacing - UPDATED */
-.chocolate-card .card-content {
-  padding: 16px !important;
-  padding-bottom: 20px !important; /* CHANGED: increased for stars */
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  gap: 0 !important; /* Remove default gap */
-  overflow: visible !important; /* ADDED: ensure visible */
-}
-
-/* Tighten title spacing */
-.chocolate-card .chocolate-title-link {
-  margin-bottom: 2px !important; /* Reduced from 4px */
-}
-
-.chocolate-card .card-title {
-  font-size: 1.05rem !important;
-  font-weight: 700;
-  line-height: 1.2 !important;
-  margin: 0 0 6px 0 !important; /* Reduced bottom margin */
-}
-
-/* Reduce maker spacing */
-.chocolate-card .card-maker-link {
-  margin-bottom: 4px !important; /* Reduced from 8px */
-}
-
-.chocolate-card .card-maker {
-  font-size: 0.8rem !important;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin: 0 !important;
-  line-height: 1.1 !important; /* Tighter line height */
-}
-
-/* Optimize rating section - UPDATED */
-.chocolate-card .card-rating {
-  margin-top: auto !important; /* Push to bottom */
-  padding-top: 8px !important; /* Reduced from 12px */
-  padding-bottom: 6px !important; /* ADDED: space for stars */
-  border-top: 1px solid #F1F5F9;
-  display: flex;
-  align-items: center;
-  gap: 6px !important;
-  min-height: 32px !important; /* CHANGED: increased from 30px */
-  overflow: visible !important; /* ADDED: ensure stars visible */
-}
-
-/* Ensure stars are visible */
-.chocolate-card .stars {
-  display: flex;
-  align-items: center;
-  gap: 1px;
-  height: 18px !important;
-  line-height: 18px !important;
-  overflow: visible !important; /* ADDED: ensure visible */
-}
-
-.chocolate-card .star {
-  font-size: 0.95rem !important;
-  line-height: 1 !important;
-  display: inline-block;
-}
-
-/* Mobile adjustments - UPDATED */
-@media (max-width: 768px) {
-  .chocolate-card {
-    height: auto !important; /* CHANGED: flexible height */
-    min-height: 360px !important;
-  }
-  
-  .chocolate-card .image-container {
-    height: 180px !important;
-    padding: 15px !important; /* Slightly less padding on mobile */
-  }
-  
-  .chocolate-card .image-container img,
-  .chocolate-card .card-image {
-    height: 75% !important; /* Smaller on mobile */
-    max-width: 75% !important;
-  }
-  
-  .chocolate-card .card-content {
-    padding: 14px !important;
-    padding-bottom: 18px !important; /* Adequate bottom padding */
-  }
-  
-  .chocolate-card .card-title {
-    font-size: 1rem !important;
-    margin-bottom: 4px !important;
-  }
-  
-  .chocolate-card .card-maker {
-    font-size: 0.75rem !important;
-  }
-  
-  .chocolate-card .card-rating {
-    padding-top: 6px !important;
-    padding-bottom: 4px !important;
-  }
-}
-
-/* Small screens - UPDATED */
-@media (max-width: 480px) {
-  .chocolate-card {
-    height: auto !important; /* CHANGED: flexible height */
-    min-height: 340px !important;
-  }
-  
-  .chocolate-card .image-container {
-    height: 240px !important;
-    padding: 12px !important; /* Less padding on small screens */
-  }
-  
-  .chocolate-card .image-container img,
-  .chocolate-card .card-image {
-    height: 90% !important; /* Even smaller on small screens */
-    max-width: 90% !important;
   }
 }

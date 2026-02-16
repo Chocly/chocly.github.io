@@ -33,8 +33,9 @@ function App() {
     <BrowserRouter basename={basename}>
       <AuthProvider>
         <div className="app">
+          <a href="#main-content" className="skip-link">Skip to content</a>
           <Header />
-          <main className="main-content">
+          <main className="main-content" id="main-content">
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/chocolate/:id" element={<ChocolateDetailPage />} />

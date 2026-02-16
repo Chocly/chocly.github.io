@@ -51,7 +51,7 @@
   padding: 0.5rem;
   border-radius: 8px;
   cursor: pointer;
-  font-family: 'Helvetica Neue', -apple-system, sans-serif;
+
   transition: all 0.2s ease;
 }
 
@@ -67,7 +67,7 @@
 
 /* Title - centered and single line */
 .mobile-page-header h1 {
-  font-family: 'Poppins', sans-serif;
+
   font-size: 1.125rem;
   font-weight: 600;
   color: #231F1F;
@@ -135,7 +135,7 @@
   color: #059669;
   font-size: 0.875rem;
   margin-top: 0.5rem;
-  font-family: 'Helvetica Neue', -apple-system, sans-serif;
+
 }
 
 /* Essential Section */
@@ -148,7 +148,7 @@
 }
 
 .section-title-mobile {
-  font-family: 'Poppins', sans-serif;
+
   font-size: 1.25rem;
   font-weight: 600;
   color: #231F1F;
@@ -166,7 +166,7 @@
 
 .form-group-mobile label {
   display: block;
-  font-family: 'Helvetica Neue', -apple-system, sans-serif;
+
   font-size: 0.9375rem;
   font-weight: 500;
   color: #231F1F;
@@ -176,7 +176,7 @@
 .form-group-mobile input {
   width: 100%;
   padding: 0.875rem 1rem;
-  font-family: 'Helvetica Neue', -apple-system, sans-serif;
+
   font-size: 1rem;
   border: 2px solid #DFD3C0; /* Brand cream border */
   border-radius: 10px;
@@ -193,7 +193,7 @@
 
 /* Duplicate Warning */
 .duplicate-hint {
-  font-family: 'Helvetica Neue', -apple-system, sans-serif;
+
   font-size: 0.8125rem;
   color: #D97706;
   margin-top: 0.25rem;
@@ -211,7 +211,7 @@
   border: 2px solid #DFD3C0;
   border-radius: 10px;
   background: white;
-  font-family: 'Helvetica Neue', -apple-system, sans-serif;
+
   font-size: 0.9375rem;
   font-weight: 500;
   color: #6C6C4E; /* Brand sage */
@@ -243,7 +243,7 @@
   border: none;
   background: #F9EBCC;
   border-radius: 10px;
-  font-family: 'Helvetica Neue', -apple-system, sans-serif;
+
   font-size: 1rem;
   font-weight: 500;
   color: #231F1F;
@@ -301,7 +301,7 @@
   border: 2px solid #DFD3C0;
   border-radius: 20px;
   background: white;
-  font-family: 'Helvetica Neue', -apple-system, sans-serif;
+
   font-size: 0.8125rem;
   font-weight: 500;
   color: #6C6C4E;
@@ -340,7 +340,7 @@
   border-radius: 12px;
   background: #B8693D; /* Brand terracotta */
   color: white;
-  font-family: 'Helvetica Neue', -apple-system, sans-serif;
+
   font-size: 1.125rem;
   font-weight: 600;
   cursor: pointer;
@@ -402,14 +402,14 @@
 }
 
 .rating-modal h2 {
-  font-family: 'Poppins', sans-serif;
+
   font-size: 1.75rem;
   color: #231F1F;
   margin: 0 0 0.5rem 0;
 }
 
 .rating-modal p {
-  font-family: 'Helvetica Neue', -apple-system, sans-serif;
+
   color: #6B7280;
   margin: 0 0 1.5rem 0;
 }
@@ -461,7 +461,7 @@
 .skip-btn {
   padding: 0.875rem;
   border-radius: 10px;
-  font-family: 'Helvetica Neue', -apple-system, sans-serif;
+
   font-size: 0.9375rem;
   font-weight: 500;
   cursor: pointer;

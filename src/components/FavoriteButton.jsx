@@ -88,6 +88,7 @@ function FavoriteButton({
       `}
       title={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
       aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
+      aria-pressed={isFavorited}
     >
       <svg 
         className="heart-icon" 

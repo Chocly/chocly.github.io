@@ -99,6 +99,7 @@ function WantToTryButton({
         `}
         title={isInWantToTry ? 'Remove from want to try list' : 'Add to want to try list'}
         aria-label={isInWantToTry ? 'Remove from want to try list' : 'Add to want to try list'}
+        aria-pressed={isInWantToTry}
       >
         {loading ? (
           <>

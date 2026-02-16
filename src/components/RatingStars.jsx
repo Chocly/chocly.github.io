@@ -73,7 +73,7 @@ function RatingStars({ rating, size = 'small', interactive = false, onRatingChan
     stars.push(starElement);
   }
   
-  return <div className="rating-stars">{stars}</div>;
+  return <div className="rating-stars" role="img" aria-label={`Rating: ${rating.toFixed(1)} out of 5 stars`}>{stars}</div>;
 }
 
 export default RatingStars;

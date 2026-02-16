@@ -15,6 +15,7 @@ import { addReview } from '../services/reviewService';
 import QuickReviewCTA from '../components/QuickReviewCTA';
 import { formatReviewerName } from '../utils/nameFormatter';
 import { isSuperAdmin } from '../config/adminConfig';
+import Breadcrumb from '../components/Breadcrumb';
 
 function ChocolateDetailPage() {
   const { id } = useParams();
@@ -181,7 +182,6 @@ function ChocolateDetailPage() {
         }
       }
 
-      console.log(`Fetched ${reviewsData.length} reviews, displaying ${uniqueReviews.length} unique reviews`);
       setReviews(uniqueReviews);
     } catch (error) {
       console.error('Error fetching reviews:', error);
@@ -284,7 +284,6 @@ function ChocolateDetailPage() {
 
       if (existingUserReview) {
         // Review was already updated by QuickReviewCTA, just refresh
-        console.log('Review updated, refreshing list');
         await fetchReviews();
         setReviewSuccess(true);
         setTimeout(() => setReviewSuccess(false), 3000);
@@ -390,6 +389,11 @@ function ChocolateDetailPage() {
 
   return (
     <div className="chocolate-detail-page">
+      <Breadcrumb items={[
+        { label: 'Home', path: '/' },
+        { label: 'Browse', path: '/browse' },
+        { label: chocolate.name }
+      ]} />
       {/* DYNAMIC SEO COMPONENT */}
       <SEO
         title={seoData.title}

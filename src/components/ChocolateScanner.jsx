@@ -29,7 +29,6 @@ function ChocolateScanner() {
       // Import your Firebase service - path is correct!
       const { getAllChocolates } = await import('../services/chocolateFirebaseService');
       
-      console.log('🔄 Loading chocolates from Firebase...');
       const chocolates = await getAllChocolates();
       
       // Filter only chocolates with images and map to needed format
@@ -53,14 +52,12 @@ function ChocolateScanner() {
           description: chocolate.description
         }));
       
-      console.log(`✅ Loaded ${chocolatesWithImages.length} chocolates with real images from Firebase`);
       setChocolateDatabase(chocolatesWithImages);
       setLoading(false);
     } catch (err) {
       console.error('Failed to load database:', err);
       
       // Fallback to a smaller set of sample data if Firebase fails
-      console.log('⚠️ Using fallback data');
       const fallbackData = [
         {
           id: 'fallback1',
@@ -225,13 +222,6 @@ function ChocolateScanner() {
       const uploadedHash = await createImageHash(uploadedImageUrl);
       const uploadedColors = await extractDominantColors(uploadedImageUrl);
       
-      console.log('📸 Uploaded Image Analysis:', {
-        hash: uploadedHash?.substring(0, 20) + '...',
-        colors: uploadedColors,
-        imageUrl: uploadedImageUrl,
-        fileName: uploadedFileName
-      });
-      
       if (!uploadedHash) {
         throw new Error('Could not process uploaded image');
       }
@@ -241,9 +231,6 @@ function ChocolateScanner() {
       const knownBrands = [...new Set(chocolateDatabase.map(c => c.maker?.toLowerCase()).filter(Boolean))];
       const detectedBrand = knownBrands.find(brand => fileNameLower.includes(brand));
       
-      if (detectedBrand) {
-        console.log('🏷️ Detected brand from filename:', detectedBrand);
-      }
       
       setProgress(40);
       
@@ -251,8 +238,6 @@ function ChocolateScanner() {
       const results = [];
       const batchSize = 10;
       const totalChocolates = chocolateDatabase.length;
-      
-      console.log(`🔍 Comparing against ${totalChocolates} chocolates...`);
       
       for (let i = 0; i < totalChocolates; i += batchSize) {
         const batch = chocolateDatabase.slice(i, Math.min(i + batchSize, totalChocolates));
@@ -276,18 +261,6 @@ function ChocolateScanner() {
           // Boost score if brand matches
           if (detectedBrand && chocolate.maker?.toLowerCase() === detectedBrand) {
             visualScore = Math.min(visualScore + 30, 100);
-            console.log(`🎯 Brand match boost for ${chocolate.name}: +30 points`);
-          }
-          
-          // Debug high scores
-          if (visualScore > 40) {
-            console.log(`🎯 Potential match: ${chocolate.name}`, {
-              maker: chocolate.maker,
-              hashSim: hashSimilarity.toFixed(1),
-              colorSim: colorSimilarity.toFixed(1),
-              totalScore: visualScore.toFixed(1),
-              brandMatch: detectedBrand && chocolate.maker?.toLowerCase() === detectedBrand
-            });
           }
           
           // Lower threshold for more matches
@@ -320,11 +293,6 @@ function ChocolateScanner() {
         // Then sort by score
         return b.matchScore - a.matchScore;
       });
-      
-      console.log(`✅ Found ${results.length} matches above threshold`);
-      if (results.length > 0) {
-        console.log('🏆 Best match:', results[0].name, 'Score:', results[0].matchScore.toFixed(1));
-      }
       
       setProgress(100);
       setMatches(results.slice(0, 10)); // Top 10 matches

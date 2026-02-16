@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { getAllChocolates } from '../services/chocolateFirebaseService'; // Changed from searchChocolates
 import ChocolateCard from '../components/ChocolateCard';
+import Breadcrumb from '../components/Breadcrumb';
 import './MakerPage.css';
 
 function MakerPage() {
@@ -25,12 +26,8 @@ function MakerPage() {
       
       try {
         setLoading(true);
-        console.log('🔍 Searching for chocolates by maker:', currentMaker);
-        
         // Get ALL chocolates (this will enrich them with maker names)
         const allChocolates = await getAllChocolates();
-        console.log('📊 Total chocolates retrieved:', allChocolates.length);
-        
         // Filter to only include chocolates where the maker matches
         // Use case-insensitive matching and trim whitespace
         const makerChocolates = allChocolates.filter(chocolate => {
@@ -41,26 +38,21 @@ function MakerPage() {
           
           // Try exact match first
           if (chocolateMaker === searchMaker) {
-            console.log('✅ Exact match found:', chocolate.name, 'by', chocolate.maker);
             return true;
           }
           
           // Try partial match (in case of slight differences)
           if (chocolateMaker.includes(searchMaker) || searchMaker.includes(chocolateMaker)) {
-            console.log('✅ Partial match found:', chocolate.name, 'by', chocolate.maker);
             return true;
           }
           
           return false;
         });
         
-        console.log('🎯 Chocolates found for maker:', makerChocolates.length);
-        console.log('📋 Maker chocolates:', makerChocolates.map(c => `${c.name} by ${c.maker}`));
-        
         setChocolates(makerChocolates);
         setLoading(false);
       } catch (err) {
-        console.error("💥 Error fetching maker chocolates:", err);
+        console.error("Error fetching maker chocolates:", err);
         setError(err.message);
         setLoading(false);
       }
@@ -110,6 +102,11 @@ function MakerPage() {
   
   return (
     <div className="maker-page">
+      <Breadcrumb items={[
+        { label: 'Home', path: '/' },
+        { label: 'Browse', path: '/browse' },
+        { label: currentMaker || 'Maker' }
+      ]} />
       <div className="container">
         <div className="maker-header">
           <h1>Chocolates by {currentMaker}</h1>

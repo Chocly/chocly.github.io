@@ -54,10 +54,11 @@ function ChocolateCard({ chocolate, featured = false, className = '' }) {
       {/* Image Container with Link - using existing classes */}
       <Link to={`/chocolate/${chocolate.id}`} className="chocolate-link">
         <div className="image-container">
-          <img 
-            src={chocolate.imageUrl || '/placeholder-chocolate.jpg'} 
-            alt={getDisplayTitle()} 
-            className="card-image" 
+          <img
+            src={chocolate.imageUrl || '/placeholder-chocolate.jpg'}
+            alt={getDisplayTitle()}
+            className="card-image"
+            loading="lazy"
           />
         </div>
       </Link>

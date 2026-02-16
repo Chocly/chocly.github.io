@@ -1,109 +1,33 @@
-/* src/index.css - Fixed for Chocolate Theme */
+/* src/index.css - Base rendering settings */
 
 :root {
-  /* Use your chocolate color scheme as the base */
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  line-height: 1.6;
-  font-weight: 400;
-
-  /* FIXED: Use light color scheme with chocolate colors */
   color-scheme: light;
-  color: #2D1810;              /* Rich dark chocolate for text */
-  background-color: #FFFFFF;   /* Clean white background */
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #F4A261;              /* Your gold accent for links */
-  text-decoration: inherit;
-}
-
-a:hover {
-  color: #E76F51;              /* Your coral color for hover */
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-  background-color: #FFFFFF;   /* Ensure white background */
-  color: #2D1810;              /* Chocolate text color */
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-  color: #2D1810;              /* Chocolate color for headings */
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #F4A261;   /* Your gold accent */
-  color: #2D1810;              /* Dark chocolate text */
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-
-button:hover {
-  border-color: #E76F51;       /* Coral border on hover */
-  background-color: #E76F51;   /* Coral background on hover */
-  color: #FFFFFF;              /* White text on hover */
-}
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto #F4A261;   /* Gold focus outline */
-}
-
-/* Remove the dark mode override entirely */
-/* This was causing your dark grey colors: */
-/*
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
-*/
-
-/* Add proper dark mode support with your chocolate theme */
+/* Dark mode support */
 @media (prefers-color-scheme: dark) {
   :root {
     color: #F9FAFB;
     background-color: #1F2937;
   }
-  
+
   body {
     background-color: #1F2937;
     color: #F9FAFB;
   }
-  
+
   a {
-    color: #F4A261;
+    color: var(--primary-color, #A73A04);
   }
-  
+
   a:hover {
-    color: #F4D03F;
+    color: var(--primary-hover, #8B2F03);
   }
-  
+
   button {
     background-color: #374151;
     color: #F9FAFB;

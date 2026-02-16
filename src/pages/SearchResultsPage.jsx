@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { searchChocolates } from '../services/chocolateFirebaseService'; // Make sure this import is correct
 import ChocolateCard from '../components/ChocolateCard';
+import Breadcrumb from '../components/Breadcrumb';
 import './SearchResultsPage.css';
 
 function SearchResultsPage() {
@@ -77,6 +78,10 @@ function SearchResultsPage() {
   
   return (
     <div className="search-results-page">
+      <Breadcrumb items={[
+        { label: 'Home', path: '/' },
+        { label: 'Search Results' }
+      ]} />
       <div className="container">
         <div className="search-header">
           <h1>Search Results</h1>
