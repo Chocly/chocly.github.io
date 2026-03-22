@@ -20,12 +20,10 @@ function ChocolateScanner() {
   const streamRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  // Load chocolate database from Firebase
   useEffect(() => {
     loadChocolateDatabase();
   }, []);
 
-  // Cleanup preview URL on unmount
   useEffect(() => {
     return () => {
       if (imagePreview) URL.revokeObjectURL(imagePreview);
@@ -37,7 +35,6 @@ function ChocolateScanner() {
       const { getAllChocolates } = await import('../services/chocolateFirebaseService');
       const chocolates = await getAllChocolates();
 
-      // Include all chocolates that have a name (no image filter needed — we match on text)
       const chocolatesForMatching = chocolates
         .filter((c) => c.name)
         .map((c) => ({
@@ -62,8 +59,6 @@ function ChocolateScanner() {
       setLoading(false);
     }
   };
-
-  // ── Core identification flow ──────────────────────────────────────────
 
   const identifyChocolate = async (imageBlob) => {
     setIsScanning(true);
@@ -96,7 +91,6 @@ function ChocolateScanner() {
 
       setVisionResult(result.data);
 
-      // Fuzzy match against database
       setProgress(80);
       const matchedChocolates = findMatchingChocolates(result.data, chocolateDatabase);
       setProgress(100);
@@ -116,8 +110,6 @@ function ChocolateScanner() {
     }
   };
 
-  // ── File upload ───────────────────────────────────────────────────────
-
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -132,8 +124,6 @@ function ChocolateScanner() {
 
     await identifyChocolate(file);
   };
-
-  // ── Camera ────────────────────────────────────────────────────────────
 
   const startCamera = async () => {
     try {
@@ -181,8 +171,6 @@ function ChocolateScanner() {
     );
   };
 
-  // ── Navigation ────────────────────────────────────────────────────────
-
   const handleChocolateClick = (chocolateId) => {
     navigate(`/chocolate/${chocolateId}`);
   };
@@ -202,11 +190,10 @@ function ChocolateScanner() {
   if (loading) {
     return (
       <div className="scanner-page">
-        <div className="container">
+        <div className="scanner-container">
           <div className="loading-state">
             <div className="loading-spinner"></div>
-            <h2>Loading Chocolate Database</h2>
-            <p>Preparing to identify chocolates...</p>
+            <p>Loading chocolate database...</p>
           </div>
         </div>
       </div>
@@ -215,74 +202,56 @@ function ChocolateScanner() {
 
   return (
     <div className="scanner-page">
-      <div className="container">
+      <div className="scanner-container">
+        {/* Minimal header */}
         <header className="scanner-header">
           <h1>Identify Chocolate</h1>
           <p className="scanner-subtitle">
-            Take a photo or upload an image of any chocolate label
+            Snap a photo or upload an image of any chocolate label
           </p>
-          <div className="scanner-stats">
-            {chocolateDatabase.length} chocolates in our database
-          </div>
         </header>
 
-        <div className="scanner-card">
-          {/* Camera Section */}
-          <section className="scanner-section">
-            <h2 className="section-title">
-              <span className="section-icon">📸</span>
-              Camera
-            </h2>
-
-            {!cameraActive ? (
-              <div className="camera-placeholder">
-                <div className="placeholder-icon">📷</div>
-                <p>Snap a photo of chocolate packaging</p>
-                <button
-                  onClick={startCamera}
-                  className="btn btn-primary btn-large"
-                  disabled={isScanning}
-                >
-                  Start Camera
-                </button>
+        {/* Side-by-side input options */}
+        {!cameraActive && !imagePreview && (
+          <div className="scanner-input-grid">
+            <button
+              onClick={startCamera}
+              className="input-card"
+              disabled={isScanning}
+            >
+              <div className="input-card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                  <circle cx="12" cy="13" r="4"/>
+                </svg>
               </div>
-            ) : (
-              <div className="camera-container">
-                <div className="camera-viewport">
-                  <video
-                    ref={videoRef}
-                    autoPlay
-                    playsInline
-                    className="camera-video"
-                  />
-                  <div className="camera-overlay">
-                    <div className="scan-frame">
-                      <span className="scan-hint">Position chocolate label here</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="camera-controls">
-                  <button
-                    onClick={capturePhoto}
-                    className="btn btn-primary btn-large"
-                    disabled={isScanning}
-                  >
-                    {isScanning ? 'Processing...' : 'Capture Photo'}
-                  </button>
-                  <button onClick={stopCamera} className="btn btn-secondary">
-                    Stop Camera
-                  </button>
-                </div>
+              <div className="input-card-text">
+                <h3>Take Photo</h3>
+                <p>Use your camera</p>
               </div>
-            )}
-          </section>
+            </button>
 
-          {/* File Upload Section */}
-          <section className="scanner-section">
-            <h2 className="section-title">
-              <span className="section-icon">📁</span>
-              Upload Image
-            </h2>
+            <div
+              onClick={() => fileInputRef.current?.click()}
+              className="input-card"
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') fileInputRef.current?.click();
+              }}
+            >
+              <div className="input-card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="17 8 12 3 7 8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+              </div>
+              <div className="input-card-text">
+                <h3>Upload Image</h3>
+                <p>Choose from files</p>
+              </div>
+            </div>
 
             <input
               ref={fileInputRef}
@@ -291,214 +260,220 @@ function ChocolateScanner() {
               onChange={handleFileUpload}
               style={{ display: 'none' }}
             />
+          </div>
+        )}
 
-            <div
-              onClick={() => fileInputRef.current?.click()}
-              className="upload-area"
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') fileInputRef.current?.click();
-              }}
-            >
-              <div className="upload-icon">⬆️</div>
-              <h3>Choose Image</h3>
-              <p>Select a photo of chocolate packaging</p>
+        {/* Active camera view */}
+        {cameraActive && (
+          <div className="camera-container">
+            <div className="camera-viewport">
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                className="camera-video"
+              />
+              <div className="camera-overlay">
+                <div className="scan-frame">
+                  <span className="scan-hint">Position label here</span>
+                </div>
+              </div>
             </div>
-          </section>
+            <div className="camera-controls">
+              <button
+                onClick={capturePhoto}
+                className="btn btn-primary"
+                disabled={isScanning}
+              >
+                {isScanning ? 'Processing...' : 'Capture'}
+              </button>
+              <button onClick={stopCamera} className="btn btn-secondary">
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
 
-          {/* Image Preview */}
-          {imagePreview && (
-            <section className="scanner-section">
-              <div className="image-preview-header">
-                <h2 className="section-title">
-                  <span className="section-icon">📷</span>
-                  Your Photo
-                </h2>
+        {/* Image preview */}
+        {imagePreview && (
+          <div className="preview-section">
+            <div className="preview-row">
+              <img
+                src={imagePreview}
+                alt="Uploaded chocolate"
+                className="image-preview"
+              />
+              <div className="preview-actions">
                 {!isScanning && (
                   <button onClick={resetScanner} className="btn btn-secondary btn-small">
                     Scan Another
                   </button>
                 )}
               </div>
-              <div className="image-preview-container">
-                <img
-                  src={imagePreview}
-                  alt="Uploaded chocolate"
-                  className="image-preview"
-                />
-              </div>
-            </section>
-          )}
+            </div>
+          </div>
+        )}
 
-          {/* Progress Bar */}
-          {isScanning && (
-            <section className="scanner-section">
-              <div className="progress-container">
-                <div className="progress-bar">
-                  <div
-                    className="progress-fill"
-                    style={{ width: `${progress}%` }}
-                  />
-                </div>
-                <p className="progress-text">
-                  {progress < 60
-                    ? 'Analyzing chocolate label...'
-                    : 'Searching our database...'}
-                  {' '}{Math.round(progress)}%
-                </p>
-              </div>
-            </section>
-          )}
+        {/* Progress */}
+        {isScanning && (
+          <div className="progress-section">
+            <div className="progress-bar">
+              <div
+                className="progress-fill"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <p className="progress-text">
+              {progress < 60 ? 'Analyzing label...' : 'Searching database...'}
+            </p>
+          </div>
+        )}
 
-          {/* Error Display */}
-          {error && (
-            <section className="scanner-section">
-              <div className="error-message">
-                <span className="error-icon">⚠️</span>
-                {error}
-              </div>
-            </section>
-          )}
-        </div>
+        {/* Error */}
+        {error && (
+          <div className="error-message">
+            <span className="error-icon">!</span>
+            {error}
+          </div>
+        )}
 
-        {/* Detection Result */}
+        {/* Detection tags */}
         {visionResult && visionResult.confidence !== 'none' && (
           <div className="detection-result">
-            <h3>We detected:</h3>
+            <span className="detection-label">Detected:</span>
             <div className="detection-details">
               {visionResult.brand && (
-                <span className="detection-tag">
-                  <strong>Brand:</strong> {visionResult.brand}
-                </span>
+                <span className="detection-tag">{visionResult.brand}</span>
               )}
               {visionResult.productName && (
-                <span className="detection-tag">
-                  <strong>Product:</strong> {visionResult.productName}
-                </span>
+                <span className="detection-tag">{visionResult.productName}</span>
               )}
               {visionResult.type && (
-                <span className="detection-tag">
-                  <strong>Type:</strong> {visionResult.type}
-                </span>
+                <span className="detection-tag">{visionResult.type}</span>
               )}
               {visionResult.cacaoPercentage && (
-                <span className="detection-tag">
-                  {visionResult.cacaoPercentage}% Cacao
-                </span>
+                <span className="detection-tag">{visionResult.cacaoPercentage}%</span>
               )}
               {visionResult.origin && (
-                <span className="detection-tag">
-                  <strong>Origin:</strong> {visionResult.origin}
-                </span>
+                <span className="detection-tag">{visionResult.origin}</span>
               )}
             </div>
           </div>
         )}
 
-        {/* Results */}
-        {matches.length > 0 && (
-          <div className="results-container">
-            <h2 className="results-title">Matches Found</h2>
-
-            {/* Best Match */}
-            {matches[0] && (
-              <div className="best-match-card">
-                <div className="best-match-header">
-                  <h2>Best Match</h2>
-                  <div className="confidence-indicator">
-                    <span className="confidence-value">
-                      {Math.round(matches[0].matchScore)}% Match
+        {/* Best Match */}
+        {matches.length > 0 && matches[0] && (
+          <div
+            className="best-match-card"
+            onClick={() => handleChocolateClick(matches[0].id)}
+          >
+            <div className="best-match-label">
+              <span className="best-match-text">Best Match</span>
+              <span className="match-score-pill">
+                {Math.round(matches[0].matchScore)}%
+              </span>
+            </div>
+            <div className="best-match-content">
+              {matches[0].imageUrl && (
+                <div className="match-image">
+                  <img
+                    src={matches[0].imageUrl}
+                    alt={matches[0].name}
+                    loading="lazy"
+                  />
+                </div>
+              )}
+              <div className="match-details">
+                <h3>{matches[0].name}</h3>
+                <p className="match-maker">{matches[0].maker}</p>
+                <div className="match-meta">
+                  {matches[0].origin && matches[0].origin !== 'Unknown' && (
+                    <span>{matches[0].origin}</span>
+                  )}
+                  {matches[0].cocoaPercent > 0 && (
+                    <span>{matches[0].cocoaPercent}% Cocoa</span>
+                  )}
+                </div>
+                {matches[0].averageRating > 0 && (
+                  <div className="match-rating">
+                    <span className="stars">
+                      {'★'.repeat(Math.floor(matches[0].averageRating || 0))}
+                      {'☆'.repeat(5 - Math.floor(matches[0].averageRating || 0))}
+                    </span>
+                    <span className="rating-text">
+                      {matches[0].averageRating?.toFixed(1)} ({matches[0].reviewCount})
                     </span>
                   </div>
-                </div>
-
-                <div
-                  onClick={() => handleChocolateClick(matches[0].id)}
-                  className="best-match-content chocolate-card"
-                  style={{ cursor: 'pointer' }}
-                >
-                  {matches[0].imageUrl && (
-                    <div className="match-image">
-                      <img
-                        src={matches[0].imageUrl}
-                        alt={matches[0].name}
-                        loading="lazy"
-                      />
-                    </div>
-                  )}
-
-                  <div className="match-details">
-                    <h3>{matches[0].name}</h3>
-                    <p className="card-maker">{matches[0].maker}</p>
-                    <div className="card-details">
-                      {matches[0].origin && matches[0].origin !== 'Unknown' && (
-                        <span className="origin">{matches[0].origin}</span>
-                      )}
-                      {matches[0].cocoaPercent > 0 && (
-                        <span className="percentage">
-                          {matches[0].cocoaPercent}% Cocoa
-                        </span>
-                      )}
-                    </div>
-                    {matches[0].averageRating > 0 && (
-                      <div className="card-rating">
-                        <span className="rating-value">
-                          {matches[0].averageRating?.toFixed(1)}
-                        </span>
-                        <div className="stars">
-                          {'★'.repeat(Math.floor(matches[0].averageRating || 0))}
-                          {'☆'.repeat(5 - Math.floor(matches[0].averageRating || 0))}
-                        </div>
-                        <span className="rating-count">
-                          ({matches[0].reviewCount} reviews)
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
+                )}
               </div>
-            )}
+            </div>
+          </div>
+        )}
 
-            {/* Other Matches */}
-            {matches.length > 1 && (
-              <div className="other-matches-card">
-                <div className="other-matches-header">
-                  <h3>Other Possible Matches</h3>
+        {/* Other Matches */}
+        {matches.length > 1 && (
+          <div className="other-matches">
+            <h3 className="other-matches-title">Other Matches</h3>
+            <div className="chocolate-grid">
+              {matches.slice(1).map((chocolate) => (
+                <div key={chocolate.id} style={{ position: 'relative' }}>
+                  <span
+                    className="match-confidence-badge"
+                    style={{
+                      background: chocolate.matchScore > 60
+                        ? 'var(--brand-sage)'
+                        : 'var(--brand-blue-gray)',
+                    }}
+                  >
+                    {Math.round(chocolate.matchScore)}%
+                  </span>
+                  <ChocolateCard chocolate={chocolate} />
                 </div>
+              ))}
+            </div>
+          </div>
+        )}
 
-                <div className="chocolate-grid">
-                  {matches.slice(1).map((chocolate) => (
-                    <div key={chocolate.id} style={{ position: 'relative' }}>
-                      <div
-                        className="match-confidence-badge"
-                        style={{
-                          position: 'absolute',
-                          top: '10px',
-                          right: '10px',
-                          background:
-                            chocolate.matchScore > 60 ? '#6C6C4E' : '#788990',
-                          color: 'white',
-                          padding: '4px 12px',
-                          borderRadius: '20px',
-                          fontSize: '14px',
-                          fontWeight: 'bold',
-                          zIndex: 10,
-                        }}
-                      >
-                        {Math.round(chocolate.matchScore)}% Match
-                      </div>
-                      <ChocolateCard chocolate={chocolate} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+        {/* Fallback actions */}
+        {matches.length > 0 && (
+          <div className="fallback-actions">
+            <span>Not the right match?</span>
+            <Link
+              to={`/search?query=${encodeURIComponent(
+                [visionResult?.brand, visionResult?.productName]
+                  .filter(Boolean)
+                  .join(' ')
+              )}`}
+              className="btn btn-secondary btn-small"
+            >
+              Search by Text
+            </Link>
+            <Link to="/add-chocolate" className="btn btn-secondary btn-small">
+              Add Chocolate
+            </Link>
+          </div>
+        )}
 
-            {/* Fallback actions */}
-            <div className="fallback-actions">
-              <p>Not what you're looking for?</p>
-              <div className="fallback-buttons">
+        {/* No matches but vision result exists */}
+        {!isScanning &&
+          matches.length === 0 &&
+          visionResult &&
+          visionResult.confidence !== 'none' && (
+            <div className="no-matches-card">
+              <h3>Not in Our Database Yet</h3>
+              <p>
+                We identified{' '}
+                <strong>
+                  {[visionResult.brand, visionResult.productName]
+                    .filter(Boolean)
+                    .join(' — ') || 'this chocolate'}
+                </strong>
+                , but it's not in our database.
+              </p>
+              <div className="no-matches-actions">
+                <Link to="/add-chocolate" className="btn btn-primary">
+                  Add This Chocolate
+                </Link>
                 <Link
                   to={`/search?query=${encodeURIComponent(
                     [visionResult?.brand, visionResult?.productName]
@@ -509,50 +484,10 @@ function ChocolateScanner() {
                 >
                   Search by Text
                 </Link>
-                <Link to="/add-chocolate" className="btn btn-secondary">
-                  Add This Chocolate
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* No matches but vision result exists */}
-        {!isScanning &&
-          matches.length === 0 &&
-          visionResult &&
-          visionResult.confidence !== 'none' && (
-            <div className="no-matches-card">
-              <div className="no-matches-content">
-                <div className="no-matches-icon">🤔</div>
-                <h3>Not in Our Database Yet</h3>
-                <p>
-                  We identified{' '}
-                  {[visionResult.brand, visionResult.productName]
-                    .filter(Boolean)
-                    .join(' — ') || 'this chocolate'}
-                  , but it's not in our database yet.
-                </p>
-                <div className="fallback-buttons">
-                  <Link to="/add-chocolate" className="btn btn-primary">
-                    Add This Chocolate
-                  </Link>
-                  <Link
-                    to={`/search?query=${encodeURIComponent(
-                      [visionResult?.brand, visionResult?.productName]
-                        .filter(Boolean)
-                        .join(' ')
-                    )}`}
-                    className="btn btn-secondary"
-                  >
-                    Search by Text
-                  </Link>
-                </div>
               </div>
             </div>
           )}
 
-        {/* Hidden canvas for camera capture */}
         <canvas ref={canvasRef} style={{ display: 'none' }} />
       </div>
     </div>

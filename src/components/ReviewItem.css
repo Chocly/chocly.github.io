@@ -36,6 +36,25 @@
   color: var(--text-dark);
 }
 
+.reviewer-link {
+  color: var(--brand-copper, #A73A04);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.reviewer-link:hover {
+  text-decoration: underline;
+  color: var(--primary-hover, #8B2F03);
+}
+
+.review-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.75rem;
+}
+
 @media (max-width: 600px) {
   .review-header {
     flex-direction: column;

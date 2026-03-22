@@ -1,0 +1,250 @@
+/* src/components/ChocolateMap.css */
+
+.choc-map {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+/* Progress bar */
+.choc-map-progress {
+  margin-bottom: 0.75rem;
+}
+
+.choc-map-progress-text {
+  font-size: 0.9rem;
+  color: #6C6C4E;
+  margin: 0 0 0.5rem;
+  text-align: center;
+}
+
+.choc-map-progress-text strong {
+  color: #A73A04;
+  font-weight: 700;
+}
+
+.choc-map-bar-track {
+  width: 100%;
+  height: 6px;
+  background: #f3f0ea;
+  border-radius: 3px;
+  overflow: hidden;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.choc-map-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #A73A04, #D4740A);
+  border-radius: 3px;
+  transition: width 0.8s ease;
+}
+
+/* Map wrapper */
+.choc-map-wrapper {
+  position: relative;
+  background: #F9F5EE;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.choc-map-svg {
+  width: 100%;
+  display: block;
+}
+
+/* Cacao belt band */
+.choc-map-cacao-belt {
+  fill: rgba(167, 58, 4, 0.05);
+}
+
+/* Country geographies */
+.choc-map-geo {
+  fill: #e4dfd5;
+  stroke: #d1cbc0;
+  stroke-width: 0.5;
+  transition: fill 0.15s;
+}
+
+.choc-map-geo:hover {
+  fill: #dbd5c9;
+}
+
+/* Ghost markers (unexplored major origins) */
+.choc-map-ghost {
+  fill: #c4bfb4;
+  opacity: 0.6;
+  cursor: pointer;
+  transition: opacity 0.2s, fill 0.2s;
+}
+
+.choc-map-ghost:hover {
+  opacity: 1;
+  fill: #a59e90;
+}
+
+/* Explored dots */
+.choc-map-dot {
+  fill: #A73A04;
+  cursor: pointer;
+  filter: drop-shadow(0 1px 3px rgba(167, 58, 4, 0.4));
+  transition: fill 0.15s;
+}
+
+.choc-map-dot:hover {
+  fill: #c24a0a;
+}
+
+/* Dot entrance animation */
+.choc-map-dot-animated {
+  animation: chocMapDotIn 0.5s ease both;
+}
+
+@keyframes chocMapDotIn {
+  0% {
+    r: 0;
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Pulse ring around explored dots */
+.choc-map-pulse {
+  fill: none;
+  stroke: #A73A04;
+  stroke-width: 1;
+  opacity: 0;
+  animation: chocMapPulse 2.5s ease-out infinite;
+}
+
+@keyframes chocMapPulse {
+  0% {
+    r: 5;
+    opacity: 0.5;
+  }
+  100% {
+    r: 14;
+    opacity: 0;
+  }
+}
+
+/* Zoom controls */
+.choc-map-controls {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 5;
+}
+
+.choc-map-ctrl-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: #fff;
+  color: #2D1B0E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  transition: background 0.15s;
+}
+
+.choc-map-ctrl-btn:hover:not(:disabled) {
+  background: #F5F0E8;
+}
+
+.choc-map-ctrl-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.choc-map-ctrl-reset {
+  margin-top: 4px;
+}
+
+/* Tooltip */
+.choc-map-tooltip {
+  position: absolute;
+  background: #2D1B0E;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 8px;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 10;
+  transform: translate(-50%, -100%);
+  margin-top: -10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  line-height: 1.3;
+}
+
+.choc-map-tooltip-count {
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
+.choc-map-tooltip-discover {
+  font-size: 0.7rem;
+  color: #F5C88A;
+}
+
+/* Legend */
+.choc-map-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: #9CA3AF;
+}
+
+.choc-map-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.choc-map-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.choc-map-legend-dot.explored {
+  background: #A73A04;
+}
+
+.choc-map-legend-dot.unexplored {
+  background: #c4bfb4;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .choc-map {
+    padding: 1rem 0.5rem;
+  }
+
+  .choc-map-progress-text {
+    font-size: 0.85rem;
+  }
+
+  .choc-map-legend {
+    font-size: 0.7rem;
+    gap: 1rem;
+  }
+}

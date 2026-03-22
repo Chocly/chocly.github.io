@@ -1,4 +1,4 @@
-// src/components/Header.jsx - Simplified with fixed positioning
+// src/components/Header.jsx
 import logo from '../assets/logolight.png';
 import logoIcon from '../assets/Header Icon Light.png';
 import { useState, useEffect } from 'react';
@@ -13,37 +13,32 @@ function Header() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  
+
   const navigate = useNavigate();
   const location = useLocation();
   const { currentUser, userProfile } = useAuth();
-  
+
   const isHomePage = location.pathname === "/";
 
-  // Handle resize
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Close menus on route change
   useEffect(() => {
     setMenuOpen(false);
     setUserMenuOpen(false);
     setSearchOpen(false);
   }, [location]);
 
-  // Prevent body scroll when menu is open
   useEffect(() => {
     if (menuOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
-    return () => {
-      document.body.style.overflow = '';
-    };
+    return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
 
   const handleSearch = (e) => {
@@ -95,35 +90,51 @@ function Header() {
     return name.charAt(0).toUpperCase();
   };
 
+  const isActive = (path) => {
+    if (path === '/browse') return location.pathname === '/browse' || location.pathname.startsWith('/browse');
+    if (path === '/community') return location.pathname === '/community';
+    return false;
+  };
+
   return (
     <>
       <header className="header">
         <div className="header-container">
           {/* Logo */}
           <Link to="/" className="header-logo">
-            <img 
-              src={(isMobile && !isHomePage) ? logoIcon : logo} 
-              alt="Chocly" 
+            <img
+              src={(isMobile && !isHomePage) ? logoIcon : logo}
+              alt="Chocly"
               className={(isMobile && !isHomePage) ? "logo-icon" : "logo-full"}
             />
           </Link>
-          
-          {/* Desktop Nav (Homepage only) */}
-          {isHomePage && !isMobile && (
+
+          {/* Desktop Nav — always visible on desktop */}
+          {!isMobile && (
             <nav className="desktop-nav" aria-label="Main navigation">
-              <Link to="/add-chocolate" className="desktop-nav-link">
-                Add Chocolate
-              </Link>
-              <Link to="/browse" className="desktop-nav-link">
+              <Link
+                to="/browse"
+                className={`desktop-nav-link ${isActive('/browse') ? 'active' : ''}`}
+              >
                 Browse
+              </Link>
+              <Link
+                to="/community"
+                className={`desktop-nav-link ${isActive('/community') ? 'active' : ''}`}
+              >
+                Community
               </Link>
             </nav>
           )}
-          
-          {/* Desktop Search (non-homepage) */}
-          {!isHomePage && !isMobile && (
-            <div className="search-dropdown">
+
+          {/* Desktop Search — always visible on desktop */}
+          {!isMobile && (
+            <div className="desktop-search">
               <form onSubmit={handleSearch} className="search-form">
+                <svg className="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="M21 21l-4.35-4.35"/>
+                </svg>
                 <input
                   type="text"
                   placeholder="Search chocolates..."
@@ -132,20 +143,14 @@ function Header() {
                   className="search-input"
                   aria-label="Search chocolates"
                 />
-                <button type="submit" className="search-submit" aria-label="Submit search">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="11" cy="11" r="8"/>
-                    <path d="M21 21l-4.35-4.35"/>
-                  </svg>
-                </button>
               </form>
             </div>
           )}
-          
+
           {/* Header Actions */}
           <div className="header-actions">
             {/* Mobile Search Button */}
-            {!isHomePage && isMobile && (
+            {isMobile && (
               <button
                 className="header-btn search-btn"
                 onClick={toggleSearch}
@@ -159,19 +164,14 @@ function Header() {
                 </svg>
               </button>
             )}
-            
-            {/* Add Button (desktop, logged in, non-homepage) */}
-            {currentUser && !isHomePage && !isMobile && (
-              <Link to="/add-chocolate" className="add-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="12" y1="8" x2="12" y2="16"/>
-                  <line x1="8" y1="12" x2="16" y2="12"/>
-                </svg>
-                <span>Add Chocolate</span>
+
+            {/* Add Review CTA — desktop only, logged in */}
+            {currentUser && !isMobile && (
+              <Link to="/add-chocolate" className="add-cta">
+                + Add Review
               </Link>
             )}
-            
+
             {/* User/Auth */}
             {currentUser ? (
               <button
@@ -185,54 +185,51 @@ function Header() {
                   <span className="user-initials">{getUserInitials()}</span>
                 </div>
                 {!isMobile && (
-                  <>
-                    <span className="user-name">{getUserDisplayName()}</span>
-                    <svg className={`chevron ${userMenuOpen ? 'rotate' : ''}`} width="14" height="14" viewBox="0 0 24 24">
-                      <path d="M7 10l5 5 5-5z" fill="currentColor"/>
-                    </svg>
-                  </>
+                  <svg className={`chevron ${userMenuOpen ? 'rotate' : ''}`} width="14" height="14" viewBox="0 0 24 24">
+                    <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+                  </svg>
                 )}
               </button>
             ) : (
-              <Link 
-                to="/auth" 
-                className={isHomePage ? "join-btn" : "signin-btn"}
-              >
-                {isHomePage ? "Join Us" : "Sign In"}
-              </Link>
+              <div className="auth-buttons">
+                <Link to="/auth" className="signin-btn">Log In</Link>
+                <Link to="/auth" className="signup-btn">Sign Up Free</Link>
+              </div>
             )}
-            
-            {/* Hamburger */}
-            <button
-              className="header-btn menu-btn"
-              onClick={toggleMenu}
-              type="button"
-              aria-expanded={menuOpen}
-              aria-label="Toggle navigation menu"
-            >
-              <span className={`hamburger ${menuOpen ? 'open' : ''}`}>
-                <span/>
-                <span/>
-                <span/>
-              </span>
-            </button>
+
+            {/* Hamburger — mobile only */}
+            {isMobile && (
+              <button
+                className="header-btn menu-btn"
+                onClick={toggleMenu}
+                type="button"
+                aria-expanded={menuOpen}
+                aria-label="Toggle navigation menu"
+              >
+                <span className={`hamburger ${menuOpen ? 'open' : ''}`}>
+                  <span/>
+                  <span/>
+                  <span/>
+                </span>
+              </button>
+            )}
           </div>
         </div>
       </header>
-      
+
       {/* Mobile Search Dropdown */}
       {searchOpen && isMobile && (
-        <div className="search-dropdown">
-          <form onSubmit={handleSearch} className="search-form">
+        <div className="search-dropdown-mobile">
+          <form onSubmit={handleSearch} className="search-form-mobile">
             <input
               type="text"
               placeholder="Search chocolates..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
+              className="search-input-mobile"
               autoFocus
             />
-            <button type="submit" className="search-submit">
+            <button type="submit" className="search-submit-mobile">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="11" cy="11" r="8"/>
                 <path d="M21 21l-4.35-4.35"/>
@@ -241,11 +238,11 @@ function Header() {
           </form>
         </div>
       )}
-      
+
       {/* Overlays */}
       {userMenuOpen && <div className="dropdown-overlay" onClick={() => setUserMenuOpen(false)} />}
       {menuOpen && <div className="menu-overlay" onClick={() => setMenuOpen(false)} />}
-      
+
       {/* User Dropdown */}
       {userMenuOpen && (
         <div className="user-dropdown">
@@ -274,7 +271,7 @@ function Header() {
           </button>
         </div>
       )}
-      
+
       {/* Mobile Nav */}
       {menuOpen && (
         <nav className="mobile-nav" aria-label="Mobile navigation">
@@ -286,6 +283,7 @@ function Header() {
           </div>
           <div className="nav-section">
             <h3>Community</h3>
+            <Link to="/community" onClick={toggleMenu}>Photo Feed</Link>
             {currentUser && (
               <Link to="/add-chocolate" onClick={toggleMenu}>Add Chocolate</Link>
             )}
@@ -295,8 +293,8 @@ function Header() {
           {!currentUser && (
             <div className="nav-section">
               <h3>Account</h3>
-              <Link to="/login" onClick={toggleMenu}>Log In</Link>
-              <Link to="/signup" onClick={toggleMenu}>Sign Up</Link>
+              <Link to="/auth" onClick={toggleMenu}>Log In</Link>
+              <Link to="/auth" onClick={toggleMenu}>Sign Up</Link>
             </div>
           )}
         </nav>

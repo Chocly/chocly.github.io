@@ -1,0 +1,545 @@
+/* =============================================
+   HomePage-new.css — Logged-out landing page
+   Prefix: hp- (homepage)
+   Mobile-first, zero !important
+   Breakpoints: 600px (tablet), 1024px (desktop)
+   ============================================= */
+
+/* === Scoped Reset === */
+.hp-page {
+  width: 100%;
+  overflow-x: hidden;
+  background: #FFFBF5;
+}
+
+.hp-page,
+.hp-page a,
+.hp-page a:hover,
+.hp-page a:visited {
+  text-decoration: none;
+}
+
+.hp-page h1,
+.hp-page h2,
+.hp-page h3,
+.hp-page p,
+.hp-page span {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  border: none;
+  border-bottom: none;
+}
+
+.hp-page h1::after,
+.hp-page h2::after,
+.hp-page h3::after {
+  display: none;
+  content: none;
+}
+
+/* === Section 1: Hero === */
+.hp-hero {
+  background: linear-gradient(135deg, #2D1B0E 0%, #5C2E0E 50%, #A73A04 100%);
+  padding: 80px 20px 40px;
+  color: #fff;
+}
+
+.hp-hero-inner {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.hp-hero-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 24px;
+}
+
+.hp-hero-subtitle {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 32px;
+}
+
+.hp-hero-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+/* === Buttons === */
+.hp-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 32px;
+  background: #A73A04;
+  color: #fff;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  transition: background 0.15s, transform 0.15s;
+  width: 100%;
+  max-width: 300px;
+}
+
+.hp-page .hp-btn-primary:hover {
+  background: #BF4508;
+  transform: translateY(-2px);
+  color: #fff;
+}
+
+.hp-btn-primary--large {
+  padding: 16px 40px;
+  font-size: 1.1rem;
+}
+
+.hp-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 32px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  transition: background 0.15s;
+  width: 100%;
+  max-width: 300px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hp-page .hp-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+/* === Hero Stats Bar === */
+.hp-hero-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px 0;
+  margin: 40px auto 0;
+  max-width: 480px;
+}
+
+.hp-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.hp-stat-number {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #F5C88A;
+  line-height: 1;
+}
+
+.hp-stat-label {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.hp-stat-divider {
+  width: 1px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* === Section 2: Featured Chocolates === */
+.hp-featured {
+  padding: 48px 20px 40px;
+  background: #FFFBF5;
+}
+
+.hp-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto 20px;
+}
+
+.hp-section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2D1B0E;
+  letter-spacing: -0.01em;
+}
+
+.hp-section-title--centered {
+  text-align: center;
+  width: 100%;
+}
+
+.hp-section-title--light {
+  color: #fff;
+}
+
+.hp-section-link {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #A73A04;
+  flex-shrink: 0;
+}
+
+.hp-page .hp-section-link:hover {
+  color: #8B2F03;
+}
+
+/* Horizontal scroll row */
+.hp-scroll-row {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hp-scroll-row::-webkit-scrollbar {
+  display: none;
+}
+
+.hp-scroll-row .chocolate-card {
+  flex: 0 0 220px;
+  scroll-snap-align: start;
+  min-height: auto;
+}
+
+/* Skeleton loading card */
+.hp-skeleton-card {
+  flex: 0 0 220px;
+  height: 320px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #EDE8DF 25%, #E5E0D6 50%, #EDE8DF 75%);
+  background-size: 200% 100%;
+  animation: hpShimmer 1.5s infinite;
+}
+
+@keyframes hpShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* === Section 3: Why Chocly === */
+.hp-features {
+  padding: 48px 20px;
+  background: #F5F0E8;
+}
+
+.hp-features .hp-section-title {
+  margin-bottom: 32px;
+}
+
+.hp-features-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hp-feature-card {
+  background: #FFFBF5;
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(45, 27, 14, 0.06);
+}
+
+.hp-feature-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  background: linear-gradient(135deg, #FFF5EB, #FFE8D6);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #A73A04;
+}
+
+.hp-feature-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2D1B0E;
+  margin-bottom: 12px;
+}
+
+.hp-feature-desc {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #6C6C4E;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+/* === Section 4: How It Works === */
+.hp-how {
+  padding: 48px 20px;
+  background: #B09169;
+  color: #fff;
+}
+
+.hp-how .hp-section-title {
+  margin-bottom: 32px;
+}
+
+.hp-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hp-step {
+  text-align: center;
+}
+
+.hp-step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 16px;
+}
+
+.hp-step-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.hp-step-desc {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+/* === Section 5: Final CTA === */
+.hp-cta {
+  padding: 64px 20px;
+  background: linear-gradient(135deg, #2D1B0E 0%, #5C2E0E 100%);
+  color: #fff;
+  text-align: center;
+}
+
+.hp-cta-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.hp-cta-subtitle {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 40px;
+  line-height: 1.5;
+}
+
+.hp-cta .hp-btn-primary {
+  margin-bottom: 32px;
+}
+
+.hp-cta-signin {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.hp-page .hp-cta-signin-link {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.hp-page .hp-cta-signin-link:hover {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+
+/* =============================================
+   RESPONSIVE: Tablet (600px+)
+   ============================================= */
+@media (min-width: 600px) {
+  .hp-hero {
+    padding: 100px 32px 48px;
+  }
+
+  .hp-hero-title {
+    font-size: 3rem;
+  }
+
+  .hp-hero-subtitle {
+    font-size: 1.125rem;
+  }
+
+  .hp-hero-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .hp-btn-primary,
+  .hp-btn-ghost {
+    width: auto;
+  }
+
+  .hp-featured {
+    padding: 56px 32px 48px;
+  }
+
+  .hp-section-title {
+    font-size: 1.5rem;
+  }
+
+  .hp-scroll-row .chocolate-card {
+    flex: 0 0 240px;
+  }
+
+  .hp-skeleton-card {
+    flex: 0 0 240px;
+  }
+
+  .hp-features {
+    padding: 56px 32px;
+  }
+
+  .hp-features-grid {
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .hp-feature-card {
+    flex: 1;
+  }
+
+  .hp-how {
+    padding: 56px 32px;
+  }
+
+  .hp-steps {
+    flex-direction: row;
+    gap: 24px;
+  }
+
+  .hp-step {
+    flex: 1;
+  }
+
+  .hp-cta {
+    padding: 80px 32px;
+  }
+
+  .hp-cta-title {
+    font-size: 2.25rem;
+  }
+}
+
+/* =============================================
+   RESPONSIVE: Desktop (1024px+)
+   ============================================= */
+@media (min-width: 1024px) {
+  .hp-hero {
+    padding: 120px 48px 56px;
+  }
+
+  .hp-hero-title {
+    font-size: 3.5rem;
+  }
+
+  .hp-hero-stats {
+    max-width: 540px;
+  }
+
+  .hp-stat-number {
+    font-size: 1.75rem;
+  }
+
+  .hp-featured {
+    padding: 64px 48px 56px;
+  }
+
+  .hp-scroll-row .chocolate-card {
+    flex: 0 0 260px;
+  }
+
+  .hp-skeleton-card {
+    flex: 0 0 260px;
+  }
+
+  .hp-features {
+    padding: 64px 48px;
+  }
+
+  .hp-feature-card {
+    padding: 36px 28px;
+  }
+
+  .hp-how {
+    padding: 64px 48px;
+  }
+
+  .hp-cta {
+    padding: 96px 48px;
+  }
+
+  .hp-cta-title {
+    font-size: 2.75rem;
+  }
+}
+
+/* =============================================
+   ACCESSIBILITY & MOTION
+   ============================================= */
+.hp-page a:focus-visible,
+.hp-page button:focus-visible {
+  outline: 2px solid #A73A04;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hp-btn-primary,
+  .hp-btn-ghost,
+  .hp-skeleton-card {
+    transition: none;
+    animation: none;
+  }
+}

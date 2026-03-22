@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { addReview, updateReview } from '../services/reviewService';
+import ReviewPhotoUploader from './ReviewPhotoUploader';
 import './QuickReviewCTA.css';
 
 function QuickReviewCTA({ 
@@ -18,7 +19,8 @@ function QuickReviewCTA({
   const [reviewText, setReviewText] = useState('');
   const [reviewTitle, setReviewTitle] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+  const [photoFiles, setPhotoFiles] = useState([]);
+
   // If editing, populate with existing review data
   useEffect(() => {
     if (existingReview) {
@@ -109,8 +111,8 @@ function QuickReviewCTA({
           helpful: 0,
           createdAt: new Date()
         };
-        
-        await addReview(fullReviewData);
+
+        await addReview(fullReviewData, photoFiles);
         alert('Review added successfully!');
       }
 
@@ -128,6 +130,7 @@ function QuickReviewCTA({
         setRating(0);
         setReviewText('');
         setReviewTitle('');
+        setPhotoFiles([]);
       }
       setIsReviewFormOpen(false);
       
@@ -225,17 +228,26 @@ function QuickReviewCTA({
                   required={!existingReview}
                 />
               </div>
-              
+
+              <div className="form-group">
+                <label>Photos</label>
+                <ReviewPhotoUploader
+                  photos={photoFiles}
+                  onPhotosChange={setPhotoFiles}
+                  existingUrls={existingReview?.photoUrls || []}
+                />
+              </div>
+
               <div className="form-actions">
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="btn-cancel"
                   onClick={() => setIsReviewFormOpen(false)}
                 >
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="btn-submit"
                   disabled={isSubmitting}
                 >
@@ -325,17 +337,25 @@ function QuickReviewCTA({
                 required
               />
             </div>
-            
+
+            <div className="form-group">
+              <label>Photos (optional)</label>
+              <ReviewPhotoUploader
+                photos={photoFiles}
+                onPhotosChange={setPhotoFiles}
+              />
+            </div>
+
             <div className="form-actions">
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="btn-cancel"
                 onClick={() => setIsReviewFormOpen(false)}
               >
                 Cancel
               </button>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="btn-submit"
                 disabled={isSubmitting || !rating}
               >

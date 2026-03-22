@@ -227,6 +227,41 @@ export const isChocolateInWantToTry = async (userId, chocolateId) => {
   }
 };
 
+// Get a public user profile (privacy-gated)
+export const getPublicUserProfile = async (userId) => {
+  try {
+    const userDoc = await getDoc(doc(db, "users", userId));
+    if (!userDoc.exists()) return null;
+
+    const data = userDoc.data();
+
+    const base = {
+      id: userDoc.id,
+      displayName: data.displayName || 'User',
+      photoURL: data.photoURL || '',
+      isProfilePublic: data.isProfilePublic !== false,
+      followerCount: data.followerCount || 0,
+      followingCount: data.followingCount || 0,
+    };
+
+    if (data.isProfilePublic === false) return base;
+
+    return {
+      ...base,
+      bio: data.bio || '',
+      location: data.location || '',
+      favoriteChocolateTypes: data.favoriteChocolateTypes || [],
+      badges: data.badges || ['Newcomer'],
+      createdAt: data.createdAt,
+      reviewCount: data.reviewCount || 0,
+      favorites: data.favorites || [],
+    };
+  } catch (error) {
+    console.error("Error getting public user profile:", error);
+    throw error;
+  }
+};
+
 // Get user's want to try list
 export const getUserWantToTryList = async (userId) => {
   try {

@@ -17,6 +17,8 @@ import { auth, db, storage } from "../firebase";
 
 // Utility function to detect mobile devices
 const isMobileDevice = () => {
+  if (typeof window === 'undefined') return false;
+
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
   // Check for common mobile indicators

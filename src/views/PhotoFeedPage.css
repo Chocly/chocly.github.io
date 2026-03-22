@@ -1,0 +1,191 @@
+/* PhotoFeedPage.css */
+
+.photo-feed-page {
+  min-height: 60vh;
+  background: #FAFAF8;
+  padding: 2rem 1rem;
+}
+
+.feed-container {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.feed-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.25rem;
+}
+
+.feed-subtitle {
+  font-size: 0.9375rem;
+  color: #9CA3AF;
+  margin: 0 0 2rem;
+}
+
+.feed-loading {
+  color: #9CA3AF;
+  font-size: 0.875rem;
+}
+
+.feed-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #9CA3AF;
+}
+
+/* Feed list */
+.feed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Individual card */
+.feed-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.feed-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1rem;
+}
+
+.feed-user {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.feed-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.feed-avatar-placeholder {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #E5E7EB;
+  color: #6B7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.feed-username {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #111827;
+}
+
+.feed-user:hover .feed-username {
+  color: var(--brand-copper, #A73A04);
+}
+
+.feed-time {
+  font-size: 0.75rem;
+  color: #9CA3AF;
+}
+
+/* Photo gallery inside feed card — remove default margin */
+.feed-card .photo-gallery {
+  border-radius: 0;
+  margin: 0;
+}
+
+/* Card body */
+.feed-card-body {
+  padding: 0.875rem 1rem 1rem;
+}
+
+.feed-chocolate {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+}
+
+.feed-chocolate-name {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: #111827;
+}
+
+.feed-chocolate-maker {
+  font-size: 0.8125rem;
+  color: #9CA3AF;
+}
+
+.feed-chocolate:hover .feed-chocolate-name {
+  color: var(--brand-copper, #A73A04);
+}
+
+.feed-rating {
+  margin-bottom: 0.5rem;
+}
+
+.feed-text {
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+  color: #374151;
+  line-height: 1.6;
+}
+
+.feed-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Load more */
+.feed-load-more {
+  display: block;
+  width: 100%;
+  padding: 0.875rem;
+  margin-top: 1.5rem;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6B7280;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.feed-load-more:hover:not(:disabled) {
+  background: #F9FAFB;
+  border-color: #D1D5DB;
+}
+
+.feed-load-more:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .photo-feed-page {
+    padding: 1.5rem 0.5rem;
+  }
+
+  .feed-title {
+    font-size: 1.5rem;
+  }
+
+  .feed-card {
+    border-radius: 12px;
+  }
+}

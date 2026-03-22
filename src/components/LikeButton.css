@@ -1,0 +1,80 @@
+/* LikeButton.css */
+
+.like-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.375rem 0.5rem;
+  border-radius: 8px;
+  color: #9CA3AF;
+  transition: color 0.2s, background 0.2s;
+}
+
+.like-button:hover {
+  background: rgba(239, 68, 68, 0.06);
+  color: #ef4444;
+}
+
+.like-button.liked {
+  color: #ef4444;
+}
+
+.like-heart {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s;
+}
+
+.like-button:hover .like-heart {
+  transform: scale(1.1);
+}
+
+.like-button.like-animating .like-heart {
+  animation: likeHeartBeat 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes likeHeartBeat {
+  0% { transform: scale(1); }
+  15% { transform: scale(1.35); }
+  30% { transform: scale(0.95); }
+  45% { transform: scale(1.15); }
+  60% { transform: scale(1); }
+}
+
+.like-count {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.like-button:disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* Focus state */
+.like-button:focus-visible {
+  outline: 2px solid #ef4444;
+  outline-offset: 2px;
+}
+
+/* Mobile touch targets */
+@media (max-width: 600px) {
+  .like-button {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .like-button.like-animating .like-heart {
+    animation: none;
+  }
+  .like-heart {
+    transition: none;
+  }
+}

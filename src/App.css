@@ -221,8 +221,7 @@ body {
   color: var(--text-secondary);
 }
 
-/* Typography */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Merriweather:wght@300;400;700&display=swap');
+/* Typography - fonts loaded via Next.js next/font/google in layout.jsx */
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Poppins', sans-serif;

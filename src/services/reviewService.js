@@ -1,20 +1,23 @@
 // src/services/reviewService.js - FIXED VERSION
-import { 
-  collection, 
-  addDoc, 
-  getDocs, 
-  query, 
-  where, 
-  orderBy, 
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
   getDoc,
   updateDoc,
   deleteDoc,
   doc,
   serverTimestamp,
-  limit 
+  limit,
+  startAfter
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { getChocolateById } from './chocolateFirebaseService';
+import { uploadReviewPhotos, deleteReviewPhotos } from './reviewPhotoService';
+import { deleteAllCommentsForReview } from './commentService';
 
 // Get all reviews for a chocolate
 export const getChocolateReviews = async (chocolateId) => {
@@ -53,49 +56,40 @@ export const getUserReviews = async (userId) => {
       return [];
     }
     
-    const reviews = [];
-    
-    // Process each review and fetch chocolate data
-    for (const docSnapshot of snapshot.docs) {
-      const reviewData = {
-        id: docSnapshot.id,
-        ...docSnapshot.data()
-      };
-      
-      // If the review already has chocolate data, use it
-      if (reviewData.chocolate && reviewData.chocolate.name) {
-        reviews.push(reviewData);
-      } else {
-        // Fetch chocolate data using the chocolateId
+    // Process all reviews in parallel instead of sequentially
+    const reviews = await Promise.all(
+      snapshot.docs.map(async (docSnapshot) => {
+        const reviewData = {
+          id: docSnapshot.id,
+          ...docSnapshot.data()
+        };
+
+        if (reviewData.chocolate && reviewData.chocolate.name) {
+          return reviewData;
+        }
+
         try {
           const chocolateData = await getChocolateById(reviewData.chocolateId);
-          
-          // Add chocolate info to the review
           reviewData.chocolate = {
             id: chocolateData.id,
             name: chocolateData.name,
             maker: chocolateData.maker,
+            origin: chocolateData.origin,
             imageUrl: chocolateData.imageUrl || 'https://placehold.co/300x300?text=Chocolate'
           };
-          
-          reviews.push(reviewData);
-          
         } catch (chocolateError) {
-          console.error('Failed to fetch chocolate for review:', reviewData.id, chocolateError);
-          
-          // Add review with fallback chocolate info
           reviewData.chocolate = {
             id: reviewData.chocolateId || 'unknown',
             name: 'Unknown Chocolate',
             maker: 'Unknown Maker',
             imageUrl: 'https://placehold.co/300x300?text=Unknown'
           };
-          
-          reviews.push(reviewData);
         }
-      }
-    }
-    
+
+        return reviewData;
+      })
+    );
+
     return reviews;
     
   } catch (error) {
@@ -104,8 +98,58 @@ export const getUserReviews = async (userId) => {
   }
 };
 
-// Add a review
-export const addReview = async (reviewData) => {
+// Lightweight: get only origin data from user reviews (for map, no full enrichment)
+export const getUserReviewOrigins = async (userId) => {
+  try {
+    const q = query(
+      collection(db, "reviews"),
+      where("userId", "==", userId)
+    );
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) return [];
+
+    const origins = [];
+    const needsFetch = [];
+
+    for (const docSnapshot of snapshot.docs) {
+      const data = docSnapshot.data();
+      const origin = data.chocolate?.origin || data.origin;
+      if (origin) {
+        origins.push(origin);
+      } else if (data.chocolateId) {
+        needsFetch.push(data.chocolateId);
+      }
+    }
+
+    // Batch-fetch missing origins in parallel (deduplicate IDs first)
+    const uniqueIds = [...new Set(needsFetch)];
+    if (uniqueIds.length > 0) {
+      const results = await Promise.all(
+        uniqueIds.map(async (id) => {
+          try {
+            const choc = await getChocolateById(id);
+            return { id, origin: choc.origin || null };
+          } catch {
+            return { id, origin: null };
+          }
+        })
+      );
+      const originMap = new Map(results.map(r => [r.id, r.origin]));
+      for (const id of needsFetch) {
+        const o = originMap.get(id);
+        if (o) origins.push(o);
+      }
+    }
+
+    return origins;
+  } catch (error) {
+    console.error("Error getting user review origins:", error);
+    return [];
+  }
+};
+
+// Add a review (with optional photo files)
+export const addReview = async (reviewData, photoFiles = []) => {
   try {
     // SAFETY CHECK: Prevent duplicate reviews for the same user and chocolate
     if (reviewData.userId && reviewData.chocolateId) {
@@ -125,12 +169,32 @@ export const addReview = async (reviewData) => {
 
     const newReview = {
       ...reviewData,
+      photoUrls: [],
+      hasPhotos: false,
+      likeCount: 0,
+      commentCount: 0,
       createdAt: reviewData.createdAt || new Date(),
       updatedAt: new Date()
     };
 
     // Add the review document to Firestore
     const docRef = await addDoc(collection(db, "reviews"), newReview);
+
+    // Upload photos if provided (needs review ID for storage path)
+    if (photoFiles.length > 0 && reviewData.userId) {
+      try {
+        const photoUrls = await uploadReviewPhotos(reviewData.userId, docRef.id, photoFiles);
+        await updateDoc(doc(db, "reviews", docRef.id), {
+          photoUrls,
+          hasPhotos: true
+        });
+        newReview.photoUrls = photoUrls;
+        newReview.hasPhotos = true;
+      } catch (photoError) {
+        console.error("Error uploading review photos:", photoError);
+        // Review still saved without photos
+      }
+    }
 
     // Update chocolate average rating and review count
     await updateChocolateRating(reviewData.chocolateId);
@@ -225,28 +289,51 @@ export const updateReview = async (reviewId, updatedData) => {
   }
 };
 
-// Delete a review
+// Delete a review (also cleans up photos, likes, and comments)
 export const deleteReview = async (reviewId) => {
   try {
     const reviewRef = doc(db, "reviews", reviewId);
-    
-    // Get the chocolate ID before deleting
+
+    // Get review data before deleting
     const reviewDoc = await getDoc(reviewRef);
-    const chocolateId = reviewDoc.exists() ? reviewDoc.data().chocolateId : null;
-    const userId = reviewDoc.exists() ? reviewDoc.data().userId : null;
-    
+    const reviewData = reviewDoc.exists() ? reviewDoc.data() : {};
+    const chocolateId = reviewData.chocolateId || null;
+    const userId = reviewData.userId || null;
+    const photoUrls = reviewData.photoUrls || [];
+
     await deleteDoc(reviewRef);
-    
+
+    // Clean up photos from Storage
+    if (photoUrls.length > 0) {
+      deleteReviewPhotos(photoUrls).catch(err =>
+        console.error("Error cleaning up review photos:", err)
+      );
+    }
+
+    // Clean up likes
+    const likesQuery = query(
+      collection(db, "reviewLikes"),
+      where("reviewId", "==", reviewId)
+    );
+    getDocs(likesQuery).then(snap =>
+      Promise.all(snap.docs.map(d => deleteDoc(d.ref)))
+    ).catch(err => console.error("Error cleaning up likes:", err));
+
+    // Clean up comments
+    deleteAllCommentsForReview(reviewId).catch(err =>
+      console.error("Error cleaning up comments:", err)
+    );
+
     // Update chocolate average rating if we have the ID
     if (chocolateId) {
       await updateChocolateRating(chocolateId);
     }
-    
+
     // Update user review count
     if (userId) {
       await updateUserReviewCount(userId);
     }
-    
+
     return true;
   } catch (error) {
     console.error("Error deleting review:", error);
@@ -394,9 +481,76 @@ export const getFeaturedReviews = async (limitCount = 3) => {
       });
     
     return uniqueReviews;
-    
+
   } catch (error) {
     console.error("Error getting featured reviews:", error);
     return [];
+  }
+};
+
+// Get photo reviews for the community feed (cursor-based pagination)
+export const getPhotoReviews = async (lastDocument = null, limitCount = 10) => {
+  try {
+    let q;
+
+    if (lastDocument) {
+      q = query(
+        collection(db, "reviews"),
+        where("hasPhotos", "==", true),
+        orderBy("createdAt", "desc"),
+        startAfter(lastDocument),
+        limit(limitCount)
+      );
+    } else {
+      q = query(
+        collection(db, "reviews"),
+        where("hasPhotos", "==", true),
+        orderBy("createdAt", "desc"),
+        limit(limitCount)
+      );
+    }
+
+    const snapshot = await getDocs(q);
+    const reviews = [];
+
+    for (const docSnapshot of snapshot.docs) {
+      const reviewData = {
+        id: docSnapshot.id,
+        ...docSnapshot.data(),
+        _doc: docSnapshot // Keep reference for pagination cursor
+      };
+
+      // Enrich with chocolate data if missing
+      if (!reviewData.chocolate || !reviewData.chocolate.name) {
+        try {
+          const chocolateDoc = await getDoc(doc(db, "chocolates", reviewData.chocolateId));
+          if (chocolateDoc.exists()) {
+            reviewData.chocolate = {
+              id: chocolateDoc.id,
+              name: chocolateDoc.data().name,
+              maker: chocolateDoc.data().maker,
+              imageUrl: chocolateDoc.data().imageUrl
+            };
+          }
+        } catch (err) {
+          reviewData.chocolate = {
+            id: reviewData.chocolateId,
+            name: "Unknown Chocolate",
+            maker: "Unknown Maker"
+          };
+        }
+      }
+
+      reviews.push(reviewData);
+    }
+
+    const lastDoc = snapshot.docs.length > 0
+      ? snapshot.docs[snapshot.docs.length - 1]
+      : null;
+
+    return { reviews, lastDoc, hasMore: snapshot.docs.length === limitCount };
+  } catch (error) {
+    console.error("Error getting photo reviews:", error);
+    return { reviews: [], lastDoc: null, hasMore: false };
   }
 };

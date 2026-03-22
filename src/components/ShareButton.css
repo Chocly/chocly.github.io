@@ -1,0 +1,55 @@
+/* ShareButton.css */
+
+.share-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.375rem 0.5rem;
+  border-radius: 8px;
+  color: #9CA3AF;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: color 0.2s, background 0.2s;
+}
+
+.share-button:hover {
+  background: rgba(0, 0, 0, 0.04);
+  color: #6B7280;
+}
+
+.share-button.share-copied {
+  color: #10B981;
+}
+
+.share-label {
+  line-height: 1;
+}
+
+/* Detail page variant */
+.share-button.share-detail {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  background: #FFFFFF;
+}
+
+.share-button.share-detail:hover {
+  border-color: #D1D5DB;
+  background: #F9FAFB;
+}
+
+/* Focus */
+.share-button:focus-visible {
+  outline: 2px solid var(--brand-copper, #A73A04);
+  outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+  .share-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}

@@ -22,6 +22,8 @@ import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
 import SuperAdminEditPage from './pages/SuperAdminEditPage';
 import ChocolateScanner from './components/ChocolateScanner';
+import UserProfilePage from './pages/UserProfilePage';
+import PhotoFeedPage from './pages/PhotoFeedPage';
 import './App.css';
 
 function App() {
@@ -42,6 +44,7 @@ function App() {
               <Route path="/browse" element={<BrowseAllPage />} />
               <Route path="/barcode" element={<Navigate to="/scanner" replace />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/user/:userId" element={<UserProfilePage />} />
               <Route path="/auth" element={<UnifiedAuthPage />} />
               <Route path="/login" element={<UnifiedAuthPage />} />
               <Route path="/signup" element={<UnifiedAuthPage />} />
@@ -59,6 +62,7 @@ function App() {
               <Route path="/privacy" element={<PrivacyPolicyPage />} />
               <Route path="/terms" element={<TermsOfServicePage />} />
               <Route path="/scanner" element={<ChocolateScanner />} />
+              <Route path="/community" element={<PhotoFeedPage />} />
               <Route path="*" element={<div>Page not found</div>} />
             </Routes>
           </main>
