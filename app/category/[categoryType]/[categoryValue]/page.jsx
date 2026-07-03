@@ -69,15 +69,9 @@ export default async function CategoryLandingPage({ params }) {
 
   let chocolates = [];
   if (filter) {
-    // For percentage, we need a different query (integer comparison)
-    if (categoryType === 'percentage') {
-      // REST API doesn't easily handle integer equality; fetch and filter
-      chocolates = await getChocolatesByCategoryServer('type', 'Dark', 200);
-      const pct = parseInt(categoryValue, 10);
-      chocolates = chocolates.filter(c => c.cacaoPercentage === pct);
-    } else {
-      chocolates = await getChocolatesByCategoryServer(filter.field, filter.value);
-    }
+    // getCategoryFilter returns a number for percentage pages, which the
+    // server query translates to an integer filter on cacaoPercentage.
+    chocolates = await getChocolatesByCategoryServer(filter.field, filter.value);
   }
 
   const displayValue = categoryValue.charAt(0).toUpperCase() + categoryValue.slice(1);

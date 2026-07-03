@@ -1,18 +1,21 @@
-// Updated QuickReviewCTA.jsx with proper edit functionality
+// QuickReviewCTA.jsx — tap-to-rate + optional written review
 import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { addReview, updateReview } from '../services/reviewService';
+import { authUrl } from '../utils/authRedirect';
 import ReviewPhotoUploader from './ReviewPhotoUploader';
 import './QuickReviewCTA.css';
 
-function QuickReviewCTA({ 
-  chocolateId, 
-  chocolateName, 
-  onQuickReview, 
-  hasUserReviewed, 
-  existingReview 
+function QuickReviewCTA({
+  chocolateId,
+  chocolateName,
+  onQuickReview,
+  hasUserReviewed,
+  existingReview
 }) {
   const { currentUser } = useAuth();
+  const location = useLocation();
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false);
@@ -20,6 +23,11 @@ function QuickReviewCTA({
   const [reviewTitle, setReviewTitle] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [photoFiles, setPhotoFiles] = useState([]);
+  // A rating-only review created by tapping a star this session — from then
+  // on star taps are updates to it, not new reviews.
+  const [quickSavedReview, setQuickSavedReview] = useState(null);
+
+  const activeReview = existingReview || quickSavedReview;
 
   // If editing, populate with existing review data
   useEffect(() => {
@@ -30,12 +38,48 @@ function QuickReviewCTA({
     }
   }, [existingReview]);
 
+  // A star tap IS a rating: it saves immediately, whether or not a review
+  // exists yet. Written text is optional, added later via the form.
   const handleStarClick = (value) => {
     setRating(value);
-    
-    // If this is an edit and they're just updating the rating
-    if (existingReview && !isReviewFormOpen) {
+
+    if (isReviewFormOpen) return; // form submit will handle persistence
+
+    if (activeReview?.id) {
       handleQuickRatingUpdate(value);
+    } else {
+      saveQuickRating(value);
+    }
+  };
+
+  // First star tap for this user+chocolate: create a rating-only review.
+  const saveQuickRating = async (value) => {
+    if (!currentUser || isSubmitting) return;
+
+    setIsSubmitting(true);
+    try {
+      const saved = await addReview({
+        rating: value,
+        text: '',
+        title: '',
+        chocolateId,
+        userId: currentUser.uid,
+        userName: currentUser.displayName || 'Anonymous',
+        userPhotoURL: currentUser.photoURL || null,
+        helpful: 0,
+        createdAt: new Date()
+      });
+
+      setQuickSavedReview(saved);
+      if (onQuickReview) {
+        onQuickReview(saved);
+      }
+    } catch (error) {
+      console.error('Error saving rating:', error);
+      alert('Failed to save your rating. Please try again.');
+      setRating(0);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -47,22 +91,22 @@ function QuickReviewCTA({
     setHoveredRating(0);
   };
 
-  // Quick rating update for existing reviews
+  // Quick rating update for a review that already exists
   const handleQuickRatingUpdate = async (newRating) => {
-    if (!existingReview?.id) return;
-    
+    if (!activeReview?.id) return;
+
     setIsSubmitting(true);
     try {
-      await updateReview(existingReview.id, {
+      await updateReview(activeReview.id, {
         rating: newRating,
-        text: existingReview.text || '',
-        title: existingReview.title || ''
+        text: activeReview.text || '',
+        title: activeReview.title || ''
       });
-      
+
       if (onQuickReview) {
-        onQuickReview({ 
-          ...existingReview, 
-          rating: newRating 
+        onQuickReview({
+          ...activeReview,
+          rating: newRating
         });
       }
     } catch (error) {
@@ -75,14 +119,9 @@ function QuickReviewCTA({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!rating) {
       alert('Please select a rating');
-      return;
-    }
-
-    if (!reviewText.trim() && !existingReview) {
-      alert('Please write a review');
       return;
     }
 
@@ -95,13 +134,13 @@ function QuickReviewCTA({
         title: reviewTitle.trim()
       };
 
-      if (existingReview?.id) {
-        // UPDATE existing review
-        await updateReview(existingReview.id, reviewData);
-        
-        alert('Review updated successfully!');
+      let savedReview;
+      if (activeReview?.id) {
+        // UPDATE existing review (including one just created by a star tap)
+        await updateReview(activeReview.id, reviewData);
+        savedReview = { ...activeReview, ...reviewData };
       } else {
-        // ADD new review
+        // ADD new review (text optional — the rating is the review)
         const fullReviewData = {
           ...reviewData,
           chocolateId,
@@ -112,31 +151,20 @@ function QuickReviewCTA({
           createdAt: new Date()
         };
 
-        await addReview(fullReviewData, photoFiles);
-        alert('Review added successfully!');
+        savedReview = await addReview(fullReviewData, photoFiles);
+        setQuickSavedReview(savedReview);
       }
 
       // Call the parent callback
       if (onQuickReview) {
-        onQuickReview({
-          ...reviewData,
-          chocolateId,
-          userId: currentUser.uid
-        });
+        onQuickReview(savedReview);
       }
 
-      // Reset form
-      if (!existingReview) {
-        setRating(0);
-        setReviewText('');
-        setReviewTitle('');
-        setPhotoFiles([]);
-      }
       setIsReviewFormOpen(false);
-      
+
     } catch (error) {
       console.error('Error submitting review:', error);
-      alert(`Failed to ${existingReview ? 'update' : 'add'} review. Please try again.`);
+      alert(`Failed to ${activeReview ? 'update' : 'add'} review. Please try again.`);
     } finally {
       setIsSubmitting(false);
     }
@@ -271,9 +299,9 @@ function QuickReviewCTA({
             <p>Share your experience with fellow chocolate lovers</p>
           </div>
           <div className="cta-actions">
-            <a href="/login" className="cta-button primary">
+            <Link to={authUrl(location.pathname)} className="cta-button primary">
               Sign In to Review
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -286,7 +314,11 @@ function QuickReviewCTA({
       <div className="cta-content">
         <div className="cta-text">
           <h3>Rate This Chocolate</h3>
-          <p>Click stars to rate, then optionally add your thoughts</p>
+          <p>
+            {activeReview
+              ? 'Rating saved! Add your thoughts to help fellow chocolate lovers.'
+              : 'Tap a star to rate — it saves instantly'}
+          </p>
         </div>
         
         <div className="quick-rating-only">
@@ -303,11 +335,11 @@ function QuickReviewCTA({
 
         {rating > 0 && (
           <div className="cta-actions">
-            <button 
+            <button
               className="cta-button secondary"
               onClick={() => setIsReviewFormOpen(!isReviewFormOpen)}
             >
-              {isReviewFormOpen ? 'Just Save Rating' : 'Add Written Review'}
+              {isReviewFormOpen ? 'Cancel' : 'Add Written Review'}
             </button>
           </div>
         )}
@@ -327,14 +359,13 @@ function QuickReviewCTA({
             </div>
             
             <div className="form-group">
-              <label htmlFor="review-text">Your Review</label>
+              <label htmlFor="review-text">Your Review (Optional)</label>
               <textarea
                 id="review-text"
                 value={reviewText}
                 onChange={(e) => setReviewText(e.target.value)}
                 placeholder="Share your thoughts about this chocolate..."
                 rows="4"
-                required
               />
             </div>
 

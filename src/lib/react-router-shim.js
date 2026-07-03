@@ -60,7 +60,17 @@ export function useLocation() {
 // useSearchParams - compatible with react-router-dom's [searchParams, setSearchParams]
 export function useSearchParams() {
   const searchParams = useNextSearchParams();
-  return [searchParams];
+  const router = useNextRouter();
+  const pathname = usePathname();
+
+  const setSearchParams = (params) => {
+    const next =
+      params instanceof URLSearchParams ? params : new URLSearchParams(params);
+    const qs = next.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  };
+
+  return [searchParams, setSearchParams];
 }
 
 // Link component - maps react-router-dom's `to` prop to Next.js `href`

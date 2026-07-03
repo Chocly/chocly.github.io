@@ -132,7 +132,7 @@ function SearchResultsPage() {
         ) : (
           <div className="no-results">
             <p>No chocolates found matching your search.</p>
-            <p>Try different keywords or <Link to="/">browse all chocolates</Link>.</p>
+            <p>Try different keywords or <Link to="/browse">browse all chocolates</Link>.</p>
           </div>
         )}
       </div>

@@ -8,28 +8,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  :root {
-    color: #F9FAFB;
-    background-color: #1F2937;
-  }
-
-  body {
-    background-color: #1F2937;
-    color: #F9FAFB;
-  }
-
-  a {
-    color: var(--primary-color, #A73A04);
-  }
-
-  a:hover {
-    color: var(--primary-hover, #8B2F03);
-  }
-
-  button {
-    background-color: #374151;
-    color: #F9FAFB;
-  }
-}
+/* Dark mode intentionally not offered yet: component styles all assume light
+   backgrounds, so a half-applied dark scheme produced unreadable patches for
+   users with OS dark mode. color-scheme: light (above) keeps rendering
+   consistent until a real dark theme is designed. */

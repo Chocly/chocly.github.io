@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { authUrl } from '../utils/authRedirect';
 import { useAuth } from '../contexts/AuthContext';
 import { getPublicUserProfile, getFavoriteChocolates } from '../services/userService';
 import { getUserReviews } from '../services/reviewService';
@@ -102,7 +103,7 @@ function UserProfilePage() {
 
   const handleFollow = async () => {
     if (!currentUser) {
-      navigate('/auth');
+      navigate(authUrl());
       return;
     }
     setFollowLoading(true);
@@ -210,7 +211,7 @@ function UserProfilePage() {
                   </button>
                 )}
                 {!currentUser && (
-                  <button className="follow-btn" onClick={() => navigate('/auth')}>
+                  <button className="follow-btn" onClick={() => navigate(authUrl())}>
                     Follow
                   </button>
                 )}

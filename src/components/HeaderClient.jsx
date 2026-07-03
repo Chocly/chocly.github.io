@@ -155,7 +155,7 @@ function Header() {
             )}
 
             {currentUser && !isMobile && (
-              <Link href="/add-chocolate" className="add-cta">+ Add Review</Link>
+              <Link href="/add-chocolate" className="add-cta">+ Add a Chocolate</Link>
             )}
 
             {currentUser ? (

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { toggleLike } from '../services/likeService';
+import { authUrl } from '../utils/authRedirect';
 import './LikeButton.css';
 
 function LikeButton({ reviewId, initialLikeCount = 0, initialIsLiked = false }) {
@@ -17,7 +18,7 @@ function LikeButton({ reviewId, initialLikeCount = 0, initialIsLiked = false }) 
     e.stopPropagation();
 
     if (!currentUser) {
-      navigate('/auth');
+      navigate(authUrl());
       return;
     }
 

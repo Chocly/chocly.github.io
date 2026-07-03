@@ -1,6 +1,8 @@
 // src/components/WantToTryButton.jsx
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { addToWantToTry, removeFromWantToTry, isChocolateInWantToTry } from '../services/userService';
+import { authUrl } from '../utils/authRedirect';
 import './WantToTryButton.css';
 
 function WantToTryButton({ 
@@ -10,6 +12,7 @@ function WantToTryButton({
   showText = false, 
   size = "medium" 
 }) {
+  const navigate = useNavigate();
   const [isInWantToTry, setIsInWantToTry] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
@@ -35,7 +38,7 @@ function WantToTryButton({
     e.stopPropagation(); // Stop event bubbling
 
     if (!currentUser) {
-      alert('Please sign in to add chocolates to your want to try list');
+      navigate(authUrl());
       return;
     }
 

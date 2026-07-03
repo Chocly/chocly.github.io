@@ -1,7 +1,9 @@
 // src/components/FavoriteButton.jsx - Enhanced version with text support
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { toggleFavorite, isChocolateFavorited } from '../services/userService';
+import { authUrl } from '../utils/authRedirect';
 import './FavoriteButton.css';
 
 function FavoriteButton({ 
@@ -11,6 +13,7 @@ function FavoriteButton({
   showText = false 
 }) {
   const { currentUser } = useAuth();
+  const navigate = useNavigate();
   const [isFavorited, setIsFavorited] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -35,8 +38,10 @@ function FavoriteButton({
     e.preventDefault();
     e.stopPropagation();
 
+    // Visitors see the button too — acting on it routes through sign-in and
+    // returns them right here.
     if (!currentUser) {
-      alert('Please sign in to save favorites!');
+      navigate(authUrl());
       return;
     }
 
@@ -59,10 +64,6 @@ function FavoriteButton({
       setLoading(false);
     }
   };
-
-  if (!currentUser) {
-    return null;
-  }
 
   // Define button text based on state
   const getButtonText = () => {

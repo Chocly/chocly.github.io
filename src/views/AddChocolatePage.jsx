@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { addUserChocolate, searchChocolates } from '../services/chocolateFirebaseService';
+import { addReview, updateReview } from '../services/reviewService';
+import { authUrl } from '../utils/authRedirect';
 import ImageUploader from '../components/ImageUploader';
 import './AddChocolatePage.css';
 
@@ -44,13 +46,14 @@ function AddChocolatePage() {
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [savedChocolateId, setSavedChocolateId] = useState(null);
   const [quickRating, setQuickRating] = useState(0);
+  const [quickReviewId, setQuickReviewId] = useState(null);
   
   // Duplicate checking
   const [similarChocolates, setSimilarChocolates] = useState([]);
   
   useEffect(() => {
     if (!currentUser) {
-      navigate('/auth');
+      navigate(authUrl());
     }
   }, [currentUser, navigate]);
   
@@ -100,7 +103,7 @@ function AddChocolatePage() {
     e.preventDefault();
     
     if (!currentUser) {
-      navigate('/auth');
+      navigate(authUrl());
       return;
     }
 
@@ -147,10 +150,34 @@ function AddChocolatePage() {
     }
   };
 
-  const handleQuickRate = (rating) => {
+  // A star tap in the success modal saves a real rating-only review;
+  // further taps adjust it.
+  const handleQuickRate = async (rating) => {
     setQuickRating(rating);
-    // Optionally save the quick rating
-    // You can implement this to save just a rating without a full review
+    if (!currentUser || !savedChocolateId) return;
+
+    try {
+      if (quickReviewId) {
+        await updateReview(quickReviewId, { rating, text: '', title: '' });
+      } else {
+        const saved = await addReview({
+          rating,
+          text: '',
+          title: '',
+          chocolateId: savedChocolateId,
+          userId: currentUser.uid,
+          userName: currentUser.displayName || 'Anonymous',
+          userPhotoURL: currentUser.photoURL || null,
+          helpful: 0,
+          createdAt: new Date()
+        });
+        setQuickReviewId(saved.id);
+      }
+    } catch (error) {
+      console.error('Error saving quick rating:', error);
+      alert('Failed to save your rating. You can rate it on the chocolate page.');
+      setQuickRating(0);
+    }
   };
 
   const handleSkipRating = () => {
@@ -345,7 +372,7 @@ function AddChocolatePage() {
               <p>Chocolate added to the database</p>
               
               <div className="quick-rate-section">
-                <p>Quick rate this chocolate:</p>
+                <p>{quickReviewId ? 'Rating saved! Adjust it anytime:' : 'Quick rate this chocolate:'}</p>
                 <div className="star-buttons">
                   {[1, 2, 3, 4, 5].map(star => (
                     <button

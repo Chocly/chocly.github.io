@@ -218,43 +218,74 @@ export async function getFeaturedChocolatesServer(limitCount = 6) {
   }
 }
 
+async function runChocolatesQuery(fieldFilter, limitCount, orderByRating) {
+  const structuredQuery = {
+    from: [{ collectionId: 'chocolates' }],
+    where: { fieldFilter },
+    limit: limitCount
+  };
+  if (orderByRating) {
+    structuredQuery.orderBy = [
+      { field: { fieldPath: 'averageRating' }, direction: 'DESCENDING' }
+    ];
+  }
+
+  const res = await fetch(
+    `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents:runQuery`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ structuredQuery }),
+      next: { revalidate: 21600 } // Cache for 6 hours
+    }
+  );
+
+  if (!res.ok) {
+    // Surface WHY (a missing composite index returns 400 with a
+    // create-index link) instead of silently rendering an empty page.
+    const errText = await res.text().catch(() => '');
+    console.error(
+      `Firestore category query failed (${res.status}) for`,
+      JSON.stringify(fieldFilter),
+      errText.slice(0, 500)
+    );
+    return null;
+  }
+
+  const results = await res.json();
+  return results
+    .filter(r => r.document)
+    .map(r => parseFirestoreDocument(r.document))
+    .filter(Boolean);
+}
+
 /**
  * Fetch chocolates by category (server-side)
  */
 export async function getChocolatesByCategoryServer(field, value, limitCount = 100) {
   try {
-    const body = {
-      structuredQuery: {
-        from: [{ collectionId: 'chocolates' }],
-        where: {
-          fieldFilter: {
-            field: { fieldPath: field },
-            op: 'EQUAL',
-            value: { stringValue: value }
-          }
-        },
-        orderBy: [{ field: { fieldPath: 'averageRating' }, direction: 'DESCENDING' }],
-        limit: limitCount
-      }
+    // Numbers (e.g. cacaoPercentage) need integerValue, not stringValue.
+    const fieldFilter = {
+      field: { fieldPath: field },
+      op: 'EQUAL',
+      value:
+        typeof value === 'number'
+          ? { integerValue: String(value) }
+          : { stringValue: value }
     };
 
-    const res = await fetch(
-      `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents:runQuery`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-        next: { revalidate: 21600 } // Cache for 6 hours
+    let docs = await runChocolatesQuery(fieldFilter, limitCount, true);
+
+    // The ordered query needs a composite index; while it's missing, fall
+    // back to an unordered query and sort here so the page still renders.
+    if (docs === null) {
+      docs = await runChocolatesQuery(fieldFilter, limitCount, false);
+      if (docs) {
+        docs.sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0));
       }
-    );
+    }
 
-    if (!res.ok) return [];
-
-    const results = await res.json();
-    return results
-      .filter(r => r.document)
-      .map(r => parseFirestoreDocument(r.document))
-      .filter(Boolean);
+    return docs || [];
   } catch (error) {
     console.error('Error fetching chocolates by category:', error);
     return [];
