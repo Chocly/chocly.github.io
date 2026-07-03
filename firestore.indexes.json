@@ -17,6 +17,22 @@
       ]
     },
     {
+      "collectionGroup": "chocolates",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "maker", "order": "ASCENDING" },
+        { "fieldPath": "averageRating", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "chocolates",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "cacaoPercentage", "order": "ASCENDING" },
+        { "fieldPath": "averageRating", "order": "DESCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "reviews",
       "queryScope": "COLLECTION",
       "fields": [

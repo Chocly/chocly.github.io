@@ -49,10 +49,10 @@ export async function generateMetadata({ params }) {
   const description = config?.desc || `Discover the best ${displayValue} chocolates with expert reviews and ratings on Chocly.`;
 
   return {
-    title: `${title} 2026 - Reviews & Ratings`,
+    title: `${title} - Reviews & Ratings`,
     description,
     openGraph: {
-      title: `${title} 2026 - Reviews & Ratings | Chocly`,
+      title: `${title} - Reviews & Ratings | Chocly`,
       description,
       url: `https://chocly.co/category/${categoryType}/${categoryValue}`,
       type: 'website',

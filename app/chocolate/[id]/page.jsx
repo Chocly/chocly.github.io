@@ -1,18 +1,26 @@
-import { getChocolateByIdServer, getChocolateReviewsServer, getAllChocolateIdsServer } from '../../../src/lib/firebase-server';
+import { permanentRedirect, notFound } from 'next/navigation';
+import { cache } from 'react';
+import { resolveChocolateServer, getChocolateReviewsServer, getAllChocolateIdsServer } from '../../../src/lib/firebase-server';
 import ChocolateDetailClient from './ChocolateDetailClient';
 
 export const revalidate = 3600; // ISR: revalidate every hour
 
+// Memoize per request: generateMetadata and the page share one lookup.
+const resolveChocolate = cache(resolveChocolateServer);
+
+// Canonical URL segment for a chocolate: slug when it has one, ID otherwise.
+const canonicalParam = (choc) => choc.slug || choc.id;
+
 // Generate static params for all chocolates at build time
 export async function generateStaticParams() {
   const chocolates = await getAllChocolateIdsServer();
-  return chocolates.map((choc) => ({ id: choc.id }));
+  return chocolates.map((choc) => ({ id: canonicalParam(choc) }));
 }
 
 // Dynamic SEO metadata per chocolate
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const chocolate = await getChocolateByIdServer(id);
+  const chocolate = await resolveChocolate(id);
 
   if (!chocolate) {
     return {
@@ -21,7 +29,7 @@ export async function generateMetadata({ params }) {
     };
   }
 
-  const reviews = await getChocolateReviewsServer(id);
+  const reviews = await getChocolateReviewsServer(chocolate.id);
   const avgRating = reviews.length > 0
     ? (reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviews.length).toFixed(1)
     : null;
@@ -44,7 +52,7 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title,
       description,
-      url: `https://chocly.co/chocolate/${id}`,
+      url: `https://chocly.co/chocolate/${canonicalParam(chocolate)}`,
       type: 'article',
       images: chocolate.imageUrl && !chocolate.imageUrl.includes('placehold')
         ? [{ url: chocolate.imageUrl, alt: `${chocolate.name} by ${chocolate.maker}` }]
@@ -56,15 +64,26 @@ export async function generateMetadata({ params }) {
       description,
     },
     alternates: {
-      canonical: `https://chocly.co/chocolate/${id}`,
+      canonical: `https://chocly.co/chocolate/${canonicalParam(chocolate)}`,
     },
   };
 }
 
 export default async function ChocolateDetailPage({ params }) {
   const { id } = await params;
-  const chocolate = await getChocolateByIdServer(id);
-  const reviews = await getChocolateReviewsServer(id);
+  const chocolate = await resolveChocolate(id);
+
+  // Real 404 (not a soft one) so search engines drop dead URLs.
+  if (!chocolate) {
+    notFound();
+  }
+
+  // Old ID links permanently redirect to the slug URL once a slug exists.
+  if (chocolate.slug && id !== chocolate.slug) {
+    permanentRedirect(`/chocolate/${chocolate.slug}`);
+  }
+
+  const reviews = await getChocolateReviewsServer(chocolate.id);
 
   // Calculate average rating
   const avgRating = reviews.length > 0
@@ -87,24 +106,33 @@ export default async function ChocolateDetailPage({ params }) {
         name: chocolate.maker || 'Unknown Maker',
       },
       category: 'Chocolate',
-      url: `https://chocly.co/chocolate/${id}`,
+      url: `https://chocly.co/chocolate/${canonicalParam(chocolate)}`,
     };
 
-    // Add additional properties
-    if (chocolate.cacaoPercentage) {
-      productSchema.additionalProperty = [
-        { '@type': 'PropertyValue', name: 'Cacao Percentage', value: `${chocolate.cacaoPercentage}%` },
-      ];
-      if (chocolate.origin) {
-        productSchema.additionalProperty.push(
-          { '@type': 'PropertyValue', name: 'Origin', value: chocolate.origin }
-        );
-      }
-      if (chocolate.type) {
-        productSchema.additionalProperty.push(
-          { '@type': 'PropertyValue', name: 'Type', value: chocolate.type }
-        );
-      }
+    // Add additional properties (every fact the page shows, machine-readable)
+    const props = [];
+    if (chocolate.cacaoPercentage) props.push({ '@type': 'PropertyValue', name: 'Cacao Percentage', value: `${chocolate.cacaoPercentage}%` });
+    if (chocolate.origin) props.push({ '@type': 'PropertyValue', name: 'Origin', value: chocolate.origin });
+    if (chocolate.type) props.push({ '@type': 'PropertyValue', name: 'Type', value: chocolate.type });
+    if (chocolate.ingredients) {
+      const ingredients = Array.isArray(chocolate.ingredients)
+        ? chocolate.ingredients.join(', ')
+        : String(chocolate.ingredients);
+      props.push({ '@type': 'PropertyValue', name: 'Ingredients', value: ingredients });
+    }
+    if (props.length > 0) productSchema.additionalProperty = props;
+
+    // NutritionInformation from the data we already hold
+    const n = chocolate.nutritionalInfo;
+    if (n && (n.calories != null || n.fat != null || n.sugar != null || n.protein != null)) {
+      productSchema.nutrition = {
+        '@type': 'NutritionInformation',
+        servingSize: n.servingSize || undefined,
+        calories: n.calories != null ? `${n.calories} calories` : undefined,
+        fatContent: n.fat != null ? `${n.fat} g` : undefined,
+        sugarContent: n.sugar != null ? `${n.sugar} g` : undefined,
+        proteinContent: n.protein != null ? `${n.protein} g` : undefined,
+      };
     }
 
     // Add aggregate rating
@@ -144,35 +172,13 @@ export default async function ChocolateDetailPage({ params }) {
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://chocly.co/' },
         { '@type': 'ListItem', position: 2, name: 'Browse', item: 'https://chocly.co/browse' },
-        { '@type': 'ListItem', position: 3, name: chocolate.name, item: `https://chocly.co/chocolate/${id}` },
+        { '@type': 'ListItem', position: 3, name: chocolate.name, item: `https://chocly.co/chocolate/${canonicalParam(chocolate)}` },
       ],
     });
 
-    // FAQ schema
-    const faqs = [
-      {
-        '@type': 'Question',
-        name: `What does ${chocolate.name} taste like?`,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: `${chocolate.name} by ${chocolate.maker} is a ${chocolate.cacaoPercentage || ''}% ${(chocolate.type || 'artisan').toLowerCase()} chocolate${chocolate.origin ? ` from ${chocolate.origin}` : ''}. ${reviews.length > 0 ? `Based on ${reviews.length} reviews, it has an average rating of ${avgRating.toFixed(1)}/5.` : 'Be the first to review it on Chocly.'}`,
-        },
-      },
-      {
-        '@type': 'Question',
-        name: `Where can I buy ${chocolate.name}?`,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: `${chocolate.name} by ${chocolate.maker} can be purchased from specialty chocolate retailers, online stores, or directly from ${chocolate.maker}. Visit Chocly for reviews and availability information.`,
-        },
-      },
-    ];
-
-    jsonLd.push({
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: faqs,
-    });
+    // (Templated FAQ schema removed intentionally: Google restricted FAQ rich
+    // results to authoritative content in 2023, and boilerplate Q&A is noise
+    // to AI engines. Real data lives in Product.additionalProperty/nutrition.)
   }
 
   return (
@@ -185,7 +191,7 @@ export default async function ChocolateDetailPage({ params }) {
         />
       ))}
       <ChocolateDetailClient
-        chocolateId={id}
+        chocolateId={chocolate ? chocolate.id : id}
         serverChocolate={chocolate}
         serverReviews={reviews}
       />

@@ -4,14 +4,17 @@ import { useSearchParams } from 'react-router-dom'; // ADD THIS IMPORT
 import { getAllChocolates, getAllTags } from '../services/chocolateFirebaseService';
 import ChocolateCard from '../components/ChocolateCard';
 import Breadcrumb from '../components/Breadcrumb';
+import { weightedRating } from '../utils/rating';
 import './BrowseAllPage.css';
 
-function BrowseAllPage() {
+function BrowseAllPage({ serverChocolates = [] }) {
   const [searchParams, setSearchParams] = useSearchParams(); // ADD THIS
-  const [allChocolates, setAllChocolates] = useState([]);
-  const [filteredChocolates, setFilteredChocolates] = useState([]);
+  // Seeded with server-rendered data so first paint (and crawlers) see real
+  // cards; the client fetch below replaces it with the full catalog.
+  const [allChocolates, setAllChocolates] = useState(serverChocolates);
+  const [filteredChocolates, setFilteredChocolates] = useState(serverChocolates);
   const [availableTags, setAvailableTags] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(serverChocolates.length === 0);
   const [error, setError] = useState(null);
   
   // Initialize filters from URL parameters
@@ -234,7 +237,8 @@ function BrowseAllPage() {
     return [...filteredChocolates].sort((a, b) => {
       switch(sortOption) {
         case 'rating':
-          return (b.averageRating || 0) - (a.averageRating || 0);
+          // Weighted: one 5-star review shouldn't outrank forty 4.6s
+          return weightedRating(b) - weightedRating(a);
         case 'popularity':
           return (b.reviewCount || 0) - (a.reviewCount || 0);
         case 'cacao-high':

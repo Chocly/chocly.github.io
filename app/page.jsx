@@ -1,4 +1,4 @@
-import { getFeaturedChocolatesServer } from '../src/lib/firebase-server';
+import { getFeaturedChocolatesServer, getSiteStatsServer } from '../src/lib/firebase-server';
 import HomePageClient from './HomePageClient';
 
 export const revalidate = 3600; // ISR: revalidate every hour
@@ -6,11 +6,11 @@ export const revalidate = 3600; // ISR: revalidate every hour
 export const metadata = {
   title: 'Chocly - Chocolate Reviews, Ratings & Recommendations',
   description:
-    'Discover 500+ craft and artisan chocolates from 30+ countries. Read expert reviews, compare ratings, and find your next favorite chocolate bar.',
+    'Discover craft and artisan chocolate from around the world. Read community reviews, compare ratings, and find your next favorite chocolate bar.',
   openGraph: {
     title: 'Chocly - Chocolate Reviews, Ratings & Recommendations',
     description:
-      'Discover 500+ craft and artisan chocolates from 30+ countries. Read expert reviews, compare ratings, and find your next favorite chocolate bar.',
+      'Discover craft and artisan chocolate from around the world. Read community reviews, compare ratings, and find your next favorite chocolate bar.',
     url: 'https://chocly.co',
     type: 'website',
   },
@@ -20,8 +20,11 @@ export const metadata = {
 };
 
 export default async function HomePage() {
-  // Fetch featured chocolates server-side for SEO
-  const featuredChocolates = await getFeaturedChocolatesServer(6);
+  // Fetch featured chocolates + real stats server-side for SEO
+  const [featuredChocolates, stats] = await Promise.all([
+    getFeaturedChocolatesServer(6),
+    getSiteStatsServer(),
+  ]);
 
   // Organization + WebSite structured data
   const jsonLd = [
@@ -59,7 +62,7 @@ export default async function HomePage() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
       ))}
-      <HomePageClient featuredChocolates={featuredChocolates} />
+      <HomePageClient featuredChocolates={featuredChocolates} stats={stats} />
     </>
   );
 }

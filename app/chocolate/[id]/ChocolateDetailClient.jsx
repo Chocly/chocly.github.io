@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { doc, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../../../src/firebase';
@@ -12,11 +13,13 @@ import WantToTryButton from '../../../src/components/WantToTryButton';
 import Breadcrumb from '../../../src/components/Breadcrumb';
 import ShareButton from '../../../src/components/ShareButton';
 import QuickReviewCTA from '../../../src/components/QuickReviewCTA';
+import ChocolateSpecs from '../../../src/components/ChocolateSpecs';
 import { useAuth } from '../../../src/contexts/AuthContext';
 import { addReview } from '../../../src/services/reviewService';
 import { getUserLikeStatuses } from '../../../src/services/likeService';
 import { formatReviewerName } from '../../../src/utils/nameFormatter';
 import { isSuperAdmin } from '../../../src/config/adminConfig';
+import { makerUrl } from '../../../src/utils/slug';
 import '../../../src/views/ChocolateDetailPage.css';
 
 export default function ChocolateDetailClient({ chocolateId, serverChocolate, serverReviews }) {
@@ -121,42 +124,15 @@ export default function ChocolateDetailClient({ chocolateId, serverChocolate, se
     }
   };
 
-  const handleQuickReview = async (reviewData) => {
+  // QuickReviewCTA persists the review itself — this callback just refreshes
+  // the list and shows the success note.
+  const handleQuickReview = async () => {
     try {
-      const existingUserReview = reviews.find(review => review.userId === currentUser?.uid);
-      if (existingUserReview) {
-        await fetchReviews();
-        setReviewSuccess(true);
-        setTimeout(() => setReviewSuccess(false), 3000);
-        return;
-      }
-
-      const fullName = currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User';
-      const reviewToSubmit = {
-        chocolateId: reviewData.chocolateId || id,
-        userId: currentUser.uid,
-        rating: reviewData.rating,
-        text: reviewData.text || '',
-        user: fullName,
-        userName: fullName,
-        displayName: formatReviewerName(fullName),
-        userPhotoURL: currentUser.photoURL || null,
-        helpful: 0,
-        createdAt: new Date(),
-        chocolate: {
-          id: chocolate.id,
-          name: chocolate.name,
-          maker: chocolate.maker,
-          imageUrl: chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate'
-        }
-      };
-      await addReview(reviewToSubmit);
-      setReviewSuccess(true);
       await fetchReviews();
+      setReviewSuccess(true);
       setTimeout(() => setReviewSuccess(false), 3000);
     } catch (error) {
-      console.error('Error submitting review:', error);
-      alert('Error submitting review. Please try again.');
+      console.error('Error refreshing reviews:', error);
     }
   };
 
@@ -201,9 +177,15 @@ export default function ChocolateDetailClient({ chocolateId, serverChocolate, se
         <div className="container">
           <div className="detail-header-content">
             <div className="detail-image">
-              <img
+              <Image
                 src={chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate'}
                 alt={`${chocolate.name} by ${chocolate.maker} - ${chocolate.cacaoPercentage || ''}% chocolate bar`}
+                width={400}
+                height={400}
+                sizes="(max-width: 768px) 90vw, 400px"
+                style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
+                priority
+                unoptimized={!chocolate.imageUrl || chocolate.imageUrl.includes('placehold.co')}
               />
               {isSuperAdmin(currentUser) && (
                 <button
@@ -224,7 +206,7 @@ export default function ChocolateDetailClient({ chocolateId, serverChocolate, se
             <div className="detail-info">
               <div className="chocolate-header-minimal">
                 <Link
-                  href={`/maker?maker=${encodeURIComponent(chocolate.maker || 'Unknown Maker')}`}
+                  href={makerUrl(chocolate.maker)}
                   className="maker-link-minimal"
                 >
                   <span className="maker-name-minimal">{chocolate.maker || 'Unknown Maker'}</span>
@@ -318,6 +300,8 @@ export default function ChocolateDetailClient({ chocolateId, serverChocolate, se
       </div>
 
       <div className="container">
+        <ChocolateSpecs chocolate={chocolate} />
+
         <section className="reviews-section">
           <h3>Customer Reviews for {chocolate.name} ({reviews.length})</h3>
 

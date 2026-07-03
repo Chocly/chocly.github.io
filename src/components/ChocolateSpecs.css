@@ -1,0 +1,51 @@
+/* ChocolateSpecs — facts table on chocolate detail pages */
+.chocolate-specs {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: var(--background-light, #fff);
+  border: 1px solid var(--border-light, #e8e0d8);
+  border-radius: 12px;
+}
+
+.chocolate-specs h3 {
+  margin: 0 0 1rem;
+  font-size: 1.15rem;
+  color: var(--text-primary, #2d1810);
+}
+
+.specs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.specs-table tr {
+  border-bottom: 1px solid var(--border-light, #efe8e0);
+}
+
+.specs-table tr:last-child {
+  border-bottom: none;
+}
+
+.specs-table th {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.6rem 1rem 0.6rem 0;
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--text-secondary, #6b5d52);
+  width: 11rem;
+}
+
+.specs-table td {
+  padding: 0.6rem 0;
+  color: var(--text-primary, #2d1810);
+  line-height: 1.5;
+}
+
+@media (max-width: 560px) {
+  .specs-table th {
+    width: 8rem;
+    white-space: normal;
+  }
+}
