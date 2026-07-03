@@ -51,3 +51,7 @@ scripts/development/
 
 # Editor files
 .idea/chocolate-backup/
+
+# Environment files: ignore all, allow only the committed template
+.env*
+!.env.example
