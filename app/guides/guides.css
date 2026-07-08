@@ -5,6 +5,7 @@
 }
 
 .guides-header h1 { margin: 0 0 0.5rem; color: #2d1810; }
+/* Warm muted gray (matches ChocolateSpecs); brand --text-secondary is blue-gray, intentionally not used here */
 .guides-header p { color: #6b5d52; max-width: 58ch; margin: 0 0 2rem; }
 
 .guides-grid {

@@ -28,7 +28,9 @@ function ChocolateSpecs({ chocolate }) {
     ['Protein', n.protein != null ? `${n.protein} g per serving` : null],
   ].filter(([, value]) => value != null && value !== '');
 
-  if (rows.length < 3) return null;
+  // Show the table whenever there's anything worth showing (maker + type alone
+  // is useful); only suppress an entirely empty table.
+  if (rows.length === 0) return null;
 
   return (
     <section className="chocolate-specs" aria-labelledby="specs-heading">

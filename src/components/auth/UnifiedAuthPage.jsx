@@ -32,7 +32,9 @@ function UnifiedAuthPage() {
 
   useEffect(() => {
     if (!authLoading && currentUser) {
-      navigate(getDestination(), { replace: true });
+      // Pass the user so brand-new accounts (incl. mobile Google redirect
+      // signups that only hit this effect) still reach /welcome onboarding.
+      navigate(getDestination(currentUser), { replace: true });
     }
   }, [currentUser, authLoading, navigate]);
 

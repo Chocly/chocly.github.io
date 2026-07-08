@@ -164,7 +164,7 @@ export default function ChocolateDetailClient({ chocolateId, serverChocolate, se
   }
 
   const averageRating = reviews.length > 0
-    ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+    ? reviews.reduce((sum, review) => sum + (review.rating || 0), 0) / reviews.length
     : chocolate.averageRating || 0;
 
   return (

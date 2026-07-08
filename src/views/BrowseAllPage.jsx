@@ -246,7 +246,7 @@ function BrowseAllPage({ serverChocolates = [] }) {
         case 'cacao-low':
           return (a.cacaoPercentage || 0) - (b.cacaoPercentage || 0);
         case 'name':
-          return a.name.localeCompare(b.name);
+          return (a.name || '').localeCompare(b.name || '');
         case 'maker':
           return (a.maker || '').localeCompare(b.maker || '');
         case 'newest':

@@ -2,8 +2,8 @@
 .chocolate-specs {
   margin: 2rem 0;
   padding: 1.5rem;
-  background: var(--background-light, #fff);
-  border: 1px solid var(--border-light, #e8e0d8);
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border-light, #E5E1DC);
   border-radius: 12px;
 }
 
@@ -20,7 +20,7 @@
 }
 
 .specs-table tr {
-  border-bottom: 1px solid var(--border-light, #efe8e0);
+  border-bottom: 1px solid var(--border-light, #E5E1DC);
 }
 
 .specs-table tr:last-child {
