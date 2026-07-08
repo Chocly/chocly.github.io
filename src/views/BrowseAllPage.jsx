@@ -4,14 +4,17 @@ import { useSearchParams } from 'react-router-dom'; // ADD THIS IMPORT
 import { getAllChocolates, getAllTags } from '../services/chocolateFirebaseService';
 import ChocolateCard from '../components/ChocolateCard';
 import Breadcrumb from '../components/Breadcrumb';
+import { weightedRating } from '../utils/rating';
 import './BrowseAllPage.css';
 
-function BrowseAllPage() {
+function BrowseAllPage({ serverChocolates = [] }) {
   const [searchParams, setSearchParams] = useSearchParams(); // ADD THIS
-  const [allChocolates, setAllChocolates] = useState([]);
-  const [filteredChocolates, setFilteredChocolates] = useState([]);
+  // Seeded with server-rendered data so first paint (and crawlers) see real
+  // cards; the client fetch below replaces it with the full catalog.
+  const [allChocolates, setAllChocolates] = useState(serverChocolates);
+  const [filteredChocolates, setFilteredChocolates] = useState(serverChocolates);
   const [availableTags, setAvailableTags] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(serverChocolates.length === 0);
   const [error, setError] = useState(null);
   
   // Initialize filters from URL parameters
@@ -234,7 +237,8 @@ function BrowseAllPage() {
     return [...filteredChocolates].sort((a, b) => {
       switch(sortOption) {
         case 'rating':
-          return (b.averageRating || 0) - (a.averageRating || 0);
+          // Weighted: one 5-star review shouldn't outrank forty 4.6s
+          return weightedRating(b) - weightedRating(a);
         case 'popularity':
           return (b.reviewCount || 0) - (a.reviewCount || 0);
         case 'cacao-high':
@@ -294,19 +298,35 @@ function BrowseAllPage() {
   const hasActiveFilters = Object.values(filters).some(value => value !== '');
   const activeFilterCount = Object.values(filters).filter(value => value !== '').length;
   
-  // Display active filter summary
+  // Display active filter summary. Each pill carries the exact state keys it
+  // owns so removal clears the right thing (labels are not state keys).
   const getActiveFilterSummary = () => {
     const active = [];
-    if (filters.maker) active.push(`Maker: ${filters.maker}`);
-    if (filters.type) active.push(`Type: ${filters.type}`);
-    if (filters.origin) active.push(`Origin: ${filters.origin}`);
-    if (filters.flavor) active.push(`Flavor: ${filters.flavor}`);
-    if (filters.tag) active.push(`Tag: ${filters.tag}`);
+    if (filters.maker) active.push({ label: `Maker: ${filters.maker}`, keys: ['maker'] });
+    if (filters.type) active.push({ label: `Type: ${filters.type}`, keys: ['type'] });
+    if (filters.origin) active.push({ label: `Origin: ${filters.origin}`, keys: ['origin'] });
+    if (filters.flavor) active.push({ label: `Flavor: ${filters.flavor}`, keys: ['flavor'] });
+    if (filters.tag) active.push({ label: `Tag: ${filters.tag}`, keys: ['tag'] });
     if (filters.minCacao && filters.maxCacao) {
-      active.push(`Cacao: ${filters.minCacao}-${filters.maxCacao}%`);
+      active.push({
+        label: `Cacao: ${filters.minCacao}-${filters.maxCacao}%`,
+        keys: ['minCacao', 'maxCacao', 'cacao']
+      });
     }
-    if (filters.minRating) active.push(`Rating: ${filters.minRating}+`);
+    if (filters.minRating) active.push({ label: `Rating: ${filters.minRating}+`, keys: ['minRating'] });
     return active;
+  };
+
+  // Clear one pill's filters (may span several state keys + URL params).
+  const clearFilterKeys = (keys) => {
+    setFilters(prev => {
+      const next = { ...prev };
+      keys.forEach(k => { if (k in next) next[k] = ''; });
+      return next;
+    });
+    const newParams = new URLSearchParams(searchParams);
+    keys.forEach(k => newParams.delete(k));
+    setSearchParams(newParams);
   };
   
   if (loading) {
@@ -340,17 +360,13 @@ function BrowseAllPage() {
         {activeFilterSummary.length > 0 && (
           <div className="active-filters-display">
             <span className="active-filters-label">Active Filters:</span>
-            {activeFilterSummary.map((filter, index) => (
-              <span key={index} className="filter-pill">
-                {filter}
-                <button 
-                  onClick={() => {
-                    // Clear specific filter
-                    const [key] = filter.split(':');
-                    const filterKey = key.toLowerCase().replace(' ', '');
-                    handleFilterChange(filterKey, '');
-                  }}
+            {activeFilterSummary.map((filter) => (
+              <span key={filter.label} className="filter-pill">
+                {filter.label}
+                <button
+                  onClick={() => clearFilterKeys(filter.keys)}
                   className="remove-filter"
+                  aria-label={`Remove filter ${filter.label}`}
                 >
                   ×
                 </button>

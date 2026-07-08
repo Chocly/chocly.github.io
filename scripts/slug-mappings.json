@@ -1,0 +1,2876 @@
+[
+  {
+    "id": "01pwKmnZNW92iJBvgHu1",
+    "name": "Orange Dark Chocolate",
+    "maker": null,
+    "slug": "orange-dark-chocolate"
+  },
+  {
+    "id": "0BDE3GweIIuN7w0urftQ",
+    "name": "Puur Mint Candy Cane Chocolate",
+    "maker": null,
+    "slug": "puur-mint-candy-cane-chocolate"
+  },
+  {
+    "id": "0KqLfqSOzpTCwW3yRpUU",
+    "name": "Almonds and Sea Salt in Dark Chocolate",
+    "maker": "Chocolove",
+    "slug": "chocolove-almonds-and-sea-salt-in-dark-chocolate"
+  },
+  {
+    "id": "0MNbrfpVczbVndNI7csU",
+    "name": "Pascha Organic 85% Dark Chocolate",
+    "maker": null,
+    "slug": "pascha-organic-85-dark-chocolate"
+  },
+  {
+    "id": "0SvjrI9YkZUSKWTTRWKf",
+    "name": "Pike Place Espresso Dark Chocolate Truffle Bar",
+    "maker": null,
+    "slug": "pike-place-espresso-dark-chocolate-truffle-bar"
+  },
+  {
+    "id": "0TX74Rkr4pBbfpKsFATl",
+    "name": "Madagascan Dark Chocolate",
+    "maker": null,
+    "slug": "madagascan-dark-chocolate"
+  },
+  {
+    "id": "132miYJ55StiqKc5jsXi",
+    "name": "Finest Alpine Milk",
+    "maker": "MilkBoy",
+    "slug": "milkboy-finest-alpine-milk"
+  },
+  {
+    "id": "1BsKLJDiQAqrt8T53Wn6",
+    "name": "Dark Cocoa Orange",
+    "maker": null,
+    "slug": "dark-cocoa-orange"
+  },
+  {
+    "id": "1PSQarzXvnRLcTXQK7OK",
+    "name": "70% Cocoa Salted Almond Dark Chocolate",
+    "maker": null,
+    "slug": "70-cocoa-salted-almond-dark-chocolate"
+  },
+  {
+    "id": "1mLh2yh4e8NDTFjcfWvb",
+    "name": "60% Dark Chocolate with Cherry Chunks",
+    "maker": null,
+    "slug": "60-dark-chocolate-with-cherry-chunks"
+  },
+  {
+    "id": "1mQ99F7O0aQquko7xJCV",
+    "name": "Gin de Grande Bretagne",
+    "maker": null,
+    "slug": "gin-de-grande-bretagne"
+  },
+  {
+    "id": "261tcXhfd3gEZqq9B9tw",
+    "name": "Belize with Nibs and Salt",
+    "maker": "Spinnaker Chocolate",
+    "slug": "spinnaker-chocolate-belize-with-nibs-and-salt"
+  },
+  {
+    "id": "2S76OZHHmKJlJ8pjyWk2",
+    "name": "65% Cocoa Dark Chocolate",
+    "maker": null,
+    "slug": "65-cocoa-dark-chocolate"
+  },
+  {
+    "id": "2eKRFLYk5OIxQHH9evId",
+    "name": "Coffee Dark Chocolate Mexicano",
+    "maker": null,
+    "slug": "coffee-dark-chocolate-mexicano"
+  },
+  {
+    "id": "3LW3qSN9qmRWJtgsHAHe",
+    "name": "70% Cacao noir intense",
+    "maker": null,
+    "slug": "70-cacao-noir-intense"
+  },
+  {
+    "id": "3XHQErqM9mU2aQO24gFj",
+    "name": "85% Cocoa Dark Chocolate Squares",
+    "maker": null,
+    "slug": "85-cocoa-dark-chocolate-squares"
+  },
+  {
+    "id": "3aFaQZHO7qRU4Rw1Gqjc",
+    "name": "Chocolate Amargo con Sal",
+    "maker": null,
+    "slug": "chocolate-amargo-con-sal"
+  },
+  {
+    "id": "3c3XFZt5zLXTGu6qzRPY",
+    "name": "Chocolate Amargo",
+    "maker": null,
+    "slug": "chocolate-amargo"
+  },
+  {
+    "id": "3gaBLKUpWdwX0cch1FdM",
+    "name": "Pure Dark",
+    "maker": "Blue Stripes",
+    "slug": "blue-stripes-pure-dark"
+  },
+  {
+    "id": "3xc4nHjXKLztH0CduBKo",
+    "name": "Fairtrade-Zartbitterschokolade mit Mandeln und Meersalz",
+    "maker": null,
+    "slug": "fairtrade-zartbitterschokolade-mit-mandeln-und-meersalz"
+  },
+  {
+    "id": "45Fa6rlQ6Im3MPjuHVts",
+    "name": "Darkmilk raspberry",
+    "maker": null,
+    "slug": "darkmilk-raspberry"
+  },
+  {
+    "id": "45Vsqruu8ol3mUtlGoZy",
+    "name": "Green & Blacks Smooth Mint",
+    "maker": null,
+    "slug": "green-blacks-smooth-mint"
+  },
+  {
+    "id": "45fjrDKXbiSRy2yXg8Ct",
+    "name": "Lindt Excellence Roasted Hazelnut Dark Chocolate",
+    "maker": null,
+    "slug": "lindt-excellence-roasted-hazelnut-dark-chocolate"
+  },
+  {
+    "id": "47aVMTfUzWaBqCRTpien",
+    "name": "Mason & Co Sea salt dark chocolate",
+    "maker": null,
+    "slug": "mason-co-sea-salt-dark-chocolate"
+  },
+  {
+    "id": "4DHYRPbHMQybjpX4NcIY",
+    "name": "Chocolate Amargo al 65%",
+    "maker": null,
+    "slug": "chocolate-amargo-al-65"
+  },
+  {
+    "id": "4EMO85nBQPNVuvemXbYp",
+    "name": "Heritage Cocoa Beans",
+    "maker": null,
+    "slug": "heritage-cocoa-beans"
+  },
+  {
+    "id": "4KwxIiZift7ST00CttZA",
+    "name": "Single Origin Dark chocolate",
+    "maker": null,
+    "slug": "single-origin-dark-chocolate"
+  },
+  {
+    "id": "4LbIzKICY8WHq67XW8zU",
+    "name": "Campfire S'mores Chocolate Bar",
+    "maker": "Compartes",
+    "slug": "compartes-campfire-smores-chocolate-bar"
+  },
+  {
+    "id": "4jAEWdqrvpC8EB8U9DU7",
+    "name": "65% Guatemala",
+    "maker": null,
+    "slug": "65-guatemala"
+  },
+  {
+    "id": "539oMPsCRcoMly3vQAer",
+    "name": "Noir Extra",
+    "maker": null,
+    "slug": "noir-extra"
+  },
+  {
+    "id": "5687sKrd1hSzWAHKVNOR",
+    "name": "Organic Nutcracker Brittle",
+    "maker": null,
+    "slug": "organic-nutcracker-brittle"
+  },
+  {
+    "id": "5DCj2FyojHlPpNMEjihP",
+    "name": "Daringly darkest",
+    "maker": null,
+    "slug": "daringly-darkest"
+  },
+  {
+    "id": "5EeW11UxY955jMz7GUtc",
+    "name": "Ecuador dark chocolate",
+    "maker": null,
+    "slug": "ecuador-dark-chocolate"
+  },
+  {
+    "id": "5aACAxw7zpjafycYlf87",
+    "name": "Almond Butter Dark Chocolate Bar",
+    "maker": null,
+    "slug": "almond-butter-dark-chocolate-bar"
+  },
+  {
+    "id": "5uaf6qqB0QJOZjAQ3fnh",
+    "name": "Unknown Dark Chocolate 70%",
+    "maker": null,
+    "slug": "unknown-dark-chocolate-70"
+  },
+  {
+    "id": "60WcAPFbRAYRF69IDOcm",
+    "name": "Histoire du ruisseau qui devient rivière, puis océan",
+    "maker": null,
+    "slug": "histoire-du-ruisseau-qui-devient-riviere-puis-ocean"
+  },
+  {
+    "id": "6621QZhQ567YZTIRapZo",
+    "name": "Gingerama Dark Chocolate",
+    "maker": null,
+    "slug": "gingerama-dark-chocolate"
+  },
+  {
+    "id": "6R3IjqRxMkOU6yYEGrMd",
+    "name": "Dark Roasted Hazelnut Chocolate Bars",
+    "maker": null,
+    "slug": "dark-roasted-hazelnut-chocolate-bars"
+  },
+  {
+    "id": "6ZfwDjDjFzYVAFI9HFEn",
+    "name": "Dark Chocolate 85%",
+    "maker": null,
+    "slug": "dark-chocolate-85"
+  },
+  {
+    "id": "6cUtatvNo6mR0a8FHVN6",
+    "name": "70% Cacao Burnt Caramel Organic Dark Chocolate",
+    "maker": null,
+    "slug": "70-cacao-burnt-caramel-organic-dark-chocolate"
+  },
+  {
+    "id": "6eXpmpQQtx91HiCJgag8",
+    "name": "Wizards",
+    "maker": null,
+    "slug": "wizards"
+  },
+  {
+    "id": "6gfcHrayUsxghYEliimI",
+    "name": "Salted Cashew Extra Dark Chocolate Bar",
+    "maker": null,
+    "slug": "salted-cashew-extra-dark-chocolate-bar"
+  },
+  {
+    "id": "6lvpkY14CfJ5O7F20ujT",
+    "name": "Total Eclipse Dark Chocolate Bar",
+    "maker": null,
+    "slug": "total-eclipse-dark-chocolate-bar"
+  },
+  {
+    "id": "6w5cTyJG3CBtXFETiKPe",
+    "name": "Buff Strong Dark Chocolate",
+    "maker": null,
+    "slug": "buff-strong-dark-chocolate"
+  },
+  {
+    "id": "6xxnH8z9oO5sZGXBDjJc",
+    "name": "Espresso Chunk Dark Chocolate",
+    "maker": null,
+    "slug": "espresso-chunk-dark-chocolate"
+  },
+  {
+    "id": "75kIXDbp600D3P9Hd65P",
+    "name": "70% Cacao Dark Chocolate Bar",
+    "maker": null,
+    "slug": "70-cacao-dark-chocolate-bar"
+  },
+  {
+    "id": "7CCWwrHgqdwruRZoacEg",
+    "name": "Golden Tree Chocolate",
+    "maker": null,
+    "slug": "golden-tree-chocolate"
+  },
+  {
+    "id": "7CvDmcl4h2Y5WhdPaOxX",
+    "name": "Sea Salt & Nibs Dark Chocolate",
+    "maker": null,
+    "slug": "sea-salt-nibs-dark-chocolate"
+  },
+  {
+    "id": "7FOZGG4x3WRrDfsm6Dbe",
+    "name": "Øgo Dark Chocolate 70%",
+    "maker": null,
+    "slug": "go-dark-chocolate-70"
+  },
+  {
+    "id": "7Sc8ii0hJRc944FRglPp",
+    "name": "green and blacks organic intense dark chocolate",
+    "maker": null,
+    "slug": "green-and-blacks-organic-intense-dark-chocolate"
+  },
+  {
+    "id": "7U4UjarC4bShjfmS5F0O",
+    "name": "Dark chocolate almond date sugar bar",
+    "maker": "Chocolate co 5150 bean to bar",
+    "slug": "chocolate-co-5150-bean-to-bar-dark-chocolate-almond-date-sugar-bar"
+  },
+  {
+    "id": "7bU1AoxhOHj25Byt2V63",
+    "name": "Sourdough & Sea Salt",
+    "maker": "Pump Street",
+    "slug": "pump-street-sourdough-sea-salt"
+  },
+  {
+    "id": "7darELBB9z4UKYZMO7JO",
+    "name": "Hazelnut Dark Chocolate",
+    "maker": null,
+    "slug": "hazelnut-dark-chocolate"
+  },
+  {
+    "id": "7dvt3kNpM5oxJBsRQPE1",
+    "name": "Cocoa Loco Dark Chocolate",
+    "maker": null,
+    "slug": "cocoa-loco-dark-chocolate"
+  },
+  {
+    "id": "7pOldQKXQ0YzCOGRo92c",
+    "name": "Keto Bark Almonds",
+    "maker": null,
+    "slug": "keto-bark-almonds"
+  },
+  {
+    "id": "7vNRUFG3t7gk2c2sSHWV",
+    "name": "Semulki Forest Uganda 70%",
+    "maker": "Dandelion Chocolate",
+    "slug": "dandelion-chocolate-semulki-forest-uganda-70"
+  },
+  {
+    "id": "896hVT69mQ1X8B7Xm6Ml",
+    "name": "Dark 85%",
+    "maker": null,
+    "slug": "dark-85"
+  },
+  {
+    "id": "8F3bMN0WWiH7Ciu0ienv",
+    "name": "Mild 70% Cacao",
+    "maker": null,
+    "slug": "mild-70-cacao"
+  },
+  {
+    "id": "8KNmw9dVR7H4u4uBGcPI",
+    "name": "Lindt EXCELLENCE Dark 70% Cocoa",
+    "maker": null,
+    "slug": "lindt-excellence-dark-70-cocoa"
+  },
+  {
+    "id": "8c2BbgJrls5kX3G9FQaK",
+    "name": "Solid Dark Chocolate",
+    "maker": null,
+    "slug": "solid-dark-chocolate"
+  },
+  {
+    "id": "9J63PxuFDK7zAtSeMrZh",
+    "name": "Dark chocolat sea salt 70% cacao",
+    "maker": null,
+    "slug": "dark-chocolat-sea-salt-70-cacao"
+  },
+  {
+    "id": "9LnGQaPab5JzrK1ICkfh",
+    "name": "Dark Chocolate with Raspberries",
+    "maker": null,
+    "slug": "dark-chocolate-with-raspberries"
+  },
+  {
+    "id": "9T3Pw8FISdFF5fwDNRng",
+    "name": "Kokoa Kamili, Tanzania, 72% Cacao",
+    "maker": "9th & Larkin",
+    "slug": "9th-larkin-kokoa-kamili-tanzania-72-cacao"
+  },
+  {
+    "id": "9ac5WEjuJWgq7SCyGh7k",
+    "name": "GEPA Dark Chocolate 61%",
+    "maker": null,
+    "slug": "gepa-dark-chocolate-61"
+  },
+  {
+    "id": "9eFFjHkC5YtjieZDINvB",
+    "name": "Chocolat noir",
+    "maker": null,
+    "slug": "chocolat-noir"
+  },
+  {
+    "id": "9htnGq8sFuaIrpELj4vA",
+    "name": "80% Cacao Maple Smoked Salt & Rosemary Dark Chocolate Bar Sweetened with Coconut Sugar",
+    "maker": null,
+    "slug": "80-cacao-maple-smoked-salt-rosemary-dark-chocolate-bar-sweetened-with-coconut-su"
+  },
+  {
+    "id": "9llethu1EYETBbo6nebu",
+    "name": "Bittersweet Chocolate",
+    "maker": null,
+    "slug": "bittersweet-chocolate"
+  },
+  {
+    "id": "9pjuJRVBlNTOllUyjPwe",
+    "name": "100 % Cocoa Dark Chocolate",
+    "maker": null,
+    "slug": "100-cocoa-dark-chocolate"
+  },
+  {
+    "id": "9qo8luwb5udkEtlcTlLh",
+    "name": "Choco Latte",
+    "maker": "Tcho",
+    "slug": "tcho-choco-latte"
+  },
+  {
+    "id": "A0zGjdewOv87DyUhCxmD",
+    "name": "No Sugar Added Dark Chocolate",
+    "maker": null,
+    "slug": "no-sugar-added-dark-chocolate"
+  },
+  {
+    "id": "A1JiCnrEKkh0s8DdZn7l",
+    "name": "Real Baking Chocolate",
+    "maker": null,
+    "slug": "real-baking-chocolate"
+  },
+  {
+    "id": "A1PZY8tlQKjbk1NFBbfu",
+    "name": "100% Cacao Dark Chocolate with organic chocolate nibs",
+    "maker": null,
+    "slug": "100-cacao-dark-chocolate-with-organic-chocolate-nibs"
+  },
+  {
+    "id": "AKkrTTAkQu1ioOSM2MEq",
+    "name": "Regina Dark Chocolate 70%",
+    "maker": null,
+    "slug": "regina-dark-chocolate-70"
+  },
+  {
+    "id": "AWzQlb72ygMdHUsLBQ5V",
+    "name": "85% Cocoa Dark Chocolate",
+    "maker": null,
+    "slug": "85-cocoa-dark-chocolate"
+  },
+  {
+    "id": "Ab1NRIPaJgvq5B0YsRK5",
+    "name": "Marzipan bread",
+    "maker": null,
+    "slug": "marzipan-bread"
+  },
+  {
+    "id": "AsbWVlioa17vxUYBP3H1",
+    "name": "Ginger lime",
+    "maker": null,
+    "slug": "ginger-lime"
+  },
+  {
+    "id": "AwHmfEyPivA4OKf0i6LC",
+    "name": "Holy Fudge",
+    "maker": "Tcho",
+    "slug": "tcho-holy-fudge"
+  },
+  {
+    "id": "B0sY8IL7bPQXM8KsZser",
+    "name": "Cofler 50% Cacao",
+    "maker": null,
+    "slug": "cofler-50-cacao"
+  },
+  {
+    "id": "BBH54MHa3CVtex2P6k9r",
+    "name": "Sea Salt Dark Chocolate Mini Bars",
+    "maker": null,
+    "slug": "sea-salt-dark-chocolate-mini-bars"
+  },
+  {
+    "id": "BJrjKSJ39HfI77Q0wK4l",
+    "name": "La nuit de Noël",
+    "maker": null,
+    "slug": "la-nuit-de-noel"
+  },
+  {
+    "id": "BM3cmyjV7DQK1Dpav9fl",
+    "name": "Choceur Dark Chocolate",
+    "maker": null,
+    "slug": "choceur-dark-chocolate"
+  },
+  {
+    "id": "BWeoQGC1rylTwuieyhm9",
+    "name": "Canada true dark chocolate",
+    "maker": "Canada true",
+    "slug": "canada-true-canada-true-dark-chocolate"
+  },
+  {
+    "id": "Besw8f3iKNUBu66oQme3",
+    "name": "dark chocolate 70%",
+    "maker": "Divine",
+    "slug": "divine-dark-chocolate-70"
+  },
+  {
+    "id": "Bqb2rVCmJTeHa1PCtTzO",
+    "name": "Chocolate Cacau 85%",
+    "maker": null,
+    "slug": "chocolate-cacau-85"
+  },
+  {
+    "id": "C4x4bRclB9SCb7eDXu3S",
+    "name": "Maya Mountain",
+    "maker": "Dandelion Chocolate",
+    "slug": "dandelion-chocolate-maya-mountain"
+  },
+  {
+    "id": "CDjg3MGR53zRyQSiO2mu",
+    "name": "Pingo Doce Dark Chocolate 74%",
+    "maker": null,
+    "slug": "pingo-doce-dark-chocolate-74"
+  },
+  {
+    "id": "CGO6KH0SVr3Cssy7KkqC",
+    "name": "milk hazelnut 32%",
+    "maker": "Tony's Chocolonely",
+    "slug": "tonys-chocolonely-milk-hazelnut-32"
+  },
+  {
+    "id": "CHpY6atoD192H8x1Ni9v",
+    "name": "Cacao dark chocolate with sea salt",
+    "maker": null,
+    "slug": "cacao-dark-chocolate-with-sea-salt"
+  },
+  {
+    "id": "CIpoH8JMiwuX2xmnMvAO",
+    "name": "Organic Peruvian 85% Cocoa Dark Chocolate",
+    "maker": null,
+    "slug": "organic-peruvian-85-cocoa-dark-chocolate"
+  },
+  {
+    "id": "CYfBFfx21XcZAV9bpHYt",
+    "name": "67% Cacao Mint Dark Chocolate",
+    "maker": null,
+    "slug": "67-cacao-mint-dark-chocolate"
+  },
+  {
+    "id": "CbRbooMytDcfrmYDzLNu",
+    "name": "Marzipan Bar",
+    "maker": null,
+    "slug": "marzipan-bar"
+  },
+  {
+    "id": "Ce9XwK1TVms1IUbmCamE",
+    "name": "88% Cocoa Extreme Dark Chocolate",
+    "maker": null,
+    "slug": "88-cocoa-extreme-dark-chocolate"
+  },
+  {
+    "id": "CjkQcVNiRsXjD0vBPrKV",
+    "name": "chocolat noir 90%",
+    "maker": null,
+    "slug": "chocolat-noir-90"
+  },
+  {
+    "id": "ClHY6FoTsjAcyLa2KMgm",
+    "name": "Dark Chocolate Orange",
+    "maker": null,
+    "slug": "dark-chocolate-orange"
+  },
+  {
+    "id": "CqGyIgmz09FtQEQahSPl",
+    "name": "Cioccolato extra fondente",
+    "maker": null,
+    "slug": "cioccolato-extra-fondente"
+  },
+  {
+    "id": "CuLbkwa8afMQgmpASP7Z",
+    "name": "Bittersweet Chocolate Bar, 70% Cacao",
+    "maker": null,
+    "slug": "bittersweet-chocolate-bar-70-cacao"
+  },
+  {
+    "id": "Cw1GVBxX6q7brHxy6rPO",
+    "name": "Bananas Foster",
+    "maker": "Raaka",
+    "slug": "raaka-bananas-foster"
+  },
+  {
+    "id": "D0cIpf16WydM5t6eg4RM",
+    "name": "Peru 64% Zartbitterschokolade",
+    "maker": null,
+    "slug": "peru-64-zartbitterschokolade"
+  },
+  {
+    "id": "D0mnz0cciaHs4WuhPY7O",
+    "name": "Salted Pistachio Chocolate Bar",
+    "maker": "Compartes",
+    "slug": "compartes-salted-pistachio-chocolate-bar"
+  },
+  {
+    "id": "D3ufhrinZRYAR7p2C3XR",
+    "name": "Dunkle Milchschokolade mit brauner Butter Ganache",
+    "maker": null,
+    "slug": "dunkle-milchschokolade-mit-brauner-butter-ganache"
+  },
+  {
+    "id": "DBQ7AO8uTpMh8I6HwSZa",
+    "name": "Excellence 85% Cacao Chocolat Noir Puissant Lindt % Lindt",
+    "maker": null,
+    "slug": "excellence-85-cacao-chocolat-noir-puissant-lindt-lindt"
+  },
+  {
+    "id": "DGO2bksYZOoAytxattYj",
+    "name": "Dark Chili Chocolate Bars",
+    "maker": null,
+    "slug": "dark-chili-chocolate-bars"
+  },
+  {
+    "id": "DJYTni792Zk5XDtd5mnL",
+    "name": "51% Dark Chocolate Pecan Coconut",
+    "maker": null,
+    "slug": "51-dark-chocolate-pecan-coconut"
+  },
+  {
+    "id": "DLlezFGdAWivqQNbG5Gr",
+    "name": "Cool Mint Dark Chocolate",
+    "maker": null,
+    "slug": "cool-mint-dark-chocolate"
+  },
+  {
+    "id": "DMHvZ5g1KFG9Y3Pvu6Oa",
+    "name": "Mini 70% Caccao Dark Chocolate Bars",
+    "maker": null,
+    "slug": "mini-70-caccao-dark-chocolate-bars"
+  },
+  {
+    "id": "DXgMYem1hZYP48HfmQju",
+    "name": "Unknown Dark Chocolate 70%",
+    "maker": null,
+    "slug": "unknown-dark-chocolate-70-2"
+  },
+  {
+    "id": "DXssGGbUEHcxWQPpL8YL",
+    "name": "Herrenschokolade",
+    "maker": null,
+    "slug": "herrenschokolade"
+  },
+  {
+    "id": "DgmS7Az9CRWDPJPVMCq6",
+    "name": "Lindt Dark Chocolate 70%",
+    "maker": null,
+    "slug": "lindt-dark-chocolate-70"
+  },
+  {
+    "id": "DvNLbi6bxNokDs2o3jCv",
+    "name": "Chocolat noir - République Dominicaine",
+    "maker": null,
+    "slug": "chocolat-noir-republique-dominicaine"
+  },
+  {
+    "id": "EE0rq9IhLd4VM4kZ1nsL",
+    "name": "Moser Roth Dark Chocolate 70%",
+    "maker": null,
+    "slug": "moser-roth-dark-chocolate-70"
+  },
+  {
+    "id": "EMWZ99SHf3AwJqsWjxVz",
+    "name": "Hazelnut Butter Dark Chocolate Bar",
+    "maker": null,
+    "slug": "hazelnut-butter-dark-chocolate-bar"
+  },
+  {
+    "id": "EMe0iwxFQQ9lwonDK6B6",
+    "name": "Bitterschokolade (74 % Kakao)",
+    "maker": null,
+    "slug": "bitterschokolade-74-kakao"
+  },
+  {
+    "id": "EYWa5hq65EW6Nk8rfr7V",
+    "name": "Fine Dark Gourmet sabor Frutilla",
+    "maker": null,
+    "slug": "fine-dark-gourmet-sabor-frutilla"
+  },
+  {
+    "id": "Edbuu4Nm9TYOjbfxqWP6",
+    "name": "Ghirardelli Chocolate",
+    "maker": null,
+    "slug": "ghirardelli-chocolate"
+  },
+  {
+    "id": "EdqufG3cHcRWkR5Ljzzl",
+    "name": "Signature",
+    "maker": null,
+    "slug": "signature"
+  },
+  {
+    "id": "EhlCctih1yzuDLsuJgHG",
+    "name": "Alter Eco 85% Peru Dark Chocolate",
+    "maker": null,
+    "slug": "alter-eco-85-peru-dark-chocolate"
+  },
+  {
+    "id": "FCG0XcWAdRhcG5jw7Bk5",
+    "name": "Unknown Dark Chocolate 70%",
+    "maker": null,
+    "slug": "unknown-dark-chocolate-70-3"
+  },
+  {
+    "id": "FMPIWZjwwwC6GmGE3YAo",
+    "name": "Rainbow Dark Chocolate 70%",
+    "maker": null,
+    "slug": "rainbow-dark-chocolate-70"
+  },
+  {
+    "id": "FNDIDKkEsMVQkV9FS04d",
+    "name": "Peppermint Crunch 70% Dark Chocolate",
+    "maker": null,
+    "slug": "peppermint-crunch-70-dark-chocolate"
+  },
+  {
+    "id": "FTva1NEGkbfTyZ0M6Vnu",
+    "name": "72% Cocoa Swiss Dark Chocolate",
+    "maker": null,
+    "slug": "72-cocoa-swiss-dark-chocolate"
+  },
+  {
+    "id": "FVifsyjnSPY4ZhI3xzDW",
+    "name": "Noir Pur Origine Mexique 75%",
+    "maker": null,
+    "slug": "noir-pur-origine-mexique-75"
+  },
+  {
+    "id": "FmGWgizQqLW5C2Ly35nz",
+    "name": "Peppermint bark",
+    "maker": null,
+    "slug": "peppermint-bark"
+  },
+  {
+    "id": "FphT3ShbaIeYuPRMp3qN",
+    "name": "72% Cacao Dark",
+    "maker": null,
+    "slug": "72-cacao-dark"
+  },
+  {
+    "id": "Fq5wtwDFFTI3IuZaEi25",
+    "name": "Dark Pure Chocolade",
+    "maker": null,
+    "slug": "dark-pure-chocolade"
+  },
+  {
+    "id": "G8DL23QALGz45bId4ZcF",
+    "name": "Chewy nougat",
+    "maker": null,
+    "slug": "chewy-nougat"
+  },
+  {
+    "id": "GIIxdEYIU7xWZMSvKNwf",
+    "name": "Chocolate 80% Sweetened with Coconut Sugar",
+    "maker": null,
+    "slug": "chocolate-80-sweetened-with-coconut-sugar"
+  },
+  {
+    "id": "GP7S72G5zXN9FPYHjKoz",
+    "name": "Chocolat noir 70%",
+    "maker": null,
+    "slug": "chocolat-noir-70"
+  },
+  {
+    "id": "GZOWtsgqbn0T1HyfknXB",
+    "name": "Delicata Dark Chocolate 70%",
+    "maker": null,
+    "slug": "delicata-dark-chocolate-70"
+  },
+  {
+    "id": "Gdxr8sDNhtyVIAyN2HfO",
+    "name": "Ecuador dark chocolate 75%",
+    "maker": null,
+    "slug": "ecuador-dark-chocolate-75"
+  },
+  {
+    "id": "Ggk7NQtujC0FsgZ7LfDG",
+    "name": "70% Cocoa Dark Chocolate",
+    "maker": null,
+    "slug": "70-cocoa-dark-chocolate"
+  },
+  {
+    "id": "Gin1lbBtqzun0XcmbjEL",
+    "name": "Variation Klassik Trinkschokolade",
+    "maker": null,
+    "slug": "variation-klassik-trinkschokolade"
+  },
+  {
+    "id": "GphmsHWEXiYnq0HAXdTm",
+    "name": "Mørk Sjokolade 86%",
+    "maker": null,
+    "slug": "mrk-sjokolade-86"
+  },
+  {
+    "id": "GwbZeuT8IwWtH5WXX25A",
+    "name": "Cashew Butter + Pure Vanilla Bean Dark Chocolate Bar",
+    "maker": null,
+    "slug": "cashew-butter-pure-vanilla-bean-dark-chocolate-bar"
+  },
+  {
+    "id": "H0optACbosUHGY9SiSyU",
+    "name": "Nocciolata",
+    "maker": null,
+    "slug": "nocciolata"
+  },
+  {
+    "id": "H2SeeWIX83qK788sGCfN",
+    "name": "Dark Chocolate with Hazelnuts",
+    "maker": null,
+    "slug": "dark-chocolate-with-hazelnuts"
+  },
+  {
+    "id": "H5TpLiVSAdYTsIdVVLU3",
+    "name": "Dark Chocolate with Sea Salt",
+    "maker": null,
+    "slug": "dark-chocolate-with-sea-salt"
+  },
+  {
+    "id": "H7gQX0QNGBlbrndTTQUi",
+    "name": "Tableta 70% Cacao",
+    "maker": null,
+    "slug": "tableta-70-cacao"
+  },
+  {
+    "id": "HEiOMxtRpECIp1FhXFvG",
+    "name": "Single Origin - Intense Dark Cacao",
+    "maker": null,
+    "slug": "single-origin-intense-dark-cacao"
+  },
+  {
+    "id": "HF3wSCwuroTyPpIeMLev",
+    "name": "Cacao 86%",
+    "maker": null,
+    "slug": "cacao-86"
+  },
+  {
+    "id": "HM8MPvb9O7ZBJ3zYjPtm",
+    "name": "Oranges and Marcona Almonds",
+    "maker": "Utopick",
+    "slug": "utopick-oranges-and-marcona-almonds"
+  },
+  {
+    "id": "HUddKv6GxcJ4ahyqSA0L",
+    "name": "Single Origin Dark Chocolate with Raspberries",
+    "maker": null,
+    "slug": "single-origin-dark-chocolate-with-raspberries"
+  },
+  {
+    "id": "HVPAsHj8HzgYZwnsXmrf",
+    "name": "Dark chocolate",
+    "maker": null,
+    "slug": "dark-chocolate"
+  },
+  {
+    "id": "HhFBp8mp8ZoyQ7LcjOdV",
+    "name": "Chocolate Tradicional",
+    "maker": null,
+    "slug": "chocolate-tradicional"
+  },
+  {
+    "id": "Hjvn4kO5JOuu9tPQcvYp",
+    "name": "Sea Salt Caramel Dark Chocolate Squares",
+    "maker": null,
+    "slug": "sea-salt-caramel-dark-chocolate-squares"
+  },
+  {
+    "id": "HoAcmOUDhR1MPOdB7cx8",
+    "name": "Chocolate Negro",
+    "maker": null,
+    "slug": "chocolate-negro"
+  },
+  {
+    "id": "Hr17hOJSLU7tZPAtYSxh",
+    "name": "Dark Chocolate with a Salted Caramel Soft Centre",
+    "maker": null,
+    "slug": "dark-chocolate-with-a-salted-caramel-soft-centre"
+  },
+  {
+    "id": "HrGdLIJG4ctYbkLJD5nB",
+    "name": "Cherry Vanilla",
+    "maker": "Ritual",
+    "slug": "ritual-cherry-vanilla"
+  },
+  {
+    "id": "HuoW2xobeZbxn4uUSETg",
+    "name": "darkmilk",
+    "maker": null,
+    "slug": "darkmilk"
+  },
+  {
+    "id": "Hw41aoSq5TcIfHVClSqY",
+    "name": "Sea Salt Dark Chocolate Bar",
+    "maker": null,
+    "slug": "sea-salt-dark-chocolate-bar"
+  },
+  {
+    "id": "HxW1BhXSaMVVQ5accQ1W",
+    "name": "Huila 86% cacao - Xocolatl • Colombia",
+    "maker": null,
+    "slug": "huila-86-cacao-xocolatl-colombia"
+  },
+  {
+    "id": "I5ETZcZ0E0u1nPSmPtc4",
+    "name": "Chocolate Makers Dark Chocolate 70%",
+    "maker": null,
+    "slug": "chocolate-makers-dark-chocolate-70"
+  },
+  {
+    "id": "I5JhsIvI6d4p27aFLGqR",
+    "name": "Hemp dark chocolate",
+    "maker": null,
+    "slug": "hemp-dark-chocolate"
+  },
+  {
+    "id": "IPw5fv4ohJJL55QId05W",
+    "name": "Gingerbread Dark Chocolate Bar",
+    "maker": null,
+    "slug": "gingerbread-dark-chocolate-bar"
+  },
+  {
+    "id": "IWDxgA5uiimRbLu9M3rz",
+    "name": "Sea Salt Dark Lindt Excellence",
+    "maker": null,
+    "slug": "sea-salt-dark-lindt-excellence"
+  },
+  {
+    "id": "IYKTAJBivhgV7BFV56wM",
+    "name": "Simple Dark Chocolate Bar",
+    "maker": null,
+    "slug": "simple-dark-chocolate-bar"
+  },
+  {
+    "id": "IoJK45O1FU961re6RxAI",
+    "name": "Lindt Excellence Orange Amandes 70% cacao noir",
+    "maker": null,
+    "slug": "lindt-excellence-orange-amandes-70-cacao-noir"
+  },
+  {
+    "id": "IogviRueHV7vxI6xzoxn",
+    "name": "Chocolate 100%",
+    "maker": null,
+    "slug": "chocolate-100"
+  },
+  {
+    "id": "IsT4rR8G4ys8nMrAT1PJ",
+    "name": "Chocolate amargo",
+    "maker": null,
+    "slug": "chocolate-amargo-2"
+  },
+  {
+    "id": "JPCONOShmpsEEgtWm2zN",
+    "name": "Razzle Dazzle Dark Chocolate",
+    "maker": null,
+    "slug": "razzle-dazzle-dark-chocolate"
+  },
+  {
+    "id": "JZ664ImvFeyynViIrTWW",
+    "name": "Fine Dark Chocolate",
+    "maker": null,
+    "slug": "fine-dark-chocolate"
+  },
+  {
+    "id": "JZtNP1cTmr3nUl9IhcYj",
+    "name": "70% Dark Choco with Maple Sugar",
+    "maker": null,
+    "slug": "70-dark-choco-with-maple-sugar"
+  },
+  {
+    "id": "JkdG41o2C7HFQT37nOTz",
+    "name": "zero",
+    "maker": null,
+    "slug": "zero"
+  },
+  {
+    "id": "Jow3aVxVDfz3gmqhZ1Ti",
+    "name": "Pasta D'Abueli",
+    "maker": null,
+    "slug": "pasta-dabueli"
+  },
+  {
+    "id": "Jpm1Z30Rfo9UJvnn1pDS",
+    "name": "Flirt Dark Chocolate",
+    "maker": null,
+    "slug": "flirt-dark-chocolate"
+  },
+  {
+    "id": "Jrl6xFYZMZpjVvw6bYLp",
+    "name": "Madagascar Fleur de Sel",
+    "maker": "Beyond Good",
+    "slug": "beyond-good-madagascar-fleur-de-sel"
+  },
+  {
+    "id": "JtIGtN0wSmvjumLYDDrX",
+    "name": "Semi-Sweet Chocolate Baking Bar",
+    "maker": null,
+    "slug": "semi-sweet-chocolate-baking-bar"
+  },
+  {
+    "id": "JwZpapWoPL6s3DRqQzDV",
+    "name": "Coffee Arabica and Dark Chocolate",
+    "maker": "Karuna Chocolate",
+    "slug": "karuna-chocolate-coffee-arabica-and-dark-chocolate"
+  },
+  {
+    "id": "JxVBnKebR5iLh1Z1WOLk",
+    "name": "Chocolat noir bio thé Earl Grey",
+    "maker": null,
+    "slug": "chocolat-noir-bio-the-earl-grey"
+  },
+  {
+    "id": "Jxulr0JiAfdRIVvWJh1p",
+    "name": "Fays",
+    "maker": null,
+    "slug": "fays"
+  },
+  {
+    "id": "JzMF1j5oGThWQWobeWcQ",
+    "name": "Dark chocolate chips",
+    "maker": null,
+    "slug": "dark-chocolate-chips"
+  },
+  {
+    "id": "KGFbBlKTv5121eM37f25",
+    "name": "Noir feinherb (78% cacao)",
+    "maker": null,
+    "slug": "noir-feinherb-78-cacao"
+  },
+  {
+    "id": "KGVgbAuW5utz2enfmDpc",
+    "name": "Croquant Biscuit Negro",
+    "maker": null,
+    "slug": "croquant-biscuit-negro"
+  },
+  {
+    "id": "KWGuY2VU10A7B61SU3uO",
+    "name": "60% Cacao Hazelnut & Currant Dark Chocolate",
+    "maker": null,
+    "slug": "60-cacao-hazelnut-currant-dark-chocolate"
+  },
+  {
+    "id": "KXeg6gqix3qVp93iYhVU",
+    "name": "Everyday essentials dark chocolate",
+    "maker": null,
+    "slug": "everyday-essentials-dark-chocolate"
+  },
+  {
+    "id": "KhtLoswPB7j0tiFNSSxg",
+    "name": "Wild Beni 77% Cacao",
+    "maker": null,
+    "slug": "wild-beni-77-cacao"
+  },
+  {
+    "id": "L1xFuyPWqy2Qa6uwWSR4",
+    "name": "Mørk chokolade med appelsin",
+    "maker": null,
+    "slug": "mrk-chokolade-med-appelsin"
+  },
+  {
+    "id": "LAe5OT7Mob2yVKDYo097",
+    "name": "Choceur Dark Hazelnut",
+    "maker": null,
+    "slug": "choceur-dark-hazelnut"
+  },
+  {
+    "id": "LSfpP8FTLyyAL3UubbcN",
+    "name": "Salted Caramel 70% Dark No Sugar Added Chocolate Bar",
+    "maker": null,
+    "slug": "salted-caramel-70-dark-no-sugar-added-chocolate-bar"
+  },
+  {
+    "id": "LZVRKXU8j8xoHClfejze",
+    "name": "Cashew Butter Filled Dark Chocolate",
+    "maker": null,
+    "slug": "cashew-butter-filled-dark-chocolate"
+  },
+  {
+    "id": "LfPf7Fy4dqxpi9QxrVXc",
+    "name": "the Best 52 cocoa mint dark chocolate",
+    "maker": null,
+    "slug": "the-best-52-cocoa-mint-dark-chocolate"
+  },
+  {
+    "id": "LmG1UlOeXJzOkpo2ERdQ",
+    "name": "Almond Butter + Puffed Quinoa Dark Chocolate Bar",
+    "maker": null,
+    "slug": "almond-butter-puffed-quinoa-dark-chocolate-bar"
+  },
+  {
+    "id": "LsbA7IEiQr19RgvxJd2f",
+    "name": "70% Cacao Orange Almond Dark Lindt Excellence",
+    "maker": null,
+    "slug": "70-cacao-orange-almond-dark-lindt-excellence"
+  },
+  {
+    "id": "LwMYqpKxbGfrez58sK3H",
+    "name": "Noir Pur Origine Sierra Leone 70% à la Violette",
+    "maker": null,
+    "slug": "noir-pur-origine-sierra-leone-70-a-la-violette"
+  },
+  {
+    "id": "M1x4KhJVsPSISesqujG5",
+    "name": "Dark Chocolate with Candied Orange Peel",
+    "maker": null,
+    "slug": "dark-chocolate-with-candied-orange-peel"
+  },
+  {
+    "id": "M6JutkcqVNiZJd5FaKII",
+    "name": "Barra de Chocolate Amargo 70% Cacao",
+    "maker": null,
+    "slug": "barra-de-chocolate-amargo-70-cacao"
+  },
+  {
+    "id": "M6wPQ0v4nrx60FmF6XRH",
+    "name": "Excellence - Sel rose de l’himalaya",
+    "maker": null,
+    "slug": "excellence-sel-rose-de-lhimalaya"
+  },
+  {
+    "id": "MAqYw8KCrjDe6qzR89ti",
+    "name": "Food wirh thought",
+    "maker": null,
+    "slug": "food-wirh-thought"
+  },
+  {
+    "id": "MDuYXiGBkvtrwGqiQDd3",
+    "name": "Triple Nut Temptation",
+    "maker": "Chuao",
+    "slug": "chuao-triple-nut-temptation"
+  },
+  {
+    "id": "MKskpUup8R6RHAGvP1mz",
+    "name": "Bagua",
+    "maker": "Qantu",
+    "slug": "qantu-bagua"
+  },
+  {
+    "id": "McDZF25uiLf4x0dg2865",
+    "name": "White Chocolate with Acai Berry",
+    "maker": "Luisa Abram",
+    "slug": "luisa-abram-white-chocolate-with-acai-berry"
+  },
+  {
+    "id": "MeCpiyANGs6XtWazRy2J",
+    "name": "80% kakao",
+    "maker": null,
+    "slug": "80-kakao"
+  },
+  {
+    "id": "MitjZcnMZpsBTPjsumPR",
+    "name": "Excellence Noir Orange Intense Aux amandes effilées",
+    "maker": null,
+    "slug": "excellence-noir-orange-intense-aux-amandes-effilees"
+  },
+  {
+    "id": "Mj8QKBoU1nhSOJHBJGZg",
+    "name": "Zartbitter Schokolade",
+    "maker": null,
+    "slug": "zartbitter-schokolade"
+  },
+  {
+    "id": "MnzaDk3z1xI7drtGDv2g",
+    "name": "Chanterelle Walnut Dark Chocolate Bar",
+    "maker": null,
+    "slug": "chanterelle-walnut-dark-chocolate-bar"
+  },
+  {
+    "id": "N2XSPP4HsBJeZXRNuQ54",
+    "name": "Dark Chocolate",
+    "maker": null,
+    "slug": "dark-chocolate-2"
+  },
+  {
+    "id": "N8iaomiqAn6xDiXc7Dxl",
+    "name": "Galaxy Fusions",
+    "maker": null,
+    "slug": "galaxy-fusions"
+  },
+  {
+    "id": "NLvDCnUtHriKjDqKZH7N",
+    "name": "Chocolat noir, les Imparfaits",
+    "maker": null,
+    "slug": "chocolat-noir-les-imparfaits"
+  },
+  {
+    "id": "NPDR2IMYiB3r7iAhlkno",
+    "name": "70% Cocoa Solids Dark Chocolate",
+    "maker": null,
+    "slug": "70-cocoa-solids-dark-chocolate"
+  },
+  {
+    "id": "NZ0OsuAUXC99eTgZWP4k",
+    "name": "Dark chocolate",
+    "maker": null,
+    "slug": "dark-chocolate-3"
+  },
+  {
+    "id": "NikyU2UsBGy9Si4g8XbJ",
+    "name": "Original Beans Piura Porcelana 75%, 70 GR Stück",
+    "maker": null,
+    "slug": "original-beans-piura-porcelana-75-70-gr-stuck"
+  },
+  {
+    "id": "Nu44N8wUd8Nmt6Tfxhil",
+    "name": "Damak Dark Chocolate with Pistachios",
+    "maker": null,
+    "slug": "damak-dark-chocolate-with-pistachios"
+  },
+  {
+    "id": "OBjQbR8QfgjIYQbXhRmc",
+    "name": "Pistachio Chocolate Bar",
+    "maker": null,
+    "slug": "pistachio-chocolate-bar"
+  },
+  {
+    "id": "OFsi46Aup3bn9tIlU7Yp",
+    "name": "Almond & Orange dark chocolate",
+    "maker": null,
+    "slug": "almond-orange-dark-chocolate"
+  },
+  {
+    "id": "OK88cfd3Zv7jmaAjLTy7",
+    "name": "73% Cacao Raspberry Dark Chocolate",
+    "maker": null,
+    "slug": "73-cacao-raspberry-dark-chocolate"
+  },
+  {
+    "id": "OLgTrkE6GuPajuVVFzhk",
+    "name": "Pink Sea Salt",
+    "maker": "Raaka",
+    "slug": "raaka-pink-sea-salt"
+  },
+  {
+    "id": "OltMCIMPbeORpHXCKWm2",
+    "name": "Excellence - Chocolat Caramel à la pointe de sel",
+    "maker": null,
+    "slug": "excellence-chocolat-caramel-a-la-pointe-de-sel"
+  },
+  {
+    "id": "OwRzj1FjusGM4rocrW99",
+    "name": "Almond Brownie No Sugar Added Dark Chocolate Style Bar",
+    "maker": null,
+    "slug": "almond-brownie-no-sugar-added-dark-chocolate-style-bar"
+  },
+  {
+    "id": "P53ENNxTBUbgIEz3ZRCX",
+    "name": "Orion Dark Chocolate 70%",
+    "maker": null,
+    "slug": "orion-dark-chocolate-70"
+  },
+  {
+    "id": "PMAMFHvZ1DpnbMMEC74U",
+    "name": "Simply Dark Chocolate",
+    "maker": null,
+    "slug": "simply-dark-chocolate"
+  },
+  {
+    "id": "PtrrT2hT3aCvpVhUzBsJ",
+    "name": "Almonds and Sea Salt in Dark Chocolate",
+    "maker": "Chocolove",
+    "slug": "chocolove-almonds-and-sea-salt-in-dark-chocolate-2"
+  },
+  {
+    "id": "PxxoKtARfTBYLKLRDbmV",
+    "name": "DARK DUO",
+    "maker": null,
+    "slug": "dark-duo"
+  },
+  {
+    "id": "Q0yBtl2aUMs8r9Znpmu6",
+    "name": "Almonds and Sea Salt in Dark Chocolate",
+    "maker": "Chocolove",
+    "slug": "chocolove-almonds-and-sea-salt-in-dark-chocolate-3"
+  },
+  {
+    "id": "Q1SkxTCQC2Ae6tgwCPl2",
+    "name": "Organic Raw Chocolate Peppermint",
+    "maker": null,
+    "slug": "organic-raw-chocolate-peppermint"
+  },
+  {
+    "id": "Q6Z2aYiCHHpbTyTD40ih",
+    "name": "Noir Amandes - dark & almond",
+    "maker": "Cafe-Tasse",
+    "slug": "cafe-tasse-noir-amandes-dark-almond"
+  },
+  {
+    "id": "QKEIl2JbudIdkF5ATHQ1",
+    "name": "54% cocoa dark milk chocolate bar",
+    "maker": null,
+    "slug": "54-cocoa-dark-milk-chocolate-bar"
+  },
+  {
+    "id": "QMcGoqyp9uf7rxbExZsW",
+    "name": "Crèmant",
+    "maker": null,
+    "slug": "cremant"
+  },
+  {
+    "id": "QoCmXiJPtGYSFQ5I41rO",
+    "name": "Pineapple, Banana, & Passionfruit Flavour Dark Chocolate",
+    "maker": null,
+    "slug": "pineapple-banana-passionfruit-flavour-dark-chocolate"
+  },
+  {
+    "id": "RBgzzDWeTrBay4JacLcm",
+    "name": "Continente,Continente Seleção,Seleção,SONAE Dark Chocolate 70%",
+    "maker": null,
+    "slug": "continentecontinente-selecaoselecaosonae-dark-chocolate-70"
+  },
+  {
+    "id": "RIQdGhaRwv0AQedhH0Pt",
+    "name": "Organic Dark Chocolate Belgian Thins",
+    "maker": null,
+    "slug": "organic-dark-chocolate-belgian-thins"
+  },
+  {
+    "id": "RJDdXkUT3MEaoTncp24C",
+    "name": "Dark chocolate with sea salt",
+    "maker": null,
+    "slug": "dark-chocolate-with-sea-salt-2"
+  },
+  {
+    "id": "RJc9CbvbMZPRXgwyK2DO",
+    "name": "Pingo Doce Dark Chocolate 52%",
+    "maker": null,
+    "slug": "pingo-doce-dark-chocolate-52"
+  },
+  {
+    "id": "RMBhMo7lzRqafPTRRXBV",
+    "name": "crollo du. Pérou 63%",
+    "maker": null,
+    "slug": "crollo-du-perou-63"
+  },
+  {
+    "id": "RWHBo6zweoSEmWSsqgdI",
+    "name": "dark milk pretzel toffee 42%",
+    "maker": "Tony's Chocolonely",
+    "slug": "tonys-chocolonely-dark-milk-pretzel-toffee-42"
+  },
+  {
+    "id": "RWtOa2GFeXtdK3nFOQzJ",
+    "name": "milk chocolate 32%",
+    "maker": "Tony's Chocolonely",
+    "slug": "tonys-chocolonely-milk-chocolate-32"
+  },
+  {
+    "id": "RidgUFmUnPlE534zcr99",
+    "name": "Organic Mint 70% Dark Chocolate",
+    "maker": null,
+    "slug": "organic-mint-70-dark-chocolate"
+  },
+  {
+    "id": "RkC0BYIxkJ0aTjHc2n38",
+    "name": "Solid Dark Chocolate Bar",
+    "maker": null,
+    "slug": "solid-dark-chocolate-bar"
+  },
+  {
+    "id": "RoTxdgXaqhLS8mXyC4h3",
+    "name": "Chocolate 72% cacao coffee",
+    "maker": null,
+    "slug": "chocolate-72-cacao-coffee"
+  },
+  {
+    "id": "S1kNH7pDMRFJMEDGdYzl",
+    "name": "Organic Dark Chocolate Bar 73% Cacao",
+    "maker": null,
+    "slug": "organic-dark-chocolate-bar-73-cacao"
+  },
+  {
+    "id": "S4dag8EweBNuMrR3CTm0",
+    "name": "peppermint cream",
+    "maker": null,
+    "slug": "peppermint-cream"
+  },
+  {
+    "id": "S72enO12E2zzXnKAQMiQ",
+    "name": "Coconut Dark Chocolate Bar",
+    "maker": null,
+    "slug": "coconut-dark-chocolate-bar"
+  },
+  {
+    "id": "SErUrFIBUqYYfy3VOLBJ",
+    "name": "Ketella Cream Dark",
+    "maker": null,
+    "slug": "ketella-cream-dark"
+  },
+  {
+    "id": "SLDKL7qg9mhFkX6GrGxt",
+    "name": "Glow Chocolate Bar",
+    "maker": null,
+    "slug": "glow-chocolate-bar"
+  },
+  {
+    "id": "SXh5Ne6RifDx0mg0RWNS",
+    "name": "Dark Chocolate Bar",
+    "maker": null,
+    "slug": "dark-chocolate-bar"
+  },
+  {
+    "id": "SahMrhFcGLcCekBeBMQX",
+    "name": "Dark Chocolate Single Origin Ecuador",
+    "maker": null,
+    "slug": "dark-chocolate-single-origin-ecuador"
+  },
+  {
+    "id": "TLf9XTZvSVm7771puPDu",
+    "name": "70% Coffee Toffee Dark Chocolate Bar",
+    "maker": null,
+    "slug": "70-coffee-toffee-dark-chocolate-bar"
+  },
+  {
+    "id": "TN0Uius3kcF9UmiwMR1w",
+    "name": "Superior Dark - Chili",
+    "maker": null,
+    "slug": "superior-dark-chili"
+  },
+  {
+    "id": "TSA7lyxM4TXq7IPuy9tm",
+    "name": "Unknown Dark Chocolate 70%",
+    "maker": null,
+    "slug": "unknown-dark-chocolate-70-4"
+  },
+  {
+    "id": "Td0zU9L9tNCjOWI4ZqfU",
+    "name": "Ekologisk Raw Choklad Original 73",
+    "maker": null,
+    "slug": "ekologisk-raw-choklad-original-73"
+  },
+  {
+    "id": "TgUmn8hKD2invbUNo51U",
+    "name": "Unknown Dark Chocolate 70%",
+    "maker": null,
+    "slug": "unknown-dark-chocolate-70-5"
+  },
+  {
+    "id": "TiaFG2BEVKMCbitezr4n",
+    "name": "Hazelnut Butter Dark Chocolate Bar",
+    "maker": null,
+    "slug": "hazelnut-butter-dark-chocolate-bar-2"
+  },
+  {
+    "id": "U39KmKmZBxi211xADhQ6",
+    "name": "Dark chocolate 70% with sea salt",
+    "maker": null,
+    "slug": "dark-chocolate-70-with-sea-salt"
+  },
+  {
+    "id": "U39jhrclaJfqbRIL8bb0",
+    "name": "Xocolata Negra",
+    "maker": null,
+    "slug": "xocolata-negra"
+  },
+  {
+    "id": "U8Z4Kv0WbENiGcpfTs7e",
+    "name": "85% Dark Chocolate",
+    "maker": null,
+    "slug": "85-dark-chocolate"
+  },
+  {
+    "id": "UD6pV67DdnPm7HXwzlRY",
+    "name": "Burnt Almond Dark Chocolate Bar",
+    "maker": null,
+    "slug": "burnt-almond-dark-chocolate-bar"
+  },
+  {
+    "id": "UYmIjeQafnslaTmY8aUw",
+    "name": "Excellence 70% Cocoa Dark Chocolate",
+    "maker": null,
+    "slug": "excellence-70-cocoa-dark-chocolate"
+  },
+  {
+    "id": "UgIleTkYOBG8fBfarTyk",
+    "name": "Gingerbread Toffee 70% Dark Chocolate",
+    "maker": null,
+    "slug": "gingerbread-toffee-70-dark-chocolate"
+  },
+  {
+    "id": "Ul46qDfqBkJto3Ucfbmx",
+    "name": "Prosit Neujahr 2024",
+    "maker": null,
+    "slug": "prosit-neujahr-2024"
+  },
+  {
+    "id": "UqcnIpGr2EziJcdKH3X6",
+    "name": "Simple Dark Chocolate",
+    "maker": null,
+    "slug": "simple-dark-chocolate"
+  },
+  {
+    "id": "Uuiy8JDefVqgg4cJegXf",
+    "name": "Salted Dark Swiss Chocolate",
+    "maker": null,
+    "slug": "salted-dark-swiss-chocolate"
+  },
+  {
+    "id": "VIOkqSpCrTIsxH4FCxhO",
+    "name": "Oro Nicaragua",
+    "maker": null,
+    "slug": "oro-nicaragua"
+  },
+  {
+    "id": "VPEFPowjoeUupiH861o8",
+    "name": "Dark Chocolate with Chopped Almond",
+    "maker": null,
+    "slug": "dark-chocolate-with-chopped-almond"
+  },
+  {
+    "id": "VhkFsIhtTzebumn4OYXV",
+    "name": "America Gourmet Chocolate",
+    "maker": null,
+    "slug": "america-gourmet-chocolate"
+  },
+  {
+    "id": "Vlde7eP01FxKsum0VFpS",
+    "name": "Chocolate Amargo al 75%",
+    "maker": null,
+    "slug": "chocolate-amargo-al-75"
+  },
+  {
+    "id": "Vmf5lMJUtPfY9A5BBgM3",
+    "name": "Dark Chocolate",
+    "maker": null,
+    "slug": "dark-chocolate-4"
+  },
+  {
+    "id": "Vs7e6Esi1yZNd8RdqIys",
+    "name": "Zotter Chocolate Labooko &quot;Pieces of Pure Joy&quot; Chocolate",
+    "maker": null,
+    "slug": "zotter-chocolate-labooko-quotpieces-of-pure-joyquot-chocolate"
+  },
+  {
+    "id": "W1RV9bHOlgbU3rEF4i6e",
+    "name": "Chocolat noir 60% bio",
+    "maker": null,
+    "slug": "chocolat-noir-60-bio"
+  },
+  {
+    "id": "W7oqm3qXDDSHHt71QQAa",
+    "name": "PB Cup",
+    "maker": "Honey mama",
+    "slug": "honey-mama-pb-cup"
+  },
+  {
+    "id": "WIendM0ySwTkVl3r9dUi",
+    "name": "Chocolat noir 85% bio",
+    "maker": null,
+    "slug": "chocolat-noir-85-bio"
+  },
+  {
+    "id": "WWJcz65VpqutmX7dCidK",
+    "name": "Milk Chocolate Bar (48% cocoa)",
+    "maker": "Endangered Species",
+    "slug": "endangered-species-milk-chocolate-bar-48-cocoa"
+  },
+  {
+    "id": "Wo08Kh1eqyMGv2D3NUhS",
+    "name": "Chocolat cremant avec petit beurre",
+    "maker": null,
+    "slug": "chocolat-cremant-avec-petit-beurre"
+  },
+  {
+    "id": "X2M6DaXAKpi0sjnlyMFX",
+    "name": "Unknown Dark Chocolate 70%",
+    "maker": null,
+    "slug": "unknown-dark-chocolate-70-6"
+  },
+  {
+    "id": "XEHuwgjoL5d071onzUmU",
+    "name": "Dark Raspberry Almond Chocolate Bars",
+    "maker": null,
+    "slug": "dark-raspberry-almond-chocolate-bars"
+  },
+  {
+    "id": "XIBcy5jQ46eFFQbAWBFM",
+    "name": "Godiva Belgium 1926 Sea Salt Dark Chocolate",
+    "maker": null,
+    "slug": "godiva-belgium-1926-sea-salt-dark-chocolate"
+  },
+  {
+    "id": "XczPxslwrXcyBCqx7yrj",
+    "name": "dark chocolate",
+    "maker": null,
+    "slug": "dark-chocolate-5"
+  },
+  {
+    "id": "XeilCH8KFKrS8bpD3JyQ",
+    "name": "Coconut Dark Chocolate Style",
+    "maker": null,
+    "slug": "coconut-dark-chocolate-style"
+  },
+  {
+    "id": "XnyJDZ6RiLLecIr14Kly",
+    "name": "Mango & Cardamom Flavour Dark Chocolate",
+    "maker": null,
+    "slug": "mango-cardamom-flavour-dark-chocolate"
+  },
+  {
+    "id": "Y7xWVi3azWbVbtrXVGzV",
+    "name": "70% Ecuador organic dark chocolate",
+    "maker": null,
+    "slug": "70-ecuador-organic-dark-chocolate"
+  },
+  {
+    "id": "YJjhSAfi4cgCnLUI1BI0",
+    "name": "Premium 70% Dark Chocolate",
+    "maker": null,
+    "slug": "premium-70-dark-chocolate"
+  },
+  {
+    "id": "YZbP6j2CE5NZ0U3RIzvs",
+    "name": "Almonds and sea salt in strong dark chocolate",
+    "maker": "Chocolove",
+    "slug": "chocolove-almonds-and-sea-salt-in-strong-dark-chocolate"
+  },
+  {
+    "id": "Ygi3v54I82B4QBKL772g",
+    "name": "Unknown Dark Chocolate 70%",
+    "maker": null,
+    "slug": "unknown-dark-chocolate-70-7"
+  },
+  {
+    "id": "YzKkk2L0rjbojEz1usAq",
+    "name": "69% Dark Satin extra smooth dark chocolate",
+    "maker": null,
+    "slug": "69-dark-satin-extra-smooth-dark-chocolate"
+  },
+  {
+    "id": "Z6n6592ucj925iVUHur1",
+    "name": "Batons 70% Dark",
+    "maker": null,
+    "slug": "batons-70-dark"
+  },
+  {
+    "id": "ZJDT6ceFS98XoztKzF5P",
+    "name": "Noir Dark Chicolate",
+    "maker": null,
+    "slug": "noir-dark-chicolate"
+  },
+  {
+    "id": "ZJLK6WS3zaARCNShTXvQ",
+    "name": "Nudie Extra Dark Chocolate",
+    "maker": null,
+    "slug": "nudie-extra-dark-chocolate"
+  },
+  {
+    "id": "ZX8RpRcKbi79LLGgU0Ps",
+    "name": "Gingerbread Dark Chocolate",
+    "maker": null,
+    "slug": "gingerbread-dark-chocolate"
+  },
+  {
+    "id": "ZaoK0Iqi9UgaeBg4ZZ0V",
+    "name": "72% Cocoa Dark Chocolate",
+    "maker": null,
+    "slug": "72-cocoa-dark-chocolate"
+  },
+  {
+    "id": "ZinU63iBu2GIXCg8VglI",
+    "name": "Cote d’ or",
+    "maker": null,
+    "slug": "cote-d-or"
+  },
+  {
+    "id": "a08uu4asye1tlXYb2s0L",
+    "name": "Dark Salted Caramel chocolate bar",
+    "maker": null,
+    "slug": "dark-salted-caramel-chocolate-bar"
+  },
+  {
+    "id": "a0bqXH53AZ0GkM98m1Mu",
+    "name": "Sugar Free 90% Cacao Dark Chocolate",
+    "maker": null,
+    "slug": "sugar-free-90-cacao-dark-chocolate"
+  },
+  {
+    "id": "a277gQ8s7WVIMjduhU7b",
+    "name": "Vida Celeiro,Celeiro Dark Chocolate 70%",
+    "maker": null,
+    "slug": "vida-celeiroceleiro-dark-chocolate-70"
+  },
+  {
+    "id": "a4fE4ue5EyIxKR232lHB",
+    "name": "Smooth",
+    "maker": null,
+    "slug": "smooth"
+  },
+  {
+    "id": "aADB2dzC76f7KStkyMkQ",
+    "name": "Sourdough Crunch",
+    "maker": "J Street Chocolate",
+    "slug": "j-street-chocolate-sourdough-crunch"
+  },
+  {
+    "id": "aO0LDnmFT7Z83vy0dGyQ",
+    "name": "Hazelut Croquant Dark Chocolate Bar",
+    "maker": null,
+    "slug": "hazelut-croquant-dark-chocolate-bar"
+  },
+  {
+    "id": "aRvYKihiHnPgpl3dNpAT",
+    "name": "60% Cocoa Dark Chocolate with Oink Himalayan Salt",
+    "maker": null,
+    "slug": "60-cocoa-dark-chocolate-with-oink-himalayan-salt"
+  },
+  {
+    "id": "aWtbb9atkdTrZ3uYGkWS",
+    "name": "Toasted Sesame + Salt Single Origin Dark Chocolate",
+    "maker": null,
+    "slug": "toasted-sesame-salt-single-origin-dark-chocolate"
+  },
+  {
+    "id": "aeuxbQVKhseGFeD5y4fz",
+    "name": "GAROTO Dark Chocolate 70%",
+    "maker": null,
+    "slug": "garoto-dark-chocolate-70"
+  },
+  {
+    "id": "amSpoFQApffpG6HmXG9h",
+    "name": "Vegan smooth chocolate",
+    "maker": null,
+    "slug": "vegan-smooth-chocolate"
+  },
+  {
+    "id": "bNELb7Xzyq9hW13fWJ3u",
+    "name": "Dubai Done Better",
+    "maker": "Charles Chocolates",
+    "slug": "charles-chocolates-dubai-done-better"
+  },
+  {
+    "id": "bNquN3f63WJ1ERzctKW6",
+    "name": "Dark Chocolate Pretzel With Sea Salt",
+    "maker": null,
+    "slug": "dark-chocolate-pretzel-with-sea-salt"
+  },
+  {
+    "id": "bOL75rctHXkktM32gUrQ",
+    "name": "Organic Dark Chocolate 55% Cacao",
+    "maker": null,
+    "slug": "organic-dark-chocolate-55-cacao"
+  },
+  {
+    "id": "bPnne2bd6XFpYiiMm4Cb",
+    "name": "Dark Chocolate Sea Salt",
+    "maker": null,
+    "slug": "dark-chocolate-sea-salt"
+  },
+  {
+    "id": "bQoPDJKc82AjnW7PCAW1",
+    "name": "Bournville Classic Dark Chocolate",
+    "maker": null,
+    "slug": "bournville-classic-dark-chocolate"
+  },
+  {
+    "id": "bfiq6tWUJli205gRSCCv",
+    "name": "Twilight Tryst Single Origin Dark Chocolate",
+    "maker": null,
+    "slug": "twilight-tryst-single-origin-dark-chocolate"
+  },
+  {
+    "id": "cF9955hC2D882WbkW1Kj",
+    "name": "Chocolate Crème de la Crème Milk Chocolate 45%",
+    "maker": "Qantu",
+    "slug": "qantu-chocolate-creme-de-la-creme-milk-chocolate-45"
+  },
+  {
+    "id": "ccpb40pBHuYOBuwL2Ysh",
+    "name": "Chocolate Paitití",
+    "maker": null,
+    "slug": "chocolate-paititi"
+  },
+  {
+    "id": "ceXW6xxEoEupsEuGGIJr",
+    "name": "Cuba 37g Nidar",
+    "maker": null,
+    "slug": "cuba-37g-nidar"
+  },
+  {
+    "id": "cgrk6pLJFUs2yKm2vJWT",
+    "name": "Zesty Orange Dark Chocolate",
+    "maker": null,
+    "slug": "zesty-orange-dark-chocolate"
+  },
+  {
+    "id": "d20dGDHrgvquxhoL7KyK",
+    "name": "Mandarine Matcha Kokos",
+    "maker": null,
+    "slug": "mandarine-matcha-kokos"
+  },
+  {
+    "id": "d5YhG9nUj8PYqf7u2pYH",
+    "name": "Butter Caramel 50% (Filled)",
+    "maker": "Zotter",
+    "slug": "zotter-butter-caramel-50-filled"
+  },
+  {
+    "id": "d8N2jXJaqKeCWBjffQ0E",
+    "name": "Dark Chocolate Espresso Bar",
+    "maker": null,
+    "slug": "dark-chocolate-espresso-bar"
+  },
+  {
+    "id": "d8gEIa16KGK2jJA3l8cE",
+    "name": "73% cocoa hazelnut",
+    "maker": "Beyond Good",
+    "slug": "beyond-good-73-cocoa-hazelnut"
+  },
+  {
+    "id": "dQ4Bz1vocRC1lZf4BhRM",
+    "name": "KETO 85% Cacao Dark Chocolate Coconut Almond Sea Salt Snaps",
+    "maker": null,
+    "slug": "keto-85-cacao-dark-chocolate-coconut-almond-sea-salt-snaps"
+  },
+  {
+    "id": "dfebXSQ3toiiMdzQHZZi",
+    "name": "Menta Amargo",
+    "maker": null,
+    "slug": "menta-amargo"
+  },
+  {
+    "id": "dgzDkLjCwXHoaZi6zSkR",
+    "name": "Cookie Crunch",
+    "maker": "The Xocolate Bar",
+    "slug": "the-xocolate-bar-cookie-crunch"
+  },
+  {
+    "id": "dhqbJ1lHv8VfSXNWbElV",
+    "name": "Vana Tallin Original",
+    "maker": null,
+    "slug": "vana-tallin-original"
+  },
+  {
+    "id": "dySljbvMSeRfShPg6v1q",
+    "name": "Dark Chocolate with Ginger & Orange",
+    "maker": null,
+    "slug": "dark-chocolate-with-ginger-orange"
+  },
+  {
+    "id": "e6xFfTZhL9Gh2CszncNd",
+    "name": "chocolate familiar",
+    "maker": null,
+    "slug": "chocolate-familiar"
+  },
+  {
+    "id": "e8afWyq02QJRgATg8hUX",
+    "name": "Lindt excellence 78%",
+    "maker": null,
+    "slug": "lindt-excellence-78"
+  },
+  {
+    "id": "e8hDCtZGLQAsk2QcpIlv",
+    "name": "Exellence",
+    "maker": null,
+    "slug": "exellence"
+  },
+  {
+    "id": "eCKI3GystysgHXw4LoSV",
+    "name": "Vanilla Crunch Dark Chocolate Bar",
+    "maker": null,
+    "slug": "vanilla-crunch-dark-chocolate-bar"
+  },
+  {
+    "id": "eEWl3s5rmp1T6GNK1aoz",
+    "name": "70% Cacao Dark Chocolate",
+    "maker": null,
+    "slug": "70-cacao-dark-chocolate"
+  },
+  {
+    "id": "eVkz8MRs7V7T5HYmnoj3",
+    "name": "Tropical",
+    "maker": null,
+    "slug": "tropical"
+  },
+  {
+    "id": "eYtwMI5zcRIKaDfNPPI6",
+    "name": "Dark Chocolate Bar w/Sea Salt & Almonds",
+    "maker": "Endangered Species",
+    "slug": "endangered-species-dark-chocolate-bar-wsea-salt-almonds"
+  },
+  {
+    "id": "ehRVBrs9HAQoF0l7YKMI",
+    "name": "Botanical orange dark chocolate",
+    "maker": null,
+    "slug": "botanical-orange-dark-chocolate"
+  },
+  {
+    "id": "ensEiXYHUyQ8rpOLout1",
+    "name": "Whole Cacao Chocolate Bar Almond Butter",
+    "maker": null,
+    "slug": "whole-cacao-chocolate-bar-almond-butter"
+  },
+  {
+    "id": "ewRMaSD1qYfmrOajYmsm",
+    "name": "60% South Cotabato Single Origin Chocolate",
+    "maker": null,
+    "slug": "60-south-cotabato-single-origin-chocolate"
+  },
+  {
+    "id": "f4fDD2d15V45zgT6Y07s",
+    "name": "dark mint",
+    "maker": null,
+    "slug": "dark-mint"
+  },
+  {
+    "id": "f4ycrfaCSivVLnHuRa0O",
+    "name": "milk caramel sea salt 32%",
+    "maker": "Tony's Chocolonely",
+    "slug": "tonys-chocolonely-milk-caramel-sea-salt-32"
+  },
+  {
+    "id": "fJprdcPkvefeEerG5K9P",
+    "name": "krachtige puur chocolade",
+    "maker": null,
+    "slug": "krachtige-puur-chocolade"
+  },
+  {
+    "id": "fPo9gfz5lUKZa3TLH289",
+    "name": "Salty Dark Chocolate Bar",
+    "maker": null,
+    "slug": "salty-dark-chocolate-bar"
+  },
+  {
+    "id": "fTO5UODmZf0PjFV7nee0",
+    "name": "California Love Pretzel Chocolate Bar",
+    "maker": "Compartes",
+    "slug": "compartes-california-love-pretzel-chocolate-bar"
+  },
+  {
+    "id": "fpGLt6t1J0ubbiObTNg0",
+    "name": "Hazelnut Butter",
+    "maker": "Blue Stripes",
+    "slug": "blue-stripes-hazelnut-butter"
+  },
+  {
+    "id": "fxkFevnnpgvBnbUL8hHd",
+    "name": "Dark chocolate & espresso",
+    "maker": null,
+    "slug": "dark-chocolate-espresso"
+  },
+  {
+    "id": "g0Q8tC6amx7KCptaDpIw",
+    "name": "Raspberry Truffle in Dark Chocolate",
+    "maker": null,
+    "slug": "raspberry-truffle-in-dark-chocolate"
+  },
+  {
+    "id": "g7g0qRySgy4d2k9uMrf6",
+    "name": "Sugar Free Dark Chocolate 90% Cacao",
+    "maker": null,
+    "slug": "sugar-free-dark-chocolate-90-cacao"
+  },
+  {
+    "id": "g9NQU69KGOA9tv0vTsB2",
+    "name": "Dark Chocolate filled with Cocoa Cream, Cocoa Nibs and Hazelnuts",
+    "maker": null,
+    "slug": "dark-chocolate-filled-with-cocoa-cream-cocoa-nibs-and-hazelnuts"
+  },
+  {
+    "id": "gLHajFoMgxxMXC7kvyi6",
+    "name": "Blood Orange Dark Chocolate",
+    "maker": null,
+    "slug": "blood-orange-dark-chocolate"
+  },
+  {
+    "id": "gPVpmagUBIgnlRYLT7fe",
+    "name": "Pike Place Espresso",
+    "maker": "Seattle Chocolate Maeve",
+    "slug": "seattle-chocolate-maeve-pike-place-espresso"
+  },
+  {
+    "id": "gRNomDYgOZ7KsRrQdnNL",
+    "name": "Chocolate oscuro Savoy",
+    "maker": null,
+    "slug": "chocolate-oscuro-savoy"
+  },
+  {
+    "id": "gTLvM3TBYKguUI3WYh15",
+    "name": "Sea Salt Extra Dark",
+    "maker": null,
+    "slug": "sea-salt-extra-dark"
+  },
+  {
+    "id": "gZLVCgNL7Pi5C395HDct",
+    "name": "California Dreaming",
+    "maker": "Compartes",
+    "slug": "compartes-california-dreaming"
+  },
+  {
+    "id": "gipF6hUZv7wPOcL6PlNL",
+    "name": "Rococo Marcocan Mint Dark Chocolate Bar",
+    "maker": null,
+    "slug": "rococo-marcocan-mint-dark-chocolate-bar"
+  },
+  {
+    "id": "gmKyYHm9kFaJ678ywUeC",
+    "name": "Hazelnut Milk Chocolate",
+    "maker": "Dick Taylor",
+    "slug": "dick-taylor-hazelnut-milk-chocolate"
+  },
+  {
+    "id": "grqgTgB3jN4w52k1kYvq",
+    "name": "Ülker Dark Chocolate 70%",
+    "maker": null,
+    "slug": "ulker-dark-chocolate-70"
+  },
+  {
+    "id": "gt24ePKpeij99nBqBXFE",
+    "name": "Unknown Dark Chocolate 70%",
+    "maker": null,
+    "slug": "unknown-dark-chocolate-70-8"
+  },
+  {
+    "id": "gzsLItH6uYCiCtJURkpF",
+    "name": "Labooko Peru 100%",
+    "maker": "Zotter",
+    "slug": "zotter-labooko-peru-100"
+  },
+  {
+    "id": "hLmejAfEiOTwPuSoBEdx",
+    "name": "Intense Orange Dark Chocolate",
+    "maker": null,
+    "slug": "intense-orange-dark-chocolate"
+  },
+  {
+    "id": "hVG8fFCZeGQ1vwaQyGgZ",
+    "name": "70% Cacao Caramel Sea Salt Dark Chocolate Lindt Excellence",
+    "maker": null,
+    "slug": "70-cacao-caramel-sea-salt-dark-chocolate-lindt-excellence"
+  },
+  {
+    "id": "hljlALP7D25IFgphFpyg",
+    "name": "Salted Caramel Dark Chocolate &quot;With Benefits&quot;",
+    "maker": null,
+    "slug": "salted-caramel-dark-chocolate-quotwith-benefitsquot"
+  },
+  {
+    "id": "iSqFPce96AI3W1P3jj7X",
+    "name": "Unknown Dark Chocolate 70%",
+    "maker": null,
+    "slug": "unknown-dark-chocolate-70-9"
+  },
+  {
+    "id": "iXT8b6L4Z53tMrG1fN54",
+    "name": "Dark Chocolate",
+    "maker": null,
+    "slug": "dark-chocolate-6"
+  },
+  {
+    "id": "ie4CK5PoG3HnIzZq5gep",
+    "name": "Bold Dark No Sugar Added Dark Chocolate Style Bar",
+    "maker": null,
+    "slug": "bold-dark-no-sugar-added-dark-chocolate-style-bar"
+  },
+  {
+    "id": "ieLHfz7QWHGEoqIaowEK",
+    "name": "Dark chocolate 45%",
+    "maker": null,
+    "slug": "dark-chocolate-45"
+  },
+  {
+    "id": "im3tBsLOcTnN9lJ6Diuz",
+    "name": "Chocolat 85%",
+    "maker": null,
+    "slug": "chocolat-85"
+  },
+  {
+    "id": "itKfdVMnHGGyP666Yn18",
+    "name": "Unknown Dark Chocolate 70%",
+    "maker": null,
+    "slug": "unknown-dark-chocolate-70-10"
+  },
+  {
+    "id": "j4CLaHLXbE5W5PUfOlNn",
+    "name": "78% Swiss dark chocolate",
+    "maker": null,
+    "slug": "78-swiss-dark-chocolate"
+  },
+  {
+    "id": "jQkgkYXQXdUKPzTgM1R5",
+    "name": "Dark Chocolate",
+    "maker": null,
+    "slug": "dark-chocolate-7"
+  },
+  {
+    "id": "jbQxrjnc7pI07USO0BVy",
+    "name": "Organic Orange Dark Chocolate",
+    "maker": null,
+    "slug": "organic-orange-dark-chocolate"
+  },
+  {
+    "id": "jixVawsv62FtTahKb7My",
+    "name": "Waitrose No1 Dark Chocolate",
+    "maker": null,
+    "slug": "waitrose-no1-dark-chocolate"
+  },
+  {
+    "id": "jx9nADIIZm8rZ5QrmC4J",
+    "name": "Cashew Butter & Raspberry Dark Chocolate Bar",
+    "maker": null,
+    "slug": "cashew-butter-raspberry-dark-chocolate-bar"
+  },
+  {
+    "id": "k8mrt73YyWi6pIGGOn6D",
+    "name": "Natural Rich Chocolate",
+    "maker": null,
+    "slug": "natural-rich-chocolate"
+  },
+  {
+    "id": "kDdxB2S4qofkTto0Fnho",
+    "name": "Ion Milk Chocolate",
+    "maker": null,
+    "slug": "ion-milk-chocolate"
+  },
+  {
+    "id": "kEeuRmZTRKrlox1b5Fih",
+    "name": "Dark Chocolate with Sea Salt & Nibs",
+    "maker": "Beyond Good",
+    "slug": "beyond-good-dark-chocolate-with-sea-salt-nibs"
+  },
+  {
+    "id": "kZ7jWWPIXj9LsICIib3L",
+    "name": "Fahrenheit 513 Dark Chocolate",
+    "maker": null,
+    "slug": "fahrenheit-513-dark-chocolate"
+  },
+  {
+    "id": "kflPZsIttT6TGNNLEtzm",
+    "name": "Mint Dark Chocolate",
+    "maker": null,
+    "slug": "mint-dark-chocolate"
+  },
+  {
+    "id": "koUWrhQmVLtMu7SG1vao",
+    "name": "Grizzly Dark Raspberry",
+    "maker": "Endangered Species",
+    "slug": "endangered-species-grizzly-dark-raspberry"
+  },
+  {
+    "id": "ksXKmFoFfgim3JYlTpKN",
+    "name": "Dark Chocolate with Whole Almonds",
+    "maker": null,
+    "slug": "dark-chocolate-with-whole-almonds"
+  },
+  {
+    "id": "kuTDjiuny6OOVhYamjVK",
+    "name": "Costa Esmeraldas, Ecuador",
+    "maker": "Dandelion Chocolate",
+    "slug": "dandelion-chocolate-costa-esmeraldas-ecuador"
+  },
+  {
+    "id": "kwlD4GJxPLBSaNzpZuDd",
+    "name": "85% Peru",
+    "maker": null,
+    "slug": "85-peru"
+  },
+  {
+    "id": "l2mGTHrbNbTS4bFn2ERu",
+    "name": "Whittaker's Dark Salted Caramel Chocolate",
+    "maker": null,
+    "slug": "whittakers-dark-salted-caramel-chocolate"
+  },
+  {
+    "id": "lMGzxryMVPZSUkDvJb1u",
+    "name": "Bittersweet Chocolate Baking Bar",
+    "maker": null,
+    "slug": "bittersweet-chocolate-baking-bar"
+  },
+  {
+    "id": "lfosDeMsi76Xf15jQjGp",
+    "name": "Cocobar Chocolate",
+    "maker": null,
+    "slug": "cocobar-chocolate"
+  },
+  {
+    "id": "liJs7J1q4xRBxg0KmJid",
+    "name": "Wild Rose & Sea Salt",
+    "maker": "Ma",
+    "slug": "ma-wild-rose-sea-salt"
+  },
+  {
+    "id": "m4VgooGIdYmO5gEWV4gt",
+    "name": "82% Vanilla Salt Dark Chocolate",
+    "maker": null,
+    "slug": "82-vanilla-salt-dark-chocolate"
+  },
+  {
+    "id": "mBfmytuDqahMu8rMNCZq",
+    "name": "Unknown Dark Chocolate 70%",
+    "maker": null,
+    "slug": "unknown-dark-chocolate-70-11"
+  },
+  {
+    "id": "mD28Ejd8hTsINLekQlqP",
+    "name": "Dark Chocolate Sea Salt",
+    "maker": "Alter Eco",
+    "slug": "alter-eco-dark-chocolate-sea-salt"
+  },
+  {
+    "id": "mLR8XIDVxE2kAU6h9QYF",
+    "name": "Maple & Nibs",
+    "maker": "Raaka",
+    "slug": "raaka-maple-nibs"
+  },
+  {
+    "id": "mLyoBwgunjIa1QpgEQ1s",
+    "name": "Cherries and Almonds",
+    "maker": "L'Amourette",
+    "slug": "lamourette-cherries-and-almonds"
+  },
+  {
+    "id": "mOgfTpKoU0E49PH2pZWE",
+    "name": "Noir equitable 85% Pérou",
+    "maker": null,
+    "slug": "noir-equitable-85-perou"
+  },
+  {
+    "id": "mVB7UaEi9Y7u2fOMS6iG",
+    "name": "Cocolate",
+    "maker": null,
+    "slug": "cocolate"
+  },
+  {
+    "id": "mafDcSdveSP6HCbtAhpX",
+    "name": "Dar chocolate",
+    "maker": null,
+    "slug": "dar-chocolate"
+  },
+  {
+    "id": "mghx2Kj3OdUBQ7Ri5m1Q",
+    "name": "Dark Chocolate with Cashews",
+    "maker": null,
+    "slug": "dark-chocolate-with-cashews"
+  },
+  {
+    "id": "mnho2jRHMe1Tj3uuxKYd",
+    "name": "Ritter sport",
+    "maker": null,
+    "slug": "ritter-sport"
+  },
+  {
+    "id": "mveAKurCVsZUhnrx1Fts",
+    "name": "Unknown Dark Chocolate 70%",
+    "maker": null,
+    "slug": "unknown-dark-chocolate-70-12"
+  },
+  {
+    "id": "mzSWFBP3sffhMk8B9iI4",
+    "name": "Extreme dark",
+    "maker": "Endangered Species",
+    "slug": "endangered-species-extreme-dark"
+  },
+  {
+    "id": "n50xCyMjraFwoXdHYAO3",
+    "name": "Raspberries In Dark Chocolate",
+    "maker": "Chocolove",
+    "slug": "chocolove-raspberries-in-dark-chocolate"
+  },
+  {
+    "id": "n53TnVYjdv3fY18i8QHN",
+    "name": "Milk Chocolate",
+    "maker": "Chocolove",
+    "slug": "chocolove-milk-chocolate"
+  },
+  {
+    "id": "n74ZvBPS1JshjOq3H7sg",
+    "name": "Chocolat noir noix-noisette caramelisee",
+    "maker": null,
+    "slug": "chocolat-noir-noix-noisette-caramelisee"
+  },
+  {
+    "id": "nOEJrIkT9zYO1DelFlwE",
+    "name": "Andean Royal Quinoa & Uyuni Salt",
+    "maker": null,
+    "slug": "andean-royal-quinoa-uyuni-salt"
+  },
+  {
+    "id": "nOVHr0hLzk7WJ9V6HEgB",
+    "name": "Belöning",
+    "maker": null,
+    "slug": "beloning"
+  },
+  {
+    "id": "nVr8Am2zyT9zT7TIFHUh",
+    "name": "Dark Chocolate with Almonds and Sea Salt",
+    "maker": null,
+    "slug": "dark-chocolate-with-almonds-and-sea-salt"
+  },
+  {
+    "id": "nYEOSoIKiWR2A6PwKTmd",
+    "name": "70% cocoa dark chocolate",
+    "maker": null,
+    "slug": "70-cocoa-dark-chocolate-2"
+  },
+  {
+    "id": "nhl8kbDLYZhkcVTbVXDH",
+    "name": "74% Cacao Dark Chocolate with Mint",
+    "maker": null,
+    "slug": "74-cacao-dark-chocolate-with-mint"
+  },
+  {
+    "id": "nsegFydjeT2r9YXtiOO0",
+    "name": "Fleur de Sel",
+    "maker": "Dick Taylor",
+    "slug": "dick-taylor-fleur-de-sel"
+  },
+  {
+    "id": "nufN9OEj0cspy2M3X5xQ",
+    "name": "Fruit & Crunch Choc Bar",
+    "maker": null,
+    "slug": "fruit-crunch-choc-bar"
+  },
+  {
+    "id": "nxzLT1lprS19iGrTqEDg",
+    "name": "Wild Beni 100% Cacao",
+    "maker": null,
+    "slug": "wild-beni-100-cacao"
+  },
+  {
+    "id": "oL7s6sgVeZi9tXOr0l6C",
+    "name": "Special Dark Chocolate with Almonds",
+    "maker": null,
+    "slug": "special-dark-chocolate-with-almonds"
+  },
+  {
+    "id": "oNLC5HYuc1YMFiWuASkH",
+    "name": "Whole Nut Bittersweet Chocolate Bar",
+    "maker": null,
+    "slug": "whole-nut-bittersweet-chocolate-bar"
+  },
+  {
+    "id": "oPFP6nFhS2JoDDVX3xy0",
+    "name": "Icewine Truffle in Dark Chocolate",
+    "maker": null,
+    "slug": "icewine-truffle-in-dark-chocolate"
+  },
+  {
+    "id": "oQnt6BU9QrMtR4vTVTpp",
+    "name": "Semi-Sweet Chocolate",
+    "maker": null,
+    "slug": "semi-sweet-chocolate"
+  },
+  {
+    "id": "oiyEVEFuRhbUATyQOov1",
+    "name": "100% Cacao Mint Dark Chocolate",
+    "maker": null,
+    "slug": "100-cacao-mint-dark-chocolate"
+  },
+  {
+    "id": "onJbyoMIBzK2lizU4EvO",
+    "name": "Hazelnut Coffee Dark Chocolate Bar",
+    "maker": null,
+    "slug": "hazelnut-coffee-dark-chocolate-bar"
+  },
+  {
+    "id": "onvbwOeJCOg1VgrnuzEs",
+    "name": "99% Cacao Ultimate Dark Chocolate",
+    "maker": null,
+    "slug": "99-cacao-ultimate-dark-chocolate"
+  },
+  {
+    "id": "oq3aebsvNS1TMnwCgTEY",
+    "name": "Wild Beni 70% Cacao",
+    "maker": null,
+    "slug": "wild-beni-70-cacao"
+  },
+  {
+    "id": "otM4UgCKyszh3QwnvPRB",
+    "name": "Bittersweet Chocolate 66% Cacao Premium Baking Bar",
+    "maker": null,
+    "slug": "bittersweet-chocolate-66-cacao-premium-baking-bar"
+  },
+  {
+    "id": "p37QWQb99H42mI9mzA2S",
+    "name": "Peruvian Dark Milk Chocolate",
+    "maker": null,
+    "slug": "peruvian-dark-milk-chocolate"
+  },
+  {
+    "id": "pBqjfgQ1c1jeySdd1IVO",
+    "name": "85% Dark Chocolate",
+    "maker": null,
+    "slug": "85-dark-chocolate-2"
+  },
+  {
+    "id": "pW8n8U8w53olmJWzxAMh",
+    "name": "Unknown Dark Chocolate 70%",
+    "maker": null,
+    "slug": "unknown-dark-chocolate-70-13"
+  },
+  {
+    "id": "pluIxQsZrV9qLymC8gmQ",
+    "name": "70% Madagascar",
+    "maker": null,
+    "slug": "70-madagascar"
+  },
+  {
+    "id": "pmbKJhQaSib27AhkSIAN",
+    "name": "San Juan Salted Toffee",
+    "maker": "MAEVE",
+    "slug": "maeve-san-juan-salted-toffee"
+  },
+  {
+    "id": "polHqdiAEsUk2UC4GyqN",
+    "name": "Dark Chocolate with Vanilla Bean",
+    "maker": "Beyond Good",
+    "slug": "beyond-good-dark-chocolate-with-vanilla-bean"
+  },
+  {
+    "id": "pxpD7dlyhNnrjp55QRCW",
+    "name": "Chocolat noir sésame complet",
+    "maker": null,
+    "slug": "chocolat-noir-sesame-complet"
+  },
+  {
+    "id": "q7qe6CfAwaK00LKqiPMV",
+    "name": "Salted Almond",
+    "maker": "Taza Chocolate",
+    "slug": "taza-chocolate-salted-almond"
+  },
+  {
+    "id": "q8q111skmYo6Xvkmh1sS",
+    "name": "74% Cacao Dark Chocolate with Hazelnuts",
+    "maker": null,
+    "slug": "74-cacao-dark-chocolate-with-hazelnuts"
+  },
+  {
+    "id": "qCFLxfYpAjdwDrjWr8D7",
+    "name": "Signature 72% Cacao Dark Chocolate",
+    "maker": null,
+    "slug": "signature-72-cacao-dark-chocolate"
+  },
+  {
+    "id": "qLsTFDDPkvWL1kpSCgf2",
+    "name": "85% Cacao Dark Chocolate Bar",
+    "maker": null,
+    "slug": "85-cacao-dark-chocolate-bar"
+  },
+  {
+    "id": "qUqAI0LfY6v5PbLJawut",
+    "name": "Moser roth Finest Dark Caramel Sea Salt",
+    "maker": null,
+    "slug": "moser-roth-finest-dark-caramel-sea-salt"
+  },
+  {
+    "id": "qVSTh93sRaGk1RtRBSKm",
+    "name": "Chili Dark Lindt Excellence",
+    "maker": null,
+    "slug": "chili-dark-lindt-excellence"
+  },
+  {
+    "id": "qhRcExun4OsX7L18Uh0o",
+    "name": "Noir Extra",
+    "maker": null,
+    "slug": "noir-extra-2"
+  },
+  {
+    "id": "qhmY1yasI3hlkEFfyE4y",
+    "name": "Nicaragua 90%",
+    "maker": null,
+    "slug": "nicaragua-90"
+  },
+  {
+    "id": "qtfVk8dpiZE5VMGyF7Sx",
+    "name": "85% Cocoa Extra Dark Chocolate",
+    "maker": null,
+    "slug": "85-cocoa-extra-dark-chocolate"
+  },
+  {
+    "id": "r9zBRXBKi7dBDfAn165V",
+    "name": "Almond Dark Chocolate Style",
+    "maker": null,
+    "slug": "almond-dark-chocolate-style"
+  },
+  {
+    "id": "rI8ol35aTTUF17aD7YoD",
+    "name": "Lindt Excellence A Touch of Sea Salt Dark Chocolate",
+    "maker": null,
+    "slug": "lindt-excellence-a-touch-of-sea-salt-dark-chocolate"
+  },
+  {
+    "id": "rUSFxEjwzMznb3dO9j7U",
+    "name": "Crave",
+    "maker": null,
+    "slug": "crave"
+  },
+  {
+    "id": "s3je7WDJjPttyj8P4iXl",
+    "name": "Chocolate Amargo 53%",
+    "maker": null,
+    "slug": "chocolate-amargo-53"
+  },
+  {
+    "id": "s5OVfajaCs8hB5YYrTKl",
+    "name": "Chocolat Villars Noir Cognac Boisé de France 100g",
+    "maker": null,
+    "slug": "chocolat-villars-noir-cognac-boise-de-france-100g"
+  },
+  {
+    "id": "s5Wg9BCY82rUasd7WSWY",
+    "name": "Revello eclipse dark chocolate",
+    "maker": null,
+    "slug": "revello-eclipse-dark-chocolate"
+  },
+  {
+    "id": "s7aTxhWmPEiUQi6V16YV",
+    "name": "Freia Mandelstang 43g",
+    "maker": null,
+    "slug": "freia-mandelstang-43g"
+  },
+  {
+    "id": "s9X3YcLcKQVAygppkdfA",
+    "name": "Oat Milk Bar",
+    "maker": null,
+    "slug": "oat-milk-bar"
+  },
+  {
+    "id": "sKBDIXoiMS5OVzujnbCK",
+    "name": "Chocolate para Mesa 75% Cacao",
+    "maker": null,
+    "slug": "chocolate-para-mesa-75-cacao"
+  },
+  {
+    "id": "sLAtCZh2vVFyTvXYgR84",
+    "name": "Dark & Orange Chocolate",
+    "maker": null,
+    "slug": "dark-orange-chocolate"
+  },
+  {
+    "id": "sRllAs7nBDtuLCvwhsE8",
+    "name": "Nestlé Dessert",
+    "maker": null,
+    "slug": "nestle-dessert"
+  },
+  {
+    "id": "sTnDPL2fe857xekLX1BW",
+    "name": "Dark Chocolate Bar | 85% Cocoa",
+    "maker": null,
+    "slug": "dark-chocolate-bar-85-cocoa"
+  },
+  {
+    "id": "scTJGPSFTnfClQaZxTZY",
+    "name": "Peru Dark Chocolate",
+    "maker": null,
+    "slug": "peru-dark-chocolate"
+  },
+  {
+    "id": "sfNHRUbazOq7sZAXWi63",
+    "name": "68% Dominican",
+    "maker": null,
+    "slug": "68-dominican"
+  },
+  {
+    "id": "slH36VyO99yMSrDcDTpb",
+    "name": "Choceur rich dark chocolate",
+    "maker": null,
+    "slug": "choceur-rich-dark-chocolate"
+  },
+  {
+    "id": "smtn1tNAJxaeJo8hbXN7",
+    "name": "Tesco Finest Ecuador Dark Chocolate",
+    "maker": null,
+    "slug": "tesco-finest-ecuador-dark-chocolate"
+  },
+  {
+    "id": "sofGsQblCU3PgdA4mwnK",
+    "name": "Peanut Dark Chocolate",
+    "maker": null,
+    "slug": "peanut-dark-chocolate"
+  },
+  {
+    "id": "t3H01xzGgq3XpEiaOdgQ",
+    "name": "KitKat Dark",
+    "maker": null,
+    "slug": "kitkat-dark"
+  },
+  {
+    "id": "tJhfhr38YcEVGuAkVau4",
+    "name": "Alter Eco Dark Chocolate 70%",
+    "maker": null,
+    "slug": "alter-eco-dark-chocolate-70"
+  },
+  {
+    "id": "tQC8KsLl3Yiymchy842V",
+    "name": "Almond Dark Chocolate Bar",
+    "maker": null,
+    "slug": "almond-dark-chocolate-bar"
+  },
+  {
+    "id": "tQxauXZuxkIaomxG3xwy",
+    "name": "chocolat noir",
+    "maker": null,
+    "slug": "chocolat-noir-2"
+  },
+  {
+    "id": "tdzB3jYwE4mLtHXQkQEM",
+    "name": "Peruvian Dark with Cacao Nibs",
+    "maker": "Jcoco",
+    "slug": "jcoco-peruvian-dark-with-cacao-nibs"
+  },
+  {
+    "id": "tiNx0cwifJcCnISQBvjd",
+    "name": "Caramel with a touch of sea salt",
+    "maker": null,
+    "slug": "caramel-with-a-touch-of-sea-salt"
+  },
+  {
+    "id": "u8Nkd7BLMuFVL1V2cVGG",
+    "name": "70% Cocoa Dark",
+    "maker": null,
+    "slug": "70-cocoa-dark"
+  },
+  {
+    "id": "uBbNgumi2BVoVQoAvBEo",
+    "name": "Mint Chip Ice Cream No Added Sugar Dark Chocolate Style Bar",
+    "maker": null,
+    "slug": "mint-chip-ice-cream-no-added-sugar-dark-chocolate-style-bar"
+  },
+  {
+    "id": "uM6JYuTdaqj3PSIshw3s",
+    "name": "Ugandan dark chocolate",
+    "maker": null,
+    "slug": "ugandan-dark-chocolate"
+  },
+  {
+    "id": "uRwTEn0neHOGaESDnyEz",
+    "name": "60% Cocoa Dark Chocolate",
+    "maker": null,
+    "slug": "60-cocoa-dark-chocolate"
+  },
+  {
+    "id": "uZ8RuItcIIpKoxHjen3j",
+    "name": "Hazelnuts Chocolate Bars imp",
+    "maker": null,
+    "slug": "hazelnuts-chocolate-bars-imp"
+  },
+  {
+    "id": "ug1c8pVBHsOwhtyshXaQ",
+    "name": "Wild Beni 86% Extra Dark",
+    "maker": null,
+    "slug": "wild-beni-86-extra-dark"
+  },
+  {
+    "id": "uhWBcm22Wje92j3iya1U",
+    "name": "55% Cacao Content Dark Chocolate",
+    "maker": null,
+    "slug": "55-cacao-content-dark-chocolate"
+  },
+  {
+    "id": "ulJRgrSGKpW1FuYOUrr1",
+    "name": "Fitzroy",
+    "maker": null,
+    "slug": "fitzroy"
+  },
+  {
+    "id": "uosNJUcsKb89zgZh0tbT",
+    "name": "85% Classic Blackout Organic Dark Chocolate",
+    "maker": null,
+    "slug": "85-classic-blackout-organic-dark-chocolate"
+  },
+  {
+    "id": "v0YW0UZkIpwnEoqedVx3",
+    "name": "Dark 85% cocoa",
+    "maker": null,
+    "slug": "dark-85-cocoa"
+  },
+  {
+    "id": "v3DD9ooeC8z7s27VXR9M",
+    "name": "85% Pure Dark Chocolate",
+    "maker": null,
+    "slug": "85-pure-dark-chocolate"
+  },
+  {
+    "id": "v47Omut8qBb6Xqw44pc1",
+    "name": "The Dark Side 75%",
+    "maker": null,
+    "slug": "the-dark-side-75"
+  },
+  {
+    "id": "vSgaNkVAOoEIjZGksgYd",
+    "name": "45% Cocoa Dark Milk Chocolate",
+    "maker": null,
+    "slug": "45-cocoa-dark-milk-chocolate"
+  },
+  {
+    "id": "vUDqb3CE1WdO60l9jq5k",
+    "name": "lindt",
+    "maker": null,
+    "slug": "lindt"
+  },
+  {
+    "id": "vbwOi0rbYLteyR8MQ9Ma",
+    "name": "Seriously Dark 85% Cocoa",
+    "maker": null,
+    "slug": "seriously-dark-85-cocoa"
+  },
+  {
+    "id": "vkjWbWRIKNMI38VMfavu",
+    "name": "Super Blackout 90% Cacao",
+    "maker": null,
+    "slug": "super-blackout-90-cacao"
+  },
+  {
+    "id": "vpt0k5GKNDjsdDw7SKtE",
+    "name": "Intense Dark Chocolate 70% Cocoa",
+    "maker": null,
+    "slug": "intense-dark-chocolate-70-cocoa"
+  },
+  {
+    "id": "vsonLIMQhUe9FL1Sd64A",
+    "name": "Dark Chocolate Yuzu",
+    "maker": "Thomas Keller",
+    "slug": "thomas-keller-dark-chocolate-yuzu"
+  },
+  {
+    "id": "wPOP4CY0PvIcRANIKIP3",
+    "name": "Extreme Dark Chocolate 88%",
+    "maker": "Chocolove",
+    "slug": "chocolove-extreme-dark-chocolate-88"
+  },
+  {
+    "id": "weph0G6znUNcOPBYK0Nr",
+    "name": "Chocolate Amargo Intenso",
+    "maker": null,
+    "slug": "chocolate-amargo-intenso"
+  },
+  {
+    "id": "wod5mj0PhR6AIbqn8iTr",
+    "name": "Hu Vanilla Cruch Dark Chocolate",
+    "maker": "Hu",
+    "slug": "hu-hu-vanilla-cruch-dark-chocolate"
+  },
+  {
+    "id": "wslXJafzsinV7DN5Q1ek",
+    "name": "Whittakers Choc 72%D / Ghana200g",
+    "maker": null,
+    "slug": "whittakers-choc-72d-ghana200g"
+  },
+  {
+    "id": "xAWwVVJwmZ5W9Nl17tVS",
+    "name": "Axfood, Eldorado Dark Chocolate 70%",
+    "maker": null,
+    "slug": "axfood-eldorado-dark-chocolate-70"
+  },
+  {
+    "id": "xCs69T8Tv7FK5NbcPbJy",
+    "name": "Mango & Almond Dark Lindt Excellence",
+    "maker": null,
+    "slug": "mango-almond-dark-lindt-excellence"
+  },
+  {
+    "id": "xLvqmOOt67q0XA9zJOpw",
+    "name": "Pound Plus Bittersweet Chocolate with Almonds",
+    "maker": null,
+    "slug": "pound-plus-bittersweet-chocolate-with-almonds"
+  },
+  {
+    "id": "xZuDdrBvhiAb7eizaO3J",
+    "name": "Hazelnut Butter Dark Chocolate Bar",
+    "maker": null,
+    "slug": "hazelnut-butter-dark-chocolate-bar-3"
+  },
+  {
+    "id": "xbaVC5VAX8lcQwrTsGDU",
+    "name": "Extra Dark Chocolate 70%",
+    "maker": null,
+    "slug": "extra-dark-chocolate-70"
+  },
+  {
+    "id": "y2ktByNevSmhUyY1VCj1",
+    "name": "Chuao chocolat",
+    "maker": null,
+    "slug": "chuao-chocolat"
+  },
+  {
+    "id": "y3c65BQY7qkiraR6f7Ub",
+    "name": "Finest dark 85% cocoa",
+    "maker": null,
+    "slug": "finest-dark-85-cocoa"
+  },
+  {
+    "id": "yAGYPCD33yGXiemtTAK2",
+    "name": "EZA Dark Chocolate 70%",
+    "maker": null,
+    "slug": "eza-dark-chocolate-70"
+  },
+  {
+    "id": "yMpUyKfXKHJVreRV21Pz",
+    "name": "Bourbon Cask Aged",
+    "maker": "Raaka",
+    "slug": "raaka-bourbon-cask-aged"
+  },
+  {
+    "id": "yUs6KaiuE0ZkPjSfYlO6",
+    "name": "Crunchy Mint Dark Chocolate Bar",
+    "maker": null,
+    "slug": "crunchy-mint-dark-chocolate-bar"
+  },
+  {
+    "id": "yZOX9Hkavoyu0ITo6JDT",
+    "name": "Pingo Doce Dark Chocolate 43%",
+    "maker": null,
+    "slug": "pingo-doce-dark-chocolate-43"
+  },
+  {
+    "id": "ya0xr6pHDTWaVynkd15J",
+    "name": "80% Cocoa Salt of the Earth Dark Chocolate Bar Sweetened with Coconut Sugar",
+    "maker": null,
+    "slug": "80-cocoa-salt-of-the-earth-dark-chocolate-bar-sweetened-with-coconut-sugar"
+  },
+  {
+    "id": "yoSbDWxMmTV0Puumpa1p",
+    "name": "Peanut Butter Cup",
+    "maker": "Honey Mama's",
+    "slug": "honey-mamas-peanut-butter-cup"
+  },
+  {
+    "id": "yojWvFmfEZ5Z7aPZ7TGO",
+    "name": "Bare Bones",
+    "maker": null,
+    "slug": "bare-bones"
+  },
+  {
+    "id": "z9SjjlWiEVLx4kQ7jfH4",
+    "name": "dark chocolate 70%",
+    "maker": "Tony's Chocolonely",
+    "slug": "tonys-chocolonely-dark-chocolate-70"
+  },
+  {
+    "id": "zCGfMa8ag4kjGbPyN2Ng",
+    "name": "Crunchy Mint Dark Chocolate Bar",
+    "maker": null,
+    "slug": "crunchy-mint-dark-chocolate-bar-2"
+  },
+  {
+    "id": "zD0cMkQd6P6aAlwMoaiS",
+    "name": "Dark Chocolate with Orange",
+    "maker": null,
+    "slug": "dark-chocolate-with-orange"
+  },
+  {
+    "id": "zG0UE9hY8TNNhcuPcPFm",
+    "name": "Zorzal Comunitario D.R. 70%",
+    "maker": "Dandelion Chocolate",
+    "slug": "dandelion-chocolate-zorzal-comunitario-dr-70"
+  },
+  {
+    "id": "zLMPNi6cqbj1IgpJPPTS",
+    "name": "dark chocolate",
+    "maker": null,
+    "slug": "dark-chocolate-8"
+  },
+  {
+    "id": "zOrfGVFEgJONZQR8LGZ9",
+    "name": "Chocolate bliss bites",
+    "maker": null,
+    "slug": "chocolate-bliss-bites"
+  },
+  {
+    "id": "zQ8hmCEQpbLSmaeovg3D",
+    "name": "72% Cocoa Swiss Dark Chocolate",
+    "maker": null,
+    "slug": "72-cocoa-swiss-dark-chocolate-2"
+  },
+  {
+    "id": "zWdAmEBTn3PId7jjWEK9",
+    "name": "Pingo Doce Dark Chocolate 72%",
+    "maker": null,
+    "slug": "pingo-doce-dark-chocolate-72"
+  },
+  {
+    "id": "znacCaXrnsX7vhcNvxa0",
+    "name": "Raspberries and dark chocolate",
+    "maker": null,
+    "slug": "raspberries-and-dark-chocolate"
+  }
+]

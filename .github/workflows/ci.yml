@@ -1,0 +1,29 @@
+name: CI
+
+# Vercel owns deploys. This workflow just proves every push builds cleanly.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          # Public web config — real values are set in Vercel; CI only needs
+          # the build to succeed, and firebase.js has safe fallbacks.
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: chocolate-review-web

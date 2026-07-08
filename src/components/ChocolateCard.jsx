@@ -1,9 +1,11 @@
 // src/components/ChocolateCard.jsx - Updated with your improvements
 import React from 'react';
+import Image from 'next/image';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import FavoriteButton from './FavoriteButton';
 import WantToTryButton from './WantToTryButton';
+import { chocolateUrl, makerUrl } from '../utils/slug';
 import './ChocolateCard.css';
 
 
@@ -52,13 +54,16 @@ function ChocolateCard({ chocolate, featured = false, className = '' }) {
     <div className={`chocolate-card ${featured ? 'featured' : ''} ${className}`}>
       
       {/* Image Container with Link - using existing classes */}
-      <Link to={`/chocolate/${chocolate.id}`} className="chocolate-link">
+      <Link to={chocolateUrl(chocolate)} className="chocolate-link">
         <div className="image-container">
-          <img
-            src={chocolate.imageUrl || '/placeholder-chocolate.jpg'}
+          <Image
+            src={chocolate.imageUrl || 'https://placehold.co/300x300?text=Chocolate'}
             alt={getDisplayTitle()}
-            className="card-image"
-            loading="lazy"
+            fill
+            sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 300px"
+            style={{ objectFit: 'contain', padding: '6%' }}
+            // placehold.co serves SVG, which the optimizer rejects
+            unoptimized={!chocolate.imageUrl || chocolate.imageUrl.includes('placehold.co')}
           />
         </div>
       </Link>
@@ -76,8 +81,8 @@ function ChocolateCard({ chocolate, featured = false, className = '' }) {
       <div className="card-content">
         
         {/* Chocolate title - NOW FIRST AND PROMINENT */}
-        <Link 
-          to={`/chocolate/${chocolate.id}`} 
+        <Link
+          to={chocolateUrl(chocolate)}
           className="chocolate-title-link"
           onClick={(e) => e.stopPropagation()}
         >
@@ -86,7 +91,7 @@ function ChocolateCard({ chocolate, featured = false, className = '' }) {
         
         {/* Maker name - NOW SECOND AS SUPPORTING TEXT */}
         <Link 
-          to={`/maker?maker=${encodeURIComponent(getDisplayMaker())}`} 
+          to={makerUrl(getDisplayMaker())} 
           className="card-maker-link"
           onClick={(e) => e.stopPropagation()}
         >

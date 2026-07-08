@@ -26,7 +26,7 @@ export const metadata = {
     template: '%s | Chocly',
   },
   description:
-    'Discover 500+ craft and artisan chocolates from 30+ countries. Read expert reviews, compare ratings, and find your next favorite chocolate bar.',
+    'Discover craft and artisan chocolate from around the world. Read community reviews, compare ratings, and find your next favorite chocolate bar.',
   keywords: [
     'chocolate reviews',
     'chocolate ratings',
@@ -41,6 +41,9 @@ export const metadata = {
     type: 'website',
     locale: 'en_US',
     siteName: 'Chocly',
+    // Default share image for pages without their own (chocolate pages
+    // override with the bar photo).
+    images: [{ url: '/assets/newheroimage.jpg', width: 1200, height: 630, alt: 'Chocly — chocolate reviews and ratings' }],
   },
   twitter: {
     card: 'summary_large_image',

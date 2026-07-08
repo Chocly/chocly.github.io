@@ -17,6 +17,7 @@ import {
   setDoc
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { generateSlug } from '../utils/slug';
 
 // Collection references
 const chocolatesCollection = collection(db, 'chocolates');
@@ -550,6 +551,7 @@ export const addUserChocolate = async (chocolateData, imageFile) => {
       // Core chocolate data
       name: chocolateData.name,
       maker: chocolateData.maker, // 🔑 CRITICAL: Store maker as string
+      slug: `${generateSlug(chocolateData.name, chocolateData.maker)}-${Date.now().toString(36)}`,
       type: chocolateData.type,
       origin: chocolateData.origin || null,
       cacaoPercentage: chocolateData.cacaoPercentage || null,

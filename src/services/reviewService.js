@@ -12,7 +12,8 @@ import {
   doc,
   serverTimestamp,
   limit,
-  startAfter
+  startAfter,
+  runTransaction
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { getChocolateById } from './chocolateFirebaseService';
@@ -148,24 +149,33 @@ export const getUserReviewOrigins = async (userId) => {
   }
 };
 
-// Add a review (with optional photo files)
+// Add a review (with optional photo files).
+// The review doc ID is deterministic ({chocolateId}_{userId}) so the database
+// itself enforces one review per user per chocolate, and the review + rating
+// aggregate are written in one atomic transaction (no lost updates, and
+// security rules can require they change together).
 export const addReview = async (reviewData, photoFiles = []) => {
   try {
-    // SAFETY CHECK: Prevent duplicate reviews for the same user and chocolate
-    if (reviewData.userId && reviewData.chocolateId) {
-      const existingReviewQuery = query(
-        collection(db, "reviews"),
-        where("userId", "==", reviewData.userId),
-        where("chocolateId", "==", reviewData.chocolateId),
-        limit(1)
-      );
-
-      const existingSnapshot = await getDocs(existingReviewQuery);
-
-      if (!existingSnapshot.empty) {
-          throw new Error('You have already reviewed this chocolate. Please edit your existing review instead.');
-      }
+    const { chocolateId, userId } = reviewData;
+    if (!chocolateId || !userId) {
+      throw new Error("A review needs both a chocolate and a signed-in user.");
     }
+
+    // Legacy reviews used random doc IDs, so also check by query.
+    const existingReviewQuery = query(
+      collection(db, "reviews"),
+      where("userId", "==", userId),
+      where("chocolateId", "==", chocolateId),
+      limit(1)
+    );
+    const existingSnapshot = await getDocs(existingReviewQuery);
+    if (!existingSnapshot.empty) {
+      throw new Error('You have already reviewed this chocolate. Please edit your existing review instead.');
+    }
+
+    const reviewId = `${chocolateId}_${userId}`;
+    const reviewRef = doc(db, "reviews", reviewId);
+    const chocolateRef = doc(db, "chocolates", chocolateId);
 
     const newReview = {
       ...reviewData,
@@ -177,14 +187,34 @@ export const addReview = async (reviewData, photoFiles = []) => {
       updatedAt: new Date()
     };
 
-    // Add the review document to Firestore
-    const docRef = await addDoc(collection(db, "reviews"), newReview);
+    await runTransaction(db, async (tx) => {
+      const [existingDoc, chocolateDoc] = await Promise.all([
+        tx.get(reviewRef),
+        tx.get(chocolateRef)
+      ]);
+      if (existingDoc.exists()) {
+        throw new Error('You have already reviewed this chocolate. Please edit your existing review instead.');
+      }
+
+      tx.set(reviewRef, newReview);
+
+      if (chocolateDoc.exists()) {
+        const c = chocolateDoc.data();
+        const count = c.reviewCount || 0;
+        const total = (c.averageRating || 0) * count;
+        tx.update(chocolateRef, {
+          averageRating: (total + (reviewData.rating || 0)) / (count + 1),
+          reviewCount: count + 1,
+          updatedAt: new Date()
+        });
+      }
+    });
 
     // Upload photos if provided (needs review ID for storage path)
-    if (photoFiles.length > 0 && reviewData.userId) {
+    if (photoFiles.length > 0) {
       try {
-        const photoUrls = await uploadReviewPhotos(reviewData.userId, docRef.id, photoFiles);
-        await updateDoc(doc(db, "reviews", docRef.id), {
+        const photoUrls = await uploadReviewPhotos(userId, reviewId, photoFiles);
+        await updateDoc(reviewRef, {
           photoUrls,
           hasPhotos: true
         });
@@ -196,49 +226,15 @@ export const addReview = async (reviewData, photoFiles = []) => {
       }
     }
 
-    // Update chocolate average rating and review count
-    await updateChocolateRating(reviewData.chocolateId);
-
-    // Update user review count if userId exists
-    if (reviewData.userId) {
-      await updateUserReviewCount(reviewData.userId);
-    }
+    await updateUserReviewCount(userId);
 
     return {
-      id: docRef.id,
+      id: reviewId,
       ...newReview
     };
   } catch (error) {
     console.error("Error adding review:", error);
     throw error;
-  }
-};
-
-// Helper function to update a chocolate's average rating
-const updateChocolateRating = async (chocolateId) => {
-  try {
-    const q = query(
-      collection(db, "reviews"),
-      where("chocolateId", "==", chocolateId)
-    );
-    
-    const snapshot = await getDocs(q);
-    
-    if (!snapshot.empty) {
-      const reviews = snapshot.docs.map(doc => doc.data());
-      const totalRating = reviews.reduce((sum, review) => sum + (review.rating || 0), 0);
-      const averageRating = totalRating / reviews.length;
-      
-      const chocolateRef = doc(db, "chocolates", chocolateId);
-      await updateDoc(chocolateRef, {
-        averageRating,
-        reviewCount: reviews.length,
-        updatedAt: serverTimestamp()
-      });
-    }
-  } catch (error) {
-    console.error("Error updating chocolate rating:", error);
-    // Don't throw - this is non-critical
   }
 };
 
@@ -264,21 +260,47 @@ const updateUserReviewCount = async (userId) => {
   }
 };  
 
-// Update a review
+// Update a review; if the rating changed, adjust the chocolate's aggregate
+// in the same atomic transaction.
 export const updateReview = async (reviewId, updatedData) => {
   try {
     const reviewRef = doc(db, "reviews", reviewId);
-    await updateDoc(reviewRef, {
-      ...updatedData,
-      updatedAt: serverTimestamp()
+
+    await runTransaction(db, async (tx) => {
+      const reviewDoc = await tx.get(reviewRef);
+      if (!reviewDoc.exists()) {
+        throw new Error("Review not found.");
+      }
+      const oldReview = reviewDoc.data();
+      const newRating = updatedData.rating ?? oldReview.rating;
+      const ratingChanged =
+        typeof newRating === "number" && newRating !== oldReview.rating;
+
+      let chocolateRef = null;
+      let chocolateDoc = null;
+      if (ratingChanged && oldReview.chocolateId) {
+        chocolateRef = doc(db, "chocolates", oldReview.chocolateId);
+        chocolateDoc = await tx.get(chocolateRef);
+      }
+
+      tx.update(reviewRef, {
+        ...updatedData,
+        updatedAt: new Date()
+      });
+
+      if (chocolateDoc && chocolateDoc.exists()) {
+        const c = chocolateDoc.data();
+        const count = c.reviewCount || 0;
+        if (count > 0) {
+          const total = (c.averageRating || 0) * count;
+          tx.update(chocolateRef, {
+            averageRating: (total - (oldReview.rating || 0) + newRating) / count,
+            updatedAt: new Date()
+          });
+        }
+      }
     });
-    
-    // Update chocolate average rating
-    const reviewDoc = await getDoc(reviewRef);
-    if (reviewDoc.exists()) {
-      await updateChocolateRating(reviewDoc.data().chocolateId);
-    }
-    
+
     return {
       id: reviewId,
       ...updatedData
@@ -289,19 +311,51 @@ export const updateReview = async (reviewId, updatedData) => {
   }
 };
 
-// Delete a review (also cleans up photos, likes, and comments)
+// Delete a review; the review removal and the chocolate aggregate decrement
+// happen in one atomic transaction, then photos/likes/comments are cleaned up
+// best-effort. (Like/comment docs left behind by permission limits are
+// harmless orphans — nothing queries comments for a deleted review.)
 export const deleteReview = async (reviewId) => {
   try {
     const reviewRef = doc(db, "reviews", reviewId);
 
-    // Get review data before deleting
-    const reviewDoc = await getDoc(reviewRef);
-    const reviewData = reviewDoc.exists() ? reviewDoc.data() : {};
-    const chocolateId = reviewData.chocolateId || null;
-    const userId = reviewData.userId || null;
-    const photoUrls = reviewData.photoUrls || [];
+    let chocolateId = null;
+    let userId = null;
+    let photoUrls = [];
 
-    await deleteDoc(reviewRef);
+    await runTransaction(db, async (tx) => {
+      const reviewDoc = await tx.get(reviewRef);
+      if (!reviewDoc.exists()) {
+        return;
+      }
+      const reviewData = reviewDoc.data();
+      chocolateId = reviewData.chocolateId || null;
+      userId = reviewData.userId || null;
+      photoUrls = reviewData.photoUrls || [];
+
+      let chocolateRef = null;
+      let chocolateDoc = null;
+      if (chocolateId) {
+        chocolateRef = doc(db, "chocolates", chocolateId);
+        chocolateDoc = await tx.get(chocolateRef);
+      }
+
+      tx.delete(reviewRef);
+
+      if (chocolateDoc && chocolateDoc.exists()) {
+        const c = chocolateDoc.data();
+        const count = c.reviewCount || 0;
+        const newCount = Math.max(0, count - 1);
+        const total = (c.averageRating || 0) * count;
+        tx.update(chocolateRef, {
+          averageRating: newCount > 0
+            ? (total - (reviewData.rating || 0)) / newCount
+            : 0,
+          reviewCount: newCount,
+          updatedAt: new Date()
+        });
+      }
+    });
 
     // Clean up photos from Storage
     if (photoUrls.length > 0) {
@@ -310,7 +364,7 @@ export const deleteReview = async (reviewId) => {
       );
     }
 
-    // Clean up likes
+    // Clean up likes (best-effort)
     const likesQuery = query(
       collection(db, "reviewLikes"),
       where("reviewId", "==", reviewId)
@@ -319,15 +373,10 @@ export const deleteReview = async (reviewId) => {
       Promise.all(snap.docs.map(d => deleteDoc(d.ref)))
     ).catch(err => console.error("Error cleaning up likes:", err));
 
-    // Clean up comments
+    // Clean up comments (best-effort)
     deleteAllCommentsForReview(reviewId).catch(err =>
       console.error("Error cleaning up comments:", err)
     );
-
-    // Update chocolate average rating if we have the ID
-    if (chocolateId) {
-      await updateChocolateRating(chocolateId);
-    }
 
     // Update user review count
     if (userId) {

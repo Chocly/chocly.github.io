@@ -2,7 +2,8 @@ import SearchPageClient from './SearchPageClient';
 
 export const metadata = {
   title: 'Search Chocolates',
-  description: 'Search our database of 500+ chocolates. Find reviews and ratings for any chocolate bar.',
+  description: 'Search the Chocly chocolate database. Find reviews and ratings for any chocolate bar.',
+  robots: { index: false, follow: true },
 };
 
 export default function SearchPage() {

@@ -8,7 +8,9 @@ import '../src/views/HomePage-new.css';
 
 const PersonalizedHome = lazy(() => import('../src/views/PersonalizedHome'));
 
-export default function HomePageClient({ featuredChocolates: serverChocolates }) {
+const fmt = (n) => (n == null ? null : n >= 1000 ? `${Math.floor(n / 100) / 10}k`.replace('.0k', 'k') : String(n));
+
+export default function HomePageClient({ featuredChocolates: serverChocolates, stats }) {
   const { currentUser, loading: authLoading } = useAuth();
   const [featuredChocolates] = useState(serverChocolates || []);
 
@@ -37,18 +39,18 @@ export default function HomePageClient({ featuredChocolates: serverChocolates })
         </div>
         <div className="hp-hero-stats">
           <div className="hp-stat">
-            <span className="hp-stat-number">500+</span>
+            <span className="hp-stat-number">{fmt(stats?.chocolates) || '—'}</span>
             <span className="hp-stat-label">Chocolates</span>
           </div>
           <div className="hp-stat-divider" />
           <div className="hp-stat">
-            <span className="hp-stat-number">1,200+</span>
+            <span className="hp-stat-number">{fmt(stats?.reviews) || '—'}</span>
             <span className="hp-stat-label">Reviews</span>
           </div>
           <div className="hp-stat-divider" />
           <div className="hp-stat">
-            <span className="hp-stat-number">30+</span>
-            <span className="hp-stat-label">Countries</span>
+            <span className="hp-stat-number">{fmt(stats?.makers) || '—'}</span>
+            <span className="hp-stat-label">Makers</span>
           </div>
         </div>
       </section>

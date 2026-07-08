@@ -1,0 +1,69 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "chocolates",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "type", "order": "ASCENDING" },
+        { "fieldPath": "averageRating", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "chocolates",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "origin", "order": "ASCENDING" },
+        { "fieldPath": "averageRating", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "chocolates",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "maker", "order": "ASCENDING" },
+        { "fieldPath": "averageRating", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "chocolates",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "cacaoPercentage", "order": "ASCENDING" },
+        { "fieldPath": "averageRating", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "reviews",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "chocolateId", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "reviews",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "reviews",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "rating", "order": "DESCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "reviews",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "hasPhotos", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

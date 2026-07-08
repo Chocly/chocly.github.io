@@ -65,6 +65,54 @@ function ProfilePage() {
   });
   const navigate = useNavigate();
 
+const loadUserData = async () => {
+  setLoading(true);
+  try {
+    // Load reviews, favorites, want-to-try, and following in parallel
+    const [userReviews, userFavorites, userWantToTry, userFollowing, userFollowers] = await Promise.all([
+      getUserReviews(currentUser.uid).catch(() => []),
+      getFavoriteChocolates(currentUser.uid).catch(() => []),
+      getUserWantToTryList(currentUser.uid).catch(() => []),
+      getFollowing(currentUser.uid).catch(() => []),
+      getFollowers(currentUser.uid).catch(() => [])
+    ]);
+
+    setReviews(userReviews);
+    setFavorites(userFavorites);
+    setWantToTryList(userWantToTry);
+    setFollowingList(userFollowing);
+    setFollowerCount(userProfile.followerCount || userFollowers.length);
+    setFollowingCount(userProfile.followingCount || userFollowing.length);
+    
+    // Set preferences from user profile
+    if (userProfile.preferences) {
+      setPreferences(userProfile.preferences);
+    }
+  } catch (error) {
+    console.error('Error loading user data:', error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+  // All hooks must run on every render (before any early return below) —
+  // otherwise the hook count changes when auth state flips and React crashes.
+  useEffect(() => {
+    if (currentUser && userProfile) {
+      loadUserData();
+      // Initialize edit form with current profile data
+      setEditForm({
+        displayName: userProfile.displayName || '',
+        bio: userProfile.bio || '',
+        location: userProfile.location || '',
+        favoriteChocolateTypes: userProfile.favoriteChocolateTypes || [],
+        isProfilePublic: userProfile.isProfilePublic !== false, // Default to true
+        profilePicture: null // File input, not the current URL
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser, userProfile]);
+
   // IMPROVED: Better conditional rendering with retry logic
   if (!authLoading && !currentUser) {
     return (
@@ -189,53 +237,7 @@ function ProfilePage() {
     );
   }
 
-// Updated useEffect section - replace your current one with this:
-useEffect(() => {
-  if (currentUser && userProfile) {
-    loadUserData();
-    // Initialize edit form with current profile data
-    setEditForm({
-      displayName: userProfile.displayName || '',
-      bio: userProfile.bio || '',
-      location: userProfile.location || '',
-      favoriteChocolateTypes: userProfile.favoriteChocolateTypes || [],
-      isProfilePublic: userProfile.isProfilePublic !== false, // Default to true
-      profilePicture: null // File input, not the current URL
-    });
-  }
-}, [currentUser, userProfile]);
 
-
- // Updated loadUserData function - replace your current one with this:
-const loadUserData = async () => {
-  setLoading(true);
-  try {
-    // Load reviews, favorites, want-to-try, and following in parallel
-    const [userReviews, userFavorites, userWantToTry, userFollowing, userFollowers] = await Promise.all([
-      getUserReviews(currentUser.uid).catch(() => []),
-      getFavoriteChocolates(currentUser.uid).catch(() => []),
-      getUserWantToTryList(currentUser.uid).catch(() => []),
-      getFollowing(currentUser.uid).catch(() => []),
-      getFollowers(currentUser.uid).catch(() => [])
-    ]);
-
-    setReviews(userReviews);
-    setFavorites(userFavorites);
-    setWantToTryList(userWantToTry);
-    setFollowingList(userFollowing);
-    setFollowerCount(userProfile.followerCount || userFollowers.length);
-    setFollowingCount(userProfile.followingCount || userFollowing.length);
-    
-    // Set preferences from user profile
-    if (userProfile.preferences) {
-      setPreferences(userProfile.preferences);
-    }
-  } catch (error) {
-    console.error('Error loading user data:', error);
-  } finally {
-    setLoading(false);
-  }
-};
 
 // Add this function for handling want-to-try removal
 const handleRemoveFromWantToTry = async (chocolate) => {

@@ -4,7 +4,7 @@ export default function robots() {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin', '/batch-upload', '/profile', '/auth', '/login', '/signup', '/chocolate/*/edit'],
+        disallow: ['/admin', '/batch-upload', '/profile', '/auth', '/login', '/signup', '/chocolate/*/edit', '/search'],
       },
     ],
     sitemap: 'https://chocly.co/sitemap.xml',

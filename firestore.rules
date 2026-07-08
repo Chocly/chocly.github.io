@@ -1,0 +1,167 @@
+rules_version = '2';
+
+// Chocly Firestore security rules.
+// Deploy with: firebase deploy --only firestore:rules
+// Principles:
+//  - Public read for catalog + community content (required by the server-side
+//    REST reads in src/lib/firebase-server.js and by SEO rendering).
+//  - Writes only by signed-in owners, with field validation.
+//  - Rating aggregates on chocolates may only change alongside that same
+//    user's review write in the same atomic transaction (getAfter/existsAfter).
+//  - Admin = custom claim (preferred) or the super-admin UID fallback below.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function isAdmin() {
+      return signedIn() && (
+        request.auth.token.get('admin', false) == true
+        || request.auth.uid == 'EZTtNncUcHYc5TikzewnB0tYmz03'
+      );
+    }
+
+    function onlyChanged(keys) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys);
+    }
+
+    // Numeric field changed by at most +/-1 (for client-side counters).
+    function counterStep(field) {
+      return (request.resource.data.get(field, 0) - resource.data.get(field, 0)) >= -1
+          && (request.resource.data.get(field, 0) - resource.data.get(field, 0)) <= 1;
+    }
+
+    // The caller's review for this chocolate is being written or removed in
+    // the same atomic operation (transaction/batch) as this aggregate update.
+    function reviewWriteInSameBatch(chocolateId) {
+      return existsAfter(/databases/$(database)/documents/reviews/$(chocolateId + '_' + request.auth.uid))
+          || (exists(/databases/$(database)/documents/reviews/$(chocolateId + '_' + request.auth.uid))
+              && !existsAfter(/databases/$(database)/documents/reviews/$(chocolateId + '_' + request.auth.uid)));
+    }
+
+    match /chocolates/{chocolateId} {
+      allow read: if true;
+
+      // Signed-in users may contribute chocolates they own.
+      allow create: if isAdmin() || (
+        signedIn()
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 200
+      );
+
+      // Non-admins may only touch rating aggregates, only within the same
+      // atomic write as their own review, and only within sane bounds.
+      allow update: if isAdmin() || (
+        signedIn()
+        && onlyChanged(['averageRating', 'reviewCount', 'updatedAt'])
+        && request.resource.data.averageRating is number
+        && request.resource.data.averageRating >= 0
+        && request.resource.data.averageRating <= 5
+        && counterStep('reviewCount')
+        && reviewWriteInSameBatch(chocolateId)
+      );
+
+      allow delete: if isAdmin();
+    }
+
+    match /reviews/{reviewId} {
+      allow read: if true;
+
+      // One review per user per chocolate, enforced by deterministic doc ID.
+      allow create: if signedIn()
+        && reviewId == request.resource.data.chocolateId + '_' + request.auth.uid
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.rating is number
+        && request.resource.data.rating >= 1
+        && request.resource.data.rating <= 5
+        && request.resource.data.get('text', '') is string
+        && request.resource.data.get('text', '').size() <= 5000;
+
+      // Owners edit their review; anyone signed-in may step like/comment
+      // counters by 1 (the like/comment doc is the source of truth).
+      allow update: if (
+        isOwner(resource.data.userId)
+        && request.resource.data.userId == resource.data.userId
+        && request.resource.data.rating is number
+        && request.resource.data.rating >= 1
+        && request.resource.data.rating <= 5
+      ) || (
+        signedIn()
+        && onlyChanged(['likeCount'])
+        && counterStep('likeCount')
+      ) || (
+        signedIn()
+        && onlyChanged(['commentCount'])
+        && counterStep('commentCount')
+      );
+
+      allow delete: if isOwner(resource.data.userId) || isAdmin();
+    }
+
+    match /users/{userId} {
+      allow read: if true;
+      allow create: if isOwner(userId);
+      // Owner edits their profile; others may only step follower counters.
+      allow update: if isOwner(userId) || isAdmin() || (
+        signedIn()
+        && onlyChanged(['followerCount', 'followingCount'])
+        && counterStep('followerCount')
+        && counterStep('followingCount')
+      );
+      allow delete: if isAdmin();
+    }
+
+    match /makers/{makerId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /tags/{tagId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /reviewLikes/{likeId} {
+      allow read: if true;
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.reviewId is string;
+      allow delete: if isOwner(resource.data.userId) || isAdmin();
+      allow update: if false;
+    }
+
+    match /reviewComments/{commentId} {
+      allow read: if true;
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 2000;
+      allow update: if isOwner(resource.data.userId);
+      allow delete: if isOwner(resource.data.userId) || isAdmin();
+    }
+
+    match /follows/{followId} {
+      allow read: if true;
+      allow create: if signedIn()
+        && request.resource.data.followerId == request.auth.uid
+        && request.resource.data.followingId is string
+        && request.resource.data.followingId != request.auth.uid;
+      allow delete: if isOwner(resource.data.followerId) || isAdmin();
+      allow update: if false;
+    }
+
+    // Deny anything not explicitly matched above.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

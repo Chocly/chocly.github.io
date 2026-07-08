@@ -2,27 +2,30 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { 
-  signInWithGoogle, 
-  loginWithEmailPassword, 
-  registerWithEmailPassword, 
-  resetPassword 
+import {
+  signInWithGoogle,
+  loginWithEmailPassword,
+  registerWithEmailPassword,
+  resetPassword
 } from '../../services/authService';
+import { safeReturnTo, friendlyAuthError } from '../../utils/authRedirect';
 
 function UnifiedAuthPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { currentUser, loading: authLoading } = useAuth();
-  
-  // REMOVED: Debug logging that was creating the black box
 
-  // FIXED: More reliable redirect logic
+  // Where to send the user after auth: back to the page they were acting on
+  // (?returnTo=...), or home — the logged-in homepage is personalized.
+  const getDestination = () => {
+    if (typeof window === 'undefined') return '/';
+    const params = new URLSearchParams(window.location.search);
+    return safeReturnTo(params.get('returnTo')) || '/';
+  };
+
   useEffect(() => {
     if (!authLoading && currentUser) {
-      // Use replace to avoid back button issues
-      setTimeout(() => {
-        navigate('/profile', { replace: true });
-      }, 100); // Small delay to ensure DOM is ready
+      navigate(getDestination(), { replace: true });
     }
   }, [currentUser, authLoading, navigate]);
 
@@ -34,7 +37,6 @@ function UnifiedAuthPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [resetMessage, setResetMessage] = useState('');
-  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleSocialAuth = async (provider) => {
     setLoading(true);
@@ -53,23 +55,11 @@ function UnifiedAuthPage() {
         return;
       }
 
-      setShowSuccess(true);
-
-      // FIXED: Better redirect with error handling
-      setTimeout(() => {
-        try {
-          navigate('/profile', { replace: true });
-        } catch (navError) {
-          console.error('Navigation error:', navError);
-          // Fallback: direct window navigation
-          window.location.href = '/profile';
-        }
-      }, 1500);
+      navigate(getDestination(), { replace: true });
 
     } catch (error) {
       console.error(`${provider} auth error:`, error);
-      setError(error.message || `Failed to sign in with ${provider}`);
-      setShowSuccess(false); // Make sure success screen is hidden on error
+      setError(friendlyAuthError(error));
     } finally {
       setLoading(false);
     }
@@ -86,28 +76,17 @@ function UnifiedAuthPage() {
     setError('');
     
     try {
-      let user;
       if (isSignUp) {
-        user = await registerWithEmailPassword(email, password, displayName);
+        await registerWithEmailPassword(email, password, displayName);
       } else {
-        user = await loginWithEmailPassword(email, password);
+        await loginWithEmailPassword(email, password);
       }
-      
-      setShowSuccess(true);
-      
-      setTimeout(() => {
-        try {
-          navigate('/profile', { replace: true });
-        } catch (navError) {
-          console.error('Navigation error:', navError);
-          window.location.href = '/profile';
-        }
-      }, 1500);
-      
+
+      navigate(getDestination(), { replace: true });
+
     } catch (error) {
       console.error('Email auth error:', error);
-      setError(error.message);
-      setShowSuccess(false);
+      setError(friendlyAuthError(error));
     } finally {
       setLoading(false);
     }
@@ -133,50 +112,6 @@ function UnifiedAuthPage() {
     setError('');
     setResetMessage('');
   };
-
-  // Success screen
-  if (showSuccess) {
-    return (
-      <div style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'linear-gradient(135deg, #FDFCFC 0%, #F8F9FA 100%)'
-      }}>
-        <div style={{
-          background: 'white',
-          padding: '3rem',
-          borderRadius: '20px',
-          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
-          textAlign: 'center',
-          maxWidth: '400px',
-          width: '90%'
-        }}>
-          <div style={{
-            fontSize: '4rem',
-            marginBottom: '1rem',
-            animation: 'bounce 2s infinite'
-          }}>
-            🍫
-          </div>
-          <h2 style={{ color: '#2D1810', marginBottom: '1rem' }}>Welcome to Chocly!</h2>
-          <p style={{ color: '#666', marginBottom: '2rem' }}>
-            Successfully signed in. Redirecting to your profile...
-          </p>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            border: '4px solid #f3f3f3',
-            borderTop: '4px solid #F4A261',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto'
-          }}></div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div style={{

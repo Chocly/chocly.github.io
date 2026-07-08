@@ -1,0 +1,58 @@
+rules_version = '2';
+
+// Chocly Storage security rules.
+// Deploy with: firebase deploy --only storage
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn() && (
+        request.auth.token.get('admin', false) == true
+        || request.auth.uid == 'EZTtNncUcHYc5TikzewnB0tYmz03'
+      );
+    }
+
+    function validImage() {
+      return request.resource.size < 8 * 1024 * 1024
+          && request.resource.contentType.matches('image/.*');
+    }
+
+    // Review photos: review-photos/{userId}/{reviewId}/{file}
+    match /review-photos/{userId}/{reviewId}/{fileName} {
+      allow read: if true;
+      allow write: if signedIn() && request.auth.uid == userId && validImage();
+      allow delete: if (signedIn() && request.auth.uid == userId) || isAdmin();
+    }
+
+    // Profile pictures: profile-pictures/{uid}-{timestamp}.{ext}
+    match /profile-pictures/{fileName} {
+      allow read: if true;
+      allow write: if signedIn()
+        && fileName.matches(request.auth.uid + '-.*')
+        && validImage();
+      allow delete: if (signedIn() && fileName.matches(request.auth.uid + '-.*')) || isAdmin();
+    }
+
+    // User-contributed chocolate photos: user-contributions/{userId}/{file}
+    match /user-contributions/{userId}/{fileName} {
+      allow read: if true;
+      allow write: if signedIn() && request.auth.uid == userId && validImage();
+      allow delete: if (signedIn() && request.auth.uid == userId) || isAdmin();
+    }
+
+    // Catalog images: admin-managed only.
+    match /chocolate-images/{fileName} {
+      allow read: if true;
+      allow write, delete: if isAdmin() && validImage();
+    }
+
+    // Deny everything else.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

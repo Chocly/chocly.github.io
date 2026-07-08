@@ -1,6 +1,7 @@
 // src/components/CommentSection.jsx
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { authUrl } from '../utils/authRedirect';
 import { useAuth } from '../contexts/AuthContext';
 import { getComments, addComment, deleteComment } from '../services/commentService';
 import './CommentSection.css';
@@ -167,7 +168,7 @@ function CommentSection({ reviewId, commentCount = 0 }) {
                 </form>
               ) : (
                 <p className="comment-sign-in">
-                  <Link to="/auth">Sign in</Link> to comment
+                  <Link to={authUrl(location.pathname)}>Sign in</Link> to comment
                 </p>
               )}
             </>

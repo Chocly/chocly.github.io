@@ -1,114 +1,30 @@
-// src/services/visionService.js — Gemini Vision API + fuzzy database matching
+// src/services/visionService.js — chocolate label identification + fuzzy matching.
+// Image analysis happens server-side (/api/scan) so no AI keys ship to the
+// browser; this module just uploads the photo and interprets the result.
 import * as fuzz from 'fuzzball';
 
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
-
-const PROMPT = `You are a chocolate product identifier. Analyze this image of chocolate packaging or a chocolate bar label.
-
-Extract the following information and return ONLY a valid JSON object with no additional text:
-
-{
-  "brand": "The manufacturer or brand name (e.g., Lindt, Ghirardelli, Valrhona)",
-  "productName": "The specific product name (e.g., Excellence 85% Cocoa, Sea Salt Dark)",
-  "type": "One of: Dark, Milk, White, Dark Milk, Ruby, or Other",
-  "cacaoPercentage": numeric percentage if visible (e.g., 72), or null,
-  "origin": "Country or region of origin if stated (e.g., Ecuador, Madagascar), or null",
-  "confidence": "high, medium, or low - how confident you are in this identification"
-}
-
-If this is not a chocolate product or you cannot identify it, return:
-{"brand": null, "productName": null, "type": null, "cacaoPercentage": null, "origin": null, "confidence": "none"}`;
-
 /**
- * Convert a File or Blob to a base64 string (without the data URI prefix).
- */
-const toBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result.split(',')[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-
-/**
- * Parse Gemini's text response into structured data.
- * Handles markdown code fences and malformed JSON gracefully.
- */
-const parseGeminiResponse = (responseText) => {
-  let cleaned = responseText.trim();
-  // Strip markdown code fences if present
-  if (cleaned.startsWith('```')) {
-    cleaned = cleaned.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
-  }
-
-  try {
-    const parsed = JSON.parse(cleaned);
-    return {
-      success: true,
-      data: {
-        brand: parsed.brand || null,
-        productName: parsed.productName || null,
-        type: parsed.type || null,
-        cacaoPercentage: parsed.cacaoPercentage ?? null,
-        origin: parsed.origin || null,
-        confidence: parsed.confidence || 'low',
-      },
-    };
-  } catch {
-    return { success: false, error: 'Failed to parse AI response' };
-  }
-};
-
-/**
- * Send an image to Gemini Vision and extract chocolate details.
+ * Send an image to the server-side scanner and extract chocolate details.
  * @param {File|Blob} imageFile
  * @returns {{ success: boolean, data?: object, error?: string }}
  */
 export const analyzeChocolateImage = async (imageFile) => {
-  if (!GEMINI_API_KEY) {
-    return { success: false, error: 'Gemini API key not configured' };
-  }
-
   try {
-    const base64 = await toBase64(imageFile);
-    const mimeType = imageFile.type || 'image/jpeg';
+    const formData = new FormData();
+    formData.append('image', imageFile);
 
-    const response = await fetch(GEMINI_URL, {
+    const response = await fetch('/api/scan', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [
-              { text: PROMPT },
-              { inline_data: { mime_type: mimeType, data: base64 } },
-            ],
-          },
-        ],
-        generationConfig: {
-          temperature: 0.1,
-          maxOutputTokens: 512,
-        },
-      }),
+      body: formData,
     });
 
-    if (response.status === 429) {
-      return { success: false, error: 'Too many requests. Please wait a moment and try again.' };
+    const result = await response.json().catch(() => null);
+
+    if (!result) {
+      return { success: false, error: 'Unexpected server response. Please try again.' };
     }
 
-    if (!response.ok) {
-      return { success: false, error: `API error (${response.status}). Please try again.` };
-    }
-
-    const json = await response.json();
-    const text = json?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-    if (!text) {
-      return { success: false, error: 'No response from AI. Please try a different photo.' };
-    }
-
-    return parseGeminiResponse(text);
+    return result;
   } catch (err) {
     if (err instanceof TypeError) {
       return { success: false, error: 'Network error. Check your connection and try again.' };
