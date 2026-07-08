@@ -4,7 +4,9 @@ import { isAdminUid } from '../../../../src/config/adminConfig.server';
 // Verifies a Firebase ID token server-side (via the Identity Toolkit REST API,
 // which validates signature + expiry) and checks the UID against the
 // server-only admin list. No Admin SDK credentials required.
-const API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+// Fallback is the same public web API key the client ships (src/lib/firebase.js)
+// — it is not a secret; authorization comes from token verification + UID list.
+const API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyAMKxVJqQyhB726ZIpqzrnlJwlVMEompzI';
 
 export async function POST(request) {
   try {
