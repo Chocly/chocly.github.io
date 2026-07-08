@@ -4,6 +4,14 @@
       "collectionGroup": "chocolates",
       "queryScope": "COLLECTION",
       "fields": [
+        { "fieldPath": "averageRating", "order": "DESCENDING" },
+        { "fieldPath": "reviewCount", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "chocolates",
+      "queryScope": "COLLECTION",
+      "fields": [
         { "fieldPath": "type", "order": "ASCENDING" },
         { "fieldPath": "averageRating", "order": "DESCENDING" }
       ]
