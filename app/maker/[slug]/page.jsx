@@ -3,7 +3,7 @@ import { cache } from 'react';
 import {
   getAllMakersServer,
   getMakerBySlugServer,
-  getChocolatesByCategoryServer,
+  getChocolatesForMakerServer,
 } from '../../../src/lib/firebase-server';
 import MakerGridClient from './MakerGridClient';
 
@@ -48,7 +48,7 @@ export default async function MakerPage({ params }) {
     notFound();
   }
 
-  const chocolates = await getChocolatesByCategoryServer('maker', maker.name, 200);
+  const chocolates = await getChocolatesForMakerServer(maker.name);
 
   const rated = chocolates.filter((c) => (c.reviewCount || 0) > 0);
   const avgRating = rated.length > 0

@@ -47,14 +47,19 @@
   font-size: 0.8rem;
 }
 
-.toast-success .toast-icon { background: #3e6b45; color: #fff; }
-.toast-error .toast-icon { background: #a32014; color: #fff; }
-.toast-info .toast-icon { background: #96700a; color: #fff; }
+.toast-success .toast-icon { background: var(--success-color, #059669); color: #fff; }
+.toast-error .toast-icon { background: var(--error-color, #DC2626); color: #fff; }
+.toast-info .toast-icon { background: var(--warning-color, #D97706); color: #fff; }
 
 .toast-message { flex: 1; }
 
 .toast-close {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
   background: none;
   border: none;
   color: inherit;
@@ -62,7 +67,6 @@
   font-size: 1.2rem;
   line-height: 1;
   cursor: pointer;
-  padding: 0.2rem;
 }
 
 .toast-close:hover,

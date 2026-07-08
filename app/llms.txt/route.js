@@ -28,6 +28,7 @@ export async function GET() {
 - [Browse all chocolates](https://chocly.co/browse): the full catalog with ratings
 - [Chocolate makers A-Z](https://chocly.co/maker): every maker with their bars
 - [Browse by category](https://chocly.co/category): by type, bean origin, and cacao percentage
+- [Chocolate guides](https://chocly.co/guides): editorial explainers on origins, cacao percentages, and bean-to-bar craft
 - [Best dark chocolate](https://chocly.co/category/type/dark): top-rated dark bars
 - [Sitemap](https://chocly.co/sitemap.xml): every indexed page
 

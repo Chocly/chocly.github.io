@@ -88,7 +88,7 @@ export default async function CategoryLandingPage({ params }) {
       '@type': 'ListItem',
       position: i + 1,
       name: `${choc.name} by ${choc.maker || 'Unknown'}`,
-      url: `https://chocly.co/chocolate/${choc.id}`,
+      url: `https://chocly.co/chocolate/${choc.slug || choc.id}`,
     })),
   };
 

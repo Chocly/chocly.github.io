@@ -1,6 +1,7 @@
 // src/lib/firebase-server.js - Server-side Firestore data fetching
 // Uses the REST API to fetch data without requiring Firebase Admin SDK credentials
 // This is used in Next.js Server Components and generateMetadata()
+import { makerSlug } from '../utils/slug';
 
 const PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "chocolate-review-web";
 const FIRESTORE_BASE = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
@@ -57,6 +58,43 @@ async function getMakerNameServer(makerId) {
   } catch {
     return null;
   }
+}
+
+/**
+ * Fetch the whole makers collection once as an id -> name map. Most chocolates
+ * (410 of 479) reference their maker by ID rather than storing an inline name,
+ * so any list of chocolates must be enriched through this to show real makers.
+ */
+async function getMakerNameMap() {
+  const map = new Map();
+  try {
+    let pageToken = '';
+    for (let page = 0; page < 20; page++) {
+      const url = `${FIRESTORE_BASE}/makers?pageSize=300${pageToken ? `&pageToken=${pageToken}` : ''}`;
+      const res = await fetch(url, { next: { revalidate: 86400 } });
+      if (!res.ok) break;
+      const data = await res.json();
+      for (const doc of data.documents || []) {
+        const maker = parseFirestoreDocument(doc);
+        const name = maker?.name || maker?.brand || maker?.title || maker?.maker;
+        if (maker?.id && name) map.set(maker.id, name);
+      }
+      if (!data.nextPageToken) break;
+      pageToken = data.nextPageToken;
+    }
+  } catch (error) {
+    console.error('Error building maker name map:', error);
+  }
+  return map;
+}
+
+// Resolve a chocolate's maker to a display string using a prefetched map.
+function makerNameFor(chocolate, makerMap) {
+  const inline = (chocolate.maker || '').trim();
+  if (inline && inline !== 'Unknown Maker') return inline;
+  const id = chocolate.makerId || chocolate.MakerID;
+  if (id && makerMap.has(id)) return makerMap.get(id);
+  return inline || null;
 }
 
 /**
@@ -139,7 +177,7 @@ export async function getChocolateBySlugServer(slug) {
 // hyphens; slugs are lowercase-with-hyphens. Try the likelier shape first,
 // then fall back to the other so old links keep working during migration.
 export async function resolveChocolateServer(param) {
-  const looksLikeId = /^[A-Za-z0-9]{20}$/.test(param) && /[A-Z]/.test(param);
+  const looksLikeId = /^[A-Za-z0-9]{20}$/.test(param) && !param.includes('-');
 
   if (looksLikeId) {
     return (
@@ -213,6 +251,8 @@ export async function getAllChocolateIdsServer() {
           fields: [
             { fieldPath: 'name' },
             { fieldPath: 'maker' },
+            { fieldPath: 'makerId' },
+            { fieldPath: 'MakerID' },
             { fieldPath: 'slug' },
             { fieldPath: 'updatedAt' }
           ]
@@ -246,6 +286,12 @@ export async function getAllChocolateIdsServer() {
       all.push(...docs.map(r => parseFirestoreDocument(r.document)).filter(Boolean));
       lastDocPath = docs[docs.length - 1].document.name;
       if (docs.length < 500) break;
+    }
+
+    // Resolve maker references to real names (most chocolates use makerId).
+    const makerMap = await getMakerNameMap();
+    for (const choc of all) {
+      choc.maker = makerNameFor(choc, makerMap);
     }
 
     return all;
@@ -345,40 +391,111 @@ export async function getSiteStatsServer() {
 
 /**
  * Distinct makers derived from the chocolates collection, with bar counts.
- * Maker slug = slugified maker name.
+ * Uses the shared makerSlug() so slugs match the links makerUrl() builds, and
+ * disambiguates when two different maker names slugify identically (e.g.
+ * "Dick Taylor" vs "Dick.Taylor") so neither maker is silently swallowed.
  */
 export async function getAllMakersServer() {
   const chocolates = await getAllChocolateIdsServer();
-  const makers = new Map();
+  const byName = new Map();   // exact name -> { slug, name, barCount }
+  const slugOwner = new Map(); // slug -> name that owns it
 
   for (const choc of chocolates) {
     const name = (choc.maker || '').trim();
     if (!name || name === 'Unknown Maker') continue;
-    const slug = name
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[̀-ͯ]/g, '')
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, '')
-      .substring(0, 80);
-    if (!slug) continue;
 
-    const existing = makers.get(slug);
+    const existing = byName.get(name);
     if (existing) {
       existing.barCount++;
-    } else {
-      makers.set(slug, { slug, name, barCount: 1 });
+      continue;
     }
+
+    let slug = makerSlug(name);
+    if (!slug) continue;
+
+    // Two distinct names collided on one slug: suffix the newcomer so both
+    // remain reachable, rather than merging them.
+    if (slugOwner.has(slug) && slugOwner.get(slug) !== name) {
+      let n = 2;
+      while (slugOwner.has(`${slug}-${n}`)) n++;
+      slug = `${slug}-${n}`;
+    }
+    slugOwner.set(slug, name);
+    byName.set(name, { slug, name, barCount: 1 });
   }
 
-  return [...makers.values()].sort((a, b) => a.name.localeCompare(b.name));
+  return [...byName.values()].sort((a, b) => a.name.localeCompare(b.name));
 }
 
 export async function getMakerBySlugServer(slug) {
   const makers = await getAllMakersServer();
   return makers.find((m) => m.slug === slug) || null;
+}
+
+// All bars for a maker, by resolved maker NAME (works whether a chocolate
+// stores the maker inline or via makerId). Card-level fields for the grid.
+export async function getChocolatesForMakerServer(makerName) {
+  if (!makerName) return [];
+  const target = makerName.trim().toLowerCase();
+  const makerMap = await getMakerNameMap();
+  const all = [];
+  let lastDocPath = null;
+
+  try {
+    for (let page = 0; page < 20; page++) {
+      const structuredQuery = {
+        from: [{ collectionId: 'chocolates' }],
+        select: {
+          fields: [
+            { fieldPath: 'name' }, { fieldPath: 'maker' },
+            { fieldPath: 'makerId' }, { fieldPath: 'MakerID' },
+            { fieldPath: 'slug' }, { fieldPath: 'type' },
+            { fieldPath: 'origin' }, { fieldPath: 'cacaoPercentage' },
+            { fieldPath: 'imageUrl' }, { fieldPath: 'averageRating' },
+            { fieldPath: 'reviewCount' }
+          ]
+        },
+        orderBy: [{ field: { fieldPath: '__name__' }, direction: 'ASCENDING' }],
+        limit: 500
+      };
+      if (lastDocPath) {
+        structuredQuery.startAt = { values: [{ referenceValue: lastDocPath }], before: false };
+      }
+
+      const res = await fetch(
+        `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents:runQuery`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ structuredQuery }),
+          next: { revalidate: 21600 }
+        }
+      );
+      if (!res.ok) break;
+
+      const results = await res.json();
+      const docs = results.filter(r => r.document);
+      if (docs.length === 0) break;
+
+      for (const r of docs) {
+        const choc = parseFirestoreDocument(r.document);
+        if (!choc) continue;
+        const name = makerNameFor(choc, makerMap);
+        if (name && name.trim().toLowerCase() === target) {
+          choc.maker = name;
+          all.push(choc);
+        }
+      }
+      lastDocPath = docs[docs.length - 1].document.name;
+      if (docs.length < 500) break;
+    }
+  } catch (error) {
+    console.error('Error fetching chocolates for maker:', error);
+  }
+
+  // Best bars first
+  all.sort((a, b) => (b.reviewCount || 0) - (a.reviewCount || 0) || (b.averageRating || 0) - (a.averageRating || 0));
+  return all;
 }
 
 /**
@@ -399,6 +516,8 @@ export async function getBrowseChocolatesServer(limitCount = 100) {
               fields: [
                 { fieldPath: 'name' },
                 { fieldPath: 'maker' },
+                { fieldPath: 'makerId' },
+                { fieldPath: 'MakerID' },
                 { fieldPath: 'slug' },
                 { fieldPath: 'type' },
                 { fieldPath: 'origin' },
@@ -419,10 +538,16 @@ export async function getBrowseChocolatesServer(limitCount = 100) {
     if (!res.ok) return [];
 
     const results = await res.json();
-    return results
+    const chocolates = results
       .filter(r => r.document)
       .map(r => parseFirestoreDocument(r.document))
       .filter(Boolean);
+
+    const makerMap = await getMakerNameMap();
+    for (const choc of chocolates) {
+      choc.maker = makerNameFor(choc, makerMap);
+    }
+    return chocolates;
   } catch (error) {
     console.error('Error fetching browse chocolates:', error);
     return [];

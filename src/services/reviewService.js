@@ -261,10 +261,11 @@ const updateUserReviewCount = async (userId) => {
 };  
 
 // Update a review; if the rating changed, adjust the chocolate's aggregate
-// in the same atomic transaction.
-export const updateReview = async (reviewId, updatedData) => {
+// in the same atomic transaction. Newly attached photos (if any) upload after.
+export const updateReview = async (reviewId, updatedData, photoFiles = []) => {
   try {
     const reviewRef = doc(db, "reviews", reviewId);
+    let ownerId = null;
 
     await runTransaction(db, async (tx) => {
       const reviewDoc = await tx.get(reviewRef);
@@ -272,6 +273,7 @@ export const updateReview = async (reviewId, updatedData) => {
         throw new Error("Review not found.");
       }
       const oldReview = reviewDoc.data();
+      ownerId = oldReview.userId || null;
       const newRating = updatedData.rating ?? oldReview.rating;
       const ratingChanged =
         typeof newRating === "number" && newRating !== oldReview.rating;
@@ -297,9 +299,31 @@ export const updateReview = async (reviewId, updatedData) => {
             averageRating: (total - (oldReview.rating || 0) + newRating) / count,
             updatedAt: new Date()
           });
+        } else {
+          // Aggregate is inconsistent (a review exists but count is 0). Heal it
+          // to at least reflect this review rather than leaving it stale.
+          tx.update(chocolateRef, {
+            averageRating: newRating,
+            reviewCount: 1,
+            updatedAt: new Date()
+          });
         }
       }
     });
+
+    // Upload any newly added photos and append them (edit path previously
+    // dropped them silently).
+    if (photoFiles.length > 0 && ownerId) {
+      try {
+        const uploaded = await uploadReviewPhotos(ownerId, reviewId, photoFiles);
+        const existing = updatedData.photoUrls || [];
+        const photoUrls = [...existing, ...uploaded];
+        await updateDoc(reviewRef, { photoUrls, hasPhotos: photoUrls.length > 0 });
+        updatedData = { ...updatedData, photoUrls, hasPhotos: photoUrls.length > 0 };
+      } catch (photoError) {
+        console.error("Error uploading review photos on update:", photoError);
+      }
+    }
 
     return {
       id: reviewId,

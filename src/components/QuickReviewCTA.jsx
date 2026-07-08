@@ -138,9 +138,10 @@ function QuickReviewCTA({
 
       let savedReview;
       if (activeReview?.id) {
-        // UPDATE existing review (including one just created by a star tap)
-        await updateReview(activeReview.id, reviewData);
-        savedReview = { ...activeReview, ...reviewData };
+        // UPDATE existing review (including one just created by a star tap).
+        // Pass photoFiles so newly attached photos aren't dropped.
+        savedReview = await updateReview(activeReview.id, reviewData, photoFiles);
+        savedReview = { ...activeReview, ...savedReview };
       } else {
         // ADD new review (text optional — the rating is the review)
         const fullReviewData = {

@@ -1,4 +1,5 @@
 import { getAllChocolateIdsServer, getAllMakersServer, getChocolatesByCategoryServer } from '../src/lib/firebase-server';
+import { guides } from '../src/content/guides';
 
 // Honest sitemap rules:
 //  - lastModified comes from real data (updatedAt), not "now" on every build —
@@ -24,6 +25,7 @@ export default async function sitemap() {
     { url: 'https://chocly.co', changeFrequency: 'daily', priority: 1.0 },
     { url: 'https://chocly.co/browse', changeFrequency: 'daily', priority: 0.9 },
     { url: 'https://chocly.co/category', changeFrequency: 'weekly', priority: 0.7 },
+    { url: 'https://chocly.co/guides', changeFrequency: 'weekly', priority: 0.7 },
     { url: 'https://chocly.co/maker', changeFrequency: 'weekly', priority: 0.7 },
     { url: 'https://chocly.co/about', changeFrequency: 'monthly', priority: 0.5 },
     { url: 'https://chocly.co/contact', changeFrequency: 'monthly', priority: 0.4 },
@@ -79,5 +81,12 @@ export default async function sitemap() {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...categoryPages, ...makerPages, ...chocolatePages];
+  const guidePages = guides.map((g) => ({
+    url: `https://chocly.co/guides/${g.slug}`,
+    lastModified: new Date(g.updated),
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...categoryPages, ...makerPages, ...guidePages, ...chocolatePages];
 }
