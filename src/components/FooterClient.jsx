@@ -32,6 +32,7 @@ function Footer() {
                 <li><Link href="/maker">Makers A–Z</Link></li>
                 <li><Link href="/scanner">Identify Chocolate</Link></li>
                 <li><Link href="/community">Community</Link></li>
+                <li><Link href="/guides">Chocolate Guides</Link></li>
               </ul>
             </div>
 
