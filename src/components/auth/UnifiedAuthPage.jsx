@@ -16,11 +16,18 @@ function UnifiedAuthPage() {
   const { currentUser, loading: authLoading } = useAuth();
 
   // Where to send the user after auth: back to the page they were acting on
-  // (?returnTo=...), or home — the logged-in homepage is personalized.
-  const getDestination = () => {
+  // (?returnTo=...), the onboarding flow for brand-new accounts, or home —
+  // the logged-in homepage is personalized.
+  const getDestination = (user) => {
     if (typeof window === 'undefined') return '/';
     const params = new URLSearchParams(window.location.search);
-    return safeReturnTo(params.get('returnTo')) || '/';
+    const returnTo = safeReturnTo(params.get('returnTo'));
+    if (returnTo) return returnTo;
+
+    const meta = user?.metadata;
+    const isBrandNew =
+      meta && meta.creationTime && meta.creationTime === meta.lastSignInTime;
+    return isBrandNew ? '/welcome' : '/';
   };
 
   useEffect(() => {
@@ -55,7 +62,7 @@ function UnifiedAuthPage() {
         return;
       }
 
-      navigate(getDestination(), { replace: true });
+      navigate(getDestination(user), { replace: true });
 
     } catch (error) {
       console.error(`${provider} auth error:`, error);
@@ -76,13 +83,14 @@ function UnifiedAuthPage() {
     setError('');
     
     try {
+      let user;
       if (isSignUp) {
-        await registerWithEmailPassword(email, password, displayName);
+        user = await registerWithEmailPassword(email, password, displayName);
       } else {
-        await loginWithEmailPassword(email, password);
+        user = await loginWithEmailPassword(email, password);
       }
 
-      navigate(getDestination(), { replace: true });
+      navigate(isSignUp ? '/welcome' : getDestination(user), { replace: true });
 
     } catch (error) {
       console.error('Email auth error:', error);

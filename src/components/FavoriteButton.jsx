@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { toggleFavorite, isChocolateFavorited } from '../services/userService';
 import { authUrl } from '../utils/authRedirect';
+import { useToast } from './ui/Toast';
 import './FavoriteButton.css';
 
 function FavoriteButton({ 
@@ -14,6 +15,7 @@ function FavoriteButton({
 }) {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
+  const toast = useToast();
   const [isFavorited, setIsFavorited] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -59,7 +61,7 @@ function FavoriteButton({
       
     } catch (error) {
       console.error('Error toggling favorite:', error);
-      alert('Error updating favorite. Please try again.');
+      toast.error('Couldn\'t update your favorites. Please try again.');
     } finally {
       setLoading(false);
     }

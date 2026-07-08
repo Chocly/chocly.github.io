@@ -5,8 +5,9 @@ import { useAuth } from '../contexts/AuthContext';
 import { getUserReviews } from '../services/reviewService';
 import { getFavoriteChocolates, removeFromFavorites } from '../services/userService';
 import { updateUserProfile } from '../services/authService';
-import { getUserWantToTryList, removeFromWantToTry } from '../services/userService';
+import { getUserWantToTryList, removeFromWantToTry, updateUserPreferences } from '../services/userService';
 import { getFollowing, getFollowers } from '../services/followService';
+import { useToast } from '../components/ui/Toast';
 import './ProfilePage.css';
 
 // SVG Icons - Complete BadgeIcon component
@@ -39,6 +40,7 @@ const BadgeIcon = ({ name }) => {
 
 function ProfilePage() {
   const { currentUser, userProfile, loading: authLoading, error: authError, profileCreating, refreshProfile } = useAuth();
+  const toast = useToast();
   const [activeTab, setActiveTab] = useState('overview');
   const [reviews, setReviews] = useState([]);
   const [favorites, setFavorites] = useState([]);
@@ -246,7 +248,7 @@ const handleRemoveFromWantToTry = async (chocolate) => {
     setWantToTryList(prev => prev.filter(item => item.chocolateId !== chocolate.id));
   } catch (error) {
     console.error('Error removing from want to try:', error);
-    alert('Error removing from want to try list. Please try again.');
+    toast.error('Couldn\'t remove it from your Want to Try list. Please try again.');
   }
 };
 
@@ -390,7 +392,7 @@ const handleRemoveFromWantToTry = async (chocolate) => {
       setFavorites(prev => prev.filter(fav => fav.id !== chocolateId));
     } catch (error) {
       console.error('Error removing favorite:', error);
-      alert('Error removing from favorites. Please try again.');
+      toast.error('Couldn\'t remove it from your favorites. Please try again.');
     }
   };
 
@@ -405,11 +407,11 @@ const handleRemoveFromWantToTry = async (chocolate) => {
 
   const savePreferences = async () => {
     try {
-      // In a real app, you would save preferences to Firestore
-      alert('Preferences saved successfully!');
+      await updateUserPreferences(currentUser.uid, preferences);
+      toast.success('Preferences saved');
     } catch (error) {
       console.error('Error saving preferences:', error);
-      alert('Error saving preferences. Please try again.');
+      toast.error('Couldn\'t save your preferences. Please try again.');
     }
   };
 
@@ -464,11 +466,11 @@ const fetchWantToTryList = async () => {
     if (file) {
       // Validate file type and size
       if (!file.type.startsWith('image/')) {
-        alert('Please select an image file');
+        toast.error('Please select an image file');
         return;
       }
       if (file.size > 5 * 1024 * 1024) { // 5MB limit
-        alert('Image must be smaller than 5MB');
+        toast.error('Image must be smaller than 5MB');
         return;
       }
       setEditForm(prev => ({
@@ -480,7 +482,7 @@ const fetchWantToTryList = async () => {
 
   const handleSaveProfile = async () => {
     if (!editForm.displayName.trim()) {
-      alert('Display name is required');
+      toast.error('Display name is required');
       return;
     }
 
@@ -506,12 +508,12 @@ const fetchWantToTryList = async () => {
       // Refresh profile data
       await refreshProfile();
       
-      alert('Profile updated successfully!');
+      toast.success('Profile updated');
       setIsEditing(false);
       
     } catch (error) {
       console.error('Error saving profile:', error);
-      alert('Error saving profile: ' + error.message);
+      toast.error('Error saving profile: ' + error.message);
     } finally {
       setLoading(false);
     }

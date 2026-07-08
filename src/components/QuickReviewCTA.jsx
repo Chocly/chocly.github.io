@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { addReview, updateReview } from '../services/reviewService';
 import { authUrl } from '../utils/authRedirect';
+import { useToast } from './ui/Toast';
 import ReviewPhotoUploader from './ReviewPhotoUploader';
 import './QuickReviewCTA.css';
 
@@ -16,6 +17,7 @@ function QuickReviewCTA({
 }) {
   const { currentUser } = useAuth();
   const location = useLocation();
+  const toast = useToast();
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false);
@@ -76,7 +78,7 @@ function QuickReviewCTA({
       }
     } catch (error) {
       console.error('Error saving rating:', error);
-      alert('Failed to save your rating. Please try again.');
+      toast.error('Failed to save your rating. Please try again.');
       setRating(0);
     } finally {
       setIsSubmitting(false);
@@ -111,7 +113,7 @@ function QuickReviewCTA({
       }
     } catch (error) {
       console.error('Error updating rating:', error);
-      alert('Failed to update rating. Please try again.');
+      toast.error('Failed to update your rating. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -121,7 +123,7 @@ function QuickReviewCTA({
     e.preventDefault();
 
     if (!rating) {
-      alert('Please select a rating');
+      toast.error('Please select a star rating first');
       return;
     }
 
@@ -164,7 +166,7 @@ function QuickReviewCTA({
 
     } catch (error) {
       console.error('Error submitting review:', error);
-      alert(`Failed to ${activeReview ? 'update' : 'add'} review. Please try again.`);
+      toast.error(`Failed to ${activeReview ? 'update' : 'add'} your review. Please try again.`);
     } finally {
       setIsSubmitting(false);
     }

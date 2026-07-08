@@ -10,12 +10,14 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import ImageUploader from '../components/ImageUploader';
 import RatingStars from '../components/RatingStars';
+import { useToast } from '../components/ui/Toast';
 import './SuperAdminEditPage.css'; // Create this for styling
 
 function SuperAdminEditPage() {
   const { id } = useParams();
   const { currentUser } = useAuth();
   const navigate = useNavigate();
+  const toast = useToast();
   
   const [chocolate, setChocolate] = useState(null);
   const [reviews, setReviews] = useState([]);
@@ -37,7 +39,7 @@ function SuperAdminEditPage() {
   // Check if user is super admin
   useEffect(() => {
     if (!currentUser || !isSuperAdmin(currentUser)) {
-      alert('Access denied. Super admin only.');
+      toast.error('Access denied. Super admin only.');
       navigate('/');
     }
   }, [currentUser, navigate]);
@@ -69,7 +71,7 @@ function SuperAdminEditPage() {
       
     } catch (err) {
       console.error('Failed to load data:', err);
-      alert('Failed to load chocolate');
+      toast.error('Failed to load the chocolate details');
       navigate('/');
     } finally {
       setLoading(false);
@@ -88,7 +90,7 @@ function SuperAdminEditPage() {
     e.preventDefault();
     
     if (!isSuperAdmin(currentUser)) {
-      alert('Access denied');
+      toast.error('Access denied');
       return;
     }
 
@@ -115,11 +117,11 @@ function SuperAdminEditPage() {
         await updateChocolateImage(id, selectedImage);
       }
 
-      alert('Chocolate updated successfully!');
+      toast.success('Chocolate updated successfully');
       navigate(`/chocolate/${id}`);
     } catch (error) {
       console.error('Error updating chocolate:', error);
-      alert(`Failed to update: ${error.message}`);
+      toast.error(`Failed to update: ${error.message}`);
     } finally {
       setSaving(false);
     }
@@ -127,7 +129,7 @@ function SuperAdminEditPage() {
 
   const handleDeleteReview = async (reviewId) => {
     if (!isSuperAdmin(currentUser)) {
-      alert('Access denied');
+      toast.error('Access denied');
       return;
     }
 
@@ -146,10 +148,10 @@ function SuperAdminEditPage() {
       const updatedReviews = await getChocolateReviews(id);
       setReviews(updatedReviews);
       
-      alert('Review deleted successfully');
+      toast.success('Review deleted');
     } catch (error) {
       console.error('Error deleting review:', error);
-      alert(`Failed to delete review: ${error.message}`);
+      toast.error(`Failed to delete review: ${error.message}`);
     } finally {
       setDeletingReviewId(null);
     }
@@ -158,12 +160,12 @@ function SuperAdminEditPage() {
   const handleDelete = async () => {
     // Verify the confirmation text matches
     if (deleteConfirmText !== chocolate.name) {
-      alert('Please type the chocolate name exactly to confirm deletion');
+      toast.error('Please type the chocolate name exactly to confirm deletion');
       return;
     }
 
     if (!isSuperAdmin(currentUser)) {
-      alert('Access denied');
+      toast.error('Access denied');
       return;
     }
 
@@ -185,11 +187,11 @@ function SuperAdminEditPage() {
     try {
       await deleteChocolate(id);
 
-      alert('Chocolate deleted successfully');
+      toast.success('Chocolate deleted');
       navigate('/browse'); // Redirect to browse page after deletion
     } catch (error) {
       console.error('Error deleting chocolate:', error);
-      alert(`Failed to delete: ${error.message}`);
+      toast.error(`Failed to delete: ${error.message}`);
     } finally {
       setSaving(false);
     }

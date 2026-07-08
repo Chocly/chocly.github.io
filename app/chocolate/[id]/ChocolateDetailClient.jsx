@@ -20,6 +20,7 @@ import { getUserLikeStatuses } from '../../../src/services/likeService';
 import { formatReviewerName } from '../../../src/utils/nameFormatter';
 import { isSuperAdmin } from '../../../src/config/adminConfig';
 import { makerUrl } from '../../../src/utils/slug';
+import { useToast } from '../../../src/components/ui/Toast';
 import '../../../src/views/ChocolateDetailPage.css';
 
 export default function ChocolateDetailClient({ chocolateId, serverChocolate, serverReviews }) {
@@ -34,6 +35,7 @@ export default function ChocolateDetailClient({ chocolateId, serverChocolate, se
   const [reviewSuccess, setReviewSuccess] = useState(false);
   const [likeStatuses, setLikeStatuses] = useState({});
   const { currentUser } = useAuth();
+  const toast = useToast();
 
   const id = chocolateId;
 
@@ -89,9 +91,9 @@ export default function ChocolateDetailClient({ chocolateId, serverChocolate, se
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
-    if (!currentUser) { alert('Please sign in to leave a review'); return; }
-    if (userRating === 0) { alert('Please select a rating'); return; }
-    if (!reviewText.trim()) { alert('Please write a review'); return; }
+    if (!currentUser) { toast.info('Please sign in to leave a review'); return; }
+    if (userRating === 0) { toast.error('Please select a star rating'); return; }
+    if (!reviewText.trim()) { toast.error('Please write a review before submitting'); return; }
 
     try {
       const fullName = currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous User';
@@ -120,7 +122,7 @@ export default function ChocolateDetailClient({ chocolateId, serverChocolate, se
       setTimeout(() => setReviewSuccess(false), 3000);
     } catch (error) {
       console.error('Error submitting review:', error);
-      alert('Error submitting review. Please try again.');
+      toast.error('Something went wrong submitting your review. Please try again.');
     }
   };
 

@@ -1,0 +1,89 @@
+.welcome-page {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #fdfcfc 0%, #f6f1ea 100%);
+}
+
+.welcome-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 16px 48px rgba(45, 24, 16, 0.1);
+  padding: 2.5rem;
+  max-width: 560px;
+  width: 100%;
+  text-align: center;
+}
+
+.welcome-emoji { font-size: 3rem; margin-bottom: 0.5rem; }
+
+.welcome-card h1 { margin: 0 0 0.4rem; color: #2d1810; }
+
+.welcome-sub { color: #6b5d52; margin: 0 0 1.8rem; }
+
+.welcome-section { margin: 1.6rem 0; text-align: left; }
+
+.welcome-section h2 {
+  font-size: 1.05rem;
+  color: #2d1810;
+  margin: 0 0 0.75rem;
+}
+
+.welcome-pills { display: flex; flex-wrap: wrap; gap: 0.55rem; }
+
+.welcome-pill {
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: 1.5px solid #d9cec2;
+  background: #fff;
+  color: #4a392e;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.welcome-pill:hover { border-color: #a73a04; }
+
+.welcome-pill.selected {
+  background: #a73a04;
+  border-color: #a73a04;
+  color: #fff;
+}
+
+.welcome-pill:focus-visible {
+  outline: 2px solid #a73a04;
+  outline-offset: 2px;
+}
+
+.welcome-actions {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.welcome-primary {
+  width: 100%;
+  padding: 0.85rem 1.5rem;
+  border-radius: 10px;
+  border: none;
+  background: #a73a04;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.welcome-primary:disabled { opacity: 0.5; cursor: default; }
+
+.welcome-skip {
+  background: none;
+  border: none;
+  color: #8a7365;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+}

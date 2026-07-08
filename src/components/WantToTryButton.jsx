@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addToWantToTry, removeFromWantToTry, isChocolateInWantToTry } from '../services/userService';
 import { authUrl } from '../utils/authRedirect';
+import { useToast } from './ui/Toast';
 import './WantToTryButton.css';
 
 function WantToTryButton({ 
@@ -13,6 +14,7 @@ function WantToTryButton({
   size = "medium" 
 }) {
   const navigate = useNavigate();
+  const toast = useToast();
   const [isInWantToTry, setIsInWantToTry] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
@@ -67,7 +69,7 @@ function WantToTryButton({
       }
     } catch (error) {
       console.error('Error updating want to try list:', error);
-      alert('Failed to update want to try list. Please try again.');
+      toast.error('Couldn\'t update your Want to Try list. Please try again.');
     } finally {
       setLoading(false);
     }

@@ -4,7 +4,10 @@ import { NextResponse } from 'next/server';
 // only here (GEMINI_API_KEY, no NEXT_PUBLIC_ prefix) and is never shipped to
 // the browser.
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+// Newest first; older names 404 for keys created after a model retires.
+const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash'];
+const geminiUrl = (model) =>
+  `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
 
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
 
@@ -108,24 +111,33 @@ export async function POST(request) {
     const buffer = Buffer.from(await file.arrayBuffer());
     const base64 = buffer.toString('base64');
 
-    const response = await fetch(GEMINI_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [
-              { text: PROMPT },
-              { inline_data: { mime_type: mimeType, data: base64 } },
-            ],
-          },
-        ],
-        generationConfig: {
-          temperature: 0.1,
-          maxOutputTokens: 512,
+    const body = JSON.stringify({
+      contents: [
+        {
+          parts: [
+            { text: PROMPT },
+            { inline_data: { mime_type: mimeType, data: base64 } },
+          ],
         },
-      }),
+      ],
+      generationConfig: {
+        temperature: 0.1,
+        maxOutputTokens: 512,
+      },
     });
+
+    let response = null;
+    for (const model of GEMINI_MODELS) {
+      response = await fetch(geminiUrl(model), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body,
+      });
+      if (response.ok || response.status === 429) break;
+      // Log WHY upstream failed (shows in Vercel logs), try the next model.
+      const errText = await response.text().catch(() => '');
+      console.error(`Gemini ${model} failed (${response.status}):`, errText.slice(0, 300));
+    }
 
     if (response.status === 429) {
       return NextResponse.json(

@@ -119,6 +119,15 @@ function Header() {
               <Link href="/browse" className={`desktop-nav-link ${isActive('/browse') ? 'active' : ''}`}>
                 Browse
               </Link>
+              <Link href="/category" className={`desktop-nav-link ${isActive('/category') ? 'active' : ''}`}>
+                Categories
+              </Link>
+              <Link href="/maker" className={`desktop-nav-link ${isActive('/maker') ? 'active' : ''}`}>
+                Makers
+              </Link>
+              <Link href="/scanner" className={`desktop-nav-link ${isActive('/scanner') ? 'active' : ''}`}>
+                Scanner
+              </Link>
               <Link href="/community" className={`desktop-nav-link ${isActive('/community') ? 'active' : ''}`}>
                 Community
               </Link>
@@ -238,6 +247,8 @@ function Header() {
             <h3>Browse</h3>
             <Link href="/" onClick={toggleMenu}>Home</Link>
             <Link href="/browse" onClick={toggleMenu}>All Chocolates</Link>
+            <Link href="/category" onClick={toggleMenu}>Categories</Link>
+            <Link href="/maker" onClick={toggleMenu}>Makers</Link>
             <Link href="/scanner" onClick={toggleMenu}>Identify Chocolate</Link>
           </div>
           <div className="nav-section">
