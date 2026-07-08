@@ -9,7 +9,6 @@ import LikeButton from '../components/LikeButton';
 import CommentSection from '../components/CommentSection';
 import RatingStars from '../components/RatingStars';
 import ShareButton from '../components/ShareButton';
-import SEO from '../components/SEO';
 import './PhotoFeedPage.css';
 
 function PhotoFeedPage() {
@@ -71,7 +70,6 @@ function PhotoFeedPage() {
   if (loading) {
     return (
       <div className="photo-feed-page">
-        <SEO title="Community - Chocly" description="See what chocolate lovers are sharing. Browse photo reviews from the Chocly community." />
         <div className="feed-container">
           <h1 className="feed-title">Community</h1>
           <p className="feed-loading">Loading photo reviews...</p>
@@ -82,8 +80,6 @@ function PhotoFeedPage() {
 
   return (
     <div className="photo-feed-page">
-      <SEO title="Community - Chocly" description="See what chocolate lovers are sharing. Browse photo reviews from the Chocly community." />
-
       <div className="feed-container">
         <h1 className="feed-title">Community</h1>
         <p className="feed-subtitle">Photo reviews from chocolate lovers</p>

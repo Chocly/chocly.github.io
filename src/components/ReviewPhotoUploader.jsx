@@ -1,9 +1,11 @@
 // src/components/ReviewPhotoUploader.jsx
 import React, { useRef } from 'react';
+import { useToast } from './ui/Toast';
 import './ReviewPhotoUploader.css';
 
 function ReviewPhotoUploader({ photos, onPhotosChange, existingUrls = [] }) {
   const inputRef = useRef(null);
+  const toast = useToast();
 
   const handleFileSelect = (e) => {
     const files = Array.from(e.target.files);
@@ -13,7 +15,7 @@ function ReviewPhotoUploader({ photos, onPhotosChange, existingUrls = [] }) {
     const remaining = 3 - totalCount;
 
     if (remaining <= 0) {
-      alert('Maximum 3 photos per review.');
+      toast.info('You can add up to 3 photos per review.');
       return;
     }
 

@@ -7,6 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { addUserChocolate, searchChocolates } from '../services/chocolateFirebaseService';
 import { addReview, updateReview } from '../services/reviewService';
 import { authUrl } from '../utils/authRedirect';
+import { useToast } from '../components/ui/Toast';
 import ImageUploader from '../components/ImageUploader';
 import './AddChocolatePage.css';
 
@@ -27,7 +28,8 @@ const ATTRIBUTE_TAGS = [
 function AddChocolatePage() {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
-  
+  const toast = useToast();
+
   // Core form data - minimal required fields
   const [formData, setFormData] = useState({
     name: '',
@@ -109,7 +111,7 @@ function AddChocolatePage() {
 
     // Validate only essential fields
     if (!formData.name.trim() || !formData.maker.trim() || !formData.type) {
-      alert('Please fill in all required fields');
+      toast.error('Please fill in the name, maker, and type fields');
       return;
     }
 
@@ -144,7 +146,7 @@ function AddChocolatePage() {
       
     } catch (error) {
       console.error('Error adding chocolate:', error);
-      alert('Error adding chocolate. Please try again.');
+      toast.error('Couldn\'t add the chocolate. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -175,7 +177,7 @@ function AddChocolatePage() {
       }
     } catch (error) {
       console.error('Error saving quick rating:', error);
-      alert('Failed to save your rating. You can rate it on the chocolate page.');
+      toast.error('Failed to save your rating. You can rate it on the chocolate page.');
       setQuickRating(0);
     }
   };

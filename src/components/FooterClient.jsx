@@ -1,9 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+import { useAuth } from '../contexts/AuthContext';
 import './Footer.css';
 
 function Footer() {
+  const { currentUser } = useAuth();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -27,24 +29,46 @@ function Footer() {
               <h3>Explore</h3>
               <ul>
                 <li><Link href="/browse">All Chocolates</Link></li>
+                <li><Link href="/maker">Makers A–Z</Link></li>
                 <li><Link href="/scanner">Identify Chocolate</Link></li>
-                <li><Link href="/about">About Us</Link></li>
-                <li><Link href="/contact">Contact</Link></li>
+                <li><Link href="/community">Community</Link></li>
+              </ul>
+            </div>
+
+            <div className="footer-links-column">
+              <h3>Categories</h3>
+              <ul>
+                <li><Link href="/category/type/dark">Dark Chocolate</Link></li>
+                <li><Link href="/category/type/milk">Milk Chocolate</Link></li>
+                <li><Link href="/category/origin/madagascar">Madagascar</Link></li>
+                <li><Link href="/category/origin/ecuador">Ecuador</Link></li>
+                <li><Link href="/category/percentage/70">70% Cacao</Link></li>
+                <li><Link href="/category">All Categories</Link></li>
               </ul>
             </div>
 
             <div className="footer-links-column">
               <h3>My Chocly</h3>
               <ul>
-                <li><Link href="/auth">Sign Up</Link></li>
-                <li><Link href="/auth">Log In</Link></li>
-                <li><Link href="/profile">My Profile</Link></li>
+                {currentUser ? (
+                  <>
+                    <li><Link href="/profile">My Profile</Link></li>
+                    <li><Link href="/add-chocolate">Add a Chocolate</Link></li>
+                  </>
+                ) : (
+                  <>
+                    <li><Link href="/auth">Sign Up</Link></li>
+                    <li><Link href="/auth">Log In</Link></li>
+                  </>
+                )}
               </ul>
             </div>
 
             <div className="footer-links-column">
               <h3>Company</h3>
               <ul>
+                <li><Link href="/about">About Us</Link></li>
+                <li><Link href="/contact">Contact</Link></li>
                 <li><Link href="/privacy">Privacy Policy</Link></li>
                 <li><Link href="/terms">Terms of Service</Link></li>
               </ul>
